@@ -1,0 +1,33 @@
+{
+    "name": "os2forms/os2forms",
+    "type": "drupal-module",
+    "description": "Drupal 8 OS2Form module provides advanced webform functionality for Danish Municipalities",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "license": "GPL-2.0-or-later",
+    "repositories": {
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        },
+        "assets": {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    },
+    "require": {
+        "drupal/eu_cookie_compliance": "^1.8",
+        "drupal/mailsystem": "^4.1",
+        "drupal/smtp": "^1.0@beta",
+        "drupal/honeypot": "^1.29",
+        "drupal/pathauto": "^1.5",
+        "drupal/redirect": "^1.4",
+        "drupal/token": "^1.5",
+        "drupal/webform": "^5.5",
+        "drupal/webform_embed": "1.x-dev",
+        "drupal/entity_print": "^2.1",
+        "drupal/webform_migrate": "^1.1",
+        "drupal/maillog": "1.x-dev",
+        "drupal/devel": "^2.1"
+    }
+}

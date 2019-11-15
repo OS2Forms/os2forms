@@ -1,0 +1,27 @@
+name: 'os2form'
+type: module
+description: 'Provides advanced webform functionality for Danish Municipalities.'
+package: OS2
+core: 8.x
+dependencies:
+  - webform
+  - webform_access
+  - webform_attachment
+  - webform_entity_print
+  - webform_scheduled_email
+  - webform_submission_export_import
+  - webform_submission_log
+  - webform_templates
+  - webform_embed
+  - entity_print
+  - webform_migrate
+  - redirect
+  - pathauto
+  - token
+  - smtp
+  - mailsystem
+  - honeypot
+  - eu_cookie_compliance
+  - taxonomy
+  - editor
+  - ckeditor
