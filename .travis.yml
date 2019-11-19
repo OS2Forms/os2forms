@@ -5,9 +5,6 @@ sudo: false
 php:
   - 7.2
 
-before_install:
-  - PROJECT_PATH=$(pwd);
-
 install:
   - composer global require drupal/coder
   - composer global require mglaman/drupal-check
@@ -17,7 +14,7 @@ install:
   - phpenv rehash
   - nvm install node
   - nvm use node
-  - npm install --global eslint-config-drupal-bundle
+  - npm install --global yarn
   - composer create-project drupal-composer/drupal-project:8.x-dev ../drupal --no-interaction
   - cd ../drupal
 # See definition of variabled in Travis CI config.
@@ -28,11 +25,15 @@ install:
   - sed -i "s/$REPOSITORIES/$REPOSITORIES_REPLACE/g" composer.json
   - sed -i "s/$REQUIRE/$REQUIRE_REPLACE/g" composer.json
   - composer update
-  - DRUAPL_ROOT=$(pwd)/web
+  - DRUPAL_ROOT=$(pwd)/web
+  - PROJECT_PATH=$(pwd)/web/modules/contrib/os2forms
+  - cd $DRUPAL_ROOT/core
+  - yarn install
 
 script:
   - phpcs --standard=Drupal --ignore=*.md $PROJECT_PATH
   - drupal-check $DRUAPL_ROOT/modules/contrib/os2forms
   - twigcs $PROJECT_PATH
-  - cd $DRUAPL_ROOT
-  - eslint modules/contrib/os2forms
+  - cd $DRUAPL_ROOT/core
+  - eslint $DRUAPL_ROOT/modules/contrib/os2forms
+  - stylelint --aei $DRUAPL_ROOT/modules/contrib/os2forms/**/*.css
