@@ -11,12 +11,9 @@ Read more about [how to install drupal core](https://www.drupal.org/docs/8/insta
 
 We are recommending to install drupal via composer by using
 [drupal-composer project](https://github.com/drupal-composer/drupal-project). 
-Example:
-```
-composer create-project drupal-composer/drupal-project:8.x-dev your-drupal-directory --no-interaction
-```
+
 To get more benefits on your Drupal project we are offering you to use 
-[OS2web](https://packagist.org/packages/os2web/os2web)  as installation
+[OS2web](https://packagist.org/packages/os2web/os2web) as installation
 profile for Drupal.
 
 You can easy download and install OS2web installation profile to your composer based 
