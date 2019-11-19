@@ -15,6 +15,9 @@ install:
   - export PATH="$HOME/.config/composer/vendor/bin:$PATH"
   - phpcs --config-set installed_paths ../../drupal/coder/coder_sniffer
   - phpenv rehash
+  - nvm install node
+  - nvm use node
+  - npm install --global eslint-config-drupal-bundle
   - composer create-project drupal-composer/drupal-project:8.x-dev ../drupal --no-interaction
   - cd ../drupal
 # See definition of variabled in Travis CI config.
@@ -31,3 +34,5 @@ script:
   - phpcs --standard=Drupal --ignore=*.md $PROJECT_PATH
   - drupal-check $DRUAPL_ROOT/modules/contrib/os2forms
   - twigcs $PROJECT_PATH
+  - cd $DRUAPL_ROOT
+  - eslint modules/contrib/os2forms
