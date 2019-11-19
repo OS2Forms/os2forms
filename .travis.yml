@@ -29,6 +29,7 @@ install:
   - PROJECT_PATH=$(pwd)/web/modules/contrib/os2forms
   - cd $DRUPAL_ROOT/core
   - yarn install
+  - npm install --global eslint-config-drupal-bundle stylelint
 
 script:
   - phpcs --standard=Drupal --ignore=*.md $PROJECT_PATH
