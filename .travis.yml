@@ -32,8 +32,8 @@ install:
 
 script:
   - phpcs --standard=Drupal --ignore=*.md $PROJECT_PATH
-  - drupal-check $DRUAPL_ROOT/modules/contrib/os2forms
+  - drupal-check $DRUPAL_ROOT/modules/contrib/os2forms
   - twigcs $PROJECT_PATH
-  - cd $DRUAPL_ROOT/core
-  - eslint $DRUAPL_ROOT/modules/contrib/os2forms
-  - stylelint --aei $DRUAPL_ROOT/modules/contrib/os2forms/**/*.css
+  - cd $DRUPAL_ROOT/core
+  - eslint $DRUPAL_ROOT/modules/contrib/os2forms
+  - stylelint --aei $DRUPAL_ROOT/modules/contrib/os2forms/**/*.css
