@@ -1,0 +1,31 @@
+language: php
+
+sudo: false
+
+php:
+  - 7.2
+
+before_install:
+  - PROJECT_PATH=$(pwd);
+
+install:
+  - composer global require drupal/coder
+  - composer global require mglaman/drupal-check
+  - export PATH="$HOME/.config/composer/vendor/bin:$PATH"
+  - phpcs --config-set installed_paths ../../drupal/coder/coder_sniffer
+  - phpenv rehash
+  - composer create-project drupal-composer/drupal-project:8.x-dev ../drupal --no-interaction
+  - cd ../drupal
+# See definition of variabled in Travis CI config.
+#  - export REPOSITORIES='"repositories": \['
+#  - export REPOSITORIES_REPLACE='"repositories": \[\{"type": "path","url": "..\/os2forms", "options": \{"symlink": false\}\},'
+#  - export REQUIRE='"require": {'
+#  - export REQUIRE_REPLACE='"require": {"os2forms\/os2forms": "\*",'
+  - sed -i "s/$REPOSITORIES/$REPOSITORIES_REPLACE/g" composer.json
+  - sed -i "s/$REQUIRE/$REQUIRE_REPLACE/g" composer.json
+  - composer update
+  - DRUAPL_ROOT=$(pwd)/web
+
+script:
+  - phpcs --standard=Drupal --ignore=*.md $PROJECT_PATH
+  - drupal-check $DRUAPL_ROOT/modules/contrib/os2forms
