@@ -6,9 +6,7 @@ php:
   - 7.2
 
 install:
-  - composer global require drupal/coder
-  - composer global require mglaman/drupal-check
-  - composer global require friendsoftwig/twigcs
+  - composer global require drupal/coder mglaman/drupal-check friendsoftwig/twigcs
   - export PATH="$HOME/.config/composer/vendor/bin:$PATH"
   - phpcs --config-set installed_paths ../../drupal/coder/coder_sniffer
   - phpenv rehash
@@ -33,8 +31,8 @@ install:
 
 script:
   - phpcs --standard=Drupal --ignore=*.md $PROJECT_PATH
-  - drupal-check $DRUPAL_ROOT/modules/contrib/os2forms
   - twigcs $PROJECT_PATH
   - cd $DRUPAL_ROOT/core
   - eslint $DRUPAL_ROOT/modules/contrib/os2forms
   - stylelint --aei $DRUPAL_ROOT/modules/contrib/os2forms/**/*.css
+  - drupal-check $DRUPAL_ROOT/modules/contrib/os2forms
