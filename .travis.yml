@@ -16,11 +16,10 @@ install:
   - cd ../ && drush dl drupal-8 --drupal-project-rename=drupal
   - cd drupal
   - DRUPAL_ROOT=$(pwd)
-# See definition of variabled in Travis CI config.
-#  - export REPOSITORIES='"repositories": \['
-#  - export REPOSITORIES_REPLACE='"repositories": \[\{"type": "path","url": "..\/os2forms", "options": \{"symlink": false\}\},'
-#  - export REQUIRE='"require": {'
-#  - export REQUIRE_REPLACE='"require": {"os2forms\/os2forms": "\*",'
+  - export REPOSITORIES='"repositories":\ \['
+  - export REPOSITORIES_REPLACE='"repositories":\[\{"type":"path","url":"..\/os2forms","options":\{"symlink":false\}\},'
+  - export REQUIRE='"require":\ {'
+  - export REQUIRE_REPLACE='"require":{"os2forms\/os2forms":"\*",'
   - sed -i "s/$REPOSITORIES/$REPOSITORIES_REPLACE/g" composer.json
   - sed -i "s/$REQUIRE/$REQUIRE_REPLACE/g" composer.json
   - composer update
