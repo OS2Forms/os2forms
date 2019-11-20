@@ -6,15 +6,16 @@ php:
   - 7.2
 
 install:
-  - composer global require drupal/coder mglaman/drupal-check friendsoftwig/twigcs
+  - composer global require drush/drush:8.x-dev drupal/coder mglaman/drupal-check friendsoftwig/twigcs
   - export PATH="$HOME/.config/composer/vendor/bin:$PATH"
   - phpcs --config-set installed_paths ../../drupal/coder/coder_sniffer
   - phpenv rehash
   - nvm install node
   - nvm use node
   - npm install --global yarn
-  - composer create-project drupal-composer/drupal-project:8.x-dev ../drupal --no-interaction
-  - cd ../drupal
+  - cd ../ && drush dl drupal-8 --drupal-project-rename=drupal
+  - cd drupal
+  - DRUPAL_ROOT=$(pwd)
 # See definition of variabled in Travis CI config.
 #  - export REPOSITORIES='"repositories": \['
 #  - export REPOSITORIES_REPLACE='"repositories": \[\{"type": "path","url": "..\/os2forms", "options": \{"symlink": false\}\},'
@@ -23,8 +24,7 @@ install:
   - sed -i "s/$REPOSITORIES/$REPOSITORIES_REPLACE/g" composer.json
   - sed -i "s/$REQUIRE/$REQUIRE_REPLACE/g" composer.json
   - composer update
-  - DRUPAL_ROOT=$(pwd)/web
-  - PROJECT_PATH=$(pwd)/web/modules/contrib/os2forms
+  - PROJECT_PATH=$DRUPAL_ROOT/modules/contrib/os2forms
   - cd $DRUPAL_ROOT/core
   - yarn install
   - npm install --global eslint-config-drupal-bundle stylelint
