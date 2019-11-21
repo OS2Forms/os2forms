@@ -1,4 +1,4 @@
-#OS2Forms Drupal module  [![Build Status](https://travis-ci.org/OS2Forms/os2forms.svg?branch=8.x)](https://travis-ci.org/OS2Forms/os2forms)
+# OS2Forms Drupal module  [![Build Status](https://travis-ci.org/OS2Forms/os2forms.svg?branch=8.x)](https://travis-ci.org/OS2Forms/os2forms)
 
 ## Install
 
@@ -77,12 +77,19 @@ NOTE: There are preconditions that have to be met before accepting a pull reques
 
 Since OS2Forms is Drupal module project, there is used drupal-friendly
 git branch/tag names.
-* 8.x, 8.x-2.x - development branches.
-* 8.x-2.0-alpha, 8.x-2.0-alpha1, 8.x-2.0-beta - test release tags.
-* 8.x-2.0-rc1, 8.x-2.0-rc2 - release candidate tags.
-* 8.x-2.0, 8.x-2.1 - stable release tags.
+
+#### Bracnhes
+* `8.x` - genral development branch.
+* `8.x-2.x` - development branch for version 2.x.
 
 There is no specific rules for feature branch names. However we recommend
 use [OS2Forms JIRA](https://os2web.atlassian.net/browse/OS2FORMS) or
 [github issue](https://github.com/OS2Forms/os2forms/issues) ticket number
 as prefix for your branch name.
+
+#### Tags
+Release tags should be created from related branches. 
+Examples for tags created from `8.x-2.x`:
+* `8.x-2.0-alpha`, `8.x-2.0-alpha1`, `8.x-2.0-beta` - test release tags.
+* `8.x-2.0-rc1`, `8.x-2.0-rc2` - release candidate tags.
+* `8.x-2.0`, `8.x-2.1` - stable release tags.
