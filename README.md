@@ -93,3 +93,14 @@ Examples for tags created from `8.x-2.x`:
 * `8.x-2.0-alpha`, `8.x-2.0-alpha1`, `8.x-2.0-beta` - test release tags.
 * `8.x-2.0-rc1`, `8.x-2.0-rc2` - release candidate tags.
 * `8.x-2.0`, `8.x-2.1` - stable release tags.
+
+## Unstable features
+### Export submissions to Word
+This feature is still not part of Webform and Entity print modules stable versions
+due to following issues:
+* [[Webform] Unlock possibility of using Entity print module export to Word feature](https://www.drupal.org/project/webform/issues/3096552)
+* [[Entity Print] Add Export to Word Support](https://www.drupal.org/project/entity_print/issues/2733781)
+
+To get this functionality on drupal project there will be applied patches from issues above via Composer.
+
+NOTE: If you are downloading os2forms module without using composer, be aware that you have apply those patches by yourself.
