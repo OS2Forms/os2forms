@@ -1,0 +1,45 @@
+<?php
+
+/**
+ * @file
+ * Install file for OS2Forms module.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function os2forms_requirements($phase) {
+  $requirements = [];
+
+  $config = \Drupal::service('config.factory')->get('entity_print.settings');
+  $severity = REQUIREMENT_OK;
+  if (!empty($config) && \Drupal::moduleHandler()->moduleExists('webform_entity_print_attachment')) {
+    $messages = [
+      '#prefix' => t('Entity print configuration'),
+      '#theme' => 'item_list',
+      '#items' => [],
+    ];
+    foreach (['pdf', 'word_docx'] as $type) {
+      $library = $config->get('print_engines.' . $type . '_engine');
+      if (empty($library)) {
+        $severity = REQUIREMENT_WARNING;
+        $library = t('<strong>EMPTY</strong>');
+      }
+      $messages['#items'][] = $library_status = t('Engine @type: @value', [
+        '@type' => $type,
+        '@value' => $library,
+      ]);
+    }
+    $messages = \Drupal::service('renderer')->renderPlain($messages);
+  }
+  else {
+    $messages = t('Webform Entity Print Attachment module is not enabled');
+    $severity = REQUIREMENT_WARNING;
+  }
+  $requirements['os2forms'] = [
+    'title' => t('os2forms'),
+    'severity' => $severity,
+    'value' => $messages,
+  ];
+  return $requirements;
+}
