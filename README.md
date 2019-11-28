@@ -39,7 +39,7 @@ See [OS2Forms testing and CI information](https://github.com/OS2Forms/docs#testi
 
 OS2Forms project is opened for new features and os course bugfixes.
 If you have any suggestion or you found a bug in project, you are very welcome
-to [create an issue](https://github.com/OS2Forms/os2forms/issues) in github.
+to create an issue in github repository issue tracker.
 For issue description there is expected that you will provide clear and
 sufficient information about your feature request or bug report.
 
