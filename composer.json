@@ -31,7 +31,8 @@
         "drupal/devel": "^2.1",
         "phpoffice/phpword": "^0.17.0",
         "tecnickcom/tcpdf": "~6",
-        "vaimo/composer-patches": "^4.20"
+        "vaimo/composer-patches": "^4.20",
+        "os2web/os2web_nemlogin": "8.x-dev"
     },
     "extra" : {
         "composer-exit-on-patch-failure": true,
