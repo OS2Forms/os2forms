@@ -1,0 +1,9 @@
+name: 'OS2forms NemID'
+type: module
+description: 'Provides custom NemID fields and integration with NemID'
+package: OS2Forms
+core: 8.x
+core_version_requirement: ^8 || ^9
+
+dependencies:
+  - os2web_nemlogin
