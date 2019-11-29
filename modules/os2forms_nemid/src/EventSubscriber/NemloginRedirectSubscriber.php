@@ -88,7 +88,7 @@ class NemloginRedirectSubscriber implements EventSubscriberInterface {
       else {
         \Drupal::messenger()
           ->addMessage(t('This webform requires a valid NemID authentication and is not visible without it. You currently have an active NemID authentication session. If you do not want to proceed with this webform press <a href="@logout">log out</a> to return back to the front page.', [
-            '@logout' => $this->nemloginAuthProvider->getLogoutUrl(['query' => ['destination' => Url::fromRoute('<front>')]])
+            '@logout' => $this->nemloginAuthProvider->getLogoutUrl(['query' => ['destination' => Url::fromRoute('<front>')->toString()]])
               ->toString(),
           ]));
       }
