@@ -15,7 +15,7 @@ namespace Drupal\os2forms_nemid\Plugin\WebformElement;
  * @see \Drupal\os2forms_nemid\Plugin\NemidElementBase
  * @see \Drupal\os2forms_nemid\Element\NemidCpr
  */
-class NemidCprInterface extends NemidElementBase implements NemidElementPersonalInterface {
+class NemidCpr extends NemidElementBase implements NemidElementPersonalInterface {
 
   /**
    * {@inheritdoc}
