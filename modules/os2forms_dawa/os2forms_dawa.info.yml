@@ -1,0 +1,10 @@
+name: 'OS2forms DAWA'
+type: module
+description: 'Provides integration with Danish Addresses Web API (DAWA https://dawa.aws.dk) and provide address autocomplete fields.'
+package: OS2Forms
+core: 8.x
+core_version_requirement: ^8 || ^9
+
+dependencies:
+  - os2forms
+  - os2web_datalookup

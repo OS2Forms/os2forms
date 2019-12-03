@@ -1,0 +1,37 @@
+<?php
+
+namespace Drupal\os2forms_dawa\Plugin\WebformElement;
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\webform\Plugin\WebformElement\TextField;
+
+/**
+ * Provides an Abstract DawaElementBase element.
+ */
+abstract class DawaElementBase extends TextField {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getDefaultProperties() {
+    $properties = parent::getDefaultProperties() + $this->getDefaultMultipleProperties();
+    // Remove autocomplete property which is not applicable to this autocomplete
+    // element.
+    unset($properties['autocomplete']);
+    return $properties;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function form(array $form, FormStateInterface $form_state) {
+    $form = parent::form($form, $form_state);
+    $form['autocomplete'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Autocomplete settings'),
+    ];
+
+    return $form;
+  }
+
+}
