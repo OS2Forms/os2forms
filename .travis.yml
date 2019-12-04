@@ -13,16 +13,16 @@ install:
   - nvm install node
   - nvm use node
   - npm install --global yarn
-  - cd ../ && drush dl drupal-8 --drupal-project-rename=drupal
+  - cd ../ && composer create-project drupal-composer/drupal-project:8.x-dev drupal --no-interaction
   - cd drupal
-  - DRUPAL_ROOT=$(pwd)
+  - DRUPAL_ROOT=$(pwd)/web
   - export REPOSITORIES='"repositories":\ \['
   - export REPOSITORIES_REPLACE='"repositories":\[\{"type":"path","url":"..\/os2forms","options":\{"symlink":false\}\},'
   - export REQUIRE='"require":\ {'
   - export REQUIRE_REPLACE='"require":{"os2forms\/os2forms":"\*",'
   - sed -i "s/$REPOSITORIES/$REPOSITORIES_REPLACE/g" composer.json
   - sed -i "s/$REQUIRE/$REQUIRE_REPLACE/g" composer.json
-  - composer update
+  - composer update os2forms/os2forms
   - PROJECT_PATH=$DRUPAL_ROOT/modules/contrib/os2forms
   - cd $DRUPAL_ROOT/core
   - yarn install
