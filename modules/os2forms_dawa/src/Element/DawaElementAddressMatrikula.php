@@ -50,7 +50,7 @@ class DawaElementAddressMatrikula extends WebformCompositeBase {
         ],
       ];
 
-      if (isset($element['#value']) && isset($element['#value']['address'])) {
+      if (isset($element['#value']) && !empty($element['#value']['address'])) {
         $addressValue = $element['#value']['address'];
 
         $matrikulaOptions = self::getMatrikulaOptions($addressValue, $element);
@@ -83,7 +83,7 @@ class DawaElementAddressMatrikula extends WebformCompositeBase {
    */
   private static function getMatrikulaOptions($addressValue, array $element) {
     /** @var \Drupal\os2forms_dawa\Service\DawaService $dawaService */
-    $dawaService = \Drupal::service('os2web_dawa.service');
+    $dawaService = \Drupal::service('os2forms_dawa.service');
 
     // Getting address.
     $addressParams = new ParameterBag();

@@ -36,7 +36,7 @@ class DawaElementController extends ControllerBase {
     $matches = [];
 
     /** @var \Drupal\os2forms_dawa\Service\DawaService $dawaService*/
-    $dawaService = \Drupal::service('os2web_dawa.service');
+    $dawaService = \Drupal::service('os2forms_dawa.service');
 
     // Get the matches based on the element type.
     switch ($element_type) {
