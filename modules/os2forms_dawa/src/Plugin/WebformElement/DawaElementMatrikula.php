@@ -15,7 +15,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *   category = @Translation("DAWA"),
  * )
  */
-class DawaMatrikula extends DawaElementBase {
+class DawaElementMatrikula extends DawaElementBase {
 
   /**
    * {@inheritdoc}
@@ -34,13 +34,8 @@ class DawaMatrikula extends DawaElementBase {
   public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
     parent::prepare($element, $webform_submission);
 
-    $element['#autocomplete_route_name'] = 'os2forms_dawa.element.autocomplete';
-    $element['#autocomplete_route_parameters'] = [
-      'webform' => $webform_submission->getWebform()->id(),
-      'key' => $element['#webform_key'],
-      'remove_code' => isset($element['#remove_code']) ? $element['#remove_code'] : FALSE,
-      'limit_by_municipality' => isset($element['#limit_by_municipality']) ? $element['#limit_by_municipality'] : '',
-    ];
+    $element['#autocomplete_route_parameters']['remove_code'] = isset($element['#remove_code']) ? $element['#remove_code'] : FALSE;
+    $element['#autocomplete_route_parameters']['limit_by_municipality'] = isset($element['#limit_by_municipality']) ? $element['#limit_by_municipality'] : '';
   }
 
   /**
@@ -51,8 +46,8 @@ class DawaMatrikula extends DawaElementBase {
 
     $form['autocomplete']['remove_code'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Remove place name'),
-      '#description' => $this->t('Removes the name of the place from the returned address, e.g. "1226 Agerskov Ejerlav, Agerskov <b><i>(1450151)</i></b>" => "1226 Agerskov Ejerlav, Agerskov"'),
+      '#title' => $this->t('Remove code'),
+      '#description' => $this->t('Removes the code of the place from the returned address, e.g. "1226 Agerskov Ejerlav, Agerskov <b><i>(1450151)</i></b>" => "1226 Agerskov Ejerlav, Agerskov"'),
       '#return_value' => TRUE,
     ];
     $form['autocomplete']['limit_by_municipality'] = [

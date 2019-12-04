@@ -22,6 +22,14 @@ interface DawaDataLookupInterface extends DataLookupInterface {
   public function getAddressAutocompletePath();
 
   /**
+   * Returns path for fetching addresses.
+   *
+   * @return string
+   *   Path used for address API.
+   */
+  public function getAddressApiPath();
+
+  /**
    * Returns path for block autocomplete field.
    *
    * @return string

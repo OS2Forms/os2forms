@@ -5,9 +5,9 @@ namespace Drupal\os2forms_dawa\Element;
 /**
  * Provides a DAWA Matrikula Autocomplete element.
  *
- * @FormElement("os2forms_dawa_block")
+ * @FormElement("os2forms_dawa_matrikula")
  */
-class DawaBlock extends DawaElementBase {
+class DawaElementMatrikula extends DawaElementBase {
 
   /**
    * {@inheritdoc}
@@ -16,7 +16,7 @@ class DawaBlock extends DawaElementBase {
     $class = get_class($this);
 
     $info = parent::getInfo();
-    $info['#pre_render'][] = [$class, 'preRenderDawaBlock'];
+    $info['#pre_render'][] = [$class, 'preRenderDawaElementMatrikula'];
     return $info;
   }
 
@@ -31,8 +31,8 @@ class DawaBlock extends DawaElementBase {
    * @return array
    *   The $element with prepared variables ready for input.html.twig.
    */
-  public static function preRenderDawaBlock(array $element) {
-    static::setAttributes($element, ['os2forms-dawa-block']);
+  public static function preRenderDawaElementMatrikula(array $element) {
+    static::setAttributes($element, ['os2forms-dawa-matrikula']);
     return $element;
   }
 

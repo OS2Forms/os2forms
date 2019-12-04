@@ -26,7 +26,12 @@ abstract class DawaElementBase extends Textfield {
    * Webform element validation handler for DawaElementBase.
    */
   public static function validateDawaElementBase(&$element, FormStateInterface $form_state, &$complete_form) {
-    $value = $form_state->getValue($element['#webform_key']);
+    if (isset($element['#webform_key'])) {
+      $value = $form_state->getValue($element['#webform_key']);
+    }
+    else {
+      $value = $form_state->getValue($element['#parents']);
+    }
 
     if (!empty($value) && !empty($element['#autocomplete_route_name'])) {
       // Simulating autocomplete call.

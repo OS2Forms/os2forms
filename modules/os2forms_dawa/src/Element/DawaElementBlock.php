@@ -3,11 +3,11 @@
 namespace Drupal\os2forms_dawa\Element;
 
 /**
- * Provides a DAWA Address Autocomplete element.
+ * Provides a DAWA Matrikula Autocomplete element.
  *
- * @FormElement("os2forms_dawa_address")
+ * @FormElement("os2forms_dawa_block")
  */
-class DawaAddress extends DawaElementBase {
+class DawaElementBlock extends DawaElementBase {
 
   /**
    * {@inheritdoc}
@@ -16,7 +16,7 @@ class DawaAddress extends DawaElementBase {
     $class = get_class($this);
 
     $info = parent::getInfo();
-    $info['#pre_render'][] = [$class, 'preRenderDawaAddress'];
+    $info['#pre_render'][] = [$class, 'preRenderDawaElementBlock'];
     return $info;
   }
 
@@ -31,8 +31,8 @@ class DawaAddress extends DawaElementBase {
    * @return array
    *   The $element with prepared variables ready for input.html.twig.
    */
-  public static function preRenderDawaAddress(array $element) {
-    static::setAttributes($element, ['os2forms-dawa-address']);
+  public static function preRenderDawaElementBlock(array $element) {
+    static::setAttributes($element, ['os2forms-dawa-block']);
     return $element;
   }
 

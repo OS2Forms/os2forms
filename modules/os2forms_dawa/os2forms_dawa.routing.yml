@@ -1,5 +1,5 @@
 os2forms_dawa.element.autocomplete:
-  path: '/os2forms-dawa/{webform}/autocomplete/{key}'
+  path: '/os2forms-dawa/{webform}/autocomplete/{element_type}'
   defaults:
     _controller: '\Drupal\os2forms_dawa\Controller\DawaElementController::autocomplete'
     _format: json

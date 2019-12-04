@@ -15,7 +15,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *   category = @Translation("DAWA"),
  * )
  */
-class DawaBlock extends DawaElementBase {
+class DawaElementBlock extends DawaElementBase {
 
   /**
    * {@inheritdoc}
@@ -33,12 +33,7 @@ class DawaBlock extends DawaElementBase {
   public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
     parent::prepare($element, $webform_submission);
 
-    $element['#autocomplete_route_name'] = 'os2forms_dawa.element.autocomplete';
-    $element['#autocomplete_route_parameters'] = [
-      'webform' => $webform_submission->getWebform()->id(),
-      'key' => $element['#webform_key'],
-      'remove_code' => isset($element['#remove_code']) ? $element['#remove_code'] : FALSE,
-    ];
+    $element['#autocomplete_route_parameters']['remove_code'] = isset($element['#remove_code']) ? $element['#remove_code'] : FALSE;
   }
 
   /**
