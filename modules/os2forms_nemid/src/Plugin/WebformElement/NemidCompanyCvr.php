@@ -15,12 +15,12 @@ namespace Drupal\os2forms_nemid\Plugin\WebformElement;
  * @see \Drupal\os2forms_nemid\Plugin\NemidElementBase
  * @see \Drupal\os2forms_nemid\Element\NemidCompanyCvr
  */
-class NemidCompanyCvr extends NemidElementBase implements NemidElementCompanyInterface {
+class NemidCompanyCvr extends NemloginElementBase implements NemidElementCompanyInterface {
 
   /**
    * {@inheritdoc}
    */
-  public function getNemloginFieldKey() {
+  public function getPrepopulateFieldFieldKey() {
     return 'cvr';
   }
 

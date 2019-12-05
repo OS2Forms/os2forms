@@ -15,13 +15,13 @@ namespace Drupal\os2forms_nemid\Plugin\WebformElement;
  * @see \Drupal\os2forms_nemid\Plugin\NemidElementBase
  * @see \Drupal\os2forms_nemid\Element\NemidCompanyName
  */
-class NemidCompanyName extends NemidElementBase implements NemidElementCompanyInterface {
+class NemidCompanyName extends ServiceplatformenCvrElementBase implements NemidElementCompanyInterface {
 
   /**
    * {@inheritdoc}
    */
-  public function getNemloginFieldKey() {
-    // TODO: Implement getNemloginFieldKey() method.
+  public function getPrepopulateFieldFieldKey() {
+    return 'company_name';
   }
 
 }

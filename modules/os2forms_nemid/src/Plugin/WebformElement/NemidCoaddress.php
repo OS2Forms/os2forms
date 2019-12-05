@@ -15,13 +15,13 @@ namespace Drupal\os2forms_nemid\Plugin\WebformElement;
  * @see \Drupal\os2forms_nemid\Plugin\NemidElementBase
  * @see \Drupal\os2forms_nemid\Element\NemidCoaddress
  */
-class NemidCoaddress extends NemidElementBase implements NemidElementPersonalInterface {
+class NemidCoaddress extends ServiceplatformenCprElementBase implements NemidElementPersonalInterface {
 
   /**
    * {@inheritdoc}
    */
-  public function getNemloginFieldKey() {
-    // TODO: Implement getNemloginFieldKey() method.
+  public function getPrepopulateFieldFieldKey() {
+    return 'coname';
   }
 
 }

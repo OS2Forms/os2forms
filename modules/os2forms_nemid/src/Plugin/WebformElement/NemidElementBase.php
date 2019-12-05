@@ -2,9 +2,9 @@
 
 namespace Drupal\os2forms_nemid\Plugin\WebformElement;
 
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Plugin\WebformElementBase;
-use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * Provides a abstract NemID Element.
@@ -13,7 +13,7 @@ use Drupal\webform\WebformSubmissionInterface;
  * @see \Drupal\webform\Plugin\WebformElementInterface
  * @see \Drupal\webform\Annotation\WebformElement
  */
-abstract class NemidElementBase extends WebformElementBase implements NemloginPrepopulateFieldInterface {
+abstract class NemidElementBase extends WebformElementBase implements NemidPrepopulateFieldInterface {
 
   /**
    * {@inheritdoc}
@@ -38,11 +38,17 @@ abstract class NemidElementBase extends WebformElementBase implements NemloginPr
   /**
    * {@inheritdoc}
    */
-  public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
+  public function alterForm(array &$element, array &$form, FormStateInterface $form_state) {
+    /** @var \Drupal\webform\WebformSubmissionForm $webformSubmissionForm */
+    $webformSubmissionForm = $form_state->getFormObject();
+
+    /** @var \Drupal\webform\WebformSubmissionInterface $webformSubmission */
+    $webformSubmission = $webformSubmissionForm->getEntity();
+
     // Only manipulate element on actual submission page.
-    if (!$webform_submission->isCompleted()) {
+    if (!$webformSubmission->isCompleted()) {
       // Getting webform type settings.
-      $webform = $webform_submission->getWebform();
+      $webform = $webformSubmission->getWebform();
       $webformNemidSettings = $webform->getThirdPartySetting('os2forms', 'os2forms_nemid');
       $webform_type = NULL;
 
@@ -67,19 +73,10 @@ abstract class NemidElementBase extends WebformElementBase implements NemloginPr
           $this->handleElementVisibility($element, OS2FORMS_NEMID_WEBFORM_TYPE_COMPANY);
         }
 
-        // TODO: make a proper values fetching with Serviceplatformen.
-        $nemloginFieldKey = $this->getNemloginFieldKey();
-        $value = $plugin->fetchValue($nemloginFieldKey);
-        $element['#default_value'] = $value;
+        $this->handleElementPrepopulate($element, $form_state);
+        NestedArray::setValue($form['elements'], $element['#webform_parents'], $element);
       }
-
     }
-
-    parent::prepare($element, $webform_submission);
-
-    // Here you can customize the webform element's properties.
-    // You can also customize the form/render element's properties via the
-    // FormElement.
   }
 
   /**

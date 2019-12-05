@@ -15,12 +15,12 @@ namespace Drupal\os2forms_nemid\Plugin\WebformElement;
  * @see \Drupal\os2forms_nemid\Plugin\NemidElementBase
  * @see \Drupal\os2forms_nemid\Element\NemidCompanyRid
  */
-class NemidCompanyRid extends NemidElementBase implements NemidElementCompanyInterface {
+class NemidCompanyRid extends NemloginElementBase implements NemidElementCompanyInterface {
 
   /**
    * {@inheritdoc}
    */
-  public function getNemloginFieldKey() {
+  public function getPrepopulateFieldFieldKey() {
     return 'rid';
   }
 
