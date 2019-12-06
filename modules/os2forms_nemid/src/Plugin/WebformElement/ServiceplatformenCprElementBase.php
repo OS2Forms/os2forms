@@ -40,22 +40,17 @@ abstract class ServiceplatformenCprElementBase extends NemidElementBase {
       if ($plugin->isAuthenticated()) {
         $cpr = $plugin->fetchValue('cpr');
 
-        // TODO: make the request to plugin, and remove dummy data.
-        // $spCrpData = calling the service with $cpr;.
-        $spCrpData = [
-          'status' => TRUE,
-          'name' => 'name',
-          'road' => 'road',
-          'road_no' => 'road_no',
-          'floor' => 'floor',
-          'door' => 'door',
-          'zipcode' => 'zipcode',
-          'city' => 'city',
-          'coname' => 'coname',
-        ];
-        $spCrpData['address'] = $spCrpData['road'] . ' ' . $spCrpData['road_no'] . ' ' . $spCrpData['floor'] . ' ' . $spCrpData['door'];
+        $pluginManager = \Drupal::service('plugin.manager.os2web_datalookup');
+        /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\ServiceplatformenCPR $servicePlatformentCprPlugin */
+        $servicePlatformentCprPlugin = $pluginManager->createInstance('serviceplatformen_cpr');
 
-        $form_state->set('servicePlatformenCprData', $spCrpData);
+        if ($servicePlatformentCprPlugin->isReady()) {
+          $spCrpData = $servicePlatformentCprPlugin->getAddress($cpr);
+          // Making composite field, address.
+          $spCrpData['address'] = $spCrpData['road'] . ' ' . $spCrpData['road_no'] . ' ' . $spCrpData['floor'] . ' ' . $spCrpData['door'];
+
+          $form_state->set('servicePlatformenCprData', $spCrpData);
+        }
       }
     }
 

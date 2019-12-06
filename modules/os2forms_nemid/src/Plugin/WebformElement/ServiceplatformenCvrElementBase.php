@@ -22,10 +22,10 @@ abstract class ServiceplatformenCvrElementBase extends NemidElementBase {
     $prepopulateKey = $this->getPrepopulateFieldFieldKey();
 
     // Fetch value from serviceplatforment CVR.
-    $cpCvrData = NULL;
+    $spCvrData = NULL;
 
     if ($form_state->has('servicePlatformenCvrData')) {
-      $cpCvrData = $form_state->get('servicePlatformenCvrData');
+      $spCvrData = $form_state->get('servicePlatformenCvrData');
     }
     else {
       // Making the request to the plugin, and storing the information on the
@@ -40,28 +40,23 @@ abstract class ServiceplatformenCvrElementBase extends NemidElementBase {
       if ($plugin->isAuthenticated()) {
         $cvr = $plugin->fetchValue('cvr');
 
-        // TODO: make the request to plugin, and remove dummy data.
-        // $cpCvrData = calling the service with $cvr;.
-        $cpCvrData = [
-          'status' => TRUE,
-          'cvr' => 'cvr',
-          'company_name' => 'company_name',
-          'company_street' => 'company_street',
-          'company_house_nr' => 'company_house_nr',
-          'company_floor' => 'company_floor',
-          'company_zipcode' => 'company_zipcode',
-          'company_city' => 'company_city',
-        ];
-        // Making composite field, company_address.
-        $cpCvrData['company_address'] = $cpCvrData['company_street'] . ' ' . $cpCvrData['company_house_nr'] . ' ' . $cpCvrData['company_floor'];
+        $pluginManager = \Drupal::service('plugin.manager.os2web_datalookup');
+        /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\ServiceplatformenCVR $servicePlatformentCvrPlugin */
+        $servicePlatformentCvrPlugin = $pluginManager->createInstance('serviceplatformen_cvr');
 
-        $form_state->set('servicePlatformenCvrData', $cpCvrData);
+        if ($servicePlatformentCvrPlugin->isReady()) {
+          $spCvrData = $servicePlatformentCvrPlugin->getInfo($cvr);
+          // Making composite field, company_address.
+          $spCvrData['company_address'] = $spCvrData['company_street'] . ' ' . $spCvrData['company_house_nr'] . ' ' . $spCvrData['company_floor'];
+
+          $form_state->set('servicePlatformenCvrData', $spCvrData);
+        }
       }
     }
 
-    if (!empty($cpCvrData)) {
-      if (isset($cpCvrData[$prepopulateKey])) {
-        $value = $cpCvrData[$prepopulateKey];
+    if (!empty($spCvrData)) {
+      if (isset($spCvrData[$prepopulateKey])) {
+        $value = $spCvrData[$prepopulateKey];
         $element['#value'] = $value;
       }
     }
