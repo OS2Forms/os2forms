@@ -12,10 +12,13 @@ If you don't have Drupal installed on you server, you will to need install it fi
 Read more about [how to install drupal core](https://www.drupal.org/docs/8/install).
 
 We are recommending to install drupal via composer by using
-[OS2Forms  composer project](https://github.com/drupal-composer/drupal-project).
+[OS2Forms composer project](https://github.com/OS2Forms/composer-project).
 By this way you will get standalone project with OS2Forms module on board, plus
 all the other contrib modules you will probably need to configure OS2Forms to
 your specific demands.
+```
+composer create-project os2forms/composer-project:8.x-dev some-dir --no-interaction
+```
 
 To get more benefits on your Drupal project we are offering you to use
 [OS2web](https://packagist.org/packages/os2web/os2web) as installation
