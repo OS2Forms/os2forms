@@ -26,7 +26,7 @@ You can easy download and install OS2web installation profile to your
 composer based Drupal project with commands:
 ```
 composer require os2web/os2web
-drush si os2web --db-url=mysql://db_user:db_pass@mysql_host/db_name --account-pass=admin -y
+drush si os2web --db-url=mysql://db_user:db_pass@mysql_host/db_name --locale=da --site-name="OS2Forms" --account-pass=admin -y
 ```
 
 ## Update
