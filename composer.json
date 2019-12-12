@@ -4,7 +4,7 @@
     "description": "Drupal 8 OS2Form module provides advanced webform functionality for Danish Municipalities",
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "license": "GPL-2.0-or-later",
+    "license": "EUPL-1.2",
     "repositories": {
         "drupal": {
             "type": "composer",
