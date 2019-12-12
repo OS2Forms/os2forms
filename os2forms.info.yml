@@ -5,6 +5,7 @@ package: OS2
 core: 8.x
 dependencies:
   - webform
+  - webform_ui
   - webform_access
   - webform_attachment
   - webform_entity_print
