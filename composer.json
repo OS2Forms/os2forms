@@ -32,8 +32,8 @@
         "phpoffice/phpword": "^0.17.0",
         "tecnickcom/tcpdf": "~6",
         "vaimo/composer-patches": "^4.20",
-        "os2web/os2web_datalookup": "8.x-dev",
-        "os2web/os2web_nemlogin": "8.x-dev"
+        "os2web/os2web_datalookup": "8.x-1.0",
+        "os2web/os2web_nemlogin": "8.x-1.0"
     },
     "extra" : {
         "composer-exit-on-patch-failure": true,
