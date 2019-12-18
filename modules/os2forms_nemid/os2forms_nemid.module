@@ -1,0 +1,97 @@
+<?php
+
+/**
+ * @file
+ * OS2Forms NemID functionality module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Defines NemID webform type - Personal.
+ */
+define('OS2FORMS_NEMID_WEBFORM_TYPE_PERSONAL', 'personal');
+
+/**
+ * Defines NemID webform type - Company.
+ */
+define('OS2FORMS_NEMID_WEBFORM_TYPE_COMPANY', 'company');
+
+/**
+ * Implements hook_webform_third_party_settings_form_alter().
+ */
+function os2forms_nemid_webform_third_party_settings_form_alter(&$form, FormStateInterface $form_state) {
+  /** @var \Drupal\webform\WebformInterface $webform */
+  $webform = $form_state->getFormObject()->getEntity();
+  $settings = $webform->getThirdPartySetting('os2forms', 'os2forms_nemid');
+
+  // OS2Forms NemID.
+  $form['third_party_settings']['os2forms']['os2forms_nemid'] = [
+    '#type' => 'details',
+    '#title' => t('OS2Forms NemID settings'),
+    '#open' => TRUE,
+  ];
+
+  // Webform type.
+  $webform_types = [
+    OS2FORMS_NEMID_WEBFORM_TYPE_PERSONAL => t('Personal'),
+    OS2FORMS_NEMID_WEBFORM_TYPE_COMPANY => t('Company'),
+  ];
+  $form['third_party_settings']['os2forms']['os2forms_nemid']['webform_type'] = [
+    '#type' => 'select',
+    '#title' => t('Webform type'),
+    '#default_value' => !(empty($settings)) ? $settings['webform_type'] : NULL,
+    '#empty_option' => t('Not specified'),
+    '#options' => $webform_types,
+    '#description' => t('Based on the selected type form irrelevant fields will not be shown to the end user'),
+  ];
+
+  // Nemlogin auto redirect.
+  $form['third_party_settings']['os2forms']['os2forms_nemid']['nemlogin_auto_redirect'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Redirect to nemlogin automatically'),
+    '#default_value' => !(empty($settings)) ? $settings['nemlogin_auto_redirect'] : FALSE,
+    '#description' => t('Redirection will happen right after user has is accessing the form, if user is already authenticated via NemID, redirection will not happen.'),
+  ];
+}
+
+/**
+ * Implements hook_webform_submission_form_alter().
+ */
+function os2forms_nemid_webform_submission_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  // Getting webform Nemid settings.
+  /** @var \Drupal\webform\WebformSubmissionInterface Interface $webformSubmission */
+  $webformSubmission = $form_state->getFormObject()->getEntity();
+  /** @var \Drupal\webform\WebformInterface $webform */
+  $webform = $webformSubmission->getWebform();
+  $webformNemidSettings = $webform->getThirdPartySetting('os2forms', 'os2forms_nemid');
+
+  // Getting webform_type setting.
+  $webform_type = NULL;
+  if (isset($webformNemidSettings['webform_type']) && !empty($webformNemidSettings['webform_type'])) {
+    $webform_type = $webformNemidSettings['webform_type'];
+  }
+
+  // Webform type is set and not empty.
+  if ($webform_type) {
+    // Initializing AuthProviderInterface plugin.
+    /** @var \Drupal\os2web_nemlogin\Service\AuthProviderService $authProviderService */
+    $authProviderService = \Drupal::service('os2web_nemlogin.auth_provider');
+    /** @var \Drupal\os2web_nemlogin\Plugin\AuthProviderInterface $authProviderPlugin */
+    $authProviderPlugin = $authProviderService->getActivePlugin();
+
+    // User is authenticated, check if the form type is corresponding to
+    // authentication type.
+    if ($authProviderPlugin->isAuthenticated()) {
+      if ($authProviderPlugin->isAuthenticatedPerson() && $webform_type !== OS2FORMS_NEMID_WEBFORM_TYPE_PERSONAL
+        || $authProviderPlugin->isAuthenticatedCompany() && $webform_type !== OS2FORMS_NEMID_WEBFORM_TYPE_COMPANY) {
+        \Drupal::messenger()
+          ->addWarning(t('Your login type does match the login type required by the webform. Please <a href="@logout">log out</a> and sign in with a different account', [
+            '@logout' => $authProviderService->getLogoutUrl()
+              ->toString(),
+          ]));
+      }
+    }
+  }
+
+}

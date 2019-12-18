@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * OS2Forms functionality module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_webform_third_party_settings_form_alter().
+ */
+function os2forms_webform_third_party_settings_form_alter(&$form, FormStateInterface $form_state) {
+  // OS2Forms.
+  $form['third_party_settings']['os2forms'] = [
+    '#type' => 'details',
+    '#title' => t('OS2Forms'),
+    '#open' => TRUE,
+    '#description' => t('OS2Forms related settings'),
+  ];
+}
