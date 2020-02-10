@@ -19,19 +19,9 @@ class DawaElementAddressMatrikula extends WebformCompositeBase {
   public static function getCompositeElements(array $element) {
     $elements = [];
     if ($element) {
-      $matrikula_wrapper_id = $element['#webform_id'] . '-matrikula-wrapper';
-
       $elements['address'] = [
         '#type' => 'os2forms_dawa_address',
         '#title' => isset($element['#address_field_title']) ? $element['#address_field_title'] : t('Address'),
-        '#ajax' => [
-          'callback' => [DawaElementAddressMatrikula::class, 'matrikulaUpdateSelectOptions'],
-          'event' => 'change',
-          'wrapper' => $matrikula_wrapper_id,
-          'progress' => [
-            'type' => 'none',
-          ],
-        ],
         '#remove_place_name' => isset($element['#remove_place_name']) ? $element['#remove_place_name'] : FALSE,
         '#remove_code' => isset($element['#remove_code']) ? $element['#remove_code'] : FALSE,
         '#limit_by_municipality' => isset($element['#limit_by_municipality']) ? $element['#limit_by_municipality'] : FALSE,
@@ -40,29 +30,49 @@ class DawaElementAddressMatrikula extends WebformCompositeBase {
       $elements['matrikula'] = [
         '#type' => 'select',
         '#title' => isset($element['#matrikula_field_title']) ? $element['#matrikula_field_title'] : t('Matrikula'),
-        '#prefix' => '<div id="' . $matrikula_wrapper_id . '">',
-        '#suffix' => '</div>',
         '#options' => [],
         '#empty_value' => NULL,
         '#validated' => TRUE,
         '#attributes' => [
           'disabled' => 'disabled',
         ],
+        '#description' => t('Options autofill is disabled during the element preview'),
       ];
 
-      if (isset($element['#value']) && !empty($element['#value']['address'])) {
-        $addressValue = $element['#value']['address'];
+      // If that is just element preview (no webform_id), then keep the
+      // element simple. Don't add AJAX behaviour.
+      if (isset($element['#webform_id'])) {
+        $matrikula_wrapper_id = $element['#webform_id'] . '-matrikula-wrapper';
 
-        $matrikulaOptions = self::getMatrikulaOptions($addressValue, $element);
+        $elements['address']['#ajax'] = [
+          'callback' => [DawaElementAddressMatrikula::class, 'matrikulaUpdateSelectOptions'],
+          'event' => 'change',
+          'wrapper' => $matrikula_wrapper_id,
+          'progress' => [
+            'type' => 'none',
+          ],
+        ];
 
-        // Populating the element.
-        if (!empty($matrikulaOptions)) {
-          $elements['matrikula']['#options'] = $matrikulaOptions;
-          $matrikulaOptionKeys = array_keys($matrikulaOptions);
-          $elements['matrikula']['matrikula']['#value'] = reset($matrikulaOptionKeys);
+        $elements['matrikula'] += [
+          '#prefix' => '<div id="' . $matrikula_wrapper_id . '">',
+          '#suffix' => '</div>',
+        ];
+        unset($elements['matrikula']['#description']);
 
-          // Make element enabled.
-          unset($elements['matrikula']['#attributes']['disabled']);
+        if (isset($element['#value']) && !empty($element['#value']['address'])) {
+          $addressValue = $element['#value']['address'];
+
+          $matrikulaOptions = self::getMatrikulaOptions($addressValue, $element);
+
+          // Populating the element.
+          if (!empty($matrikulaOptions)) {
+            $elements['matrikula']['#options'] = $matrikulaOptions;
+            $matrikulaOptionKeys = array_keys($matrikulaOptions);
+            $elements['matrikula']['matrikula']['#value'] = reset($matrikulaOptionKeys);
+
+            // Make element enabled.
+            unset($elements['matrikula']['#attributes']['disabled']);
+          }
         }
       }
     }

@@ -30,7 +30,6 @@ abstract class DawaElementBase extends TextField {
 
     $element['#autocomplete_route_name'] = 'os2forms_dawa.element.autocomplete';
     $element['#autocomplete_route_parameters'] = [
-      'webform' => $webform_submission->getWebform()->id(),
       'element_type' => $element['#type'],
     ];
   }

@@ -1,11 +1,7 @@
 os2forms_dawa.element.autocomplete:
-  path: '/os2forms-dawa/{webform}/autocomplete/{element_type}'
+  path: '/os2forms-dawa/autocomplete/{element_type}'
   defaults:
     _controller: '\Drupal\os2forms_dawa\Controller\DawaElementController::autocomplete'
     _format: json
-  options:
-    parameters:
-      webform:
-        type: 'entity:webform'
   requirements:
-    _entity_access: 'webform.submission_page'
+    _permission: 'access content'
