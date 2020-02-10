@@ -17,15 +17,13 @@ class DawaElementController extends ControllerBase {
    *
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   The current request object containing the search string.
-   * @param \Drupal\webform\WebformInterface $webform
-   *   A webform.
    * @param string $element_type
    *   Type of the webform element.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   A JSON response containing the autocomplete suggestions.
    */
-  public function autocomplete(Request $request, WebformInterface $webform, $element_type) {
+  public function autocomplete(Request $request, $element_type) {
     // Get autocomplete query.
     $query = $request->query;
     $q = $query->get('q') ?: '';

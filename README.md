@@ -56,6 +56,33 @@ See [OS2Forms code review policy](https://github.com/OS2Forms/docs#code-review)
 ### Git name convention
 See [OS2Forms git name convention](https://github.com/OS2Forms/docs#git-guideline)
 
+## Important notes
+### Webforms
+Each webform, including all its settings, is stored as configuration in db and
+will(could) be exported as `yml` file via Drupal configuration management
+system. And afterwards could be tracked by `git`.
+
+It means that all webform settings from drupal database will
+be syncronized (exported/imported) with state stored in `yml` files from
+configuration folder stored in git repository. Without proper actions webforms
+could be deleted or reverted to state in `yml` during synchronization.
+
+To avoid/prevent this behavior we recommend use `Config ignore` module, where
+you can add all settings you do not want to export/import via configuration
+management system.
+
+### Serviceplatformen plugins
+Settings for CPR and CVR serviceplantormen plugins are storing as configuration
+in db and will(could) be exported as `yml` file via Drupal configuration
+management system. And afterwards could be tracked by `git`.
+
+If case you have public access to your git repository all setting from plugins
+will be exposed for third persons.
+
+To avoid/prevent this behavior we recommend use `Config ignore` module, where
+you can add all settings you do not want to export/import via configuration
+management system.
+
 ## Unstable features
 ### Export submissions to Word
 This feature is still not part of Webform and Entity print modules stable versions
