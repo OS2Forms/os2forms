@@ -28,7 +28,7 @@
         "drupal/entity_print": "^2.1",
         "drupal/webform_migrate": "^1.1",
         "drupal/maillog": "1.x-dev",
-        "drupal/devel": "^2.1",
+        "drupal/webform_permissions_by_term": "^1.2",
         "phpoffice/phpword": "^0.17.0",
         "tecnickcom/tcpdf": "~6",
         "vaimo/composer-patches": "^4.20",
