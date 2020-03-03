@@ -95,3 +95,17 @@ function os2forms_nemid_webform_submission_form_alter(array &$form, FormStateInt
   }
 
 }
+
+/**
+ * Implements hook_preprocess().
+ */
+function os2forms_nemid_preprocess(&$variables, $hook) {
+  // Disable caching of 'webform' type field, as that breaks NemID integration.
+  if ($hook == 'field') {
+    $element = $variables['element'];
+    if ($element['#field_type'] == 'webform') {
+      // Disable caching.
+      $variables['#cache']['max-age'] = 0;
+    }
+  }
+}
