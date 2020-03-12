@@ -49,6 +49,9 @@ abstract class ServiceplatformenCprElementBase extends NemidElementBase {
           // Making composite field, address.
           $spCrpData['address'] = $spCrpData['road'] . ' ' . $spCrpData['road_no'] . ' ' . $spCrpData['floor'] . ' ' . $spCrpData['door'];
 
+          // Making composite field, city.
+          $spCrpData['city'] = $spCrpData['zipcode'] . ' ' . $spCrpData['city'];
+
           $form_state->set('servicePlatformenCprData', $spCrpData);
         }
       }
