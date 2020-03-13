@@ -74,8 +74,9 @@ abstract class NemidElementBase extends WebformElementBase implements NemidPrepo
         }
 
         $this->handleElementPrepopulate($element, $form_state);
-        NestedArray::setValue($form['elements'], $element['#webform_parents'], $element);
       }
+
+      NestedArray::setValue($form['elements'], $element['#webform_parents'], $element);
     }
   }
 
