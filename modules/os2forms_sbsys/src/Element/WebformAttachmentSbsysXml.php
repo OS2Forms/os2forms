@@ -175,41 +175,15 @@ class WebformAttachmentSbsysXml extends WebformAttachmentXml {
    *   Submission value.
    */
   protected static function getFirstValueByType($type, WebformSubmissionInterface $webform_submission) {
-    $value = NULL;
     $webform = $webform_submission->getWebform();
-    $webform_elements = $webform->getElementsDecoded();
-    foreach ($webform_elements as $key => $webform_element) {
-      if ($el_key = self::getElementKeyByType($webform_element, $type, $key)) {
-        $value = $webform_submission->getElementData($el_key);
-        break;
-      }
-    }
-    return $value;
-  }
 
-  /**
-   * Gets key of first element by field type.
-   *
-   * @param array $webform_element
-   *   The element of the webform.
-   * @param string $type
-   *   Element value type.
-   * @param string $el_key
-   *   Current element key.
-   *
-   * @return mixed
-   *   Element key.
-   */
-  protected static function getElementKeyByType(array $webform_element, $type, $el_key) {
-    foreach ($webform_element as $key => $value) {
-      if ($key == '#type' && $value == $type) {
-        return $el_key;
-      }
-      elseif (is_array($value)) {
-        return self::getElementKeyByType($value, $type, $key);
+    $webform_elements = $webform->getElementsDecodedAndFlattened();
+
+    foreach ($webform_elements as $key => $webform_element) {
+      if ($webform_element['#type'] == $type) {
+        return $webform_submission->getElementData($key);
       }
     }
-    return FALSE;
   }
 
   /**
