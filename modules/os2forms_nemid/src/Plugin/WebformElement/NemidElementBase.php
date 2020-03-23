@@ -5,6 +5,7 @@ namespace Drupal\os2forms_nemid\Plugin\WebformElement;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Plugin\WebformElementBase;
+use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * Provides a abstract NemID Element.
@@ -83,6 +84,27 @@ abstract class NemidElementBase extends WebformElementBase implements NemidPrepo
   /**
    * {@inheritdoc}
    */
+  protected function build($format, array &$element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    // Getting webform type settings.
+    $webform = $webform_submission->getWebform();
+    $webformNemidSettings = $webform->getThirdPartySetting('os2forms', 'os2forms_nemid');
+    $webform_type = NULL;
+
+    // If webform type is set, handle element visiblity.
+    if (isset($webformNemidSettings['webform_type'])) {
+      $webform_type = $webformNemidSettings['webform_type'];
+
+      if (!$this->isVisible($webform_type)) {
+        return NULL;
+      }
+    }
+
+    return parent::build($format, $element, $webform_submission, $options);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 
@@ -105,7 +127,10 @@ abstract class NemidElementBase extends WebformElementBase implements NemidPrepo
   /**
    * Handles element visibility on the webform.
    *
-   * If element type is not corresponding with the form type, element if hidden.
+   * If element type is not corresponding with the form type, element #access
+   * attribute is set to FALSE.
+   * Otherwise #access is not modified (prevents unwanted display of elements
+   * that were hidden otherwise).
    *
    * @param array $element
    *   Array element info.
@@ -113,16 +138,33 @@ abstract class NemidElementBase extends WebformElementBase implements NemidPrepo
    *   Allowed type of the element.
    */
   protected function handleElementVisibility(array &$element, $allowed_type) {
+    if (!$this->isVisible($allowed_type)) {
+      $element['#access'] = FALSE;
+    }
+  }
+
+  /**
+   * Checks is this element is allowed to be displayed.
+   *
+   * @param string $allowed_type
+   *   Allowed type of the element.
+   *
+   * @return bool
+   *   TRUE if visible, FALSE otherwise.
+   */
+  protected function isVisible($allowed_type) {
     if ($allowed_type === OS2FORMS_NEMID_WEBFORM_TYPE_PERSONAL) {
       if ($this instanceof NemidElementCompanyInterface) {
-        $element['#access'] = FALSE;
+        return FALSE;
       }
     }
     elseif ($allowed_type === OS2FORMS_NEMID_WEBFORM_TYPE_COMPANY) {
       if ($this instanceof NemidElementPersonalInterface) {
-        $element['#access'] = FALSE;
+        return FALSE;
       }
     }
+
+    return TRUE;
   }
 
 }
