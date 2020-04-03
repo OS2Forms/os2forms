@@ -31,6 +31,7 @@ abstract class NemidElementBase extends WebformElementBase implements NemidPrepo
       'minlength' => '',
       'maxlength' => '',
       'placeholder' => '',
+      'readonly' => '',
     ];
 
     return $properties;
@@ -110,9 +111,9 @@ abstract class NemidElementBase extends WebformElementBase implements NemidPrepo
 
     // @see \Drupal\webform\Plugin\WebformElement\WebformEntityReferenceTrait::form
     $element_properties = $form_state->get('element_properties');
-    // If element is new, set disabled by default.
+    // If element is new, set readonly by default.
     if (empty($element_properties['title'])) {
-      $form['form']['disabled']['#value'] = TRUE;
+      $form['form']['readonly']['#value'] = TRUE;
     }
 
     // Here you can define and alter a webform element's properties UI.
