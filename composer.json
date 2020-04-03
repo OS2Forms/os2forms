@@ -44,9 +44,6 @@
         "patches": {
             "drupal/entity_print": {
                 "2733781 - Add Export to Word Support": "https://www.drupal.org/files/issues/2019-11-22/2733781-47.patch"
-            },
-            "drupal/webform" : {
-                "3096552 - Unlock possibility of using Entity print module export to Word feature": "https://www.drupal.org/files/issues/2019-11-25/3096552-unlock-export-to-word-1.patch"
             }
         }
     }
