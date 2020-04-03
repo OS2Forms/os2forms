@@ -5,6 +5,7 @@ namespace Drupal\os2forms_nemid\EventSubscriber;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\os2web_nemlogin\Service\AuthProviderService;
+use Drupal\webform\Entity\Webform;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -56,12 +57,45 @@ class NemloginRedirectSubscriber implements EventSubscriberInterface {
     // This is necessary because this also gets called on
     // webform sub-tabs such as "edit", "revisions", etc.  This
     // prevents those pages from redirected.
-    if ($request->attributes->get('_route') !== 'entity.webform.canonical') {
+    $route = $request->attributes->get('_route');
+    if ($route !== 'entity.webform.canonical' && $route !== 'entity.node.canonical') {
       return;
     }
 
     /** @var \Drupal\webform\WebformInterface $webform */
-    $webform = $request->attributes->get('webform');
+    $webform = NULL;
+
+    if ($route === 'entity.webform.canonical') {
+      $webform = $request->attributes->get('webform');
+    }
+    else {
+      /** @var \Drupal\Core\Entity\EntityFieldManagerInterface $entityFieldManager */
+      $entityFieldManager = \Drupal::service('entity_field.manager');
+
+      $node = $request->attributes->get('node');
+      $nodeType = $node->getType();
+
+      // Search if this node type is related with field of type 'webform'.
+      $webformFieldMap = $entityFieldManager->getFieldMapByFieldType('webform');
+      if (isset($webformFieldMap['node'])) {
+        foreach ($webformFieldMap['node'] as $field_name => $field_meta) {
+          // We found field of type 'webform' in this node, let's try fetching
+          // the webform.
+          if (in_array($nodeType, $field_meta['bundles'])) {
+            if ($webformId = $node->get($field_name)->target_id) {
+              $webform = Webform::load($webformId);
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    // If we don't have any webform.
+    if (!$webform) {
+      return;
+    }
+
     $webformNemidSettings = $webform->getThirdPartySetting('os2forms', 'os2forms_nemid');
 
     // Getting nemlogin_auto_redirect setting.
