@@ -23,7 +23,7 @@
         "drupal/pathauto": "^1.5",
         "drupal/redirect": "^1.4",
         "drupal/token": "^1.5",
-        "drupal/webform": "^5.5",
+        "drupal/webform": "^5.11",
         "drupal/webform_embed": "1.x-dev",
         "drupal/entity_print": "^2.1",
         "drupal/webform_migrate": "^1.1",
