@@ -142,10 +142,11 @@ class DawaElementAddressMatrikula extends WebformCompositeBase {
    */
   public static function matrikulaUpdateSelectOptions(array &$form, FormStateInterface $form_state) {
     $triggeringElement = $form_state->getTriggeringElement();
-    $parents = $triggeringElement['#parents'];
-    $parentName = $parents[count($parents) - 2];
-
-    return $form['elements'][$parentName]['matrikula'];
+    $parents = $triggeringElement['#array_parents'];
+    $matrikula_element = $form;
+    for ($i=0; $i<=count($parents) - 2; $i++) {
+      $matrikula_element = $matrikula_element[$parents[$i]];
+    }
+    return $matrikula_element['matrikula'];
   }
-
 }
