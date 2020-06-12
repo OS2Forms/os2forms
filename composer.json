@@ -33,7 +33,8 @@
         "tecnickcom/tcpdf": "~6",
         "vaimo/composer-patches": "^4.20",
         "os2web/os2web_datalookup": "^1.0",
-        "os2web/os2web_nemlogin": "^1.0"
+        "os2web/os2web_nemlogin": "^1.0",
+        "drupal/webform_validation": "^1.0@alpha"
     },
     "extra" : {
         "composer-exit-on-patch-failure": true,
