@@ -1,0 +1,20 @@
+{#
+/**
+ * @file
+ * Default theme implementation for a summary of a webform save to file handler.
+ *
+ * Available variables:
+ * - settings: The current configuration for this save to file handler.
+ * - handler: The save to file handler.
+ *
+ * @ingroup themeable
+ */
+#}
+{% if settings.debug %}<b class="color-error">{{ 'Debugging is enabled'|t }}</b><br />{% endif %}
+<b>{{ 'Completed path:'|t }}</b> {{ settings.completed_path }}<br />
+{% if settings.updated_path %}<b>{{ 'Updated path:'|t }}</b> {{ settings.updated_path }}<br />{% endif %}
+{% if settings.deleted_path %}<b>{{ 'Deleted path:'|t }}</b> {{ settings.deleted_path }}<br />{% endif %}
+{% if settings.draft_path %}<b>{{ 'Draft path:'|t }}</b> {{ settings.draft_path }}<br />{% endif %}
+{% if settings.converted_path %}<b>{{ 'Converted path:'|t }}</b> {{ settings.converted_path }}<br />{% endif %}
+{% if settings.error_url %}<b>{{ 'Error URL:'|t }}</b> {{ settings.error_url }}<br />{% endif %}
+{% if settings.file_type %}<b>{{ 'Type:'|t }}</b> {{ settings.file_type }}<br />{% endif %}

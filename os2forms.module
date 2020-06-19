@@ -19,3 +19,14 @@ function os2forms_webform_third_party_settings_form_alter(&$form, FormStateInter
     '#description' => t('OS2Forms related settings'),
   ];
 }
+
+/**
+ * Implements hook_theme().
+ */
+function os2forms_theme() {
+  return [
+    'webform_handler_save_to_file_summary' => [
+      'variables' => ['settings' => NULL, 'handler' => NULL],
+    ],
+  ];
+}
