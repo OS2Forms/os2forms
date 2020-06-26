@@ -109,3 +109,153 @@ function os2forms_nemid_preprocess(&$variables, $hook) {
     }
   }
 }
+
+/**
+ * Helper function to define webform element meta data.
+ *
+ * @param $markup
+ * @param $indent
+ * @param $element
+ */
+function os2forms_nemid_get_settings_from_extras(&$markup, $indent, $element) {
+  $extra = unserialize($element['extra']);
+  $options = [
+    'disabled',
+    'readonly',
+    'placehoder',
+    'description',
+  ];
+  foreach ($options as $option) {
+    if (!empty($extra[$option])) {
+      $value = 'true';
+      switch ($option) {
+        case 'description':
+        case 'placeholder':
+          $value = "\"" . str_replace(['"', "\n", "\r"], ["'", '\n', ''], $extra[$option]) . "\"";
+          break;
+      }
+      $markup .= "$indent  #$option: $value\n";
+    }
+  }
+}
+
+/**
+ * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
+ *
+ * Not released hook
+ * @See https://www.drupal.org/project/webform_migrate/issues/3155073
+ */
+function os2forms_nemid_webform_migrate_d7_webform_element_nemid_address_alter(&$markup, $indent, array $element) {
+  $markup .= "$indent  '#type': os2forms_nemid_address\n";
+  os2forms_nemid_get_settings_from_extras($markup, $indent, $element);
+}
+
+/**
+ * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
+ *
+ * Not released hook
+ * @See https://www.drupal.org/project/webform_migrate/issues/3155073
+ */
+function os2forms_nemid_webform_migrate_d7_webform_element_nemid_city_alter(&$markup, $indent, array $element) {
+  $markup .= "$indent  '#type': os2forms_nemid_city\n";
+  os2forms_nemid_get_settings_from_extras($markup, $indent, $element);
+}
+
+/**
+ * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
+ *
+ * Not released hook
+ * @See https://www.drupal.org/project/webform_migrate/issues/3155073
+ */
+function os2forms_nemid_webform_migrate_d7_webform_element_nemid_coaddress_alter(&$markup, $indent, array $element) {
+  $markup .= "$indent  '#type': os2forms_nemid_coaddress\n";
+  os2forms_nemid_get_settings_from_extras($markup, $indent, $element);
+}
+
+/**
+ * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
+ *
+ * Not released hook
+ * @See https://www.drupal.org/project/webform_migrate/issues/3155073
+ */
+function os2forms_nemid_webform_migrate_d7_webform_element_nemid_com_addr_alter(&$markup, $indent, array $element) {
+  $markup .= "$indent  '#type': os2forms_nemid_company_address\n";
+  os2forms_nemid_get_settings_from_extras($markup, $indent, $element);
+}
+
+/**
+ * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
+ *
+ * Not released hook
+ * @See https://www.drupal.org/project/webform_migrate/issues/3155073
+ */
+function os2forms_nemid_webform_migrate_d7_webform_element_nemid_com_cvr_alter(&$markup, $indent, array $element) {
+  $markup .= "$indent  '#type': os2forms_nemid_company_cvr\n";
+  os2forms_nemid_get_settings_from_extras($markup, $indent, $element);
+}
+
+/**
+ * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
+ *
+ * Not released hook
+ * @See https://www.drupal.org/project/webform_migrate/issues/3155073
+ */
+function os2forms_nemid_webform_migrate_d7_webform_element_nemid_com_name_alter(&$markup, $indent, array $element) {
+  $markup .= "$indent  '#type': os2forms_nemid_company_name\n";
+  os2forms_nemid_get_settings_from_extras($markup, $indent, $element);
+}
+
+/**
+ * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
+ *
+ * Not released hook
+ * @See https://www.drupal.org/project/webform_migrate/issues/3155073
+ */
+function os2forms_nemid_webform_migrate_d7_webform_element_nemid_com_rid_alter(&$markup, $indent, array $element) {
+  $markup .= "$indent  '#type': os2forms_nemid_company_rid\n";
+  os2forms_nemid_get_settings_from_extras($markup, $indent, $element);
+}
+
+/**
+ * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
+ *
+ * Not released hook
+ * @See https://www.drupal.org/project/webform_migrate/issues/3155073
+ */
+function os2forms_nemid_webform_migrate_d7_webform_element_nemid_cpr_alter(&$markup, $indent, array $element) {
+  $markup .= "$indent  '#type': os2forms_nemid_cpr\n";
+  os2forms_nemid_get_settings_from_extras($markup, $indent, $element);
+}
+
+/**
+ * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
+ *
+ * Not released hook
+ * @See https://www.drupal.org/project/webform_migrate/issues/3155073
+ */
+function os2forms_nemid_webform_migrate_d7_webform_element_nemid_name_alter(&$markup, $indent, array $element) {
+  $markup .= "$indent  '#type': os2forms_nemid_name\n";
+  os2forms_nemid_get_settings_from_extras($markup, $indent, $element);
+}
+
+/**
+ * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
+ *
+ * Not released hook
+ * @See https://www.drupal.org/project/webform_migrate/issues/3155073
+ */
+function os2forms_nemid_webform_migrate_d7_webform_element_nemid_link_alter(&$markup, $indent, array $element) {
+  $markup .= "$indent  '#type': os2forms_nemid_nemlogin_link\n";
+  os2forms_nemid_get_settings_from_extras($markup, $indent, $element);
+}
+
+/**
+ * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
+ *
+ * Not released hook
+ * @See https://www.drupal.org/project/webform_migrate/issues/3155073
+ */
+function os2forms_nemid_webform_migrate_d7_webform_element_nemid_pid_alter(&$markup, $indent, array $element) {
+  $markup .= "$indent  '#type': os2forms_nemid_pid\n";
+  os2forms_nemid_get_settings_from_extras($markup, $indent, $element);
+}
