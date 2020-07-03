@@ -144,9 +144,10 @@ class DawaElementAddressMatrikula extends WebformCompositeBase {
     $triggeringElement = $form_state->getTriggeringElement();
     $parents = $triggeringElement['#array_parents'];
     $matrikula_element = $form;
-    for ($i=0; $i<=count($parents) - 2; $i++) {
+    for ($i = 0; $i <= count($parents) - 2; $i++) {
       $matrikula_element = $matrikula_element[$parents[$i]];
     }
     return $matrikula_element['matrikula'];
   }
+
 }

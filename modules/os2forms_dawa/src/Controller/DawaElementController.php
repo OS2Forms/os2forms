@@ -3,7 +3,6 @@
 namespace Drupal\os2forms_dawa\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\webform\WebformInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 

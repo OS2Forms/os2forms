@@ -12,7 +12,6 @@ use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
 use Drupal\file\Entity\File;
 use Drupal\webform\Element\WebformMessage;
 use Drupal\webform\Plugin\WebformElement\BooleanBase;
@@ -239,7 +238,7 @@ class SaveToFileWebformHandler extends WebformHandlerBase {
 
     $path_pattern = ['public' => 'public?:\/\/'];
     if (\Drupal::service('file_system')->realpath("private://")) {
-      $path_pattern['private'] =  'private?:\/\/';
+      $path_pattern['private'] = 'private?:\/\/';
     }
 
     foreach ($states as $state => $state_item) {
@@ -394,6 +393,8 @@ class SaveToFileWebformHandler extends WebformHandlerBase {
    *   depending on the last save operation performed.
    * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
    *   The webform submission to be posted.
+   *
+   * @throws \Exception
    */
   protected function saveFile($state, WebformSubmissionInterface $webform_submission) {
     $file_path = $this->getFilePath($state, $webform_submission);
@@ -404,15 +405,15 @@ class SaveToFileWebformHandler extends WebformHandlerBase {
     $file_type = $this->configuration['file_type'];
     try {
       $data = $this->getRequestData($state, $webform_submission);
-      /** @var FileSystemInterface $file_system */
+      /** @var \Drupal\Core\File\FileSystemInterface $file_system */
       $file_system = \Drupal::service('file_system');
       $file_dir = $file_system->dirname($file_path);
       if (!file_exists($file_dir)) {
         $file_system->mkdir($file_dir, NULL, TRUE);
       }
-      $file_system->saveData($data, $file_path, FileSystemInterface::EXISTS_REPLACE );
+      $file_system->saveData($data, $file_path, FileSystemInterface::EXISTS_REPLACE);
     }
-    catch ( FileWriteException $e) {
+    catch (FileWriteException $e) {
       $this->handleError($state, $e->getMessage(), $file_path, $file_type);
       return;
     }
@@ -421,7 +422,18 @@ class SaveToFileWebformHandler extends WebformHandlerBase {
     $this->debug(t('Save to file successful!'), $state, $file_path);
   }
 
-  function getFilePath($state, WebformSubmissionInterface $webform_submission) {
+  /**
+   * Gets file path to save data.
+   *
+   * @param string $state
+   *   String state of webform submission.
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   Webform submission entity object.
+   *
+   * @return string|null
+   *   File path string or null.
+   */
+  protected function getFilePath($state, WebformSubmissionInterface $webform_submission) {
     $state_path = $this->configuration[$state . '_path'];
     if (empty($state_path)) {
       return NULL;
@@ -442,7 +454,8 @@ class SaveToFileWebformHandler extends WebformHandlerBase {
    *   depending on the last save operation performed.
    * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
    *   The webform submission to be posted.
-   * @throws
+   *
+   * @throws \Exception
    *
    * @return array
    *   A webform submission converted to an associative array.
@@ -554,7 +567,8 @@ class SaveToFileWebformHandler extends WebformHandlerBase {
    *   The element's webform plugin.
    * @param mixed $value
    *   The element's value.
-   * @throws
+   *
+   * @throws \Exception
    *
    * @return mixed
    *   The element's value cast to boolean or float when appropriate.
@@ -641,10 +655,6 @@ class SaveToFileWebformHandler extends WebformHandlerBase {
     return $this->isDraftEnabled() && ($this->getWebform()->getSetting('form_convert_anonymous') === TRUE);
   }
 
-  /****************************************************************************/
-  // Debug and exception handlers.
-  /****************************************************************************/
-
   /**
    * Display debugging information.
    *
@@ -720,7 +730,7 @@ class SaveToFileWebformHandler extends WebformHandlerBase {
    * @param string $file_type
    *   The file type.
    *
-   * @throws
+   * @throws \Drupal\Core\Entity\EntityMalformedException
    */
   protected function handleError($state, $message, $file_path, $file_type) {
     global $base_url, $base_path;
