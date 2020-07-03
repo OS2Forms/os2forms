@@ -15,7 +15,7 @@ abstract class DawaElementBase extends TextField {
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
-    $properties = parent::getDefaultProperties() + $this->getDefaultMultipleProperties();
+    $properties = parent::getDefaultProperties() + $this->defineDefaultBaseProperties();
     // Remove autocomplete property which is not applicable to this autocomplete
     // element.
     unset($properties['autocomplete']);
