@@ -30,3 +30,35 @@ function os2forms_theme() {
     ],
   ];
 }
+
+/**
+ * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
+ *
+ * Not released hook
+ * @See https://www.drupal.org/project/webform_migrate/issues/3155073
+ */
+function os2forms_webform_migrate_d7_webform_element_date_popup_alter(&$markup, $indent, array $element) {
+  $markup .= "$indent  '#type': date\n";
+  $markup .= "$indent  '#datepicker': true\n";
+  $markup .= "$indent  '#date_date_format': d/m/Y\n";
+
+  $extra = unserialize($element['extra']);
+  $options = [
+    'disabled',
+    'readonly',
+    'placehoder',
+    'description',
+  ];
+  foreach ($options as $option) {
+    if (!empty($extra[$option])) {
+      $value = 'true';
+      switch ($option) {
+        case 'description':
+        case 'placeholder':
+          $value = "\"" . str_replace(['"', "\n", "\r"], ["'", '\n', ''], $extra[$option]) . "\"";
+          break;
+      }
+      $markup .= "$indent  #$option: $value\n";
+    }
+  }
+}
