@@ -62,3 +62,34 @@ function os2forms_webform_migrate_d7_webform_element_date_popup_alter(&$markup, 
     }
   }
 }
+
+/**
+ * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
+ *
+ * Not released hook
+ * @See https://www.drupal.org/project/webform_migrate/issues/3155073
+ */
+function os2forms_webform_migrate_d7_webform_element_bt_layout_row_alter(&$markup, $indent, array $element) {
+  $markup .= "$indent  '#type': webform_flexbox\n";
+
+  $extra = unserialize($element['extra']);
+  if (!empty($extra['description'])) {
+    $value = "\"" . str_replace(['"', "\n", "\r"], ["'", '\n', ''], $extra['description']) . "\"";
+    $markup .= "$indent  #description: $value\n";
+  }
+}
+
+/**
+ * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
+ *
+ * Not released hook
+ * @See https://www.drupal.org/project/webform_migrate/issues/3155073
+ */
+function os2forms_webform_migrate_d7_webform_element_bt_layout_cols_alter(&$markup, $indent, array $element) {
+  $markup .= "$indent  '#type': container\n";
+  $extra = unserialize($element['extra']);
+  if (!empty($extra['description'])) {
+    $value = "\"" . str_replace(['"', "\n", "\r"], ["'", '\n', ''], $extra['description']) . "\"";
+    $markup .= "$indent  #description: $value\n";
+  }
+}
