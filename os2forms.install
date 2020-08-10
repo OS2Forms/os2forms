@@ -43,3 +43,12 @@ function os2forms_requirements($phase) {
   ];
   return $requirements;
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable webform_entity_print_attachment module.
+ */
+function os2forms_update_8901() {
+  \Drupal::service('module_installer')->install(['webform_entity_print_attachment']);
+}
