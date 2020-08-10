@@ -11,6 +11,7 @@ dependencies:
   - webform_access
   - webform_attachment
   - webform_entity_print
+  - webform_entity_print_attachment
   - webform_scheduled_email
   - webform_submission_export_import
   - webform_submission_log
