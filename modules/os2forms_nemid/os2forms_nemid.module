@@ -259,3 +259,37 @@ function os2forms_nemid_webform_migrate_d7_webform_element_nemid_pid_alter(&$mar
   $markup .= "$indent  '#type': os2forms_nemid_pid\n";
   os2forms_nemid_get_settings_from_extras($markup, $indent, $element);
 }
+
+/**
+ * Implements hook_migrate_prepare_row().
+ */
+function os2forms_nemid_migrate_prepare_row(\Drupal\migrate\Row $row, \Drupal\migrate\Plugin\MigrateSourceInterface $source, \Drupal\migrate\Plugin\MigrationInterface $migration) {
+  $nid = $row->getSourceProperty('nid');
+  $default = $source->getDatabase()->select('os2forms_frontend_webform_settings', 'of')
+    ->fields('of')
+    ->condition('nid', $nid, '=')
+    ->condition('submodule', 'os2forms_nemid', '=')
+    ->execute()
+    ->fetchAssoc();
+
+  if (empty($default['data'])) {
+    return;
+  }
+
+  $data = unserialize($default['data']);
+  $os2forms_nemid = [];
+  if (!empty($data['webform_type'])) {
+    $os2forms_nemid['webform_type'] = $data['webform_type'];
+  }
+  if (!empty($data['nemid_link_auto_redirect'])) {
+    $os2forms_nemid['nemlogin_auto_redirect'] = (bool) $data['nemid_link_auto_redirect'];
+  }
+  if (!empty($os2forms_nemid)) {
+    $third_party_settings = $row->getDestinationProperty('third_party_settings');
+    $third_party_settings['os2forms']['os2forms_nemid'] = $os2forms_nemid;
+    $row->setDestinationProperty('third_party_settings', $third_party_settings);
+    $dependencies = $row->getDestinationProperty('dependencies');
+    $dependencies['module'][] = 'os2forms';
+    $row->setDestinationProperty('dependencies', $dependencies);
+  }
+}
