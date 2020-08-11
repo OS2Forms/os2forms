@@ -1,0 +1,83 @@
+<?php
+
+/**
+ * @file
+ * OS2Forms SBSYS functionality module.
+ */
+
+/**
+ * Implements hook_migrate_prepare_row().
+ */
+function os2forms_sbsys_migrate_prepare_row(\Drupal\migrate\Row $row, \Drupal\migrate\Plugin\MigrateSourceInterface $source, \Drupal\migrate\Plugin\MigrationInterface $migration) {
+  $nid = $row->getSourceProperty('nid');
+  $default = $source->getDatabase()->select('os2forms_frontend_webform_settings', 'of')
+    ->fields('of')
+    ->condition('nid', $nid, '=')
+    ->condition('submodule', 'os2forms_sbsys', '=')
+    ->execute()
+    ->fetchAssoc();
+
+  if (empty($default['data'])) {
+    return;
+  }
+
+  $query = $source->getDatabase()->select('webform_component', 'wc');
+  $query->fields('wc', [
+    'pid',
+    'form_key',
+  ]);
+  $components = $query->condition('nid', $nid)->execute();
+  $keys = [];
+  foreach ($components as $component) {
+    $keys[$component->form_key] = $component->form_key . ($component->pid ? '_' . $component->pid : '');
+  }
+
+  $data = unserialize($default['data']);
+  $os2forms_sbsys = [];
+  $properties = [
+    'os2formsId',
+    'kle',
+    'sagSkabelonId',
+    'nemid_cpr',
+    'nemid_name',
+    'nemid_address',
+    'nemid_zipcode',
+    'nemid_city',
+    'bodyText',
+  ];
+  foreach ($properties as $property) {
+    $os2forms_sbsys['#' . $property . '_custom'] = '';
+    if (!empty($data[$property])) {
+      $value = $data[$property];
+      if ($value == 'custom') {
+        $os2forms_sbsys['#' . $property . '_custom'] = $data[$property . '_custom'];
+        $os2forms_sbsys['#' . $property] = $value;
+      }
+      else {
+        $os2forms_sbsys['#' . $property] = $keys[$value];
+      }
+    }
+  }
+
+  if (!empty($data['MaaSendesTilDFF'])) {
+    $os2forms_sbsys['#MaaSendesTilDFF'] = $data['MaaSendesTilDFF'];
+  }
+
+  if (!empty($os2forms_sbsys)) {
+    $markup = "webform_attachment_os2forms_sbsys_xml:\n";
+    $markup .= "  '#title': 'SBSYS Attachment'\n";
+    $markup .= "  '#type': webform_attachment_os2forms_sbsys_xml\n";
+    foreach ($os2forms_sbsys as $key => $value) {
+      $markup .= "  '$key': '$value'\n";
+    }
+    $elements = $row->getSourceProperty('elements');
+    $elements .= $markup;
+    $row->setSourceProperty('elements', $elements);
+
+    $dependencies = $row->getDestinationProperty('dependencies');
+    if (!array_search('os2forms', $dependencies)) {
+      $dependencies['module'][] = 'os2forms';
+      $row->setDestinationProperty('dependencies', $dependencies);
+    }
+  }
+}

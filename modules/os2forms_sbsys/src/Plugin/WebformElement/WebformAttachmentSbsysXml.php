@@ -141,6 +141,19 @@ class WebformAttachmentSbsysXml extends WebformAttachmentXml {
         'textfield',
         'select',
         'email',
+        'os2forms_nemid_cpr',
+        'os2forms_nemid_name',
+        'os2forms_nemid_pid',
+        'os2forms_nemid_address',
+        'os2forms_nemid_coaddress',
+        'os2forms_nemid_zipcode',
+        'os2forms_nemid_city',
+        'os2forms_nemid_company_cvr',
+        'os2forms_nemid_company_name',
+        'os2forms_nemid_company_address',
+        'os2forms_nemid_company_city',
+        'os2forms_nemid_company_rid',
+        'date',
       ];
       if (!$element_plugin->isInput($element)
         || !isset($element['#type'])

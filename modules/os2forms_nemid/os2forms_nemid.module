@@ -211,6 +211,17 @@ function os2forms_nemid_webform_migrate_d7_webform_element_nemid_com_name_alter(
  * Not released hook
  * @See https://www.drupal.org/project/webform_migrate/issues/3155073
  */
+function os2forms_nemid_webform_migrate_d7_webform_element_nemid_com_city_alter(&$markup, $indent, array $element) {
+  $markup .= "$indent  '#type': os2forms_nemid_company_city\n";
+  os2forms_nemid_get_settings_from_extras($markup, $indent, $element);
+}
+
+/**
+ * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
+ *
+ * Not released hook
+ * @See https://www.drupal.org/project/webform_migrate/issues/3155073
+ */
 function os2forms_nemid_webform_migrate_d7_webform_element_nemid_com_rid_alter(&$markup, $indent, array $element) {
   $markup .= "$indent  '#type': os2forms_nemid_company_rid\n";
   os2forms_nemid_get_settings_from_extras($markup, $indent, $element);
