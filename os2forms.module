@@ -93,3 +93,188 @@ function os2forms_webform_migrate_d7_webform_element_bt_layout_cols_alter(&$mark
     $markup .= "$indent  #description: $value\n";
   }
 }
+
+/**
+ * Implements hook_migrate_prepare_row().
+ */
+function os2forms_migrate_prepare_row(\Drupal\migrate\Row $row, \Drupal\migrate\Plugin\MigrateSourceInterface $source, \Drupal\migrate\Plugin\MigrationInterface $migration) {
+  _os2forms_migrate_prepare_row_pdf($row, $source, $migration);
+  _os2forms_migrate_prepare_row_doc($row, $source, $migration);
+}
+
+/**
+ * Implements support of PDF attachment migration.
+ */
+function _os2forms_migrate_prepare_row_pdf(\Drupal\migrate\Row $row, \Drupal\migrate\Plugin\MigrateSourceInterface $source, \Drupal\migrate\Plugin\MigrationInterface $migration) {
+  // Adding migration path for Webform PDF Entity print attachment.
+  $nid = $row->getSourceProperty('nid');
+  $default = $source->getDatabase()->select('webform2pdf', 'w2p')
+    ->fields('w2p')
+    ->condition('nid', $nid, '=')
+    ->execute()
+    ->fetchAssoc();
+
+  if (!empty($default['data'])) {
+    $data = unserialize($default['data']);
+    unset($default['data']);
+    $default = array_merge($default, $data);
+  }
+
+  if (empty($default['enabled'])) {
+    return;
+  }
+
+  $of_default = $source->getDatabase()->select('os2forms_frontend_webform_settings', 'of')
+    ->fields('of')
+    ->condition('nid', $nid, '=')
+    ->condition('submodule', 'os2forms_webform2pdf', '=')
+    ->execute()
+    ->fetchAssoc();
+
+  if (empty($of_default['data'])) {
+    $data = unserialize($default['data']);
+    unset($default['data']);
+    $default = array_merge($default, $data);
+  }
+
+  $markup = "webform_attachment_pdf:\n";
+  $markup .= "  '#title': 'PDF Attachment'\n";
+  $markup .= "  '#type': webform_entity_print_attachment:pdf\n";
+  $filename = 'webform_submission-[webform:id]-[webform_submission:sid].pdf';
+  if ($default['custom_pdf_name']) {
+    $filename = str_replace(['@nid', '@sid'], ['[webform:id]', '[webform_submission:sid]'], $data['custom_pdf_name']);
+  }
+  $markup .= "  '#filename': '$filename'\n";
+  $template = _os2forms_migrate_prepare_webform2pdf_get_template($nid, $source);
+  if ($template) {
+    $template_arr = explode("\n", $template);
+    $markup .= "  '#view_mode': twig\n";
+    $markup .= "  '#template': |\n    " . implode("\n    ", $template_arr) . "\n";
+  }
+
+  // Saving new form element.
+  $elements = $row->getSourceProperty('elements');
+  $elements .= $markup;
+  $row->setSourceProperty('elements', $elements);
+  $dependencies = $row->getDestinationProperty('dependencies');
+  if (empty($dependencies) || !array_search('os2forms', $dependencies)) {
+    $dependencies['module'][] = 'os2forms';
+    $row->setDestinationProperty('dependencies', $dependencies);
+  }
+}
+
+/**
+ * Implements support of DOC attachment migration.
+ */
+function _os2forms_migrate_prepare_row_doc(\Drupal\migrate\Row $row, \Drupal\migrate\Plugin\MigrateSourceInterface $source, \Drupal\migrate\Plugin\MigrationInterface $migration) {
+  // Adding migration path for Webform DOC Entity print attachment.
+  $nid = $row->getSourceProperty('nid');
+  $default = $source->getDatabase()->select('os2forms_frontend_webform_settings', 'of')
+    ->fields('of')
+    ->condition('nid', $nid, '=')
+    ->condition('submodule', 'os2forms_doc', '=')
+    ->execute()
+    ->fetchAssoc();
+
+  if (!empty($default['data'])) {
+    $data = unserialize($default['data']);
+    unset($default['data']);
+    $default = array_merge($default, $data);
+  }
+
+  if (empty($default['enabled'])) {
+    return;
+  }
+
+  $markup = "webform_attachment_docx:\n";
+  $markup .= "  '#title': 'PDF Attachment'\n";
+  $markup .= "  '#type': webform_entity_print_attachment:word_docx\n";
+  $markup .= "  '#filename': 'webform_submission-[webform:id]-[webform_submission:sid].docx'\n";
+  $template = _os2forms_migrate_prepare_webform2pdf_get_template($nid, $source);
+  if ($template) {
+    $template_arr = explode("\n", $template);
+    $markup .= "  '#view_mode': twig\n";
+    $markup .= "  '#template': |\n    " . implode("\n    ", $template_arr) . "\n";
+  }
+
+  // Saving new form element.
+  $elements = $row->getSourceProperty('elements');
+  $elements .= $markup;
+  $row->setSourceProperty('elements', $elements);
+
+  $dependencies = $row->getDestinationProperty('dependencies');
+  if (!array_search('os2forms', $dependencies)) {
+    $dependencies['module'][] = 'os2forms';
+    $row->setDestinationProperty('dependencies', $dependencies);
+  }
+}
+
+function _os2forms_migrate_prepare_webform2pdf_get_template($nid, $source) {
+  $template = &drupal_static(__FUNCTION__ . '_' . $nid, FALSE);
+  if ($template) {
+    return $template;
+  }
+  $settings = $source->getDatabase()->select('webform2pdf', 'w2p')
+    ->fields('w2p')
+    ->condition('nid', $nid, '=')
+    ->execute()
+    ->fetchAssoc();
+
+  if (!empty($settings['data'])) {
+    $data = unserialize($settings['data']);
+    unset($settings['data']);
+    $settings = array_merge($settings, $data);
+  }
+
+  if (empty($settings['p_body']['value'])) {
+    return FALSE;
+  }
+  $template = $settings['p_body']['value'];
+
+  // Due to changed form_keys we should replace old form_key to new one.
+  // Collecting mapping array for form_keys.
+  $query = $source->getDatabase()->select('webform_component', 'wc');
+  $query->fields('wc', [
+    'pid',
+    'form_key',
+  ]);
+  $components = $query->condition('nid', $nid)->execute();
+  $keys = [];
+  foreach ($components as $component) {
+    $keys[$component->form_key] = $component->form_key . ($component->pid ? '_' . $component->pid : '');
+  }
+
+  // Replacing D7 webform tokens to D8.
+  $template = str_replace('[submission:', '[webform_submission:', $template);
+  foreach ($keys as $old_key => $new_key) {
+    $template = str_replace(':' . $old_key . ']', ':' . $new_key . ']', $template);
+    $template = str_replace(':' . $old_key . ':', ':' . $new_key . ':', $template);
+  }
+
+  // Check valid tokens.
+  preg_match_all('/\[(.*)\]/', $template, $matches);
+  $tokens = array_unique($matches[0]);
+  $valid_tokens = array_filter($tokens, function($token) {
+    return empty(\Drupal::token()->getInvalidTokensByContext($token, [
+      0 => 'webform',
+      1 => 'webform_submission',
+      2 => 'webform_handler',
+      3 => 'site',
+      4 => 'date',
+    ]));
+  });
+
+  // Making tokens available for twig template.
+  foreach($valid_tokens as $token) {
+    $template = str_replace($token, "{{ webform_token('" . $token . "', webform_submission, [], options) }}", $template);
+    $unset_key = array_search($token, $tokens);
+    unset($tokens[$unset_key]);
+  }
+
+  // Removing invalid tokens.
+  foreach($tokens as $invalid_token) {
+    $template = str_replace($invalid_token, '', $template);
+  }
+
+  return $template;
+}
