@@ -131,10 +131,10 @@ function _os2forms_migrate_prepare_row_pdf(\Drupal\migrate\Row $row, \Drupal\mig
     ->execute()
     ->fetchAssoc();
 
-  if (empty($of_default['data'])) {
-    $data = unserialize($default['data']);
-    unset($default['data']);
-    $default = array_merge($default, $data);
+  if (!empty($of_default['data'])) {
+    $data = unserialize($of_default['data']);
+    unset($of_default['data']);
+    $default = array_merge($of_default, $data);
   }
 
   $markup = "webform_attachment_pdf:\n";
