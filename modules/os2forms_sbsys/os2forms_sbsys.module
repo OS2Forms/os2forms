@@ -5,6 +5,8 @@
  * OS2Forms SBSYS functionality module.
  */
 
+use Symfony\Component\Yaml\Yaml;
+
 /**
  * Implements hook_migrate_prepare_row().
  */
@@ -50,8 +52,8 @@ function os2forms_sbsys_migrate_prepare_row(\Drupal\migrate\Row $row, \Drupal\mi
     if (!empty($data[$property])) {
       $value = $data[$property];
       if ($value == 'custom') {
-        $os2forms_sbsys['#' . $property . '_custom'] = $data[$property . '_custom'];
-        $os2forms_sbsys['#' . $property] = $value;
+        $os2forms_sbsys['#' . $property . '_custom'] = Yaml::dump($data[$property . '_custom'], 2, 1);
+        $os2forms_sbsys['#' . $property] = '_custom_';
       }
       else {
         $os2forms_sbsys['#' . $property] = $keys[$value];
@@ -68,7 +70,7 @@ function os2forms_sbsys_migrate_prepare_row(\Drupal\migrate\Row $row, \Drupal\mi
     $markup .= "  '#title': 'SBSYS Attachment'\n";
     $markup .= "  '#type': webform_attachment_os2forms_sbsys_xml\n";
     foreach ($os2forms_sbsys as $key => $value) {
-      $markup .= "  '$key': '$value'\n";
+      $markup .= "  '$key': $value\n";
     }
     $elements = $row->getSourceProperty('elements');
     $elements .= $markup;
