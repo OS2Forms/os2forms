@@ -203,7 +203,7 @@ function _os2forms_migrate_prepare_row_doc(\Drupal\migrate\Row $row, \Drupal\mig
   $row->setSourceProperty('elements', $elements);
 
   $dependencies = $row->getDestinationProperty('dependencies');
-  if (!array_search('os2forms', $dependencies)) {
+  if (empty($dependencies) || !array_search('os2forms', $dependencies)) {
     $dependencies['module'][] = 'os2forms';
     $row->setDestinationProperty('dependencies', $dependencies);
   }

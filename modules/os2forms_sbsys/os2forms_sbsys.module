@@ -77,7 +77,7 @@ function os2forms_sbsys_migrate_prepare_row(\Drupal\migrate\Row $row, \Drupal\mi
     $row->setSourceProperty('elements', $elements);
 
     $dependencies = $row->getDestinationProperty('dependencies');
-    if (!array_search('os2forms', $dependencies)) {
+    if (empty($dependencies) || !array_search('os2forms', $dependencies)) {
       $dependencies['module'][] = 'os2forms';
       $row->setDestinationProperty('dependencies', $dependencies);
     }
