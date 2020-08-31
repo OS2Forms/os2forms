@@ -21,6 +21,27 @@ function os2forms_webform_third_party_settings_form_alter(&$form, FormStateInter
 }
 
 /**
+ * Implements hook_webform_admin_third_party_settings_form_alter().
+ */
+function os2forms_webform_admin_third_party_settings_form_alter(&$form, FormStateInterface $form_state) {
+  $form['third_party_settings']['os2forms'] = [
+    '#type' => 'details',
+    '#title' => t('OS2Forms'),
+  ];
+  /** @var \Drupal\webform\WebformThirdPartySettingsManagerInterface $third_party_settings_manager */
+  $third_party_settings_manager = \Drupal::service('webform.third_party_settings_manager');
+  $webform_entity_storage = \Drupal::service('entity.manager')->getStorage('webform');
+  $form['third_party_settings']['os2forms']['migrate_to_category'] = [
+    '#type' => 'webform_select_other',
+    '#title' => t('Migrate webforms to category'),
+    '#description' => t('After migration webforms will get this category.'),
+    '#options' => $webform_entity_storage->getCategories(),
+    '#empty_value' => 'none',
+    '#default_value' => $third_party_settings_manager->getThirdPartySetting('os2forms', 'migrate_to_category') ?: FALSE,
+  ];
+}
+
+/**
  * Implements hook_theme().
  */
 function os2forms_theme() {
@@ -100,6 +121,11 @@ function os2forms_webform_migrate_d7_webform_element_bt_layout_cols_alter(&$mark
 function os2forms_migrate_prepare_row(\Drupal\migrate\Row $row, \Drupal\migrate\Plugin\MigrateSourceInterface $source, \Drupal\migrate\Plugin\MigrationInterface $migration) {
   _os2forms_migrate_prepare_row_pdf($row, $source, $migration);
   _os2forms_migrate_prepare_row_doc($row, $source, $migration);
+  /** @var \Drupal\webform\WebformThirdPartySettingsManagerInterface $third_party_settings_manager */
+  $migrate_to_category = \Drupal::service('webform.third_party_settings_manager')->getThirdPartySetting('os2forms', 'migrate_to_category');
+  if (!empty($migrate_to_category)) {
+    $row->setDestinationProperty('category', $migrate_to_category);
+  }
 }
 
 /**
