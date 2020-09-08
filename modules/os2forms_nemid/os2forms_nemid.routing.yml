@@ -1,0 +1,7 @@
+os2web_nemid.settings_form:
+  path: '/admin/config/system/os2forms_nemid'
+  defaults:
+    _title: 'OS2Forms Nemid settings'
+    _form: 'Drupal\os2forms_nemid\Form\SettingsForm'
+  requirements:
+    _permission: 'administer site configuration'
