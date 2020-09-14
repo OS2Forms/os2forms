@@ -45,7 +45,10 @@ class DawaElementAddressMatrikula extends WebformCompositeBase {
         $matrikula_wrapper_id = $element['#webform_id'] . '-matrikula-wrapper';
 
         $elements['address']['#ajax'] = [
-          'callback' => [DawaElementAddressMatrikula::class, 'matrikulaUpdateSelectOptions'],
+          'callback' => [
+            DawaElementAddressMatrikula::class,
+            'matrikulaUpdateSelectOptions',
+          ],
           'event' => 'change',
           'wrapper' => $matrikula_wrapper_id,
           'progress' => [

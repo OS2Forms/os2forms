@@ -57,7 +57,10 @@ class NemidCoaddress extends NemidElementBase {
    */
   public static function preRenderNemidCoaddress(array $element) {
     $element = parent::prerenderNemidElementBase($element);
-    static::setAttributes($element, ['form-text', 'os2forms-nemid-coaddress']);
+    static::setAttributes($element, [
+      'form-text',
+      'os2forms-nemid-coaddress',
+    ]);
     return $element;
   }
 

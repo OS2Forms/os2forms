@@ -59,7 +59,10 @@ class NemidCompanyAddress extends NemidElementBase {
    */
   public static function preRenderNemidCompanyAddress(array $element) {
     $element = parent::prerenderNemidElementBase($element);
-    static::setAttributes($element, ['form-text', 'os2forms-nemid-company-address']);
+    static::setAttributes($element, [
+      'form-text',
+      'os2forms-nemid-company-address',
+    ]);
     return $element;
   }
 

@@ -57,7 +57,10 @@ class NemidCompanyCity extends NemidElementBase {
    */
   public static function preRenderNemidCompanyCity(array $element) {
     $element = parent::prerenderNemidElementBase($element);
-    static::setAttributes($element, ['form-text', 'os2forms-nemid-company-city']);
+    static::setAttributes($element, [
+      'form-text',
+      'os2forms-nemid-company-city',
+    ]);
     return $element;
   }
 

@@ -161,7 +161,10 @@ class WebformAttachmentSbsysXml extends WebformAttachmentXml {
         || $element_plugin->hasMultipleValues($element)) {
         continue;
       }
-      $element_options[$element_key] = (isset($element['#title'])) ? new FormattableMarkup('@title (@key)', ['@title' => $element['#title'], '@key' => $element_key]) : $element_key;
+      $element_options[$element_key] = (isset($element['#title'])) ? new FormattableMarkup('@title (@key)', [
+        '@title' => $element['#title'],
+        '@key' => $element_key,
+      ]) : $element_key;
     }
     $element_options['_custom_'] = $this->t('Custom text ...');
     $nemid_field_element_options = array_merge(

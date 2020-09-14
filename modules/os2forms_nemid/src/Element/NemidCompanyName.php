@@ -57,7 +57,10 @@ class NemidCompanyName extends NemidElementBase {
    */
   public static function preRenderNemidCompanyName(array $element) {
     $element = parent::prerenderNemidElementBase($element);
-    static::setAttributes($element, ['form-text', 'os2forms-nemid-company-name']);
+    static::setAttributes($element, [
+      'form-text',
+      'os2forms-nemid-company-name',
+    ]);
     return $element;
   }
 

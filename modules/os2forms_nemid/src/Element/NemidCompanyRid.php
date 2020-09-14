@@ -57,7 +57,10 @@ class NemidCompanyRid extends NemidElementBase {
    */
   public static function preRenderNemidCompanyRid(array $element) {
     $element = parent::prerenderNemidElementBase($element);
-    static::setAttributes($element, ['form-text', 'os2forms-nemid-company-rid']);
+    static::setAttributes($element, [
+      'form-text',
+      'os2forms-nemid-company-rid',
+    ]);
     return $element;
   }
 

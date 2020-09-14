@@ -32,7 +32,10 @@ class NemidNemloginLink extends WebformMarkupBase {
    * {@inheritdoc}
    */
   public function getTranslatableProperties() {
-    return array_merge(parent::getTranslatableProperties(), ['nemlogin_link_login_text', 'nemlogin_link_logout_text']);
+    return array_merge(parent::getTranslatableProperties(), [
+      'nemlogin_link_login_text',
+      'nemlogin_link_logout_text',
+    ]);
   }
 
   /**

@@ -270,7 +270,9 @@ class SaveToFileWebformHandler extends WebformHandlerBase {
         '#mode' => 'yaml',
         '#title' => $this->t('@title custom data', $t_args),
         '#description' => $this->t('Enter custom data that will be included when a webform submission is @state.', $t_args),
-        '#states' => ['visible' => [':input[name="settings[' . $state_path . ']"]' => ['filled' => TRUE]]],
+        '#states' => [
+          'visible' => [':input[name="settings[' . $state_path . ']"]' => ['filled' => TRUE]],
+        ],
         '#default_value' => $this->configuration[$state_custom_data],
       ];
     }
@@ -677,7 +679,10 @@ class SaveToFileWebformHandler extends WebformHandlerBase {
 
     $build = [
       '#type' => 'details',
-      '#title' => $this->t('Debug: Save to file: @title [@state]', ['@title' => $this->label(), '@state' => $state]),
+      '#title' => $this->t('Debug: Save to file: @title [@state]', [
+        '@title' => $this->label(),
+        '@state' => $state,
+      ]),
     ];
 
     // State.
@@ -685,7 +690,10 @@ class SaveToFileWebformHandler extends WebformHandlerBase {
       '#type' => 'item',
       '#title' => $this->t('Submission state/operation:'),
       '#markup' => $state,
-      '#wrapper_attributes' => ['class' => ['container-inline'], 'style' => 'margin: 0'],
+      '#wrapper_attributes' => [
+        'class' => ['container-inline'],
+        'style' => 'margin: 0',
+      ],
     ];
 
     // Save to file.
@@ -694,13 +702,19 @@ class SaveToFileWebformHandler extends WebformHandlerBase {
       '#type' => 'item',
       '#title' => $this->t('File path'),
       '#markup' => $file_path,
-      '#wrapper_attributes' => ['class' => ['container-inline'], 'style' => 'margin: 0'],
+      '#wrapper_attributes' => [
+        'class' => ['container-inline'],
+        'style' => 'margin: 0',
+      ],
     ];
     $build['file_type'] = [
       '#type' => 'item',
       '#title' => $this->t('Request type'),
       '#markup' => $this->configuration['file_type'],
-      '#wrapper_attributes' => ['class' => ['container-inline'], 'style' => 'margin: 0'],
+      '#wrapper_attributes' => [
+        'class' => ['container-inline'],
+        'style' => 'margin: 0',
+      ],
     ];
 
     // Message.
@@ -775,7 +789,10 @@ class SaveToFileWebformHandler extends WebformHandlerBase {
   /**
    * {@inheritdoc}
    */
-  protected function buildTokenTreeElement(array $token_types = ['webform', 'webform_submission'], $description = NULL) {
+  protected function buildTokenTreeElement(
+    array $token_types = ['webform', 'webform_submission'],
+    $description = NULL
+  ) {
     $description = $description ?: $this->t('Use [webform_submission:values:ELEMENT_KEY:raw] to get plain text values.');
     return parent::buildTokenTreeElement($token_types, $description);
   }

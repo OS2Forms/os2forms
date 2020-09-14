@@ -57,7 +57,10 @@ class NemidCompanyCvr extends NemidElementBase {
    */
   public static function preRenderNemidCompanyCvr(array $element) {
     $element = parent::prerenderNemidElementBase($element);
-    static::setAttributes($element, ['form-text', 'os2forms-nemid-company-cvr']);
+    static::setAttributes($element, [
+      'form-text',
+      'os2forms-nemid-company-cvr',
+    ]);
     return $element;
   }
 
