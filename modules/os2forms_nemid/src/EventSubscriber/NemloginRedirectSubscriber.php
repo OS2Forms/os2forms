@@ -5,6 +5,7 @@ namespace Drupal\os2forms_nemid\EventSubscriber;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\os2web_nemlogin\Service\AuthProviderService;
+use Drupal\os2forms_nemid\Form\SettingsForm;
 use Drupal\webform\Entity\Webform;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -103,7 +104,6 @@ class NemloginRedirectSubscriber implements EventSubscriberInterface {
     if (isset($webformNemidSettings['nemlogin_auto_redirect'])) {
       $nemlogin_auto_redirect = $webformNemidSettings['nemlogin_auto_redirect'];
     }
-
     // Checking if $nemlogin_auto_redirect is on.
     if ($nemlogin_auto_redirect) {
       // Killing cache so that positive or negative redirect decision is not
@@ -120,11 +120,14 @@ class NemloginRedirectSubscriber implements EventSubscriberInterface {
         $event->stopPropagation();
       }
       else {
-        \Drupal::messenger()
-          ->addMessage(t('This webform requires a valid NemID authentication and is not visible without it. You currently have an active NemID authentication session. If you do not want to proceed with this webform press <a href="@logout">log out</a> to return back to the front page.', [
-            '@logout' => $this->nemloginAuthProvider->getLogoutUrl(['query' => ['destination' => Url::fromRoute('<front>')->toString()]])
-              ->toString(),
-          ]));
+        $settingFormConfig = \Drupal::config(SettingsForm::$configName);
+        if (!$settingFormConfig->get('os2forms_nemid_hide_active_nemid_session_message')) {
+            \Drupal::messenger()
+              ->addMessage(t('This webform requires a valid NemID authentication and is not visible without it. You currently have an active NemID authentication session. If you do not want to proceed with this webform press <a href="@logout">log out</a> to return back to the front page.', [
+                '@logout' => $this->nemloginAuthProvider->getLogoutUrl(['query' => ['destination' => Url::fromRoute('<front>')->toString()]])
+                  ->toString(),
+              ]));
+        }
       }
     }
   }
