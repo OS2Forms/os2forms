@@ -10,6 +10,9 @@
  */
 function os2forms_requirements($phase) {
   $requirements = [];
+  if ($phase !== 'runtime') {
+    return $requirements;
+  }
 
   $config = \Drupal::service('config.factory')->get('entity_print.settings');
   $severity = REQUIREMENT_OK;
