@@ -3,7 +3,7 @@
 namespace Drupal\os2forms_nemid\Plugin\WebformElement;
 
 /**
- * Provides a 'os2forms_nemid_city' element.
+ * Provides a 'os2forms_nemid_company_city' element.
  *
  * @WebformElement(
  *   id = "os2forms_nemid_company_city",
@@ -15,7 +15,7 @@ namespace Drupal\os2forms_nemid\Plugin\WebformElement;
  * @see \Drupal\os2forms_nemid\Plugin\NemidElementBase
  * @see \Drupal\os2forms_nemid\Element\NemidCompanyCity
  */
-class NemidCompanyCity extends ServiceplatformenCprElementBase implements NemidElementCompanyInterface {
+class NemidCompanyCity extends ServiceplatformenCvrElementBase implements NemidElementCompanyInterface {
 
   /**
    * {@inheritdoc}

@@ -49,6 +49,9 @@ abstract class ServiceplatformenCvrElementBase extends NemidElementBase {
           // Making composite field, company_address.
           $spCvrData['company_address'] = $spCvrData['company_street'] . ' ' . $spCvrData['company_house_nr'] . ' ' . $spCvrData['company_floor'];
 
+          // Making composite field, city.
+          $spCrpData['company_city'] = $spCvrData['company_zipcode'] . ' ' . $spCvrData['company_city'];
+
           $form_state->set('servicePlatformenCvrData', $spCvrData);
         }
       }
