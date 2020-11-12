@@ -29,17 +29,6 @@ class WebformAttachmentSbsysXml extends WebformAttachmentXml {
     $nemid_cpr = self::getFirstValueByType('os2forms_nemid_cpr', $webform_submission);
     $nemid_com_cvr = self::getFirstValueByType('os2forms_nemid_company_cvr', $webform_submission);
     $os2web_datalookup_plugins = \Drupal::service('plugin.manager.os2web_datalookup');
-    /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupInterface $sp_cvr */
-    $sp_cvr = $os2web_datalookup_plugins->createInstance('serviceplatformen_cvr');
-    if (!empty($nemid_com_cvr) && $sp_cvr->isReady()) {
-      $company_info = $sp_cvr->getInfo($nemid_com_cvr);
-      if ($company_info['status']) {
-        $nemid_name = htmlspecialchars($company_info['company_name']);
-        $nemid_address = htmlspecialchars($company_info['company_street'] . ' ' . $company_info['company_house_nr'] . ' ' . $company_info['company_']);
-        $nemid_city = htmlspecialchars($company_info['company_city']);
-        $nemid_zipcode = htmlspecialchars($company_info['company_zipcode']);
-      }
-    }
     /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupInterface $sp_cpr */
     $sp_cpr = $os2web_datalookup_plugins->createInstance('serviceplatformen_cpr');
     if (!empty($nemid_cpr) && $sp_cpr->isReady()) {
@@ -49,6 +38,18 @@ class WebformAttachmentSbsysXml extends WebformAttachmentXml {
         $nemid_address = htmlspecialchars($person_address['road'] . ' ' . $person_address['road_no'] . ' ' . $person_address['floor'] . ' ' . $person_address['door']);
         $nemid_city = htmlspecialchars($person_address['city']);
         $nemid_zipcode = htmlspecialchars($person_address['zipcode']);
+      }
+    }
+
+    /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupInterface $sp_cvr */
+    $sp_cvr = $os2web_datalookup_plugins->createInstance('serviceplatformen_cvr');
+    if (!empty($nemid_com_cvr) && $sp_cvr->isReady()) {
+      $company_info = $sp_cvr->getInfo($nemid_com_cvr);
+      if ($company_info['status']) {
+        $nemid_name = htmlspecialchars($company_info['company_name']);
+        $nemid_address = htmlspecialchars($company_info['company_street'] . ' ' . $company_info['company_house_nr'] . ' ' . $company_info['company_']);
+        $nemid_city = htmlspecialchars($company_info['company_city']);
+        $nemid_zipcode = htmlspecialchars($company_info['company_zipcode']);
       }
     }
 
