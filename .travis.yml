@@ -9,7 +9,6 @@ before_install:
   - echo "memory_limit=2G" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
 
 install:
-  - composer global require hirak/prestissimo
   - composer global require drush/drush:8.x-dev drupal/coder mglaman/drupal-check friendsoftwig/twigcs
   - export PATH="$HOME/.config/composer/vendor/bin:$PATH"
   - phpcs --config-set installed_paths ../../drupal/coder/coder_sniffer
