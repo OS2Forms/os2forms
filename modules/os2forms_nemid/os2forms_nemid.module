@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
 
 /**
  * Defines NemID webform type - Personal.
@@ -90,6 +91,9 @@ function os2forms_nemid_webform_submission_form_alter(array &$form, FormStateInt
             '@logout' => $authProviderService->getLogoutUrl()
               ->toString(),
           ]));
+        foreach (Element::children($form['actions']) as $key) {
+          $form['actions'][$key]['#disabled'] = TRUE;
+        }
       }
     }
   }
