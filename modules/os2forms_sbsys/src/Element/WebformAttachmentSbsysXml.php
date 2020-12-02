@@ -40,7 +40,6 @@ class WebformAttachmentSbsysXml extends WebformAttachmentXml {
         $nemid_zipcode = htmlspecialchars($person_address['zipcode']);
       }
     }
-
     /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupInterface $sp_cvr */
     $sp_cvr = $os2web_datalookup_plugins->createInstance('serviceplatformen_cvr');
     if (!empty($nemid_com_cvr) && $sp_cvr->isReady()) {
@@ -84,6 +83,7 @@ class WebformAttachmentSbsysXml extends WebformAttachmentXml {
     $webform = $webform_submission->getWebform();
     $webform_title = htmlspecialchars($webform->label());
     $fields = self::getWebformElementsAsList($webform_submission);
+
     if (isset($fields['antal_rum_max'])) {
       $maxRoom = htmlspecialchars($fields['antal_rum_max']);
     }
@@ -102,14 +102,14 @@ class WebformAttachmentSbsysXml extends WebformAttachmentXml {
     $xml_data = [
       'OS2FormsId' => $os2formsId,
       'SBSYSJournalisering' => [
-        'PrimaerPartCprNummer' => (!empty($nemid_cpr)) ? $nemid_cpr : '',
+        'PrimaerPartCprNummer' => (!empty($nemid_cpr) && empty($nemid_com_cvr)) ? $nemid_cpr : '',
         'PrimaerPartCvrNummer' => (!empty($nemid_com_cvr)) ? $nemid_com_cvr : '',
         'KLe' => $kle,
         'SagSkabelonId' => $sagSkabelonId,
       ],
       'DigitalForsendelse' => [
         'Slutbruger' => [
-          'CprNummer' => (isset($nemid_cpr)) ? $nemid_cpr : '',
+          'CprNummer' => (!empty($nemid_cpr) && empty($nemid_com_cvr)) ? $nemid_cpr : '',
           'CvrNummer' => (isset($nemid_com_cvr)) ? $nemid_com_cvr : '',
           'Navn' => (isset($nemid_name)) ? $nemid_name : '',
           'Adresse' => (isset($nemid_address)) ? $nemid_address : '',
@@ -200,19 +200,28 @@ class WebformAttachmentSbsysXml extends WebformAttachmentXml {
    *   Webform elements as simple array.
    */
   protected static function getWebformElementsAsList(WebformSubmissionInterface $webform_submission) {
+    $nemid_cpr = self::getFirstValueByType('os2forms_nemid_cpr', $webform_submission);
+    $nemid_com_cvr = self::getFirstValueByType('os2forms_nemid_company_cvr', $webform_submission);
     $webform = $webform_submission->getWebform();
     $data = $webform_submission->getData();
     $webform_elements = $webform->getElementsInitializedFlattenedAndHasValue();
     $elements_list = [];
-
     foreach ($webform_elements as $key => $webform_element) {
       $field_name = $key;
       $field_name = preg_replace('/\W/', '_', $field_name);
+      $webform_element['#type'];
       if ($webform_element['#type'] == 'markup') {
         $elements_list[$field_name] = $webform_element['value'];
       }
       elseif ($data && isset($data[$key])) {
-        $elements_list[$field_name] = $data[$key];
+        if ($webform_element['#type'] == 'os2forms_nemid_cpr') {
+          if (!empty($nemid_cpr) && empty($nemid_com_cvr)) {
+            $elements_list[$field_name] = $data[$key];
+          }
+        }
+        else {
+          $elements_list[$field_name] = $data[$key];
+        }
       }
     }
     return $elements_list;
