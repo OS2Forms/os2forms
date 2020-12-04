@@ -1,0 +1,17 @@
+langcode: da
+status: true
+dependencies:
+  config:
+    - node.type.os2forms_webform_text
+id: node.os2forms_webform_text.title
+field_name: title
+entity_type: node
+bundle: os2forms_webform_text
+label: 'Administrativ titel '
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

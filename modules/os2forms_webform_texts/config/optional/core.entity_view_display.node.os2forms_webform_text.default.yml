@@ -1,0 +1,27 @@
+langcode: da
+status: true
+dependencies:
+  config:
+    - field.field.node.os2forms_webform_text.field_webform_text
+    - node.type.os2forms_webform_text
+  module:
+    - text
+    - user
+id: node.os2forms_webform_text.default
+targetEntityType: node
+bundle: os2forms_webform_text
+mode: default
+content:
+  field_webform_text:
+    weight: 1
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+hidden:
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
+  langcode: true
+  links: true

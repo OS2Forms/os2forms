@@ -16,6 +16,7 @@ dependencies:
   - webform_submission_export_import
   - webform_submission_log
   - webform_templates
+  - webform_composite
   - webform_embed
   - entity_print
   - webform_migrate

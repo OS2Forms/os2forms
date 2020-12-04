@@ -1,0 +1,21 @@
+langcode: da
+status: true
+dependencies:
+  config:
+    - node.type.os2forms_webform_text
+id: node.os2forms_webform_text.promote
+field_name: promote
+entity_type: node
+bundle: os2forms_webform_text
+label: 'Forfremmet til forside'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: Tilsluttet
+  off_label: Afbrudt
+field_type: boolean

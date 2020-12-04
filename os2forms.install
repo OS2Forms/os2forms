@@ -55,3 +55,13 @@ function os2forms_requirements($phase) {
 function os2forms_update_8901() {
   \Drupal::service('module_installer')->install(['webform_entity_print_attachment']);
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable os2forms_webform_texts and webform_composite module.
+ */
+function os2forms_update_8903() {
+  \Drupal::service('module_installer')->install(['os2forms_webform_texts']);
+  \Drupal::service('module_installer')->install(['webform_composite']);
+}

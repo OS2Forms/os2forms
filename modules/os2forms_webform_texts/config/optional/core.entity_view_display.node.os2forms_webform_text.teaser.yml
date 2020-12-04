@@ -1,0 +1,25 @@
+langcode: da
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.os2forms_webform_text.field_webform_text
+    - node.type.os2forms_webform_text
+  module:
+    - user
+id: node.os2forms_webform_text.teaser
+targetEntityType: node
+bundle: os2forms_webform_text
+mode: teaser
+content:
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
+  field_webform_text: true
+  langcode: true
