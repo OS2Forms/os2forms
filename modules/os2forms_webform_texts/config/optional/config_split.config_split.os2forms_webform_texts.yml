@@ -1,0 +1,17 @@
+langcode: da
+status: true
+dependencies: {  }
+id: os2forms_webform_texts
+label: 'OS2Forms Webform texts'
+description: ''
+folder: modules/contrib/os2forms/modules/os2forms_webform_texts/config/optional
+module: {  }
+theme: {  }
+blacklist:
+  - 'webform_text*'
+  - '*webform_text'
+  - '*webform_text*'
+graylist: {  }
+graylist_dependents: true
+graylist_skip_equal: true
+weight: 0

@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * OS2Forms Webform texts module.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function os2forms_webform_texts_theme() {
+  return [
+    'node__webform_element' => [
+      'base hook' => 'node',
+    ],
+  ];
+}

@@ -1,0 +1,20 @@
+langcode: da
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_webform_text
+    - node.type.os2forms_webform_text
+  module:
+    - text
+id: node.os2forms_webform_text.field_webform_text
+field_name: field_webform_text
+entity_type: node
+bundle: os2forms_webform_text
+label: Tekst
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long
