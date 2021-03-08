@@ -1,0 +1,34 @@
+langcode: da
+status: true
+dependencies:
+  config:
+    - field.field.node.webform.body
+    - field.field.node.webform.field_os2forms_wff_application
+    - field.field.node.webform.field_os2forms_wff_area
+    - field.field.node.webform.webform
+    - node.type.webform
+  module:
+    - user
+    - webform
+id: node.webform.default
+targetEntityType: node
+bundle: webform
+mode: default
+content:
+  webform:
+    weight: 0
+    label: hidden
+    settings:
+      source_entity: true
+    third_party_settings: {  }
+    type: webform_entity_reference_entity_view
+    region: content
+hidden:
+  body: true
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
+  field_os2forms_wff_application: true
+  field_os2forms_wff_area: true
+  langcode: true
+  links: true

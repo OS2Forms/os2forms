@@ -1,0 +1,28 @@
+langcode: da
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_os2forms_wff_application
+    - node.type.webform
+    - taxonomy.vocabulary.os2forms_tax_application
+id: node.webform.field_os2forms_wff_application
+field_name: field_os2forms_wff_application
+entity_type: node
+bundle: webform
+label: Anvendelse
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      os2forms_tax_application: os2forms_tax_application
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

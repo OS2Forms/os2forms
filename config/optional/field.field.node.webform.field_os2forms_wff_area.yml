@@ -1,0 +1,28 @@
+langcode: da
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_os2forms_wff_area
+    - node.type.webform
+    - taxonomy.vocabulary.os2forms_tax_area
+id: node.webform.field_os2forms_wff_area
+field_name: field_os2forms_wff_area
+entity_type: node
+bundle: webform
+label: Fagområde
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      os2forms_tax_area: os2forms_tax_area
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
