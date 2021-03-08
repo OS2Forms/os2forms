@@ -1,0 +1,21 @@
+langcode: da
+status: true
+dependencies:
+  module:
+    - node
+id: os2forms_wf_webforms
+label: 'OS2Forms Webforms'
+type: 'canonical_entities:node'
+pattern: 'content/[node:field_os2forms_wff_application:entity:name]/[node:title]'
+selection_criteria:
+  c6e82172-e76f-406f-bdce-b4b4a8331591:
+    id: node_type
+    bundles:
+      webform: webform
+    negate: false
+    context_mapping:
+      node: node
+    uuid: c6e82172-e76f-406f-bdce-b4b4a8331591
+selection_logic: and
+weight: -5
+relationships: {  }

@@ -5,6 +5,24 @@
  * Install file for OS2Forms module.
  */
 
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\taxonomy\Entity\Term;
+use Symfony\Component\Yaml\Yaml;
+
+/**
+ * Reads in new configuration.
+ *
+ * @param string $config_name
+ *   Configuration name.
+ */
+function os2forms_read_in_new_config($config_name, $moduleName = '') {
+  $path = drupal_get_path('module', $moduleName ?: 'os2forms');
+  /** @var \Drupal\Core\Config\StorageInterface $active_storage */
+  $active_storage = \Drupal::service('config.storage');
+  $active_storage->write($config_name, Yaml::parse(file_get_contents($path . '/config/optional/' . $config_name . '.yml')));
+}
+
 /**
  * Implements hook_requirements().
  */
@@ -48,6 +66,17 @@ function os2forms_requirements($phase) {
 }
 
 /**
+ * Implements hook_install().
+ */
+function os2forms_install() {
+  // Add Application terms.
+  _os2form_install_init_application_terms();
+
+  // Add Area terms.
+  _os2form_install_init_area_terms();
+}
+
+/**
  * Implements hook_update_N().
  *
  * Enable webform_entity_print_attachment module.
@@ -64,4 +93,97 @@ function os2forms_update_8901() {
 function os2forms_update_8903() {
   \Drupal::service('module_installer')->install(['os2forms_webform_texts']);
   \Drupal::service('module_installer')->install(['webform_composite']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Create fields Application and Area as taxonomy.
+ */
+function os2forms_update_8904() {
+  // Create Application taxonomy.
+  os2forms_read_in_new_config('taxonomy.vocabulary.os2forms_tax_application');
+
+  // Add Application terms.
+  _os2form_install_init_application_terms();
+
+  // Create Area taxonomy.
+  os2forms_read_in_new_config('taxonomy.vocabulary.os2forms_tax_area');
+
+  // Add Area terms.
+  _os2form_install_init_area_terms();
+
+  // Add field field.field.node.webform.field_os2forms_wff_area.
+  // Field storage.
+  $field_storage_yml = Yaml::parse(file_get_contents(drupal_get_path('module', 'os2forms') . "/config/optional/field.storage.node.field_os2forms_wff_area.yml"));
+  if (!FieldStorageConfig::loadByName('node', 'field_os2forms_wff_area')) {
+    FieldStorageConfig::create($field_storage_yml)->save();
+  }
+  // Field instance.
+  $field_yml = Yaml::parse(file_get_contents(drupal_get_path('module', 'os2forms') . "/config/optional/field.field.node.webform.field_os2forms_wff_area.yml"));
+  if (!FieldConfig::loadByName('node', 'webform', 'field_os2forms_wff_area')) {
+    FieldConfig::create($field_yml)->save();
+  }
+
+  // Add field field.field.node.webform.field_os2forms_wff_application.
+  // Field storage.
+  $field_storage_yml = Yaml::parse(file_get_contents(drupal_get_path('module', 'os2forms') . "/config/optional/field.storage.node.field_os2forms_wff_application.yml"));
+  if (!FieldStorageConfig::loadByName('node', 'field_os2forms_wff_application')) {
+    FieldStorageConfig::create($field_storage_yml)->save();
+  }
+  // Field instance.
+  $field_yml = Yaml::parse(file_get_contents(drupal_get_path('module', 'os2forms') . "/config/optional/field.field.node.webform.field_os2forms_wff_application.yml"));
+  if (!FieldConfig::loadByName('node', 'webform', 'field_os2forms_wff_application')) {
+    FieldConfig::create($field_yml)->save();
+  }
+
+  // Update form display.
+  os2forms_read_in_new_config('core.entity_form_display.node.webform.default');
+
+  // Apply URL generation.
+  os2forms_read_in_new_config('pathauto.pattern.os2forms_wf_webforms');
+}
+
+/**
+ * Creates a list of predefined terms for Application vocabulary.
+ */
+function _os2form_install_init_application_terms() {
+  $term_names = ['Intern', 'Ekstern', 'Test/Udvikling', 'Parkeret', 'Ingen'];
+
+  foreach ($term_names as $name) {
+    Term::create([
+      'vid' => 'os2forms_tax_application',
+      'name' => $name,
+    ])->save();
+  }
+}
+
+/**
+ * Creates a list of predefined terms for Ara vocabulary.
+ */
+function _os2form_install_init_area_terms() {
+  $term_names = [
+    'Borgerservice',
+    'Kommunikation',
+    'Digitalisering',
+    'Teknik og Miljø',
+    'Børn og Familie',
+    'Social',
+    'Sundhed',
+    'Beskæftigelse',
+    'Kultur',
+    'IT',
+    'Byplan',
+    'Dagtilbud',
+    'Skole',
+    'Økonomi',
+    'Andet',
+  ];
+
+  foreach ($term_names as $name) {
+    Term::create([
+      'vid' => 'os2forms_tax_area',
+      'name' => $name,
+    ])->save();
+  }
 }

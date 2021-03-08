@@ -1,0 +1,16 @@
+langcode: da
+status: true
+dependencies: {  }
+id: os2forms_wf_config
+label: 'OS2Forms config'
+description: ''
+folder: modules/contrib/os2forms/config/optional
+module: {  }
+theme: {  }
+blacklist:
+  - '*os2forms_wf*'
+  - '*os2forms_tax*'
+graylist: {  }
+graylist_dependents: true
+graylist_skip_equal: true
+weight: 0
