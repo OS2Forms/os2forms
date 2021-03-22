@@ -140,9 +140,7 @@ class WebformAttachmentSbsysXml extends WebformAttachmentXml {
       $xml_data['FormularData'][$field_name] = $field_value;
     }
 
-    return \Drupal::service('serializer')->serialize($xml_data, 'xml', [
-      'xml_root_node_name' => 'os2formsFormular',
-    ]);
+    return \Drupal::service('serializer')->serialize($xml_data, 'xml', self::getXmlContext());
   }
 
   /**
