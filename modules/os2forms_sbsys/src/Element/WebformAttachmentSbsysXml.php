@@ -17,9 +17,10 @@ class WebformAttachmentSbsysXml extends WebformAttachmentXml {
    * {@inheritdoc}
    */
   public static function getXmlContext() {
-    return parent::getXmlContext() + [
-      'xml_root_node_name' => 'os2formsFormular',
-    ];
+    $xmlContext = parent::getXmlContext();
+    $xmlContext['xml_root_node_name'] = 'os2formsFormular';
+
+    return $xmlContext;
   }
 
   /**
