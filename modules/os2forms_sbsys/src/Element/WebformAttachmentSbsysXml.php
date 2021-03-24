@@ -244,7 +244,7 @@ class WebformAttachmentSbsysXml extends WebformAttachmentXml {
     }
     $data = $webform_submission->getData();
     if ($config[$name] != '_custom_') {
-      return isset($config[$name . "_custom"]) ? htmlspecialchars($data[$config[$name]]) : '';
+      return isset($data[$config[$name]]) ? htmlspecialchars($data[$config[$name]]) : '';
     }
     else {
       return isset($config[$name . "_custom"]) ? htmlspecialchars($config[$name . "_custom"]) : '';
