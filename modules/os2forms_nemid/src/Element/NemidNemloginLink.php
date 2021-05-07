@@ -29,8 +29,10 @@ class NemidNemloginLink extends Link {
     }
 
     $link = $authProviderService->generateLink($nemlogin_link_login_text, $nemlogin_link_logout_text);
-    $element['#title'] = $link->getText();
-    $element['#url'] = $link->getUrl();
+    if ($link instanceof \Drupal\Core\Link) {
+      $element['#title'] = $link->getText();
+      $element['#url'] = $link->getUrl();
+    }
 
     return parent::preRenderLink($element);
   }
