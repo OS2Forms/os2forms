@@ -52,12 +52,9 @@ abstract class NemidElementBase extends WebformElementBase implements NemidPrepo
       // Getting webform type settings.
       $webform = $webformSubmission->getWebform();
       $webformNemidSettings = $webform->getThirdPartySetting('os2forms', 'os2forms_nemid');
-      $webform_type = NULL;
+      $webform_type = !empty($webformNemidSettings['webform_type']) ? $webformNemidSettings['webform_type'] : NULL;
 
-      // If webform type is set, handle element visiblity.
-      if (isset($webformNemidSettings['webform_type'])) {
-        $webform_type = $webformNemidSettings['webform_type'];
-
+      if (NULL !== $webform_type) {
         $this->handleElementVisibility($element, $webform_type);
       }
 
@@ -89,15 +86,11 @@ abstract class NemidElementBase extends WebformElementBase implements NemidPrepo
     // Getting webform type settings.
     $webform = $webform_submission->getWebform();
     $webformNemidSettings = $webform->getThirdPartySetting('os2forms', 'os2forms_nemid');
-    $webform_type = NULL;
+    $webform_type = !empty($webformNemidSettings['webform_type']) ? $webformNemidSettings['webform_type'] : NULL;
 
     // If webform type is set, handle element visiblity.
-    if (isset($webformNemidSettings['webform_type'])) {
-      $webform_type = $webformNemidSettings['webform_type'];
-
-      if (!$this->isVisible($webform_type)) {
-        return NULL;
-      }
+    if (NULL !== $webform_type && !$this->isVisible($webform_type)) {
+      return NULL;
     }
 
     return parent::build($format, $element, $webform_submission, $options);

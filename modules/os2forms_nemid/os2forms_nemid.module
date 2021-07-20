@@ -68,13 +68,10 @@ function os2forms_nemid_webform_submission_form_alter(array &$form, FormStateInt
   $webformNemidSettings = $webform->getThirdPartySetting('os2forms', 'os2forms_nemid');
 
   // Getting webform_type setting.
-  $webform_type = NULL;
-  if (isset($webformNemidSettings['webform_type']) && !empty($webformNemidSettings['webform_type'])) {
-    $webform_type = $webformNemidSettings['webform_type'];
-  }
+  $webform_type = !empty($webformNemidSettings['webform_type']) ? $webformNemidSettings['webform_type'] : NULL;
 
   // Webform type is set and not empty.
-  if ($webform_type) {
+  if (NULL !== $webform_type) {
     // Initializing AuthProviderInterface plugin.
     /** @var \Drupal\os2web_nemlogin\Service\AuthProviderService $authProviderService */
     $authProviderService = \Drupal::service('os2web_nemlogin.auth_provider');
