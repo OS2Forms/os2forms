@@ -2,7 +2,6 @@
 
 namespace Drupal\os2forms_nemid\Element;
 
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Element\WebformCompositeBase;
 
 /**
@@ -26,6 +25,11 @@ class NemidCompanyPNumber extends WebformCompositeBase {
       $elements['p_number_submit'] = [
         '#type' => 'button',
         '#value' => isset($element['#fetch_button_title']) ? $element['#fetch_button_title'] : t('Hent'),
+        '#limit_validation_errors' => [
+          [
+            $element['#webform_key']
+          ]
+        ],
       ];
     }
 
