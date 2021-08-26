@@ -61,22 +61,22 @@ abstract class NemidElementBase extends WebformElementBase implements NemidPrepo
         $this->handleElementVisibility($element, $webform_type);
       }
 
+      // Handle fields visibility depending on Authorization type.
       /** @var \Drupal\os2web_nemlogin\Service\AuthProviderService $authProviderService */
       $authProviderService = \Drupal::service('os2web_nemlogin.auth_provider');
       /** @var \Drupal\os2web_nemlogin\Plugin\AuthProviderInterface $plugin */
       $plugin = $authProviderService->getActivePlugin();
-
       if ($plugin->isAuthenticated()) {
-        // Handle fields visibility depending on Authorization type.
         if ($plugin->isAuthenticatedPerson()) {
           $this->handleElementVisibility($element, OS2FORMS_NEMID_WEBFORM_TYPE_PERSONAL);
         }
         if ($plugin->isAuthenticatedCompany()) {
           $this->handleElementVisibility($element, OS2FORMS_NEMID_WEBFORM_TYPE_COMPANY);
         }
-
-        $this->handleElementPrepopulate($element, $form_state);
       }
+
+      // Handle element prepopulate.
+      $this->handleElementPrepopulate($element, $form_state);
 
       NestedArray::setValue($form['elements'], $element['#webform_parents'], $element);
     }

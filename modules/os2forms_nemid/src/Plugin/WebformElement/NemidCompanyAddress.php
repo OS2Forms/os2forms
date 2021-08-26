@@ -15,7 +15,7 @@ namespace Drupal\os2forms_nemid\Plugin\WebformElement;
  * @see \Drupal\os2forms_nemid\Plugin\NemidElementBase
  * @see \Drupal\os2forms_nemid\Element\NemidCompanyAddress
  */
-class NemidCompanyAddress extends ServiceplatformenCvrElementBase implements NemidElementCompanyInterface {
+class NemidCompanyAddress extends ServiceplatformenCompanyElementBase implements NemidElementCompanyInterface {
 
   /**
    * {@inheritdoc}
