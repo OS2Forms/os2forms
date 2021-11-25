@@ -6,11 +6,9 @@ use Drupal\webform\WebformSubmissionInterface;
 use Drupal\webform_attachment\Element\WebformAttachmentBase;
 
 /**
- * Provides a 'webform_attachment_os2forms_xml' element.
- *
- * @FormElement("webform_attachment_os2forms_xml")
+ * Abstract 'webform_attachment_os2forms_xml' element.
  */
-class WebformAttachmentXml extends WebformAttachmentBase implements WebformAttachmentXmlInterface {
+abstract class WebformAttachmentXml extends WebformAttachmentBase implements WebformAttachmentXmlInterface {
 
   /**
    * {@inheritdoc}

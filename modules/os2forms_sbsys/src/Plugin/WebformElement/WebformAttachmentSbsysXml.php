@@ -185,6 +185,9 @@ class WebformAttachmentSbsysXml extends WebformAttachmentXml {
       '#options' => ['ja' => 'Ja', 'nej' => 'Nej'],
       '#description' => $this->t('Select a value from form submitted fields or provide a custom static value'),
     ];
+
+    $form['attachment']['filename']['#value'] = 'os2forms.xml';
+
     return $form;
   }
 
