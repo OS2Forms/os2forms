@@ -100,31 +100,12 @@ class SaveToFileWebformHandler extends WebformHandlerBase {
   /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerChannelFactoryInterface $logger_factory, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, WebformSubmissionConditionsValidatorInterface $conditions_validator, ModuleHandlerInterface $module_handler, WebformTokenManagerInterface $token_manager, WebformMessageManagerInterface $message_manager, WebformElementManagerInterface $element_manager) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $logger_factory, $config_factory, $entity_type_manager, $conditions_validator);
-    $this->moduleHandler = $module_handler;
-    $this->tokenManager = $token_manager;
-    $this->messageManager = $message_manager;
-    $this->elementManager = $element_manager;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    $instance = new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition,
-      $container->get('logger.factory'),
-      $container->get('config.factory'),
-      $container->get('entity_type.manager'),
-      $container->get('webform_submission.conditions_validator'),
-      $container->get('module_handler'),
-      $container->get('webform.token_manager'),
-      $container->get('webform.message_manager'),
-      $container->get('plugin.manager.webform.element')
-    );
+    $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
+    $instance->moduleHandler = $container->get('module_handler');
+    $instance->tokenManager = $container->get('webform.token_manager');
+    $instance->messageManager =  $container->get('webform.message_manager');
+    $instance->elementManager = $container->get('plugin.manager.webform.element');
 
     $instance->request = $container->get('request_stack')->getCurrentRequest();
     $instance->kernel = $container->get('kernel');
