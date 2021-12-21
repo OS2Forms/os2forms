@@ -47,7 +47,7 @@ class WebformAttachmentSbsysXml extends WebformAttachmentXml {
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
-    return array_merge($this->getSbsysDefaultProperties(), parent::getDefaultProperties());
+    return array_merge(parent::getDefaultProperties(), $this->getSbsysDefaultProperties());
   }
 
   /**
@@ -80,6 +80,7 @@ class WebformAttachmentSbsysXml extends WebformAttachmentXml {
       $properties[$key . '_custom'] = '';
     }
     $properties['MaaSendesTilDFF'] = '';
+    $properties['filename'] = 'os2forms.xml';
     return $properties;
   }
 
@@ -166,8 +167,6 @@ class WebformAttachmentSbsysXml extends WebformAttachmentXml {
       '#options' => ['ja' => 'Ja', 'nej' => 'Nej'],
       '#description' => $this->t('Select a value from form submitted fields or provide a custom static value'),
     ];
-
-    $form['attachment']['filename']['#value'] = 'os2forms.xml';
 
     return $form;
   }
