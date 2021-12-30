@@ -1,0 +1,3 @@
+services:
+  os2forms_autocomplete.service:
+    class: Drupal\os2forms_autocomplete\Service\AutocompleteService

@@ -1,0 +1,10 @@
+os2forms_autocomplete.element.autocomplete:
+  path: '/os2forms/{webform}/autocomplete/{key}'
+  defaults:
+    _controller: '\Drupal\os2forms_autocomplete\Controller\AutocompleteElementController::autocomplete'
+  options:
+    parameters:
+      webform:
+        type: 'entity:webform'
+  requirements:
+    _entity_access: 'webform.submission_page'
