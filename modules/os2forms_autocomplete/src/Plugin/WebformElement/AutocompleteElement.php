@@ -41,19 +41,21 @@ class AutocompleteElement extends WebformAutocomplete {
   public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
     parent::prepare($element, $webform_submission);
 
-    $element['#autocomplete_route_name'] = 'os2forms_autocomplete.element.autocomplete';
-    $element['#autocomplete_route_parameters'] = [
-      'webform' => $webform_submission->getWebform()->id(),
-      'key' => $element['#webform_key'],
-    ];
+    if (isset($element['#webform_key'])) {
+      $element['#autocomplete_route_name'] = 'os2forms_autocomplete.element.autocomplete';
+      $element['#autocomplete_route_parameters'] = [
+        'webform' => $webform_submission->getWebform()->id(),
+        'key' => $element['#webform_key'],
+      ];
 
-    if ($webform_submission->isNew() && isset($element['#default_value'])) {
-      /** @var \Drupal\os2forms_autocomplete\Service\AutocompleteService $acService */
-      $acService = \Drupal::service('os2forms_autocomplete.service');
-      $autocompleteDefaultValue = $acService->getFirstMatchingValue($element['#autocomplete_api_url'], $element['#default_value']);
+      if ($webform_submission->isNew() && isset($element['#default_value'])) {
+        /** @var \Drupal\os2forms_autocomplete\Service\AutocompleteService $acService */
+        $acService = \Drupal::service('os2forms_autocomplete.service');
+        $autocompleteDefaultValue = $acService->getFirstMatchingValue($element['#autocomplete_api_url'], $element['#default_value']);
 
-      if ($autocompleteDefaultValue) {
-        $element['#default_value'] = $autocompleteDefaultValue;
+        if ($autocompleteDefaultValue) {
+          $element['#default_value'] = $autocompleteDefaultValue;
+        }
       }
     }
   }
