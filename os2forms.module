@@ -30,7 +30,7 @@ function os2forms_webform_admin_third_party_settings_form_alter(&$form, FormStat
   ];
   /** @var \Drupal\webform\WebformThirdPartySettingsManagerInterface $third_party_settings_manager */
   $third_party_settings_manager = \Drupal::service('webform.third_party_settings_manager');
-  $webform_entity_storage = \Drupal::service('entity.manager')->getStorage('webform');
+  $webform_entity_storage = \Drupal::service('entity_type.manager')->getStorage('webform');
   $form['third_party_settings']['os2forms']['migrate_to_category'] = [
     '#type' => 'webform_select_other',
     '#title' => t('Migrate webforms to category'),
