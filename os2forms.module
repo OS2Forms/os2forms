@@ -30,7 +30,7 @@ function os2forms_webform_admin_third_party_settings_form_alter(&$form, FormStat
   ];
   /** @var \Drupal\webform\WebformThirdPartySettingsManagerInterface $third_party_settings_manager */
   $third_party_settings_manager = \Drupal::service('webform.third_party_settings_manager');
-  $webform_entity_storage = \Drupal::service('entity_type.manager')->getStorage('webform');
+  $webform_entity_storage = \Drupal::service('entity.manager')->getStorage('webform');
   $form['third_party_settings']['os2forms']['migrate_to_category'] = [
     '#type' => 'webform_select_other',
     '#title' => t('Migrate webforms to category'),
@@ -303,4 +303,34 @@ function _os2forms_migrate_prepare_webform2pdf_get_template($nid, $source) {
   }
 
   return $template;
+}
+
+/**
+ * Implements hook_menu_local_tasks_alter().
+ */
+function os2forms_menu_local_tasks_alter(&$data, $route_name) {
+  $webform = \Drupal::routeMatch()->getParameter('webform');
+  $routeName = \Drupal::routeMatch()->getRouteName();
+  if ($webform && $routeName == $route_name) {
+    if (is_object($webform)) {
+      $webform = $webform->id();
+    }
+    if (isset ($data['tabs'][0]['entity.webform.embed']) && !\Drupal::currentUser()->hasPermission('os2forms embed webform access') ) {
+      unset($data['tabs'][0]['entity.webform.embed']);
+    }
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function os2forms_module_implements_alter(&$implementations, $hook) {
+  switch ($hook) {
+    // Move our hook_entity_type_alter() implementation to the end of the list.
+    case 'menu_local_tasks_alter':
+      $group = $implementations['os2forms'];
+      unset($implementations['os2forms']);
+      $implementations['os2forms'] = $group;
+      break;
+  }
 }

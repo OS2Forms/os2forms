@@ -1,0 +1,4 @@
+os2forms embed webform access:
+  title: 'Access to Embed webform tab'
+  description: 'Permission for access to Embed webform tab.'
+  restrict access: TRUE
