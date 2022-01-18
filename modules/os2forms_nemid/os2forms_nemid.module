@@ -308,3 +308,26 @@ function os2forms_nemid_migrate_prepare_row(\Drupal\migrate\Row $row, \Drupal\mi
     $row->setDestinationProperty('dependencies', $dependencies);
   }
 }
+
+/**
+ * Add a flag that this webform submission has a protected address field.
+ *
+ * @param array $form
+ *  Form object.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   Form state object.
+ *
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ */
+function os2forms_nemid_submission_set_address_protected(array $form, \Drupal\Core\Form\FormStateInterface &$form_state){
+  /** @var \Drupal\webform\WebformSubmissionForm $webformSubmissionForm */
+  $webformSubmissionForm = $form_state->getFormObject();
+
+  /** @var \Drupal\webform\WebformSubmissionInterface $webformSubmission */
+  $webformSubmission = $webformSubmissionForm->getEntity();
+
+  $data = $webformSubmission->getData();
+  $data['os2forms_nemid_elements_nemid_address_protected'] = TRUE;
+  $webformSubmission->setData($data);
+  $webformSubmission->save();
+}
