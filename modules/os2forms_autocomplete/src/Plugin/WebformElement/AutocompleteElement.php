@@ -81,10 +81,10 @@ class AutocompleteElement extends WebformAutocomplete {
   public function getValue(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
     $value = parent::getValue($element, $webform_submission, $options);
 
-    if ($value == $element['#default_value']) {
+    if ($webform_submission->isNew()) {
       /** @var \Drupal\os2forms_autocomplete\Service\AutocompleteService $acService */
       $acService = \Drupal::service('os2forms_autocomplete.service');
-      $autocompleteDefaultValue = $acService->getFirstMatchingValue($element['#autocomplete_api_url'], $element['#default_value']);
+      $autocompleteDefaultValue = $acService->getFirstMatchingValue($element['#autocomplete_api_url'], $value);
 
       if ($autocompleteDefaultValue) {
         $value = $autocompleteDefaultValue;
