@@ -61,6 +61,40 @@ class AutocompleteElement extends WebformAutocomplete {
   }
 
   /**
+   * Override of default getValue.
+   *
+   * When value is requested, we check if it should be supplemented with the
+   * values from autocomplete webservice instead.
+   *
+   * @see \Drupal\webform\Plugin\WebformElementBase::getValue().
+   *
+   * @param array $element
+   *   An element.
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
+   * @param array $options
+   *   An array of options.
+   *
+   * @return array|string
+   *   The element's submission value.
+   */
+  public function getValue(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    $value = parent::getValue($element, $webform_submission, $options);
+
+    if ($value == $element['#default_value']) {
+      /** @var \Drupal\os2forms_autocomplete\Service\AutocompleteService $acService */
+      $acService = \Drupal::service('os2forms_autocomplete.service');
+      $autocompleteDefaultValue = $acService->getFirstMatchingValue($element['#autocomplete_api_url'], $element['#default_value']);
+
+      if ($autocompleteDefaultValue) {
+        $value = $autocompleteDefaultValue;
+      }
+    }
+
+    return $value;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function form(array $form, FormStateInterface $form_state) {
