@@ -101,10 +101,10 @@ class Os2formsPersonLookup extends WebformCompositeBase {
 
     /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\ServiceplatformenCPR $servicePlatformentCprPlugin */
     $servicePlatformentCprPlugin = $os2web_datalookup_plugins->createInstance('serviceplatformen_cpr');
-    $peronsData = $servicePlatformentCprPlugin->cprBasicInformation($cpr_number);
+    $personsData = $servicePlatformentCprPlugin->cprBasicInformation($cpr_number);
 
-    if (!$peronsData['status']) {
-      $error = isset($peronsData['text']) ? $peronsData['text'] : (isset($peronsData['error']) ? $peronsData['error'] : t('Can not verify CPR Number'));
+    if (!$personsData['status']) {
+      $error = isset($personsData['text']) ? $personsData['text'] : (isset($personsData['error']) ? $personsData['error'] : t('Can not verify CPR Number'));
       \Drupal::logger('os2forms')->warning(t('os2forms_person_lookup - data lookup error: @error', ['@error' => $error]));
       $form_state->setError($element['cpr_number'], t('CPR is not valid.'));
 
@@ -116,7 +116,7 @@ class Os2formsPersonLookup extends WebformCompositeBase {
       return;
     }
 
-    if ($peronsData['adresseringsnavn'] != $values['name']) {
+    if ($personsData['adresseringsnavn'] != $values['name']) {
       $form_state->setError($element['name'], t('Name: @name does not belong given CPR number', ['@name' => $values['name']]));
     }
   }
