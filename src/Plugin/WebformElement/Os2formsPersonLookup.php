@@ -3,6 +3,7 @@
 namespace Drupal\os2forms\Plugin\WebformElement;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\os2forms\Utility\NameHelper;
 use Drupal\webform\Plugin\WebformElement\WebformCompositeBase;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionInterface;
@@ -116,7 +117,8 @@ class Os2formsPersonLookup extends WebformCompositeBase {
       return;
     }
 
-    if ($personsData['adresseringsnavn'] != $values['name']) {
+    $helper = new NameHelper();
+    if ($helper->compareNames($personsData['adresseringsnavn'], $values['name']) != 0) {
       $form_state->setError($element['name'], t('Name: @name does not belong given CPR number', ['@name' => $values['name']]));
     }
   }
