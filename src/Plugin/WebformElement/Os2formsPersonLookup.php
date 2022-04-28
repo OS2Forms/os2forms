@@ -118,7 +118,7 @@ class Os2formsPersonLookup extends WebformCompositeBase {
     }
 
     $helper = new NameHelper();
-    if ($helper->compareNames($personsData['adresseringsnavn'], $values['name']) != 0) {
+    if ($helper->compareNames($personsData['adresseringsnavn'], $values['name']) !== 0) {
       $form_state->setError($element['name'], t('Navn og CPR nummer stemmer ikke overens.'));
     }
   }
