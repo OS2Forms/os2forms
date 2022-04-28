@@ -14,7 +14,7 @@ use Drupal\webform\WebformSubmissionInterface;
  * @WebformElement(
  *   id = "os2forms_person_lookup",
  *   label = @Translation("CPR / Navn validering"),
- *   description = @Translation("Giver en nem validering med CPR nummer"),
+ *   description = @Translation("Giver en nem validering med CPR-nummer"),
  *   category = @Translation("OS2Forms"),
  *   composite = TRUE,
  *   multiline = TRUE,
@@ -59,7 +59,7 @@ class Os2formsPersonLookup extends WebformCompositeBase {
   public function initializeCompositeElements(array &$element) {
     $element['#webform_composite_elements'] = [
       'cpr_number' => [
-        '#title' => $this->t('CPR nummer'),
+        '#title' => $this->t('CPR-nummer'),
         '#type' => 'textfield',
         '#maxlength' => 255,
         '#required' => TRUE,
@@ -107,7 +107,7 @@ class Os2formsPersonLookup extends WebformCompositeBase {
     if (!$personsData['status']) {
       $error = isset($personsData['text']) ? $personsData['text'] : (isset($personsData['error']) ? $personsData['error'] : t('Can not verify CPR Number'));
       \Drupal::logger('os2forms')->warning(t('os2forms_person_lookup - data lookup error: @error', ['@error' => $error]));
-      $form_state->setError($element['cpr_number'], t('Navn og CPR nummer stemmer ikke overens.'));
+      $form_state->setError($element['cpr_number'], t('Navn og CPR-nummer stemmer ikke overens.'));
 
       return;
     }
@@ -119,7 +119,7 @@ class Os2formsPersonLookup extends WebformCompositeBase {
 
     $helper = new NameHelper();
     if ($helper->compareNames($personsData['adresseringsnavn'], $values['name']) !== 0) {
-      $form_state->setError($element['name'], t('Navn og CPR nummer stemmer ikke overens.'));
+      $form_state->setError($element['name'], t('Navn og CPR-nummer stemmer ikke overens.'));
     }
   }
 }

@@ -18,7 +18,7 @@ class Os2formsPersonLookup extends WebformCompositeBase {
     $elements = [];
     $elements['cpr_number'] = [
       '#type' => 'textfield',
-      '#title' => t('CPR nummer'),
+      '#title' => t('CPR-nummer'),
       '#required' => TRUE,
     ];
     $elements['name'] = [
