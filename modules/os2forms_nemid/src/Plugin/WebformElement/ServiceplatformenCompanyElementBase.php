@@ -85,7 +85,7 @@ abstract class ServiceplatformenCompanyElementBase extends NemidElementBase {
     $nemloginAuth = $authProviderService->getActivePlugin();
     if ($nemloginAuth->isAuthenticated()) {
       $cvr = $nemloginAuth->fetchValue('cvr');
-
+      $spCompanyData['cvr'] = $cvr;
       $pluginManager = \Drupal::service('plugin.manager.os2web_datalookup');
       /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\ServiceplatformenCVR $servicePlatformentCvrPlugin */
       $servicePlatformentCvrPlugin = $pluginManager->createInstance('serviceplatformen_cvr');
@@ -120,6 +120,7 @@ abstract class ServiceplatformenCompanyElementBase extends NemidElementBase {
       $spCompanyData['company_city'] = $spCompanyData['company_zipcode'] . ' ' . $spCompanyData['company_city'];
     }
 
+    $this->logger->debug( __METHOD__ . ':' . __LINE__ . ' Debug data: ' . print_r($spCompanyData, 1));
     return $spCompanyData;
   }
 
