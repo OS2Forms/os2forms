@@ -17,6 +17,16 @@ use Drupal\webform\WebformSubmissionInterface;
 abstract class NemidElementBase extends WebformElementBase implements NemidPrepopulateFieldInterface {
 
   /**
+   * Defines NemID webform type - Personal.
+   */
+  const WEBFORM_TYPE_PERSONAL = 'personal';
+
+  /**
+   * Defines NemID webform type - Company.
+   */
+  const WEBFORM_TYPE_COMPANY = 'company';
+
+  /**
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
@@ -68,10 +78,10 @@ abstract class NemidElementBase extends WebformElementBase implements NemidPrepo
       $plugin = $authProviderService->getActivePlugin();
       if ($plugin->isAuthenticated()) {
         if ($plugin->isAuthenticatedPerson()) {
-          $this->handleElementVisibility($element, OS2FORMS_NEMID_WEBFORM_TYPE_PERSONAL);
+          $this->handleElementVisibility($element, self::WEBFORM_TYPE_PERSONAL);
         }
         if ($plugin->isAuthenticatedCompany()) {
-          $this->handleElementVisibility($element, OS2FORMS_NEMID_WEBFORM_TYPE_COMPANY);
+          $this->handleElementVisibility($element, self::WEBFORM_TYPE_COMPANY);
         }
       }
 
@@ -154,12 +164,12 @@ abstract class NemidElementBase extends WebformElementBase implements NemidPrepo
    *   TRUE if visible, FALSE otherwise.
    */
   protected function isVisible($allowed_type) {
-    if ($allowed_type === OS2FORMS_NEMID_WEBFORM_TYPE_PERSONAL) {
+    if ($allowed_type === self::WEBFORM_TYPE_PERSONAL) {
       if ($this instanceof NemidElementCompanyInterface) {
         return FALSE;
       }
     }
-    elseif ($allowed_type === OS2FORMS_NEMID_WEBFORM_TYPE_COMPANY) {
+    elseif ($allowed_type === self::WEBFORM_TYPE_COMPANY) {
       if ($this instanceof NemidElementPersonalInterface) {
         return FALSE;
       }

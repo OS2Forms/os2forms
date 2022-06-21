@@ -2,13 +2,31 @@
 
 namespace Drupal\os2forms_autocomplete\Service;
 
+use Drupal\Core\Logger\LoggerChannelFactory;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
 /**
- * Class AutocompleteService.
+ * Service for the OS2Forms Autocomplete.
  */
 class AutocompleteService {
+
+  /**
+   * The OS2Forms logger channel.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $logger;
+
+  /**
+   * AutocompleteService constructor.
+   *
+   * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
+   *   The logger factory.
+   */
+  public function __construct(LoggerChannelFactory $logger_factory) {
+    $this->logger = $logger_factory->get('OS2Forms Autocomplete');
+  }
 
   /**
    * Returns a full list of items for autocomplete options.
@@ -29,13 +47,14 @@ class AutocompleteService {
         $body = $res->getBody();
         $jsonDecoded = json_decode($body, TRUE);
         if (!empty($jsonDecoded) && is_array($jsonDecoded)) {
-          foreach ($jsonDecoded as $key => $values) {
+          foreach ($jsonDecoded as $values) {
             $options = array_merge($options, $values);
           }
         }
       }
-    } catch (RequestException $e) {
-      \Drupal::logger('OS2Forms Autocomplete')->notice('Autocomplete request failed: %e', ['%e' => $e->getMessage()]);
+    }
+    catch (RequestException $e) {
+      $this->logger->notice('Autocomplete request failed: %e', ['%e' => $e->getMessage()]);
     }
 
     return $options;
@@ -46,11 +65,11 @@ class AutocompleteService {
    *
    * @param string $requestUrl
    *   URL for getting the results from.
-   * @param $needle
-   *  Search criteria.
+   * @param string $needle
+   *   Search criteria.
    *
    * @return mixed
-   *  First available option or FALSE.
+   *   First available option or FALSE.
    */
   public function getFirstMatchingValue($requestUrl, $needle) {
     $options = $this->getAutocompleteItemsFromApi($requestUrl);

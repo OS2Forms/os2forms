@@ -5,7 +5,6 @@ namespace Drupal\os2forms_autocomplete\Controller;
 use Drupal\webform\Controller\WebformElementController;
 use Drupal\webform\Entity\WebformOptions;
 use Drupal\webform\WebformInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 

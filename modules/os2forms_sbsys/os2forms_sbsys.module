@@ -5,12 +5,15 @@
  * OS2Forms SBSYS functionality module.
  */
 
+use Drupal\migrate\Plugin\MigrationInterface;
+use Drupal\migrate\Plugin\MigrateSourceInterface;
+use Drupal\migrate\Row;
 use Symfony\Component\Yaml\Yaml;
 
 /**
  * Implements hook_migrate_prepare_row().
  */
-function os2forms_sbsys_migrate_prepare_row(\Drupal\migrate\Row $row, \Drupal\migrate\Plugin\MigrateSourceInterface $source, \Drupal\migrate\Plugin\MigrationInterface $migration) {
+function os2forms_sbsys_migrate_prepare_row(Row $row, MigrateSourceInterface $source, MigrationInterface $migration) {
   $nid = $row->getSourceProperty('nid');
   $default = $source->getDatabase()->select('os2forms_frontend_webform_settings', 'of')
     ->fields('of')
@@ -34,7 +37,7 @@ function os2forms_sbsys_migrate_prepare_row(\Drupal\migrate\Row $row, \Drupal\mi
     $keys[$component->form_key] = $component->form_key . ($component->pid ? '_' . $component->pid : '');
   }
 
-  $data = unserialize($default['data']);
+  $data = unserialize($default['data'], ['allowed_classes' => FALSE]);
   $os2forms_sbsys = [];
   $properties = [
     'os2formsId',

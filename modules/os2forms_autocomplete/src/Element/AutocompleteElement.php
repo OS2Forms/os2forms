@@ -12,7 +12,7 @@ use Drupal\webform\Element\WebformAutocomplete;
 class AutocompleteElement extends WebformAutocomplete {
 
   /**
-   * @inheritDoc
+   * {@inheritdoc}
    */
   public static function preRenderWebformAutocomplete($element) {
     static::setAttributes($element, ['os2forms-autocomplete']);

@@ -27,8 +27,8 @@ class DawaElementAddressMatrikula extends WebformCompositeBase {
       'remove_place_name' => '',
       'remove_code' => '',
       'limit_by_municipality' => '',
-      'address_field_title' => t('Address'),
-      'matrikula_field_title' => t('Matrikula'),
+      'address_field_title' => $this->t('Address'),
+      'matrikula_field_title' => $this->t('Matrikula'),
     ] + parent::getDefaultProperties();
     return $properties;
   }

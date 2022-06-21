@@ -24,12 +24,12 @@ abstract class ServiceplatformenCompanyElementBase extends NemidElementBase {
     $spCompanyData = NULL;
 
     // Handling P-number being changed/reset.
-    if ($form_state->isRebuilding() && $this->isPNumberTrigger($form_state)) {
+    if ($form_state->isRebuilding() && $this->isPnumberTrigger($form_state)) {
       // Resetting the current field value - it fetch is successfull,
       // it will be filled later.
       $element['#value'] = NULL;
 
-      $pNumber = $this->getPNumberValue($form_state);
+      $pNumber = $this->getPnumberValue($form_state);
 
       // If another pNumber, resetting cached servicePlatformenCompanyData.
       if (strcmp($pNumber, $form_state->get('nemidCompanyPNumber')) !== 0) {
@@ -76,7 +76,7 @@ abstract class ServiceplatformenCompanyElementBase extends NemidElementBase {
    *   Company information or NULL if request could not be performed.
    */
   private function fetchCompanyData(FormStateInterface $form_state) {
-    $spCompanyData =  NULL;
+    $spCompanyData = NULL;
 
     // 1. Attempt to fetch data via CVR.
     /** @var \Drupal\os2web_nemlogin\Service\AuthProviderService $authProviderService */
@@ -96,8 +96,8 @@ abstract class ServiceplatformenCompanyElementBase extends NemidElementBase {
     }
     // 2. Attempt to fetch data via P-number.
     else {
-      if ($form_state->isRebuilding() && $this->isPNumberTrigger($form_state)) {
-        $pNumber = $this->getPNumberValue($form_state);
+      if ($form_state->isRebuilding() && $this->isPnumberTrigger($form_state)) {
+        $pNumber = $this->getPnumberValue($form_state);
 
         if ($pNumber) {
           $pluginManager = \Drupal::service('plugin.manager.os2web_datalookup');
@@ -120,7 +120,7 @@ abstract class ServiceplatformenCompanyElementBase extends NemidElementBase {
       $spCompanyData['company_city'] = $spCompanyData['company_zipcode'] . ' ' . $spCompanyData['company_city'];
     }
 
-    $this->logger->debug( __METHOD__ . ':' . __LINE__ . ' Debug data: ' . print_r($spCompanyData, 1));
+    $this->logger->debug(__METHOD__ . ':' . __LINE__ . ' Debug data: ' . print_r($spCompanyData, 1));
     return $spCompanyData;
   }
 
@@ -133,9 +133,9 @@ abstract class ServiceplatformenCompanyElementBase extends NemidElementBase {
    * @return bool
    *   TRUE or FALSE.
    */
-  public function isPNumberTrigger(FormStateInterface $form_state) {
+  public function isPnumberTrigger(FormStateInterface $form_state) {
     if ($triggerElement = $form_state->getTriggeringElement()) {
-      //Checking trigger element parent.
+      // Checking trigger element parent.
       $form_array = $form_state->getCompleteForm();
       $triggerElParents = $triggerElement['#array_parents'];
 
@@ -143,7 +143,7 @@ abstract class ServiceplatformenCompanyElementBase extends NemidElementBase {
       array_pop($triggerElParents);
       $parentElement = NestedArray::getValue($form_array, $triggerElParents);
 
-      // Checking if parent element is 'os2forms_nemid_company_p_number'
+      // Checking if parent element is 'os2forms_nemid_company_p_number'.
       if ($parentElement && isset($parentElement['#type']) && $parentElement['#type'] == 'os2forms_nemid_company_p_number') {
         return TRUE;
       }
@@ -161,7 +161,7 @@ abstract class ServiceplatformenCompanyElementBase extends NemidElementBase {
    * @return string
    *   P-Number value from the field.
    */
-  public function getPNumberValue(FormStateInterface $form_state) {
+  public function getPnumberValue(FormStateInterface $form_state) {
     $triggerElement = $form_state->getTriggeringElement();
 
     $pNumberParents = $triggerElement['#parents'];

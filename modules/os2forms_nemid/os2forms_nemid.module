@@ -5,18 +5,12 @@
  * OS2Forms NemID functionality module.
  */
 
+use Drupal\migrate\Plugin\MigrationInterface;
+use Drupal\migrate\Plugin\MigrateSourceInterface;
+use Drupal\migrate\Row;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
-
-/**
- * Defines NemID webform type - Personal.
- */
-define('OS2FORMS_NEMID_WEBFORM_TYPE_PERSONAL', 'personal');
-
-/**
- * Defines NemID webform type - Company.
- */
-define('OS2FORMS_NEMID_WEBFORM_TYPE_COMPANY', 'company');
+use Drupal\os2forms_nemid\Plugin\WebformElement\NemidElementBase;
 
 /**
  * Implements hook_webform_third_party_settings_form_alter().
@@ -84,8 +78,8 @@ function os2forms_nemid_webform_submission_form_alter(array &$form, FormStateInt
     // User is authenticated, check if the form type is corresponding to
     // authentication type.
     if ($authProviderPlugin->isAuthenticated()) {
-      if ($authProviderPlugin->isAuthenticatedPerson() && $webform_type !== OS2FORMS_NEMID_WEBFORM_TYPE_PERSONAL
-        || $authProviderPlugin->isAuthenticatedCompany() && $webform_type !== OS2FORMS_NEMID_WEBFORM_TYPE_COMPANY) {
+      if ($authProviderPlugin->isAuthenticatedPerson() && $webform_type !== NemidElementBase::WEBFORM_TYPE_PERSONAL
+        || $authProviderPlugin->isAuthenticatedCompany() && $webform_type !== NemidElementBase::WEBFORM_TYPE_COMPANY) {
         \Drupal::messenger()
           ->addWarning(t('Your login type does match the login type required by the webform. Please <a href="@logout">log out</a> and sign in with a different account', [
             '@logout' => $authProviderService->getLogoutUrl()
@@ -117,12 +111,15 @@ function os2forms_nemid_preprocess(&$variables, $hook) {
 /**
  * Helper function to define webform element meta data.
  *
- * @param $markup
- * @param $indent
- * @param $element
+ * @param string $markup
+ *   Webform yaml definition in plain text.
+ * @param int $indent
+ *   Indentation value.
+ * @param array $element
+ *   Webform element.
  */
-function os2forms_nemid_get_settings_from_extras(&$markup, $indent, $element) {
-  $extra = unserialize($element['extra']);
+function os2forms_nemid_get_settings_from_extras(&$markup, $indent, array $element) {
+  $extra = unserialize($element['extra'], ['allowed_classes' => FALSE]);
   $options = [
     'disabled',
     'readonly',
@@ -146,7 +143,8 @@ function os2forms_nemid_get_settings_from_extras(&$markup, $indent, $element) {
 /**
  * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
  *
- * Not released hook
+ * Not released hook.
+ *
  * @See https://www.drupal.org/project/webform_migrate/issues/3155073
  */
 function os2forms_nemid_webform_migrate_d7_webform_element_nemid_address_alter(&$markup, $indent, array $element) {
@@ -157,7 +155,8 @@ function os2forms_nemid_webform_migrate_d7_webform_element_nemid_address_alter(&
 /**
  * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
  *
- * Not released hook
+ * Not released hook.
+ *
  * @See https://www.drupal.org/project/webform_migrate/issues/3155073
  */
 function os2forms_nemid_webform_migrate_d7_webform_element_nemid_city_alter(&$markup, $indent, array $element) {
@@ -168,7 +167,8 @@ function os2forms_nemid_webform_migrate_d7_webform_element_nemid_city_alter(&$ma
 /**
  * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
  *
- * Not released hook
+ * Not released hook.
+ *
  * @See https://www.drupal.org/project/webform_migrate/issues/3155073
  */
 function os2forms_nemid_webform_migrate_d7_webform_element_nemid_coaddress_alter(&$markup, $indent, array $element) {
@@ -179,7 +179,8 @@ function os2forms_nemid_webform_migrate_d7_webform_element_nemid_coaddress_alter
 /**
  * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
  *
- * Not released hook
+ * Not released hook.
+ *
  * @See https://www.drupal.org/project/webform_migrate/issues/3155073
  */
 function os2forms_nemid_webform_migrate_d7_webform_element_nemid_com_addr_alter(&$markup, $indent, array $element) {
@@ -190,7 +191,8 @@ function os2forms_nemid_webform_migrate_d7_webform_element_nemid_com_addr_alter(
 /**
  * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
  *
- * Not released hook
+ * Not released hook.
+ *
  * @See https://www.drupal.org/project/webform_migrate/issues/3155073
  */
 function os2forms_nemid_webform_migrate_d7_webform_element_nemid_com_cvr_alter(&$markup, $indent, array $element) {
@@ -201,7 +203,8 @@ function os2forms_nemid_webform_migrate_d7_webform_element_nemid_com_cvr_alter(&
 /**
  * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
  *
- * Not released hook
+ * Not released hook.
+ *
  * @See https://www.drupal.org/project/webform_migrate/issues/3155073
  */
 function os2forms_nemid_webform_migrate_d7_webform_element_nemid_com_name_alter(&$markup, $indent, array $element) {
@@ -212,7 +215,8 @@ function os2forms_nemid_webform_migrate_d7_webform_element_nemid_com_name_alter(
 /**
  * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
  *
- * Not released hook
+ * Not released hook.
+ *
  * @See https://www.drupal.org/project/webform_migrate/issues/3155073
  */
 function os2forms_nemid_webform_migrate_d7_webform_element_nemid_com_city_alter(&$markup, $indent, array $element) {
@@ -223,7 +227,8 @@ function os2forms_nemid_webform_migrate_d7_webform_element_nemid_com_city_alter(
 /**
  * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
  *
- * Not released hook
+ * Not released hook.
+ *
  * @See https://www.drupal.org/project/webform_migrate/issues/3155073
  */
 function os2forms_nemid_webform_migrate_d7_webform_element_nemid_com_rid_alter(&$markup, $indent, array $element) {
@@ -234,7 +239,8 @@ function os2forms_nemid_webform_migrate_d7_webform_element_nemid_com_rid_alter(&
 /**
  * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
  *
- * Not released hook
+ * Not released hook.
+ *
  * @See https://www.drupal.org/project/webform_migrate/issues/3155073
  */
 function os2forms_nemid_webform_migrate_d7_webform_element_nemid_cpr_alter(&$markup, $indent, array $element) {
@@ -245,7 +251,8 @@ function os2forms_nemid_webform_migrate_d7_webform_element_nemid_cpr_alter(&$mar
 /**
  * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
  *
- * Not released hook
+ * Not released hook.
+ *
  * @See https://www.drupal.org/project/webform_migrate/issues/3155073
  */
 function os2forms_nemid_webform_migrate_d7_webform_element_nemid_name_alter(&$markup, $indent, array $element) {
@@ -256,7 +263,8 @@ function os2forms_nemid_webform_migrate_d7_webform_element_nemid_name_alter(&$ma
 /**
  * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
  *
- * Not released hook
+ * Not released hook.
+ *
  * @See https://www.drupal.org/project/webform_migrate/issues/3155073
  */
 function os2forms_nemid_webform_migrate_d7_webform_element_nemid_link_alter(&$markup, $indent, array $element) {
@@ -267,7 +275,8 @@ function os2forms_nemid_webform_migrate_d7_webform_element_nemid_link_alter(&$ma
 /**
  * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
  *
- * Not released hook
+ * Not released hook.
+ *
  * @See https://www.drupal.org/project/webform_migrate/issues/3155073
  */
 function os2forms_nemid_webform_migrate_d7_webform_element_nemid_pid_alter(&$markup, $indent, array $element) {
@@ -278,7 +287,7 @@ function os2forms_nemid_webform_migrate_d7_webform_element_nemid_pid_alter(&$mar
 /**
  * Implements hook_migrate_prepare_row().
  */
-function os2forms_nemid_migrate_prepare_row(\Drupal\migrate\Row $row, \Drupal\migrate\Plugin\MigrateSourceInterface $source, \Drupal\migrate\Plugin\MigrationInterface $migration) {
+function os2forms_nemid_migrate_prepare_row(Row $row, MigrateSourceInterface $source, MigrationInterface $migration) {
   $nid = $row->getSourceProperty('nid');
   $default = $source->getDatabase()->select('os2forms_frontend_webform_settings', 'of')
     ->fields('of')
@@ -291,7 +300,7 @@ function os2forms_nemid_migrate_prepare_row(\Drupal\migrate\Row $row, \Drupal\mi
     return;
   }
 
-  $data = unserialize($default['data']);
+  $data = unserialize($default['data'], ['allowed_classes' => FALSE]);
   $os2forms_nemid = [];
   if (!empty($data['webform_type'])) {
     $os2forms_nemid['webform_type'] = $data['webform_type'];
@@ -313,13 +322,13 @@ function os2forms_nemid_migrate_prepare_row(\Drupal\migrate\Row $row, \Drupal\mi
  * Add a flag that this webform submission has a protected address field.
  *
  * @param array $form
- *  Form object.
+ *   Form object.
  * @param \Drupal\Core\Form\FormStateInterface $form_state
  *   Form state object.
  *
  * @throws \Drupal\Core\Entity\EntityStorageException
  */
-function os2forms_nemid_submission_set_address_protected(array $form, \Drupal\Core\Form\FormStateInterface &$form_state){
+function os2forms_nemid_submission_set_address_protected(array $form, FormStateInterface &$form_state) {
   /** @var \Drupal\webform\WebformSubmissionForm $webformSubmissionForm */
   $webformSubmissionForm = $form_state->getFormObject();
 

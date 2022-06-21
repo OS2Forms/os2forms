@@ -31,7 +31,6 @@ abstract class ServiceplatformenCprElementBase extends NemidElementBase {
       // Making the request to the plugin, and storing the information on the
       // form, so that it's available on the next element within the same
       // webform render.
-
       /** @var \Drupal\os2web_nemlogin\Service\AuthProviderService $authProviderService */
       $authProviderService = \Drupal::service('os2web_nemlogin.auth_provider');
       /** @var \Drupal\os2web_nemlogin\Plugin\AuthProviderInterface $plugin */
