@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 See ["how do I make a good changelog record?"](https://keepachangelog.com/en/1.0.0/#how) 
-before starting add changes.
+before starting to add changes.
 
 ## [Unreleased]
 
