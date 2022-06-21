@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 See ["how do I make a good changelog record?"](https://keepachangelog.com/en/1.0.0/#how) 
 before starting to add changes.
 
+## [Unreleased]
+
+### Added
+- Github CI action for checking Drupal Coding standards with PHP Code Sniffer
+
+
 ## Example of change log record
 ```
 ## [x.x.x] Release name
