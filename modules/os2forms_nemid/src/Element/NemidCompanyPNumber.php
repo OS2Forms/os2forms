@@ -30,6 +30,7 @@ class NemidCompanyPNumber extends WebformCompositeBase {
             $element['#webform_key']
           ]
         ],
+        '#name' => $element['#webform_key'] . '-fetch',
       ];
     }
 
