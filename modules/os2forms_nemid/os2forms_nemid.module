@@ -29,8 +29,8 @@ function os2forms_nemid_webform_third_party_settings_form_alter(&$form, FormStat
 
   // Webform type.
   $webform_types = [
-    OS2FORMS_NEMID_WEBFORM_TYPE_PERSONAL => t('Personal'),
-    OS2FORMS_NEMID_WEBFORM_TYPE_COMPANY => t('Company'),
+    NemidElementBase::WEBFORM_TYPE_PERSONAL => t('Personal'),
+    NemidElementBase::WEBFORM_TYPE_COMPANY => t('Company'),
   ];
   $form['third_party_settings']['os2forms']['os2forms_nemid']['webform_type'] = [
     '#type' => 'select',
