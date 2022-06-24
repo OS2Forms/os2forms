@@ -15,7 +15,6 @@ use Drupal\webform\Plugin\WebformElement\WebformCompositeBase;
  *   category = @Translation("NemID"),
  *   composite = TRUE,
  * )
- *
  */
 class NemidCompanyPNumber extends WebformCompositeBase {
 
@@ -24,8 +23,8 @@ class NemidCompanyPNumber extends WebformCompositeBase {
    */
   public function getDefaultProperties() {
     $properties = [
-        'fetch_button_title' => t('Hent'),
-      ] + parent::getDefaultProperties();
+      'fetch_button_title' => $this->t('Hent'),
+    ] + parent::getDefaultProperties();
     return $properties;
   }
 
@@ -46,4 +45,5 @@ class NemidCompanyPNumber extends WebformCompositeBase {
 
     return $form;
   }
+
 }

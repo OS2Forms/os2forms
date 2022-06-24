@@ -47,13 +47,13 @@ class NemidAddress extends ServiceplatformenCprElementBase implements NemidEleme
       if ($spCrpData['name_address_protected']) {
         $element['#info_message'] = 'adresse beskyttelse';
         NestedArray::setValue($form['elements'], $element['#webform_parents'], $element);
-        $form['actions']['submit']['#submit'][]  = 'os2forms_nemid_submission_set_address_protected';
+        $form['actions']['submit']['#submit'][] = 'os2forms_nemid_submission_set_address_protected';
       }
     }
     else {
       $data = $webformSubmission->getData();
       if (array_key_exists('os2forms_nemid_elements_nemid_address_protected', $data)) {
-        $element['#description'] = '(adresse beskyttelse)';
+        $element['#description'] = $this->t('(adresse beskyttelse)');
         NestedArray::setValue($form['elements'], $element['#webform_parents'], $element);
       }
     }

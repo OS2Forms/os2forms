@@ -38,8 +38,8 @@ class SettingsForm extends ConfigFormBase {
     // Import settings.
     $form['os2forms_nemid_hide_active_nemid_session_message'] = [
       '#type' => 'checkbox',
-      '#title' => t('Hide message about active Nemid session, if it exists.'),
-      '#description' => t('If checked, meessage aboout active NemID session will not shown on webform page'),
+      '#title' => $this->t('Hide message about active Nemid session, if it exists.'),
+      '#description' => $this->t('If checked, meessage aboout active NemID session will not shown on webform page'),
       '#default_value' => $this->config(SettingsForm::$configName)
         ->get('os2forms_nemid_hide_active_nemid_session_message'),
     ];

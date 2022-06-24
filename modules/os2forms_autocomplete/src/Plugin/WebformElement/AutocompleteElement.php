@@ -66,8 +66,6 @@ class AutocompleteElement extends WebformAutocomplete {
    * When value is requested, we check if it should be supplemented with the
    * values from autocomplete webservice instead.
    *
-   * @see \Drupal\webform\Plugin\WebformElementBase::getValue().
-   *
    * @param array $element
    *   An element.
    * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
@@ -77,6 +75,8 @@ class AutocompleteElement extends WebformAutocomplete {
    *
    * @return array|string
    *   The element's submission value.
+   *
+   * @see \Drupal\webform\Plugin\WebformElementBase::getValue()
    */
   public function getValue(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
     $value = parent::getValue($element, $webform_submission, $options);

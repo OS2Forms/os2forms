@@ -34,8 +34,8 @@ class DawaElementAddress extends DawaElementBase {
   public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
     parent::prepare($element, $webform_submission);
 
-    $element['#autocomplete_route_parameters']['remove_place_name'] = isset($element['#remove_place_name']) ? $element['#remove_place_name'] : FALSE;
-    $element['#autocomplete_route_parameters']['limit_by_municipality'] = isset($element['#limit_by_municipality']) ? $element['#limit_by_municipality'] : FALSE;
+    $element['#autocomplete_route_parameters']['remove_place_name'] = $element['#remove_place_name'] ?? FALSE;
+    $element['#autocomplete_route_parameters']['limit_by_municipality'] = $element['#limit_by_municipality'] ?? FALSE;
   }
 
   /**

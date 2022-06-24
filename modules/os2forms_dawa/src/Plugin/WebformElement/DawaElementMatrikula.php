@@ -34,8 +34,8 @@ class DawaElementMatrikula extends DawaElementBase {
   public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
     parent::prepare($element, $webform_submission);
 
-    $element['#autocomplete_route_parameters']['remove_code'] = isset($element['#remove_code']) ? $element['#remove_code'] : FALSE;
-    $element['#autocomplete_route_parameters']['limit_by_municipality'] = isset($element['#limit_by_municipality']) ? $element['#limit_by_municipality'] : '';
+    $element['#autocomplete_route_parameters']['remove_code'] = $element['#remove_code'] ?? FALSE;
+    $element['#autocomplete_route_parameters']['limit_by_municipality'] = $element['#limit_by_municipality'] ?? '';
   }
 
   /**

@@ -4,6 +4,7 @@ namespace Drupal\os2forms_nemid\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a 'OS2Forms Nemid Login/out link' block.
@@ -14,6 +15,22 @@ use Drupal\Core\Form\FormStateInterface;
  * )
  */
 class NemidLoginLogoutLink extends BlockBase {
+
+  /**
+   * The OS2Web Nemlogin authorization provider.
+   *
+   * @var \Drupal\os2web_nemlogin\Service\AuthProviderService
+   */
+  protected $authProvider;
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    $instance = new static($configuration, $plugin_id, $plugin_definition);
+    $instance->authProvider = $container->get('os2web_nemlogin.auth_provider');
+    return $instance;
+  }
 
   /**
    * {@inheritdoc}
@@ -68,9 +85,7 @@ class NemidLoginLogoutLink extends BlockBase {
    * {@inheritdoc}
    */
   public function build() {
-    /** @var \Drupal\os2web_nemlogin\Service\AuthProviderService $authProviderService */
-    $authProviderService = \Drupal::service('os2web_nemlogin.auth_provider');
-    $plugin = $authProviderService->getActivePlugin();
+    $plugin = $this->authProvider->getActivePlugin();
 
     // Do nothing if there is no auth plugin.
     if (empty($plugin)) {
@@ -81,7 +96,8 @@ class NemidLoginLogoutLink extends BlockBase {
       return [];
     }
 
-    $link = $authProviderService->generateLink($this->configuration['link_login_text'], $this->configuration['link_logout_text']);
+    /** @var \Drupal\Core\Link $link */
+    $link = $this->authProvider->generateLink($this->configuration['link_login_text'], $this->configuration['link_logout_text']);
     $element['#title'] = $link->getText();
     $element['#url'] = $link->getUrl();
     $build['login_logout_link'] = [

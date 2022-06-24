@@ -3,16 +3,8 @@
 namespace Drupal\os2forms_sbsys\Plugin\WebformElement;
 
 use Drupal\Component\Render\FormattableMarkup;
-use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\ElementInfoManagerInterface;
-use Drupal\Core\Session\AccountInterface;
 use Drupal\os2forms\Plugin\WebformElement\WebformAttachmentXml;
-use Drupal\webform\Plugin\WebformElementManagerInterface;
-use Drupal\webform\WebformLibrariesManagerInterface;
-use Drupal\webform\WebformTokenManagerInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -99,7 +91,7 @@ class WebformAttachmentSbsysXml extends WebformAttachmentXml {
       'nemid_city' => 'nemid_field',
       'bodyText' => 'textarea',
     ];
-    return isset($propertyTypes[$propertyName]) ? $propertyTypes[$propertyName] : 'textfield';
+    return $propertyTypes[$propertyName] ?? 'textfield';
   }
 
   /**
