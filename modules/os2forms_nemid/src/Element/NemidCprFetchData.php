@@ -5,11 +5,11 @@ namespace Drupal\os2forms_nemid\Element;
 use Drupal\webform\Element\WebformCompositeBase;
 
 /**
- * Provides a 'os2forms_nemid_company_p_number'.
+ * Provides a 'os2forms_nemid_cpr_fetch_data'.
  *
- * @FormElement("os2forms_nemid_company_p_number")
+ * @FormElement("os2forms_nemid_cpr_fetch_data")
  */
-class NemidCompanyPNumber extends WebformCompositeBase {
+class NemidCprFetchData extends WebformCompositeBase {
 
   /**
    * {@inheritdoc}
@@ -17,18 +17,18 @@ class NemidCompanyPNumber extends WebformCompositeBase {
   public static function getCompositeElements(array $element) {
     $elements = [];
     if ($element) {
-      $elements['p_number_value'] = [
+      $elements['cpr_fetch_data_value'] = [
         '#type' => 'textfield',
         '#title' => $element['#title'],
       ];
 
-      $elements['p_number_submit'] = [
+      $elements['cpr_fetch_data_submit'] = [
         '#type' => 'button',
-        '#value' => $element['#fetch_button_title'] ?? t('Hent'),
+        '#value' => isset($element['#fetch_button_title']) ? $element['#fetch_button_title'] : t('Hent'),
         '#limit_validation_errors' => [
           [
-            $element['#webform_key'],
-          ],
+            $element['#webform_key']
+          ]
         ],
         '#name' => $element['#webform_key'] . '-fetch',
       ];
