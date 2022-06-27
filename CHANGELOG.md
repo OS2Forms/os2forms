@@ -9,6 +9,12 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+### Added
+- New "CPR / Navn validering" webforms element for easy person validation by CPR and Name (OS2FORMS-372)
+
+### Fixed
+- Codingstandard issues (OS2FORMS-380)
+
 ## [3.2.6] 2022-06-22
 
 ### Fixed
