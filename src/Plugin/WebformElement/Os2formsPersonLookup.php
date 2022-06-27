@@ -27,6 +27,7 @@ use Drupal\webform\WebformSubmissionInterface;
  * @see \Drupal\address\Element\Address
  */
 class Os2formsPersonLookup extends WebformCompositeBase {
+
   /**
    * {@inheritdoc}
    */
@@ -86,13 +87,6 @@ class Os2formsPersonLookup extends WebformCompositeBase {
   }
 
   /**
-   * {@inheritdoc}
-   */
-  public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
-    parent::prepare($element, $webform_submission);
-  }
-
-  /**
    * Form API callback. Make sure CPR is valid and belong provided name.
    */
   public static function validatePerson(array &$element, FormStateInterface $form_state, array &$completed_form) {
@@ -105,7 +99,7 @@ class Os2formsPersonLookup extends WebformCompositeBase {
     $personsData = $servicePlatformentCprPlugin->cprBasicInformation($cpr_number);
 
     if (!$personsData['status']) {
-      $error = isset($personsData['text']) ? $personsData['text'] : (isset($personsData['error']) ? $personsData['error'] : t('Can not verify CPR Number'));
+      $error = $personsData['text'] ?? ($personsData['error'] ?? t('Can not verify CPR Number'));
       \Drupal::logger('os2forms')->warning(t('os2forms_person_lookup - data lookup error: @error', ['@error' => $error]));
       $form_state->setError($element['cpr_number'], t('Navn og CPR-nummer stemmer ikke overens.'));
 
@@ -122,4 +116,5 @@ class Os2formsPersonLookup extends WebformCompositeBase {
       $form_state->setError($element['name'], t('Navn og CPR-nummer stemmer ikke overens.'));
     }
   }
+
 }
