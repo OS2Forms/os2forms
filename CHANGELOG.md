@@ -4,16 +4,19 @@ All notable changes to this project should be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-See ["how do I make a good changelog record?"](https://keepachangelog.com/en/1.0.0/#how) 
+See ["how do I make a good changelog record?"](https://keepachangelog.com/en/1.0.0/#how)
 before starting to add changes. Use example [placed in the end of the page](#example-of-change-log-record)
 
 ## [Unreleased]
+
+## [3.2.7] 2022-06-29
 
 ### Added
 - New "CPR / Navn validering" webforms element for easy person validation by CPR and Name (OS2FORMS-372)
 
 ### Fixed
 - Codingstandard issues (OS2FORMS-380)
+- NemID code file support  - company login, when CPR is also available
 
 ## [3.2.6] 2022-06-22
 
