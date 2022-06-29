@@ -77,11 +77,11 @@ abstract class NemidElementBase extends WebformElementBase implements NemidPrepo
       /** @var \Drupal\os2web_nemlogin\Plugin\AuthProviderInterface $plugin */
       $plugin = $authProviderService->getActivePlugin();
       if ($plugin->isAuthenticated()) {
-        if ($plugin->isAuthenticatedPerson()) {
-          $this->handleElementVisibility($element, self::WEBFORM_TYPE_PERSONAL);
-        }
         if ($plugin->isAuthenticatedCompany()) {
           $this->handleElementVisibility($element, self::WEBFORM_TYPE_COMPANY);
+        }
+        elseif ($plugin->isAuthenticatedPerson()) {
+          $this->handleElementVisibility($element, self::WEBFORM_TYPE_PERSONAL);
         }
       }
 
