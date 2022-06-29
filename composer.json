@@ -49,6 +49,10 @@
         "os2web/os2web_nemlogin": "^1.0",
         "drupal/webform_validation": "2.0.x-dev"
     },
+    "require-dev": {
+        "drupal/coder": "^8.3",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1"
+    },
     "extra" : {
         "composer-exit-on-patch-failure": true,
         "patchLevel": {
@@ -63,5 +67,19 @@
                 "Unlock possibility of using Entity print module export to Word": "https://www.drupal.org/files/issues/2020-02-29/3096552-6.patch"
             }
         }
+    },
+    "scripts": {
+        "coding-standards-check/phpcs": [
+            "phpcs --standard=phpcs.xml.dist"
+        ],
+        "coding-standards-check": [
+            "@coding-standards-check/phpcs"
+        ],
+        "coding-standards-apply/phpcs": [
+            "phpcbf --standard=phpcs.xml.dist"
+        ],
+        "coding-standards-apply": [
+            "@coding-standards-apply/phpcs"
+        ]
     }
 }

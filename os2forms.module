@@ -5,6 +5,9 @@
  * OS2Forms functionality module.
  */
 
+use Drupal\migrate\Plugin\MigrationInterface;
+use Drupal\migrate\Plugin\MigrateSourceInterface;
+use Drupal\migrate\Row;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -55,7 +58,8 @@ function os2forms_theme() {
 /**
  * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
  *
- * Not released hook
+ * Adjusts migration from Drupal 7.
+ *
  * @See https://www.drupal.org/project/webform_migrate/issues/3155073
  */
 function os2forms_webform_migrate_d7_webform_element_date_popup_alter(&$markup, $indent, array $element) {
@@ -63,7 +67,7 @@ function os2forms_webform_migrate_d7_webform_element_date_popup_alter(&$markup, 
   $markup .= "$indent  '#datepicker': true\n";
   $markup .= "$indent  '#date_date_format': d/m/Y\n";
 
-  $extra = unserialize($element['extra']);
+  $extra = unserialize($element['extra'], ['allowed_classes' => FALSE]);
   $options = [
     'disabled',
     'readonly',
@@ -87,13 +91,14 @@ function os2forms_webform_migrate_d7_webform_element_date_popup_alter(&$markup, 
 /**
  * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
  *
- * Not released hook
+ * Adjusts migration from Drupal 7.
+ *
  * @See https://www.drupal.org/project/webform_migrate/issues/3155073
  */
 function os2forms_webform_migrate_d7_webform_element_bt_layout_row_alter(&$markup, $indent, array $element) {
   $markup .= "$indent  '#type': webform_flexbox\n";
 
-  $extra = unserialize($element['extra']);
+  $extra = unserialize($element['extra'], ['allowed_classes' => FALSE]);
   if (!empty($extra['description'])) {
     $value = "\"" . str_replace(['"', "\n", "\r"], ["'", '\n', ''], $extra['description']) . "\"";
     $markup .= "$indent  #description: $value\n";
@@ -103,12 +108,13 @@ function os2forms_webform_migrate_d7_webform_element_bt_layout_row_alter(&$marku
 /**
  * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
  *
- * Not released hook
+ * Adjusts migration from Drupal 7.
+ *
  * @See https://www.drupal.org/project/webform_migrate/issues/3155073
  */
 function os2forms_webform_migrate_d7_webform_element_bt_layout_cols_alter(&$markup, $indent, array $element) {
   $markup .= "$indent  '#type': container\n";
-  $extra = unserialize($element['extra']);
+  $extra = unserialize($element['extra'], ['allowed_classes' => FALSE]);
   if (!empty($extra['description'])) {
     $value = "\"" . str_replace(['"', "\n", "\r"], ["'", '\n', ''], $extra['description']) . "\"";
     $markup .= "$indent  #description: $value\n";
@@ -118,7 +124,7 @@ function os2forms_webform_migrate_d7_webform_element_bt_layout_cols_alter(&$mark
 /**
  * Implements hook_migrate_prepare_row().
  */
-function os2forms_migrate_prepare_row(\Drupal\migrate\Row $row, \Drupal\migrate\Plugin\MigrateSourceInterface $source, \Drupal\migrate\Plugin\MigrationInterface $migration) {
+function os2forms_migrate_prepare_row(Row $row, MigrateSourceInterface $source, MigrationInterface $migration) {
   _os2forms_migrate_prepare_row_pdf($row, $source, $migration);
   _os2forms_migrate_prepare_row_doc($row, $source, $migration);
   /** @var \Drupal\webform\WebformThirdPartySettingsManagerInterface $third_party_settings_manager */
@@ -131,7 +137,7 @@ function os2forms_migrate_prepare_row(\Drupal\migrate\Row $row, \Drupal\migrate\
 /**
  * Implements support of PDF attachment migration.
  */
-function _os2forms_migrate_prepare_row_pdf(\Drupal\migrate\Row $row, \Drupal\migrate\Plugin\MigrateSourceInterface $source, \Drupal\migrate\Plugin\MigrationInterface $migration) {
+function _os2forms_migrate_prepare_row_pdf(Row $row, MigrateSourceInterface $source, MigrationInterface $migration) {
   // Adding migration path for Webform PDF Entity print attachment.
   $nid = $row->getSourceProperty('nid');
   $default = $source->getDatabase()->select('webform2pdf', 'w2p')
@@ -141,7 +147,7 @@ function _os2forms_migrate_prepare_row_pdf(\Drupal\migrate\Row $row, \Drupal\mig
     ->fetchAssoc();
 
   if (!empty($default['data'])) {
-    $data = unserialize($default['data']);
+    $data = unserialize($default['data'], ['allowed_classes' => FALSE]);
     unset($default['data']);
     $default = array_merge($default, $data);
   }
@@ -158,7 +164,7 @@ function _os2forms_migrate_prepare_row_pdf(\Drupal\migrate\Row $row, \Drupal\mig
     ->fetchAssoc();
 
   if (!empty($of_default['data'])) {
-    $data = unserialize($of_default['data']);
+    $data = unserialize($of_default['data'], ['allowed_classes' => FALSE]);
     unset($of_default['data']);
     $default = array_merge($of_default, $data);
   }
@@ -168,7 +174,11 @@ function _os2forms_migrate_prepare_row_pdf(\Drupal\migrate\Row $row, \Drupal\mig
   $markup .= "  '#type': webform_entity_print_attachment:pdf\n";
   $filename = 'webform_submission-[webform:id]-[webform_submission:sid].pdf';
   if ($default['custom_pdf_name']) {
-    $filename = str_replace(['@nid', '@sid'], ['[webform:id]', '[webform_submission:sid]'], $data['custom_pdf_name']);
+    $filename = str_replace(
+      ['@nid', '@sid'],
+      ['[webform:id]', '[webform_submission:sid]'],
+      $data['custom_pdf_name']
+    );
   }
   $markup .= "  '#filename': '$filename'\n";
   $template = _os2forms_migrate_prepare_webform2pdf_get_template($nid, $source);
@@ -192,7 +202,7 @@ function _os2forms_migrate_prepare_row_pdf(\Drupal\migrate\Row $row, \Drupal\mig
 /**
  * Implements support of DOC attachment migration.
  */
-function _os2forms_migrate_prepare_row_doc(\Drupal\migrate\Row $row, \Drupal\migrate\Plugin\MigrateSourceInterface $source, \Drupal\migrate\Plugin\MigrationInterface $migration) {
+function _os2forms_migrate_prepare_row_doc(Row $row, MigrateSourceInterface $source, MigrationInterface $migration) {
   // Adding migration path for Webform DOC Entity print attachment.
   $nid = $row->getSourceProperty('nid');
   $default = $source->getDatabase()->select('os2forms_frontend_webform_settings', 'of')
@@ -203,7 +213,7 @@ function _os2forms_migrate_prepare_row_doc(\Drupal\migrate\Row $row, \Drupal\mig
     ->fetchAssoc();
 
   if (!empty($default['data'])) {
-    $data = unserialize($default['data']);
+    $data = unserialize($default['data'], ['allowed_classes' => FALSE]);
     unset($default['data']);
     $default = array_merge($default, $data);
   }
@@ -235,6 +245,9 @@ function _os2forms_migrate_prepare_row_doc(\Drupal\migrate\Row $row, \Drupal\mig
   }
 }
 
+/**
+ * Preprocesses PDF template for webform.
+ */
 function _os2forms_migrate_prepare_webform2pdf_get_template($nid, $source) {
   $template = &drupal_static(__FUNCTION__ . '_' . $nid, FALSE);
   if ($template) {
@@ -247,7 +260,7 @@ function _os2forms_migrate_prepare_webform2pdf_get_template($nid, $source) {
     ->fetchAssoc();
 
   if (!empty($settings['data'])) {
-    $data = unserialize($settings['data']);
+    $data = unserialize($settings['data'], ['allowed_classes' => FALSE]);
     unset($settings['data']);
     $settings = array_merge($settings, $data);
   }
@@ -280,7 +293,7 @@ function _os2forms_migrate_prepare_webform2pdf_get_template($nid, $source) {
   // Check valid tokens.
   preg_match_all('/\[(.*)\]/', $template, $matches);
   $tokens = array_unique($matches[0]);
-  $valid_tokens = array_filter($tokens, function($token) {
+  $valid_tokens = array_filter($tokens, function ($token) {
     return empty(\Drupal::token()->getInvalidTokensByContext($token, [
       0 => 'webform',
       1 => 'webform_submission',
@@ -291,14 +304,14 @@ function _os2forms_migrate_prepare_webform2pdf_get_template($nid, $source) {
   });
 
   // Making tokens available for twig template.
-  foreach($valid_tokens as $token) {
+  foreach ($valid_tokens as $token) {
     $template = str_replace($token, "{{ webform_token('" . $token . "', webform_submission, [], options) }}", $template);
     $unset_key = array_search($token, $tokens);
     unset($tokens[$unset_key]);
   }
 
   // Removing invalid tokens.
-  foreach($tokens as $invalid_token) {
+  foreach ($tokens as $invalid_token) {
     $template = str_replace($invalid_token, '', $template);
   }
 
@@ -315,7 +328,7 @@ function os2forms_menu_local_tasks_alter(&$data, $route_name) {
     if (is_object($webform)) {
       $webform = $webform->id();
     }
-    if (isset ($data['tabs'][0]['entity.webform.embed']) && !\Drupal::currentUser()->hasPermission('os2forms embed webform access') ) {
+    if (isset($data['tabs'][0]['entity.webform.embed']) && !\Drupal::currentUser()->hasPermission('os2forms embed webform access')) {
       unset($data['tabs'][0]['entity.webform.embed']);
     }
   }

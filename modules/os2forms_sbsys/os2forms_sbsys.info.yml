@@ -6,7 +6,7 @@ core: 8.x
 core_version_requirement: ^8 || ^9
 
 dependencies:
-  - os2forms
-  - os2forms_nemid
-  - os2web_datalookup
-  - serialization
+  - 'drupal:os2forms'
+  - 'drupal:os2forms_nemid'
+  - 'drupal:os2web_datalookup'
+  - 'drupal:serialization'

@@ -63,7 +63,7 @@ class WebformAttachmentSbsysXml extends WebformAttachmentXml {
     $nemid_address_mapping_value = self::getConfigurationValue('nemid_address', $config, $webform_submission);
     $nemid_zipcode_mapping_value = self::getConfigurationValue('nemid_zipcode', $config, $webform_submission);
     $nemid_city_mapping_value = self::getConfigurationValue('nemid_city', $config, $webform_submission);
-    $maa_sendes_til_dff = isset($config['MaaSendesTilDFF']) ? $config['MaaSendesTilDFF'] : 'ja';
+    $maa_sendes_til_dff = $config['MaaSendesTilDFF'] ?? 'ja';
 
     if ($nemid_cpr_mapping_value && $nemid_cpr_mapping_value != 'default_nemid_value') {
       $nemid_cpr = $nemid_cpr_mapping_value;

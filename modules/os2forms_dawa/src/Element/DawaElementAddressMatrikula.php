@@ -21,15 +21,15 @@ class DawaElementAddressMatrikula extends WebformCompositeBase {
     if ($element) {
       $elements['address'] = [
         '#type' => 'os2forms_dawa_address',
-        '#title' => isset($element['#address_field_title']) ? $element['#address_field_title'] : t('Address'),
-        '#remove_place_name' => isset($element['#remove_place_name']) ? $element['#remove_place_name'] : FALSE,
-        '#remove_code' => isset($element['#remove_code']) ? $element['#remove_code'] : FALSE,
-        '#limit_by_municipality' => isset($element['#limit_by_municipality']) ? $element['#limit_by_municipality'] : FALSE,
+        '#title' => $element['#address_field_title'] ?? t('Address'),
+        '#remove_place_name' => $element['#remove_place_name'] ?? FALSE,
+        '#remove_code' => $element['#remove_code'] ?? FALSE,
+        '#limit_by_municipality' => $element['#limit_by_municipality'] ?? FALSE,
       ];
 
       $elements['matrikula'] = [
         '#type' => 'select',
-        '#title' => isset($element['#matrikula_field_title']) ? $element['#matrikula_field_title'] : t('Matrikula'),
+        '#title' => $element['#matrikula_field_title'] ?? t('Matrikula'),
         '#options' => [],
         '#empty_value' => NULL,
         '#validated' => TRUE,

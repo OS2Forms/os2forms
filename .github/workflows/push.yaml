@@ -19,10 +19,8 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
 
-      - name: Install PHP Code Sniffer
-        run: |
-          composer require dealerdirect/phpcodesniffer-composer-installer --no-interaction
-          composer require drupal/coder --no-interaction
+      - name: Install dependencies
+        run: composer install --no-interaction
 
       - name: Check coding standards
-        run: vendor/bin/phpcs
+        run: composer run coding-standards-check --no-interaction

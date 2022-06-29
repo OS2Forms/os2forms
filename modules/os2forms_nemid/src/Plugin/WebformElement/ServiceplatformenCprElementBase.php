@@ -126,7 +126,7 @@ abstract class ServiceplatformenCprElementBase extends NemidElementBase {
    */
   public function isCprNumberTrigger(FormStateInterface $form_state) {
     if ($triggerElement = $form_state->getTriggeringElement()) {
-      //Checking trigger element parent.
+      // Checking trigger element parent.
       $form_array = $form_state->getCompleteForm();
       $triggerElParents = $triggerElement['#array_parents'];
 
@@ -134,7 +134,7 @@ abstract class ServiceplatformenCprElementBase extends NemidElementBase {
       array_pop($triggerElParents);
       $parentElement = NestedArray::getValue($form_array, $triggerElParents);
 
-      // Checking if parent element is 'os2forms_nemid_cpr_fetch_data'
+      // Checking if parent element is 'os2forms_nemid_cpr_fetch_data'.
       if ($parentElement && isset($parentElement['#type']) && $parentElement['#type'] == 'os2forms_nemid_cpr_fetch_data') {
         return TRUE;
       }

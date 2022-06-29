@@ -3,6 +3,7 @@
 namespace Drupal\os2forms_nemid\Element;
 
 use Drupal\Core\Render\Element\Link;
+use Drupal\Core\Link as CoreLink;
 
 /**
  * Provides a render element for more.
@@ -29,7 +30,7 @@ class NemidNemloginLink extends Link {
     }
 
     $link = $authProviderService->generateLink($nemlogin_link_login_text, $nemlogin_link_logout_text);
-    if ($link instanceof \Drupal\Core\Link) {
+    if ($link instanceof CoreLink) {
       $element['#title'] = $link->getText();
       $element['#url'] = $link->getUrl();
     }

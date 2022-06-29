@@ -24,11 +24,11 @@ class NemidCompanyPNumber extends WebformCompositeBase {
 
       $elements['p_number_submit'] = [
         '#type' => 'button',
-        '#value' => isset($element['#fetch_button_title']) ? $element['#fetch_button_title'] : t('Hent'),
+        '#value' => $element['#fetch_button_title'] ?? t('Hent'),
         '#limit_validation_errors' => [
           [
-            $element['#webform_key']
-          ]
+            $element['#webform_key'],
+          ],
         ],
         '#name' => $element['#webform_key'] . '-fetch',
       ];

@@ -3,14 +3,10 @@
 namespace Drupal\os2forms\Plugin\WebformHandler;
 
 use Drupal\Component\Serialization\Json;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\File\Exception\FileWriteException;
 use Drupal\Core\File\FileSystemInterface;
-use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\Serialization\Yaml;
-use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\file\Entity\File;
 use Drupal\webform\Element\WebformMessage;
@@ -19,13 +15,9 @@ use Drupal\webform\Plugin\WebformElement\NumericBase;
 use Drupal\webform\Plugin\WebformElement\WebformCompositeBase;
 use Drupal\webform\Plugin\WebformElement\WebformManagedFileBase;
 use Drupal\webform\Plugin\WebformElementInterface;
-use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Drupal\webform\Plugin\WebformHandlerBase;
 use Drupal\webform\WebformInterface;
-use Drupal\webform\WebformMessageManagerInterface;
-use Drupal\webform\WebformSubmissionConditionsValidatorInterface;
 use Drupal\webform\WebformSubmissionInterface;
-use Drupal\webform\WebformTokenManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -104,7 +96,7 @@ class SaveToFileWebformHandler extends WebformHandlerBase {
     $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
     $instance->moduleHandler = $container->get('module_handler');
     $instance->tokenManager = $container->get('webform.token_manager');
-    $instance->messageManager =  $container->get('webform.message_manager');
+    $instance->messageManager = $container->get('webform.message_manager');
     $instance->elementManager = $container->get('plugin.manager.webform.element');
 
     $instance->request = $container->get('request_stack')->getCurrentRequest();
@@ -382,7 +374,7 @@ class SaveToFileWebformHandler extends WebformHandlerBase {
   protected function saveFile($state, WebformSubmissionInterface $webform_submission) {
     $file_path = $this->getFilePath($state, $webform_submission);
     if (empty($file_path)) {
-      $this->debug(t('Save to file successful!'), $state, $file_path);
+      $this->debug($this->t('Save to file successful!'), $state, $file_path);
     }
     $this->messageManager->setWebformSubmission($webform_submission);
     $file_type = $this->configuration['file_type'];
@@ -402,7 +394,7 @@ class SaveToFileWebformHandler extends WebformHandlerBase {
     }
 
     // If debugging is enabled, display the request and response.
-    $this->debug(t('Save to file successful!'), $state, $file_path);
+    $this->debug($this->t('Save to file successful!'), $state, $file_path);
   }
 
   /**

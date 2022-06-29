@@ -8,7 +8,8 @@
 /**
  * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
  *
- * Not released hook
+ * Not released hook.
+ *
  * @See https://www.drupal.org/project/webform_migrate/issues/3155073
  */
 function os2forms_nemid_webform_migrate_d7_webform_element_address_autocomp_alter(&$markup, $indent, array $element) {
@@ -18,7 +19,8 @@ function os2forms_nemid_webform_migrate_d7_webform_element_address_autocomp_alte
 /**
  * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
  *
- * Not released hook
+ * Not released hook.
+ *
  * @See https://www.drupal.org/project/webform_migrate/issues/3155073
  */
 function os2forms_nemid_webform_migrate_d7_webform_element_addrs_autocomp_l_alter(&$markup, $indent, array $element) {
