@@ -69,6 +69,11 @@
             }
         }
     },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    },
     "scripts": {
         "coding-standards-check/phpcs": [
             "phpcs --standard=phpcs.xml.dist"
