@@ -9,6 +9,9 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+### Added
+-  Allowed plugins section to composer.json. Fixes issues with github actions flow
+
 ## [3.2.8] 2022-08-11
 - Added Webform Remote Select (webform_remote_select) as dependency (OS2FORMS-384)
 
