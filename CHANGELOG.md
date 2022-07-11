@@ -9,6 +9,9 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## [3.2.8] 2022-08-11
+- Added Webform Remote Select (webform_remote_select) as dependency (OS2FORMS-384)
+
 ## [3.2.7] 2022-06-29
 
 ### Added

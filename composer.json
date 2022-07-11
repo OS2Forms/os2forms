@@ -47,7 +47,8 @@
         "vaimo/composer-patches": "^4.20",
         "os2web/os2web_datalookup": "^1.0",
         "os2web/os2web_nemlogin": "^1.0",
-        "drupal/webform_validation": "2.0.x-dev"
+        "drupal/webform_validation": "2.0.x-dev",
+        "drupal/webform_remote_select": "^1.0.6"
     },
     "require-dev": {
         "drupal/coder": "^8.3",
