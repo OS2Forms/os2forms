@@ -14,6 +14,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - Removed vaimo/composer-patches as dependency
 - Changed composer patching configuration slightly
 - Applied coding standards. Updated GitHub Actions.
+- Removed NemID authentication message from AJAX requests
 
 ## [3.3.0] 2022-12-22
 - Added OS2Forms attachment component (with custom heards, footer and colophon) (OS2FORMS-361)
