@@ -22,6 +22,17 @@ class WebformAttachmentSbsysXml extends WebformAttachmentXml {
 
     return $xmlContext;
   }
+  /**
+   * {@inheritdoc}
+   */
+  public static function getFileName(array $element, WebformSubmissionInterface $webform_submission) {
+    if (empty($element['#filename'])) {
+      return 'os2forms.xml';
+    }
+    else {
+      return parent::getFileName($element, $webform_submission);
+    }
+  }
 
   /**
    * {@inheritdoc}
