@@ -108,38 +108,43 @@ class NemloginRedirectSubscriber implements EventSubscriberInterface {
   public function redirectToNemlogin(GetResponseEvent $event) {
     $request = $event->getRequest();
 
-    // This is necessary because this also gets called on
-    // webform sub-tabs such as "edit", "revisions", etc.  This
-    // prevents those pages from redirected.
-    $route = $request->attributes->get('_route');
-    if ($route !== 'entity.webform.canonical' && $route !== 'entity.node.canonical') {
-      return;
-    }
-
     /** @var \Drupal\webform\WebformInterface $webform */
     $webform = NULL;
 
-    if ($route === 'entity.webform.canonical') {
-      $webform = $request->attributes->get('webform');
-    }
-    else {
-      $node = $request->attributes->get('node');
-      $nodeType = $node->getType();
+    // Try to find a webform from the request.
+    $route = $request->attributes->get('_route');
+    switch ($route) {
+      // Creating a new submission.
+      case 'entity.webform.canonical':
+        $webform = $request->attributes->get('webform');
+        break;
 
-      // Search if this node type is related with field of type 'webform'.
-      $webformFieldMap = $this->entityFieldManager->getFieldMapByFieldType('webform');
-      if (isset($webformFieldMap['node'])) {
-        foreach ($webformFieldMap['node'] as $field_name => $field_meta) {
-          // We found field of type 'webform' in this node, let's try fetching
-          // the webform.
-          if (in_array($nodeType, $field_meta['bundles'])) {
-            if ($webformId = $node->get($field_name)->target_id) {
-              $webform = Webform::load($webformId);
-              break;
+      // Editing a submission.
+      case'entity.webform_submission.edit_form':
+        $webformSubmission = $request->attributes->get('webform_submission');
+        $webform = $webformSubmission->getWebform();
+        break;
+
+      // Webform attached to a node.
+      case 'entity.node.canonical':
+        $node = $request->attributes->get('node');
+        $nodeType = $node->getType();
+
+        // Search if this node type is related with field of type 'webform'.
+        $webformFieldMap = $this->entityFieldManager->getFieldMapByFieldType('webform');
+        if (isset($webformFieldMap['node'])) {
+          foreach ($webformFieldMap['node'] as $field_name => $field_meta) {
+            // We found field of type 'webform' in this node, let's try fetching
+            // the webform.
+            if (in_array($nodeType, $field_meta['bundles'])) {
+              if ($webformId = $node->get($field_name)->target_id) {
+                $webform = Webform::load($webformId);
+                break;
+              }
             }
           }
         }
-      }
+        break;
     }
 
     // If we don't have any webform.
