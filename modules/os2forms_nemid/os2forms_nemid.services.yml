@@ -4,3 +4,5 @@ services:
     arguments: ['@os2web_nemlogin.auth_provider', '@current_user', '@entity_field.manager', '@config.factory', '@messenger', '@page_cache_kill_switch']
     tags:
       - {name: event_subscriber}
+
+  Drupal\os2forms_nemid\Helper\WebformHelper:

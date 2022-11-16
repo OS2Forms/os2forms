@@ -10,44 +10,16 @@ use Drupal\migrate\Plugin\MigrateSourceInterface;
 use Drupal\migrate\Row;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
+use Drupal\os2forms_nemid\Helper\WebformHelper;
 use Drupal\os2forms_nemid\Plugin\WebformElement\NemidElementBase;
 
 /**
  * Implements hook_webform_third_party_settings_form_alter().
+ *
+ * @see WebformHelper::webformThirdPartySettingsFormAlter()
  */
 function os2forms_nemid_webform_third_party_settings_form_alter(&$form, FormStateInterface $form_state) {
-  /** @var \Drupal\webform\WebformInterface $webform */
-  $webform = $form_state->getFormObject()->getEntity();
-  $settings = $webform->getThirdPartySetting('os2forms', 'os2forms_nemid');
-
-  // OS2Forms NemID.
-  $form['third_party_settings']['os2forms']['os2forms_nemid'] = [
-    '#type' => 'details',
-    '#title' => t('OS2Forms NemID settings'),
-    '#open' => TRUE,
-  ];
-
-  // Webform type.
-  $webform_types = [
-    NemidElementBase::WEBFORM_TYPE_PERSONAL => t('Personal'),
-    NemidElementBase::WEBFORM_TYPE_COMPANY => t('Company'),
-  ];
-  $form['third_party_settings']['os2forms']['os2forms_nemid']['webform_type'] = [
-    '#type' => 'select',
-    '#title' => t('Webform type'),
-    '#default_value' => !(empty($settings)) ? $settings['webform_type'] : NULL,
-    '#empty_option' => t('Not specified'),
-    '#options' => $webform_types,
-    '#description' => t('Based on the selected type form irrelevant fields will not be shown to the end user'),
-  ];
-
-  // Nemlogin auto redirect.
-  $form['third_party_settings']['os2forms']['os2forms_nemid']['nemlogin_auto_redirect'] = [
-    '#type' => 'checkbox',
-    '#title' => t('Redirect to nemlogin automatically'),
-    '#default_value' => !(empty($settings)) ? $settings['nemlogin_auto_redirect'] : FALSE,
-    '#description' => t('Redirection will happen right after user has is accessing the form, if user is already authenticated via NemID, redirection will not happen.'),
-  ];
+  Drupal::service(WebformHelper::class)->webformThirdPartySettingsFormAlter($form, $form_state);
 }
 
 /**
