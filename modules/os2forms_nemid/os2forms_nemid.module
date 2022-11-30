@@ -5,11 +5,12 @@
  * OS2Forms NemID functionality module.
  */
 
-use Drupal\migrate\Plugin\MigrationInterface;
-use Drupal\migrate\Plugin\MigrateSourceInterface;
-use Drupal\migrate\Row;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link as CoreLink;
 use Drupal\Core\Render\Element;
+use Drupal\migrate\Plugin\MigrateSourceInterface;
+use Drupal\migrate\Plugin\MigrationInterface;
+use Drupal\migrate\Row;
 use Drupal\os2forms_nemid\Plugin\WebformElement\NemidElementBase;
 
 /**
@@ -61,6 +62,26 @@ function os2forms_nemid_webform_submission_form_alter(array &$form, FormStateInt
   $webform = $webformSubmission->getWebform();
   $webformNemidSettings = $webform->getThirdPartySetting('os2forms', 'os2forms_nemid');
 
+  $webformShareRoutes = ['entity.webform.share_page', 'entity.webform.share_page.javascript'];
+  $route_name = \Drupal::routeMatch()->getRouteName();
+
+  // Checking if we have a share route and automatic nemlogin redirect enabled.
+  if (in_array($route_name, $webformShareRoutes)) {
+    if ($webformNemidSettings['nemlogin_auto_redirect']) {
+      // Remove all webform elements and add a single nemlogin link.
+      unset($form['elements']);
+      unset($form['actions']);
+
+      $form['elements'][] = [
+        '#type' => 'os2forms_nemid_nemlogin_link',
+      ];
+
+      // As it's a shared/embedded form with no elements, there is no need to
+      // continue further.
+      return;
+    }
+  }
+
   // Getting webform_type setting.
   $webform_type = NULL;
   if (isset($webformNemidSettings['webform_type']) && !empty($webformNemidSettings['webform_type'])) {
@@ -91,7 +112,6 @@ function os2forms_nemid_webform_submission_form_alter(array &$form, FormStateInt
       }
     }
   }
-
 }
 
 /**
