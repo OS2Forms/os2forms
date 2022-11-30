@@ -1,0 +1,16 @@
+# Component Element List
+entity.config.os2forms_attachment_components:
+  route_name: entity.os2forms_attachment_component.list
+  title: 'OS2forms attachment components'
+  parent_id: webform.config
+  weight: 100
+# Components Element Forms
+entity.os2forms_attachment_component:
+  title: 'Edit'
+  route_name: entity.os2forms_attachment_component.edit_form
+  base_route: entity.os2forms_attachment_component.edit_form
+  parent: entity.config.os2forms_attachment_components
+entity.os2forms_attachment_component.edit_form:
+  title: 'Edit'
+  route_name: entity.os2forms_attachment_component.edit_form
+  parent_id: entity.os2forms_attachment_component

@@ -1,0 +1,5 @@
+entity.os2forms_attachment_component.add_form:
+  route_name: 'entity.os2forms_attachment_component.add_form'
+  title: 'Add Attachment component'
+  appears_on:
+    - entity.os2forms_attachment_component.list
