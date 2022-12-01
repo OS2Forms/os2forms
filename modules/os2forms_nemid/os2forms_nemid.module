@@ -65,9 +65,12 @@ function os2forms_nemid_webform_submission_form_alter(array &$form, FormStateInt
   $webformShareRoutes = ['entity.webform.share_page', 'entity.webform.share_page.javascript'];
   $route_name = \Drupal::routeMatch()->getRouteName();
 
-  // Checking if we have a share route and automatic nemlogin redirect enabled.
+  // Checking if we have a share route.
   if (in_array($route_name, $webformShareRoutes)) {
-    if ($webformNemidSettings['nemlogin_auto_redirect']) {
+    // Check and automatic nemlogin redirect enabled or
+    // os2forms_nemid_nemlogin_link field.
+    $elementTypes = array_column($webform->getElementsDecodedAndFlattened(), '#type');
+    if ($webformNemidSettings['nemlogin_auto_redirect'] || in_array('os2forms_nemid_nemlogin_link', $elementTypes)) {
       // Remove all webform elements and add a single nemlogin link.
       unset($form['elements']);
       unset($form['actions']);
