@@ -89,6 +89,7 @@ class AttachmentComponentForm extends EntityForm {
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Header/footer content'),
       '#default_value' => $component->getBody(),
+      '#format' => 'full_html'
     ];
 
     /** @var \Drupal\webform\WebformTokenManagerInterface $token_manager */
