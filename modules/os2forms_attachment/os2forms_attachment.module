@@ -94,6 +94,10 @@ function _os2forms_attachment_print_form_add_header_footer_override(array &$elem
     '#default_value' => $template_settings['os2form_footer'],
     '#weight' => 0,
   );
+
+  // Showing/hiding default header/footer elements based on the permission.
+  $element['webform_entity_print']['template']['header']['#access'] = \Drupal::currentUser()->hasPermission('os2forms webform header footer edit');
+  $element['webform_entity_print']['template']['footer']['#access'] = \Drupal::currentUser()->hasPermission('os2forms webform header footer edit');
 }
 
 /**
