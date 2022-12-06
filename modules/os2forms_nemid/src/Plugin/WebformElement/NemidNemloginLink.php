@@ -4,6 +4,7 @@ namespace Drupal\os2forms_nemid\Plugin\WebformElement;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Plugin\WebformElement\WebformMarkupBase;
+use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * Provides a 'Nemlogin link' element.
@@ -36,6 +37,15 @@ class NemidNemloginLink extends WebformMarkupBase {
       'nemlogin_link_login_text',
       'nemlogin_link_logout_text',
     ]);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
+    parent::prepare($element, $webform_submission);
+
+    $element['#attributes']['class'][] = 'nemlogin-button-link';
   }
 
   /**
