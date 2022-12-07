@@ -52,6 +52,7 @@ class NemidNemloginLink extends Link {
     if ($link instanceof CoreLink) {
       $element['#title'] = $link->getText();
       $element['#url'] = $link->getUrl();
+      $element['#attributes']['class'][] = 'nemlogin-button-link';
     }
 
     return parent::preRenderLink($element);
