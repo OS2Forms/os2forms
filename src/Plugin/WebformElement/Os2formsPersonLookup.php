@@ -92,14 +92,17 @@ class Os2formsPersonLookup extends WebformCompositeBase {
   public static function validatePerson(array &$element, FormStateInterface $form_state, array &$completed_form) {
     $values = $element['#value'];
     $cpr_number = str_replace('-', '', $values['cpr_number']);
+
+    /** @var \Drupal\os2web_datalookup\Plugin\DataLookupManager $os2web_datalookup_plugins */
     $os2web_datalookup_plugins = \Drupal::service('plugin.manager.os2web_datalookup');
 
-    /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\ServiceplatformenCPR $servicePlatformentCprPlugin */
-    $servicePlatformentCprPlugin = $os2web_datalookup_plugins->createInstance('serviceplatformen_cpr');
-    $personsData = $servicePlatformentCprPlugin->cprBasicInformation($cpr_number);
+    /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupCPRInterface $cprPlugin */
+    $cprPlugin = $os2web_datalookup_plugins->createDefaultInstanceByGroup('cpr_lookup');
 
-    if (!$personsData['status']) {
-      $error = $personsData['text'] ?? ($personsData['error'] ?? t('Can not verify CPR Number'));
+    $cprResult = $cprPlugin->lookup($cpr_number);
+
+    if (!$cprResult->isSuccessful()) {
+      $error = $cprResult->getErrorMessage() ?? t('Can not verify CPR Number');
       \Drupal::logger('os2forms')->warning(t('os2forms_person_lookup - data lookup error: @error', ['@error' => $error]));
       $form_state->setError($element['cpr_number'], t('Navn og CPR-nummer stemmer ikke overens.'));
 
@@ -112,7 +115,7 @@ class Os2formsPersonLookup extends WebformCompositeBase {
     }
 
     $helper = new NameHelper();
-    if ($helper->compareNames($personsData['adresseringsnavn'], $values['name']) !== 0) {
+    if ($helper->compareNames($cprResult->getName(), $values['name']) !== 0) {
       $form_state->setError($element['name'], t('Navn og CPR-nummer stemmer ikke overens.'));
     }
   }

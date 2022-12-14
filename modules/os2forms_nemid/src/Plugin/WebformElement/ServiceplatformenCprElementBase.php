@@ -94,22 +94,31 @@ abstract class ServiceplatformenCprElementBase extends NemidElementBase {
     }
 
     if ($cpr) {
+      /** @var \Drupal\os2web_datalookup\Plugin\DataLookupManager $pluginManager */
       $pluginManager = \Drupal::service('plugin.manager.os2web_datalookup');
-      /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\ServiceplatformenCPR $servicePlatformentCprPlugin */
-      $servicePlatformentCprPlugin = $pluginManager->createInstance('serviceplatformen_cpr');
 
-      if ($servicePlatformentCprPlugin->isReady()) {
-        $spCrpData = $servicePlatformentCprPlugin->getAddress($cpr);
+      /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupCPRInterface $cprPlugin */
+      $cprPlugin = $pluginManager->createDefaultInstanceByGroup('cpr_lookup');
+
+      if ($cprPlugin->isReady()) {
+        $cprResult = $cprPlugin->lookup($cpr);
+
+        if ($cprResult->isSuccessful()) {
+          // OS2forms nemid type fields are expecting data to provided as an
+          // array to be able to fetch it key-based.
+          $spCrpData = [
+            'status' => 1,
+            'cpr' => $cpr,
+            'name' => $cprResult->getName(),
+            'address' => $cprResult->getStreet() . ' ' . $cprResult->getHouseNr() . ', ' . $cprResult->getFloor() . ', ' . $cprResult->getApartmentNr(),
+            'city' => $cprResult->getPostalCode() . ' ' . $cprResult->getCity(),
+            'coname' => $cprResult->getCoName(),
+            'kommunekode' => $cprResult->getMunicipalityCode(),
+            'name_address_protected' => $cprResult->isNameAddressProtected(),
+          ];
+        }
       }
 
-      // Post fetch procedure - manipulating the address fields.
-      if (isset($spCrpData['status']) && $spCrpData['status']) {
-        // Making composite field, address.
-        $spCrpData['address'] = $spCrpData['road'] . ' ' . $spCrpData['road_no'] . ' ' . $spCrpData['floor'] . ' ' . $spCrpData['door'];
-
-        // Making composite field, city.
-        $spCrpData['city'] = $spCrpData['zipcode'] . ' ' . $spCrpData['city'];
-      }
     }
 
     return $spCrpData;
