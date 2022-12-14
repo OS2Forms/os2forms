@@ -54,7 +54,7 @@ function _os2forms_attachment_print_form_add_template_override(array &$element, 
   if (!empty($headerIds)) {
     $headers = AttachmentComponent::loadMultiple($headerIds);
     foreach ($headers as $header) {
-      $header_options[t('Custom')][$header->id()] = $header->label();
+      $header_options['Custom'][$header->id()] = $header->label();
     }
   }
 
@@ -80,7 +80,7 @@ function _os2forms_attachment_print_form_add_template_override(array &$element, 
   if (!empty($footerIds)) {
     $footers = AttachmentComponent::loadMultiple($footerIds);
     foreach ($footers as $footer) {
-      $footer_options[t('Custom')][$footer->id()] = $footer->label();
+      $footer_options['Custom'][$footer->id()] = $footer->label();
     }
   }
   // Template.
