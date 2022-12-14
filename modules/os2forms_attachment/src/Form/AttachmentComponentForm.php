@@ -88,7 +88,7 @@ class AttachmentComponentForm extends EntityForm {
     ];
     $form['body'] = [
       '#type' => 'webform_html_editor',
-      '#title' => $this->t('Header/footer content'),
+      '#title' => $this->t('Component content'),
       '#default_value' => $component->getBody(),
       '#format' => 'full_html'
     ];
