@@ -81,6 +81,7 @@ class AttachmentComponentForm extends EntityForm {
       '#title' => $this->t('Type'),
       '#options' => [
         'header' => $this->t('Header'),
+        'colophon' => $this->t('Colophon'),
         'footer' => $this->t('Footer'),
       ],
       '#default_value' => $component->getType(),
