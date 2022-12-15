@@ -30,8 +30,8 @@ class AttachmentElement extends WebformAttachmentBase {
     /** @var \Drupal\entity_print\Plugin\EntityPrintPluginManagerInterface $print_engine_manager */
     $print_engine_manager = \Drupal::service('plugin.manager.entity_print.print_engine');
 
-    /** @var \Drupal\entity_print\PrintBuilderInterface $print_builder */
-    $print_builder = \Drupal::service('entity_print.print_builder');
+    /** @var \Drupal\os2forms_attachment\Os2formsAttachmentPrintBuilder $print_builder */
+    $print_builder = \Drupal::service('os2forms_attachment.print_builder');
 
     // Make sure Webform Entity Print template is used.
     // @see webform_entity_print_entity_view_alter()
