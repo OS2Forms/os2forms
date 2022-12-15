@@ -4,6 +4,7 @@ namespace Drupal\os2forms_nemid\Plugin\WebformElement;
 
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\os2web_datalookup\LookupResult\CprLookupResult;
 
 /**
  * Provides a abstract ServicePlatformenCpr Element.
@@ -21,7 +22,9 @@ abstract class ServiceplatformenCprElementBase extends NemidElementBase {
    */
   public function handleElementPrepopulate(array &$element, FormStateInterface &$form_state) {
     $prepopulateKey = $this->getPrepopulateFieldFieldKey();
-    $spCrpData = NULL;
+
+    /** @var CprLookupResult $cprLookupResult */
+    $cprLookupResult = NULL;
 
     // Handling CPR being changed/reset.
     if ($form_state->isRebuilding() && $this->isCprNumberTrigger($form_state)) {
@@ -31,10 +34,10 @@ abstract class ServiceplatformenCprElementBase extends NemidElementBase {
 
       $cpr = $this->getCprNumberValue($form_state);
 
-      // If another cprFetchData, resetting cached servicePlatformenCprData.
+      // If another cprFetchData, resetting cached cprLookupResult.
       if (strcmp($cpr, $form_state->get('nemidCprFetchData')) !== 0) {
         $storage = $form_state->getStorage();
-        unset($storage['servicePlatformenCprData']);
+        unset($storage['cprLookupResult']);
         $form_state->setStorage($storage);
 
         // Saving the new CPR-number.
@@ -43,24 +46,23 @@ abstract class ServiceplatformenCprElementBase extends NemidElementBase {
     }
 
     // Trying to fetch person data from cache.
-    if ($form_state->has('servicePlatformenCprData')) {
-      $spCrpData = $form_state->get('servicePlatformenCprData');
+    if ($form_state->has('cprLookupResult')) {
+      $cprLookupResult = $form_state->get('cprLookupResult');
     }
     else {
       // Cached version does not exist.
       //
       // Making the request to the plugin, and storing the data, so that it's
       // available on the next element within the same webform render.
-      if ($spCrpData = $this->fetchPersonData($form_state)) {
-        if (isset($spCrpData['status']) && $spCrpData['status']) {
-          $form_state->set('servicePlatformenCprData', $spCrpData);
+      if ($cprLookupResult = $this->fetchPersonData($form_state)) {
+        if ($cprLookupResult->isSuccessful()) {
+          $form_state->set('cprLookupResult', $cprLookupResult);
         }
       }
     }
 
-    if (!empty($spCrpData)) {
-      if (isset($spCrpData[$prepopulateKey])) {
-        $value = $spCrpData[$prepopulateKey];
+    if ($cprLookupResult) {
+      if ($value = $cprLookupResult->getFieldValue($prepopulateKey)) {
         $element['#value'] = $value;
       }
     }
@@ -72,11 +74,13 @@ abstract class ServiceplatformenCprElementBase extends NemidElementBase {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   Form state object.
    *
-   * @return array|null
-   *   Company information or NULL if request could not be performed.
+   * @return CprLookupResult
+   *   CPRLookupResult as object.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
   private function fetchPersonData(FormStateInterface $form_state) {
-    $spCrpData = NULL;
+    $cprResult = new CprLookupResult();
 
     // 1. Getting CPR from Nemlogin.
     /** @var \Drupal\os2web_nemlogin\Service\AuthProviderService $authProviderService */
@@ -102,26 +106,11 @@ abstract class ServiceplatformenCprElementBase extends NemidElementBase {
 
       if ($cprPlugin->isReady()) {
         $cprResult = $cprPlugin->lookup($cpr);
-
-        if ($cprResult->isSuccessful()) {
-          // OS2forms nemid type fields are expecting data to provided as an
-          // array to be able to fetch it key-based.
-          $spCrpData = [
-            'status' => 1,
-            'cpr' => $cpr,
-            'name' => $cprResult->getName(),
-            'address' => $cprResult->getStreet() . ' ' . $cprResult->getHouseNr() . ', ' . $cprResult->getFloor() . ', ' . $cprResult->getApartmentNr(),
-            'city' => $cprResult->getPostalCode() . ' ' . $cprResult->getCity(),
-            'coname' => $cprResult->getCoName(),
-            'kommunekode' => $cprResult->getMunicipalityCode(),
-            'name_address_protected' => $cprResult->isNameAddressProtected(),
-          ];
-        }
       }
 
     }
 
-    return $spCrpData;
+    return $cprResult;
   }
 
   /**

@@ -2,6 +2,8 @@
 
 namespace Drupal\os2forms_nemid\Plugin\WebformElement;
 
+use Drupal\os2web_datalookup\LookupResult\CprLookupResult;
+
 /**
  * Provides a 'os2forms_nemid_kommunekode' element.
  *
@@ -21,7 +23,7 @@ class NemidKommunekode extends ServiceplatformenCprElementBase implements NemidE
    * {@inheritdoc}
    */
   public function getPrepopulateFieldFieldKey() {
-    return 'kommunekode';
+    return CprLookupResult::MUNICIPALITY_CODE;
   }
 
 }
