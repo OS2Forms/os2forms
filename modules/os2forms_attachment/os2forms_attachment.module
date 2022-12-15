@@ -187,7 +187,7 @@ function os2forms_attachment_webform_submission_view_alter(array &$build, Entity
         // Creating colophon.
         $build['webform_entity_print_wrapper']['webform_entity_print_colophon'] = [
           '#type' => 'container',
-          '#attributes' => ['class' => ['webform-entity-print-colophon'], 'style' => 'float:right;width:29%;'],
+          '#attributes' => ['class' => ['webform-entity-print-colophon'], 'style' => 'float:right;width:27%;margin-left:20px;word-wrap:break-word;'],
           '#markup' => $colophonBody,
         ];
 
