@@ -11,6 +11,82 @@ use Drupal\os2forms_attachment\Entity\AttachmentComponent;
  */
 
 /**
+ * Implements hook_theme().
+ *
+ * Overriding default entity entity_print template.
+ */
+function os2forms_attachment_theme($existing, $type, $theme, $path) {
+  return [
+    'entity_print' => [
+      'path' => $path . '/templates',
+      'template' => 'os2forms-attachment--webform-submission',
+      'variables' => [
+        'title' => '',
+        'content' => NULL,
+        'entity_print_css' => NULL,
+        'header' => NULL,
+        'footer' => NULL,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_preprocess_entity_print().
+ *
+ * Adds header and footer to be accessible in
+ */
+function os2forms_attachment_preprocess_entity_print(array &$variables) {
+  $webform_submission = _webform_entity_print_preprocess_entity_print_get_webform_submission($variables['content']);
+  if (!$webform_submission) {
+    return;
+  }
+
+  /** @var \Drupal\webform\WebformThirdPartySettingsManagerInterface $third_party_settings_manager */
+  $third_party_settings_manager = \Drupal::service('webform.third_party_settings_manager');
+
+  $default_template_settings = $third_party_settings_manager->getThirdPartySetting('webform_entity_print', 'template') ?: [];
+  $webform_template_settings = $webform_submission->getWebform()->getThirdPartySetting('webform_entity_print', 'template') ?: [];
+  $template = array_filter($webform_template_settings)
+    + array_filter($default_template_settings);
+
+  /** @var \Drupal\webform\WebformTokenManagerInterface $token_manager */
+  $token_manager = \Drupal::service('webform.token_manager');
+
+  // Adding header to the theme template.
+  if (!empty($template['os2form_header'])) {
+    /** @var AttachmentComponent $header */
+    $header = AttachmentComponent::load($template['os2form_header']);
+
+    if ($header) {
+      $headerBody = $token_manager->replace($header->getBody(), $webform_submission);
+      $variables['header'] = $headerBody;
+
+      $variables['header'] = [
+        '#type' => 'container',
+        '#attributes' => ['class' => ['webform-entity-print-header']],
+        '#markup' => $headerBody,
+      ];
+    }
+  }
+
+  // Adding footer to the theme template.
+  if (!empty($template['os2form_footer'])) {
+    /** @var AttachmentComponent $footer */
+    $footer = AttachmentComponent::load($template['os2form_footer']);
+    if ($footer) {
+      $footerBody = $token_manager->replace($footer->getBody(), $webform_submission);
+
+      $variables['footer'] = [
+        '#type' => 'container',
+        '#attributes' => ['class' => ['webform-entity-print-footer']],
+        '#markup' => $footerBody,
+      ];
+    }
+  }
+}
+
+/**
  * Implements hook_webform_admin_third_party_settings_form_alter().
  */
 function os2forms_attachment_webform_admin_third_party_settings_form_alter(&$form, FormStateInterface $form_state) {
@@ -150,27 +226,13 @@ function os2forms_attachment_webform_submission_view_alter(array &$build, Entity
     /** @var \Drupal\webform\WebformTokenManagerInterface $token_manager */
     $token_manager = \Drupal::service('webform.token_manager');
 
-    // Header.
-    if (!empty($template['os2form_header'])) {
-      /** @var AttachmentComponent $header */
-      $header = AttachmentComponent::load($template['os2form_header']);
+    // Header and footer are set as part of the template, therefore unsetting
+    // then from content build.
+    // @see os2forms_attachment_preprocess_entity_print.
+    unset($build['webform_entity_print_header']);
+    unset($build['webform_entity_print_footer']);
 
-      if ($header) {
-        $headerBody = $token_manager->replace($header->getBody(), $entity);
-
-        $build['webform_entity_print_header'] = [
-          '#type' => 'container',
-          '#attributes' => ['class' => ['webform-entity-print-header']],
-          '#markup' => $headerBody,
-          '#weight' => -20,
-        ];
-      }
-      else {
-        unset($build['webform_entity_print_header']);
-      }
-    }
-
-    // Colophon.
+    // adding Colophon.
     if (!empty($template['os2form_colophon'])) {
       /** @var AttachmentComponent $colophon */
       $colophon = AttachmentComponent::load($template['os2form_colophon']);
@@ -199,25 +261,6 @@ function os2forms_attachment_webform_submission_view_alter(array &$build, Entity
         // Moving all elements into body.
         $build['webform_entity_print_wrapper']['webform_entity_print_body']['data'] = $build['data'];
         unset($build['data']);
-      }
-    }
-
-    // Footer.
-    if (!empty($template['os2form_footer'])) {
-      /** @var AttachmentComponent $footer */
-      $footer = AttachmentComponent::load($template['os2form_footer']);
-      if ($footer) {
-        $footerBody = $token_manager->replace($footer->getBody(), $entity);
-
-        $build['webform_entity_print_footer'] = [
-          '#type' => 'container',
-          '#attributes' => ['class' => ['webform-entity-print-footer']  ],
-          '#markup' => $footerBody,
-          '#weight' => 20,
-        ];
-      }
-      else {
-        unset($build['webform_entity_print_footer']);
       }
     }
   }
