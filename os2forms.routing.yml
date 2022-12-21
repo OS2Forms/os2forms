@@ -1,0 +1,14 @@
+os2forms.settings_form:
+  path: '/admin/structure/webform/config/os2forms'
+  defaults:
+    _title: 'OS2forms settings'
+    _form: 'Drupal\os2forms\Form\SettingsForm'
+  requirements:
+    _permission: 'administer webform'
+os2forms.entity.webform.settings_form:
+  path: '/admin/structure/webform/manage/{webform}/settings/os2forms'
+  defaults:
+    _entity_form: webform.os2forms_settings
+    _title_callback: '\Drupal\webform\Controller\WebformEntityController::title'
+  requirements:
+    _entity_access: 'webform.update'

@@ -14,6 +14,15 @@ use Drupal\migrate\Row;
 use Drupal\os2forms_nemid\Plugin\WebformElement\NemidElementBase;
 
 /**
+ * Implement HOOK_form_FORM_ID_alter().
+ *
+ * Exposing settings for OS2forms webform settings.
+ */
+function os2forms_nemid_form_webform_os2forms_settings_form_alter(&$form, FormStateInterface $form_state) {
+  os2forms_nemid_webform_third_party_settings_form_alter($form,$form_state);
+}
+
+/**
  * Implements hook_webform_third_party_settings_form_alter().
  */
 function os2forms_nemid_webform_third_party_settings_form_alter(&$form, FormStateInterface $form_state) {
