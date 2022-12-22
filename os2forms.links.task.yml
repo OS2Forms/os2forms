@@ -1,0 +1,11 @@
+# OS2Forms Settings
+os2forms.os2forms_settings:
+  route_name: os2forms.settings_form
+  title: 'OS2forms'
+  parent_id: webform.config
+  weight: 90
+os2forms.entity.webform.settings_form:
+  title: 'OS2forms'
+  route_name: os2forms.entity.webform.settings_form
+  parent_id: entity.webform.settings
+  weight: 90

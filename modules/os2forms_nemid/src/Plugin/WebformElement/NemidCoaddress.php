@@ -2,6 +2,8 @@
 
 namespace Drupal\os2forms_nemid\Plugin\WebformElement;
 
+use Drupal\os2web_datalookup\LookupResult\CprLookupResult;
+
 /**
  * Provides a 'os2forms_nemid_coaddress' element.
  *
@@ -21,7 +23,7 @@ class NemidCoaddress extends ServiceplatformenCprElementBase implements NemidEle
    * {@inheritdoc}
    */
   public function getPrepopulateFieldFieldKey() {
-    return 'coname';
+    return CprLookupResult::CO_NAME;
   }
 
 }

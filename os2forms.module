@@ -11,6 +11,15 @@ use Drupal\migrate\Row;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
+ * Implements hook_entity_type_build().
+ *
+ * Adding os2forms_settings for to webform.
+ */
+function os2forms_entity_type_build(array &$entity_types) {
+  $entity_types['webform']->setFormClass('os2forms_settings', 'Drupal\os2forms\Form\WebformSettingsForm');
+}
+
+/**
  * Implements hook_webform_third_party_settings_form_alter().
  */
 function os2forms_webform_third_party_settings_form_alter(&$form, FormStateInterface $form_state) {

@@ -4,6 +4,7 @@ namespace Drupal\os2forms_nemid\Plugin\WebformElement;
 
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\os2web_datalookup\LookupResult\CprLookupResult;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -25,7 +26,7 @@ class NemidAddress extends ServiceplatformenCprElementBase implements NemidEleme
    * {@inheritdoc}
    */
   public function getPrepopulateFieldFieldKey() {
-    return 'address';
+    return CprLookupResult::ADDRESS;
   }
 
   /**
@@ -34,7 +35,8 @@ class NemidAddress extends ServiceplatformenCprElementBase implements NemidEleme
   public function alterForm(array &$element, array &$form, FormStateInterface $form_state) {
     parent::alterForm($element, $form, $form_state);
 
-    $spCrpData = $form_state->get('servicePlatformenCprData');
+    /** @var \Drupal\os2web_datalookup\LookupResult\CprLookupResult $cprLookupResult */
+    $cprLookupResult = $form_state->get('cprLookupResult');
 
     /** @var \Drupal\webform\WebformSubmissionForm $webformSubmissionForm */
     $webformSubmissionForm = $form_state->getFormObject();
@@ -44,7 +46,7 @@ class NemidAddress extends ServiceplatformenCprElementBase implements NemidEleme
 
     // Only manipulate element on submission create form.
     if (!$webformSubmission->isCompleted()) {
-      if ($spCrpData['name_address_protected']) {
+      if ($cprLookupResult && $cprLookupResult->isNameAddressProtected()) {
         $element['#info_message'] = 'adresse beskyttelse';
         NestedArray::setValue($form['elements'], $element['#webform_parents'], $element);
         $form['actions']['submit']['#submit'][] = 'os2forms_nemid_submission_set_address_protected';

@@ -1,0 +1,30 @@
+# Webform os2forms_attachment_component routes.
+
+entity.os2forms_attachment_component.list:
+  path: '/admin/structure/webform/config/os2forms_attachment_component'
+  defaults:
+    _entity_list: 'os2forms_attachment_component'
+    _title: 'Attachment component elements'
+  requirements:
+    _permission: 'administer webform'
+entity.os2forms_attachment_component.add_form:
+  path: '/admin/structure/webform/config/os2forms_attachment_component/add'
+  defaults:
+    _entity_form: 'os2forms_attachment_component.add'
+    _title: 'Add Attachment component'
+  requirements:
+    _permission: 'administer webform'
+entity.os2forms_attachment_component.edit_form:
+  path: '/admin/structure/webform/config/os2forms_attachment_component/{os2forms_attachment_component}'
+  defaults:
+    _entity_form: 'os2forms_attachment_component.edit'
+    _title_callback: '\Drupal\os2forms_attachment\Controller\AttachmentComponentController::editTitle'
+  requirements:
+    _permission: 'administer webform'
+entity.os2forms_attachment_component.delete_form:
+  path: '/admin/structure/webform/config/os2forms_attachment_component/{os2forms_attachment_component}/delete'
+  defaults:
+    _entity_form: 'os2forms_attachment_component.delete'
+    _title: 'Delete Attachment component'
+  requirements:
+    _permission: 'administer webform'

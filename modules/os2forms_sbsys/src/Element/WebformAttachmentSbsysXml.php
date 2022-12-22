@@ -40,16 +40,20 @@ class WebformAttachmentSbsysXml extends WebformAttachmentXml {
   public static function getFileContent(array $element, WebformSubmissionInterface $webform_submission) {
     $nemid_cpr = self::getFirstValueByType('os2forms_nemid_cpr', $webform_submission);
     $nemid_com_cvr = self::getFirstValueByType('os2forms_nemid_company_cvr', $webform_submission);
+
+    /** @var \Drupal\os2web_datalookup\Plugin\DataLookupManager $os2web_datalookup_plugins */
     $os2web_datalookup_plugins = \Drupal::service('plugin.manager.os2web_datalookup');
-    /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupInterface $sp_cpr */
-    $sp_cpr = $os2web_datalookup_plugins->createInstance('serviceplatformen_cpr');
-    if (!empty($nemid_cpr) && $sp_cpr->isReady()) {
-      $person_address = $sp_cpr->getAddress($nemid_cpr);
-      if ($person_address['status']) {
-        $nemid_name = htmlspecialchars($person_address['name']);
-        $nemid_address = htmlspecialchars($person_address['road'] . ' ' . $person_address['road_no'] . ' ' . $person_address['floor'] . ' ' . $person_address['door']);
-        $nemid_city = htmlspecialchars($person_address['city']);
-        $nemid_zipcode = htmlspecialchars($person_address['zipcode']);
+
+    /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupCPRInterface $cprPlugin */
+    $cprPlugin = $os2web_datalookup_plugins->createDefaultInstanceByGroup('cpr_lookup');
+
+    if (!empty($nemid_cpr) && $cprPlugin->isReady()) {
+      $cprResult = $cprPlugin->lookup($nemid_cpr);
+      if ($cprResult->isSuccessful()) {
+        $nemid_name = htmlspecialchars($cprResult->getName());
+        $nemid_address = htmlspecialchars($cprResult->getStreet() . ' ' . $cprResult->getHouseNr() . ' ' . $cprResult->getFloor() . ' ' . $cprResult->getApartmentNr());
+        $nemid_city = htmlspecialchars($cprResult->getCity());
+        $nemid_zipcode = htmlspecialchars($cprResult->getPostalCode());
       }
     }
     /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupInterface $sp_cvr */

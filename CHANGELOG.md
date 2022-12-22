@@ -9,6 +9,16 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## [3.3.0] 2022-12-22
+- Added OS2Forms attachment component (with custom heards, footer and colophon) (OS2FORMS-361)
+- Nemlogin link in shared webforms fix (OS-11)
+- Updated new CPR lookup method (OS2FORMS-359)
+- Added settings tab for all OS2forms settings (OS-25)
+
+## [3.2.9] 2022-09-21
+- SBSys file default name (AOP-664-86774)
+- Allowed plugins section to composer.json. Fixes issues with github actions flow
+
 ## [3.2.8] 2022-08-11
 - Added Webform Remote Select (webform_remote_select) as dependency (OS2FORMS-384)
 

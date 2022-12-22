@@ -29,10 +29,30 @@ class NemidNemloginLink extends Link {
       $nemlogin_link_logout_text = $element['#nemlogin_link_logout_text'];
     }
 
-    $link = $authProviderService->generateLink($nemlogin_link_login_text, $nemlogin_link_logout_text);
+    $options = [];
+
+    // Checking if we have a share webform route, if yes open link in a new
+    // tab.
+    $webformShareRoutes = ['entity.webform.share_page', 'entity.webform.share_page.javascript'];
+    $route_name = \Drupal::routeMatch()->getRouteName();
+
+    if (in_array($route_name, $webformShareRoutes)) {
+      $element['#attributes']['target'] = '_blank';
+
+      // Replacing return URL, as we are opening in a new window we want full
+      // page webform, not embed form.
+      /** @var \Drupal\webform\Entity\Webform $webform */
+      $webform = \Drupal::request()->attributes->get('webform');
+      if ($webform) {
+        $options['query']['destination'] = $webform->toUrl()->toString();
+      }
+    }
+
+    $link = $authProviderService->generateLink($nemlogin_link_login_text, $nemlogin_link_logout_text, $options);
     if ($link instanceof CoreLink) {
       $element['#title'] = $link->getText();
       $element['#url'] = $link->getUrl();
+      $element['#attributes']['class'][] = 'nemlogin-button-link';
     }
 
     return parent::preRenderLink($element);

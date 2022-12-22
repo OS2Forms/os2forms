@@ -2,6 +2,8 @@
 
 namespace Drupal\os2forms_nemid\Plugin\WebformElement;
 
+use Drupal\os2web_datalookup\LookupResult\CprLookupResult;
+
 /**
  * Provides a 'os2forms_nemid_name' element.
  *
@@ -21,7 +23,7 @@ class NemidName extends ServiceplatformenCprElementBase implements NemidElementP
    * {@inheritdoc}
    */
   public function getPrepopulateFieldFieldKey() {
-    return 'name';
+    return CprLookupResult::NAME;
   }
 
 }
