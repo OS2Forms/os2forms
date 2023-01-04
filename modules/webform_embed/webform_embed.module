@@ -1,0 +1,75 @@
+<?php
+
+/**
+ * @file
+ * Contains webform_embed.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
+
+/**
+ * @param $route_name
+ * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+ *
+ * @return string
+ */
+function webform_embed_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the webform_embed module.
+    case 'help.page.webform_embed':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Allows you to embed webforms within an iframe on another site.') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * @param $existing
+ * @param $type
+ * @param $theme
+ * @param $path
+ *
+ * @return array
+ */
+function webform_embed_theme($existing, $type, $theme, $path) {
+
+  return [
+    'page__webform_embed' => [
+      'variables' => ['webform_output' => NULL],
+    ],
+  ];
+
+}
+
+/**
+ * Implements hook_menu_local_tasks_alter().
+ *
+ * @param $data
+ * @param $route_name
+ */
+function webform_embed_menu_local_tasks_alter(&$data, $route_name) {
+  $webform = \Drupal::routeMatch()->getParameter('webform');
+  $routeName = \Drupal::routeMatch()->getRouteName();
+  if ($webform && $routeName == $route_name) {
+    if (is_object($webform)) {
+      $webform = $webform->id();
+    }
+    $data['tabs'][0]['entity.webform.embed'] = [
+      '#theme' => 'menu_local_task',
+      '#link' => [
+        'title' => t('Embed'),
+        'url' => Url::fromRoute('webform_embed.webform_embed_controller_display_form', ['webform' => $webform]),
+        'localized_options' => [
+          'attributes' => [
+            'title' => t('Embed Webform'),
+          ],
+        ],
+      ],
+    ];
+  }
+
+}

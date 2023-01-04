@@ -6,19 +6,6 @@
     "prefer-stable": true,
     "license": "EUPL-1.2",
     "repositories": {
-        "webform_embed": {
-            "type": "package",
-            "package": {
-                "name": "drupal/webform_embed",
-                "type": "drupal-module",
-                "version": "1.x-dev",
-                "dist": {
-                    "type": "zip",
-                    "url": "https://ftp.drupal.org/files/projects/webform_embed-8.x-1.x-dev.zip",
-                    "shasum": ""
-                }
-            }
-        },
         "drupal": {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
@@ -37,7 +24,6 @@
         "drupal/redirect": "^1.4",
         "drupal/token": "^1.5",
         "drupal/webform": "^6.1",
-        "drupal/webform_embed": "1.x-dev",
         "drupal/entity_print": "^2.1",
         "drupal/webform_migrate": "^1.1",
         "drupal/maillog": "1.x-dev",
