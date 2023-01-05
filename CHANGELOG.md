@@ -8,6 +8,9 @@ See ["how do I make a good changelog record?"](https://keepachangelog.com/en/1.0
 before starting to add changes. Use example [placed in the end of the page](#example-of-change-log-record)
 
 ## [Unreleased]
+- Added github action for checking changelog changes when creating pull requests
+- Added webform_embed as custom module and removed from composer.
+- Added cweagans/composer-patches as dependency
 
 ## [3.3.0] 2022-12-22
 - Added OS2Forms attachment component (with custom heards, footer and colophon) (OS2FORMS-361)
