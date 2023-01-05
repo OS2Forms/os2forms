@@ -30,7 +30,6 @@
         "drupal/permissions_by_term": "^3.1 || ^2.25",
         "phpoffice/phpword": "^0.18.2",
         "tecnickcom/tcpdf": "~6",
-        "vaimo/composer-patches": "^4.20",
         "os2web/os2web_datalookup": "^1.0",
         "os2web/os2web_nemlogin": "^1.0",
         "drupal/webform_validation": "2.0.x-dev",
