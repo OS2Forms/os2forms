@@ -52,11 +52,6 @@
             }
         }
     },
-    "config": {
-        "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true
-        }
-    },
     "scripts": {
         "coding-standards-check/phpcs": [
             "phpcs --standard=phpcs.xml.dist"
@@ -70,5 +65,14 @@
         "coding-standards-apply": [
             "@coding-standards-apply/phpcs"
         ]
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "simplesamlphp/composer-module-installer": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "cweagans/composer-patches": true,
+            "zaporylie/composer-drupal-optimizations": true
+        }
     }
 }
