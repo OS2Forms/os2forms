@@ -16,6 +16,7 @@
         }
     },
     "require": {
+        "cweagans/composer-patches": "^1.6.5",
         "drupal/eu_cookie_compliance": "^1.8",
         "drupal/mailsystem": "^4.1",
         "drupal/smtp": "^1.0@beta",
