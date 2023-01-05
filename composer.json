@@ -53,9 +53,6 @@
             "drupal/webform": {
                 "Unlock possibility of using Entity print module export to Word": "https://www.drupal.org/files/issues/2020-02-29/3096552-6.patch"
             }
-        },
-        "branch-alias": {
-            "dev-composer_cleanup": "3.4.0"
         }
     },
     "config": {
