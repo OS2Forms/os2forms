@@ -42,9 +42,6 @@
     },
     "extra" : {
         "composer-exit-on-patch-failure": true,
-        "patchLevel": {
-            "test": "-p2"
-        },
         "enable-patching" : true,
         "patches": {
             "drupal/entity_print": {
