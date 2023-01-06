@@ -16,4 +16,4 @@ jobs:
         run: git fetch
 
       - name: Check that changelog has been updated.
-        run: git diff --exit-code origin/develop -- CHANGELOG.md && exit 1 || exit 0
+        run: git diff --exit-code origin/${{ github.base_ref }} -- CHANGELOG.md && exit 1 || exit 0
