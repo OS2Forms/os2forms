@@ -1,0 +1,12 @@
+name: 'OS2forms Declaration of Consent'
+type: module
+description: 'Provides Consent.'
+package: OS2Forms
+core: 8.x
+core_version_requirement: ^8 || ^9
+
+dependencies:
+  - 'drupal:os2forms'
+  - 'drupal:os2forms_nemid'
+  - 'drupal:os2web_datalookup'
+  - 'drupal:serialization'
