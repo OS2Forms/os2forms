@@ -62,6 +62,31 @@ function os2forms_requirements($phase) {
     'severity' => $severity,
     'value' => $messages,
   ];
+
+  $commit_sha = exec('git rev-parse HEAD');
+  $tag = exec("git describe --tags --abbrev=0");
+  $remote = exec('git config --get remote.origin.url');
+
+  $version_messages = [
+    '#prefix' => t('OS2Forms version'),
+    '#theme' => 'item_list',
+    '#items' => [
+      0 => t('tag <strong>@tag</strong> (commit: <strong>@commit</strong>)', [
+        '@tag' => $tag,
+        '@commit' => $commit_sha,
+      ]),
+      1 => t('remote: <strong>@remote</strong>', [
+        '@remote' => $remote,
+      ]),
+    ]
+  ];
+
+  $requirements['os2forms_version'] = [
+    'title' => t('OS2Forms Version'),
+    'severity' => REQUIREMENT_INFO,
+    'value' => \Drupal::service('renderer')->renderPlain($version_messages),
+  ];
+
   return $requirements;
 }
 
