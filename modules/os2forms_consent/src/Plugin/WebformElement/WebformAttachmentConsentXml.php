@@ -38,7 +38,7 @@ class WebformAttachmentConsentXml extends WebformAttachmentXml {
   /**
    * {@inheritdoc}
    */
-  public function sProperties() {
+  public function getDefaultProperties() {
     return array_merge(parent::getDefaultProperties(), $this->getConsentDefaultProperties());
   }
 
