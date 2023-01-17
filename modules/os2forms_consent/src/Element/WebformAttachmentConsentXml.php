@@ -18,7 +18,7 @@ class WebformAttachmentConsentXml extends WebformAttachmentXml {
    */
   public static function getXmlContext() {
     $xmlContext = parent::getXmlContext();
-    $xmlContext['xml_root_node_name'] = 'os2formsFormular';
+    $xmlContext['xml_root_node_name'] = 'Viljestilkendegivelseserklaering';
 
     return $xmlContext;
   }
@@ -100,57 +100,7 @@ class WebformAttachmentConsentXml extends WebformAttachmentXml {
     $webform_title = htmlspecialchars($webform->label());
     $fields = self::getWebformElementsAsList($webform_submission);
 
-    if (isset($fields['antal_rum_max'])) {
-      $maxRoom = htmlspecialchars($fields['antal_rum_max']);
-    }
-    if (isset($fields['antal_rum_min'])) {
-      $minRoom = htmlspecialchars($fields['antal_rum_min']);
-    }
-    if (isset($fields['priority_1'])) {
-      $priorities = [];
-      for ($i = 1; $i <= 4; $i++) {
-        if ($fields['priority_' . $i]) {
-          $priorities[] = htmlspecialchars($fields['priority_' . $i]);
-        }
-      }
-    }
-
-    $xml_data = [
-      'OS2FormsId' => $os2formsId,
-      'CONSENTJournalisering' => [
-        'PrimaerPartCprNummer' => (!empty($nemid_cpr) && empty($nemid_com_cvr)) ? $nemid_cpr : '',
-        'PrimaerPartCvrNummer' => (!empty($nemid_com_cvr)) ? $nemid_com_cvr : '',
-        'KLe' => $kle,
-        'SagSkabelonId' => $sagSkabelonId,
-      ],
-      'DigitalForsendelse' => [
-        'Slutbruger' => [
-          'CprNummer' => (!empty($nemid_cpr) && empty($nemid_com_cvr)) ? $nemid_cpr : '',
-          'CvrNummer' => (isset($nemid_com_cvr)) ? $nemid_com_cvr : '',
-          'Navn' => (isset($nemid_name)) ? $nemid_name : '',
-          'Adresse' => (isset($nemid_address)) ? $nemid_address : '',
-          'Postnr' => (isset($nemid_zipcode)) ? $nemid_zipcode : '',
-          'Postdistrikt' => (isset($nemid_city)) ? $nemid_city : '',
-        ],
-        'Kvittering' => [
-          'TitelTekst' => $webform_title,
-          'BodyTekst' => $bodyText,
-        ],
-        'MaaSendesTilDFF' => $maa_sendes_til_dff,
-      ],
-    ];
-
-    if (isset($minRoom) || isset($maxRoom)) {
-      $xml_data['Room'] = [
-        'Min' => $minRoom,
-        'Max' => $maxRoom,
-      ];
-    }
-
-    if (!empty($priorities)) {
-      $xml_data['DigitalForsendelse']['Omraade'] = implode(',', $priorities);
-    }
-
+    $structuredData = [];
     foreach ($fields as $field_name => $field_value) {
       // Taking care of the array values.
       if (is_array($field_value)) {
@@ -158,8 +108,99 @@ class WebformAttachmentConsentXml extends WebformAttachmentXml {
       }
 
       $field_value = htmlspecialchars($field_value);
-      $xml_data['FormularData'][$field_name] = $field_value;
+      $structuredData[$field_name] = $field_value;
     }
+
+    $xml_data = [
+      'ID' => 'urn:uuid:333e4567-e89b-12d3-a456-426655440000',
+      'Attestation' => [
+        'Format' => 'systembevis',
+        'Underskriftstidspunkt' => '2022-07-30T12:30:06.0724725',
+        'ViljestilkendegiverID' => 'urn:uuid:323e4567-e89b-12d3-a456-426655440000',
+      ],
+      'ErklaeringHeader' => [
+        'Erklaeringsskabelon' => 'http//digst.dk/samtykke/skabeloner/personoplysninger/',
+        'Adgangspolitik' => [
+          'Gruppe' => 'digikoebingKommuneogLaegehus',
+          'Tilladelse' => 'laes',
+        ],
+        'Administrator' => [
+          'Administratorrolle' => 'forretningsansvarlig',
+          'Organisation' => [
+            'Identifikator' => [
+              'Vaerdi' => '6807115500826',
+              'Klassifikation' => 'EAN',
+            ],
+          ],
+        ],
+        'Aktoer' => [
+          [
+            'ID' => 'urn:uuid:323e4567-e89b-12d3-a456-426655440000',
+            'PaakraevetSignatur' => 'true',
+            'Aktoerrolle' => 'viljestilkendegivelsessubjekt',
+            'Person' => [
+              'Navn' => $nemid_name,
+              'Identifikator' => [
+                'Vaerdi' => $nemid_cpr,
+                'Klassifikation' => 'CPR',
+              ],
+            ],
+          ],
+          [
+            'ID' => 'urn:uuid:323e4567-e89b-12d3-a456-426655440000',
+            'PaakraevetSignatur' => 'false',
+            'Aktoerrolle' => 'viljetilkendegivelsesrekvirent',
+            'Organisation' => [
+              'Identifikator' => [
+                'Vaerdi' => '11782812',
+                'Klassifikation' => 'CVR',
+              ],
+            ],
+          ],
+        ],
+        'Domaenekontekst' => [
+          'Forvaltningshandling' => [
+            'ForetrukkenTerm' => 'G01. Generelle sager',
+            'Identifikator' => [
+              'Vaerdi' => '27.69.24',
+              'Klassifikation' => 'KLE Online Marts 2022',
+            ],
+          ],
+          'Sagskontekst' => [
+            'Titel' => 'Sag om revalidering',
+            'Identifikator' => [
+              'Vaerdi' => 'rvle3473-dcce-31c7-a4dc-16395242974b',
+              'Klassifikation' => 'Digikøbing kommune SagsID',
+            ],
+          ],
+        ],
+        'Erklaeringsmetadata' => [
+          'Status' => 'gaeldende',
+          'Titel' => 'Samtykke til indhentning og/eller videregivelse af personoplysninger',
+        ],
+        'Viljestilkendegivelsestype' => 'samtykke',
+      ],
+      'ErklaeringBody' => [
+        'ID' => 'urn:uuid:721a4565-e89b-12d3-a456-426655440000',
+        'Erklaeringsobjekt' => [
+          [
+            'Format' => 'pdf',
+            'DokumentFil' => 'sg015_BJ2022.07.30.pdf',
+          ],
+          [
+            'Format' => 'tekst',
+            'Tekst' => 'Jeg giver hermed mit samtykke til indhentning og deling af oplysninger fra egen læge og tidligere bopælskommune',
+          ],
+          [
+            'Format' => 'struktureret_data',
+            'Maskinlaesbartindhold' => [
+              'StruktureretData' => $structuredData,
+              'Stylesheet' => 'html',
+            ],
+          ],
+        ],
+      ]
+    ];
 
     return \Drupal::service('serializer')->serialize($xml_data, 'xml', self::getXmlContext());
   }
