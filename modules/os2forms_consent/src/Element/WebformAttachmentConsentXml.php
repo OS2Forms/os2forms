@@ -56,15 +56,19 @@ class WebformAttachmentConsentXml extends WebformAttachmentXml {
         $nemid_zipcode = htmlspecialchars($cprResult->getPostalCode());
       }
     }
-    /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupInterface $sp_cvr */
-    $sp_cvr = $os2web_datalookup_plugins->createInstance('serviceplatformen_cvr');
-    if (!empty($nemid_com_cvr) && $sp_cvr->isReady()) {
-      $company_info = $sp_cvr->getInfo($nemid_com_cvr);
-      if ($company_info['status']) {
-        $nemid_name = htmlspecialchars($company_info['company_name']);
-        $nemid_address = htmlspecialchars($company_info['company_street'] . ' ' . $company_info['company_house_nr'] . ' ' . $company_info['company_']);
-        $nemid_city = htmlspecialchars($company_info['company_city']);
-        $nemid_zipcode = htmlspecialchars($company_info['company_zipcode']);
+    /** @var \Drupal\os2web_datalookup\Plugin\DataLookupManager $pluginManager */
+    $pluginManager = \Drupal::service('plugin.manager.os2web_datalookup');
+    /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupInterfaceCvr $cvrPlugin */
+    $cvrPlugin = $pluginManager->createDefaultInstanceByGroup('cvr_lookup');
+
+    if (!empty($nemid_com_cvr) && $cvrPlugin->isReady()) {
+      $cvrResult = $cvrPlugin->lookup($nemid_com_cvr);
+
+      if ($cvrResult->isSuccessful()) {
+        $nemid_name = htmlspecialchars($cvrResult->getName());
+        $nemid_address = htmlspecialchars($cvrResult->getStreet() . ' ' . $cvrResult->getHouseNr());
+        $nemid_city = htmlspecialchars($cvrResult->getCity());
+        $nemid_zipcode = htmlspecialchars($cvrResult->getPostalCode());
       }
     }
 
