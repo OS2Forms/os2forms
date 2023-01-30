@@ -1,0 +1,8 @@
+webform_embed.webform_embed_controller_display_form:
+  path: '/webform_embed/displayForm/{webform}'
+  defaults:
+    _controller: '\Drupal\webform_embed\Controller\WebformEmbedController::displayForm'
+    _title: 'Display Form'
+  requirements:
+    _permission: 'access content'
+
