@@ -78,7 +78,7 @@ function os2forms_requirements($phase) {
       1 => t('remote: <strong>@remote</strong>', [
         '@remote' => $remote,
       ]),
-    ]
+    ],
   ];
 
   $requirements['os2forms_version'] = [

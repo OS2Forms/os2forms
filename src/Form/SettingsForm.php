@@ -4,6 +4,8 @@ namespace Drupal\os2forms\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\webform\WebformThirdPartySettingsManagerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Configure os2forms settings for this site.
@@ -11,10 +13,36 @@ use Drupal\Core\Form\FormStateInterface;
 class SettingsForm extends FormBase {
 
   /**
+   * Third party settings manager.
+   *
+   * @var \Drupal\webform\WebformThirdPartySettingsManagerInterface
+   */
+  protected $thirdPartySettingsManager;
+
+  /**
    * {@inheritdoc}
    */
   public function getFormId() {
     return 'os2forms_settings';
+  }
+
+  /**
+   * SettingsForm constructor.
+   *
+   * @param \Drupal\webform\WebformThirdPartySettingsManagerInterface $thirdPartySettingsManager
+   *   Third party settings manager.
+   */
+  public function __construct(WebformThirdPartySettingsManagerInterface $thirdPartySettingsManager) {
+    $this->thirdPartySettingsManager = $thirdPartySettingsManager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('webform.third_party_settings_manager')
+    );
   }
 
   /**
@@ -40,13 +68,11 @@ class SettingsForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    /** @var \Drupal\webform\WebformThirdPartySettingsManagerInterface $third_party_settings_manager */
-    $third_party_settings_manager = \Drupal::service('webform.third_party_settings_manager');
 
     $third_party_settings = $form_state->getValue('third_party_settings');
     foreach ($third_party_settings as $module_key => $settings) {
       foreach ($settings as $settingKey => $settingValues) {
-        $savedSettings = $third_party_settings_manager->getThirdPartySetting($module_key, $settingKey);
+        $savedSettings = $this->thirdPartySettingsManager->getThirdPartySetting($module_key, $settingKey);
         if (is_array($settingValues)) {
           $savedSettings = array_replace($savedSettings, $settingValues);
         }
@@ -54,7 +80,7 @@ class SettingsForm extends FormBase {
           $savedSettings = $settingValues;
         }
 
-        $third_party_settings_manager->setThirdPartySetting($module_key, $settingKey, $savedSettings);
+        $this->thirdPartySettingsManager->setThirdPartySetting($module_key, $settingKey, $savedSettings);
       }
     }
 

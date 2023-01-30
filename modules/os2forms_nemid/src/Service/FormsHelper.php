@@ -220,10 +220,8 @@ class FormsHelper {
       $cvr = $nemloginAuth->fetchValue('cvr');
       $spCompanyData['cvr'] = $cvr;
 
-      /** @var \Drupal\os2web_datalookup\Plugin\DataLookupManager $pluginManager */
-      $pluginManager = \Drupal::service('plugin.manager.os2web_datalookup');
       /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupInterfaceCvr $cvrPlugin */
-      $cvrPlugin = $pluginManager->createDefaultInstanceByGroup('cvr_lookup');
+      $cvrPlugin = $this->dataLookManager->createDefaultInstanceByGroup('cvr_lookup');
 
       if ($cvrPlugin->isReady()) {
         $cvrResult = $cvrPlugin->lookup($cvr);
@@ -235,9 +233,8 @@ class FormsHelper {
         $pNumber = $this->getPnumberValue($form_state);
 
         if ($pNumber) {
-          $pluginManager = \Drupal::service('plugin.manager.os2web_datalookup');
           /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\ServiceplatformenPNumber $servicePlatformentPNumberPlugin */
-          $servicePlatformentPNumberPlugin = $pluginManager->createInstance('serviceplatformen_p_number');
+          $servicePlatformentPNumberPlugin = $this->dataLookManager->createInstance('serviceplatformen_p_number');
 
           if ($servicePlatformentPNumberPlugin->isReady()) {
             $cvrResult = $servicePlatformentPNumberPlugin->lookup($pNumber);

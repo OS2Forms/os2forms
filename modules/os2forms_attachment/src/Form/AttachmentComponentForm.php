@@ -7,6 +7,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\webform\WebformTokenManagerInterface;
 
 /**
  * Form handler for the Attachment component add and edit forms.
@@ -28,16 +29,26 @@ class AttachmentComponentForm extends EntityForm {
   protected $currentUser;
 
   /**
+   * Webform token manager.
+   *
+   * @var \Drupal\webform\WebformTokenManagerInterface
+   */
+  protected $tokenManager;
+
+  /**
    * Constructs an AttachmentComponentForm object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
    * @param \Drupal\Core\Session\AccountInterface $current_user
    *   The current user.
+   * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
+   *   Webform token manager.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, AccountInterface $current_user) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, AccountInterface $current_user, WebformTokenManagerInterface $token_manager) {
     $this->entityTypeManager = $entity_type_manager;
     $this->currentUser = $current_user;
+    $this->tokenManager = $token_manager;
   }
 
   /**
@@ -46,7 +57,8 @@ class AttachmentComponentForm extends EntityForm {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('entity_type.manager'),
-      $container->get('current_user')
+      $container->get('current_user'),
+      $container->get('webform.token_manager')
     );
   }
 
@@ -91,9 +103,7 @@ class AttachmentComponentForm extends EntityForm {
       '#format' => 'full_html',
     ];
 
-    /** @var \Drupal\webform\WebformTokenManagerInterface $token_manager */
-    $token_manager = \Drupal::service('webform.token_manager');
-    $form['token_tree_link'] = $token_manager->buildTreeElement();
+    $form['token_tree_link'] = $this->tokenManager->buildTreeElement();
 
     // You will need additional form elements for your custom properties.
     return $form;
