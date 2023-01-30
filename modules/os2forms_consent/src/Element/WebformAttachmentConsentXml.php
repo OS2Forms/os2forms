@@ -22,6 +22,7 @@ class WebformAttachmentConsentXml extends WebformAttachmentXml {
 
     return $xmlContext;
   }
+
   /**
    * {@inheritdoc}
    */
@@ -203,7 +204,7 @@ class WebformAttachmentConsentXml extends WebformAttachmentXml {
             ],
           ],
         ],
-      ]
+      ],
     ];
 
     return \Drupal::service('serializer')->serialize($xml_data, 'xml', self::getXmlContext());

@@ -18,4 +18,5 @@ class WebformSettingsForm extends WebformEntitySettingsBaseForm {
 
     return parent::form($form, $form_state);
   }
+
 }

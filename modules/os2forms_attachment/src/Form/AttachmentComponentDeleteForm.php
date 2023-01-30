@@ -7,7 +7,11 @@ use Drupal\Core\Url;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Defines AttachmentComponentDeleteForm.
+ * Class AttachmentComponentDeleteForm.
+ *
+ * Delete form for attachment component.
+ *
+ * @package Drupal\os2forms_attachment\Form
  */
 class AttachmentComponentDeleteForm extends EntityConfirmFormBase {
 

@@ -9,19 +9,26 @@ use Drupal\os2web_datalookup\LookupResult\CvrLookupResult;
 use Drupal\os2web_datalookup\Plugin\DataLookupManager;
 use Drupal\os2web_nemlogin\Service\AuthProviderService;
 
+/**
+ * FormsHelper.
+ *
+ * Helper functions for os2forms_nemid.
+ *
+ * @package Drupal\os2forms_nemid\Service
+ */
 class FormsHelper {
 
   /**
    * Auth provider service.
    *
-   * @var \Drupal\os2web_nemlogin\Service\AuthProviderService $authProviderService
+   * @var \Drupal\os2web_nemlogin\Service\AuthProviderService
    */
   private $authProviderService;
 
   /**
    * DataLookupPlugin manager.
    *
-   * @var \Drupal\os2web_datalookup\Plugin\DataLookupManager $dataLookManager
+   * @var \Drupal\os2web_datalookup\Plugin\DataLookupManager
    */
   private $dataLookManager;
 
@@ -29,7 +36,9 @@ class FormsHelper {
    * Constructor.
    *
    * @param \Drupal\os2web_nemlogin\Service\AuthProviderService $authProviderService
+   *   Auth provider service.
    * @param \Drupal\os2web_datalookup\Plugin\DataLookupManager $dataLookPluginManager
+   *   Datalookup plugin manager.
    */
   public function __construct(AuthProviderService $authProviderService, DataLookupManager $dataLookPluginManager) {
     $this->authProviderService = $authProviderService;
@@ -42,9 +51,9 @@ class FormsHelper {
    * If there is no CPRLookupResult, it is requested and saved for future uses.
    *
    * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   Form state
+   *   Form state.
    *
-   * @return \Drupal\os2web_datalookup\LookupResult\CprLookupResult|NULL
+   * @return \Drupal\os2web_datalookup\LookupResult\CprLookupResult|null
    *   CPRLookupResult or NULL.
    *
    * @throws \Drupal\Component\Plugin\Exception\PluginException
@@ -69,7 +78,7 @@ class FormsHelper {
       }
     }
 
-    /** @var CprLookupResult $cprLookupResult */
+    /** @var Drupal\os2web_datalookup\LookupResult\CprLookupResult $cprLookupResult */
     $cprLookupResult = NULL;
 
     // Trying to fetch person data from cache.
@@ -97,7 +106,7 @@ class FormsHelper {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   Form state object.
    *
-   * @return CprLookupResult
+   * @return \Drupal\os2web_datalookup\LookupResult\CprLookupResult
    *   CPRLookupResult as object.
    *
    * @throws \Drupal\Component\Plugin\Exception\PluginException
@@ -138,9 +147,9 @@ class FormsHelper {
    * If there is no CBVRLookupResult, it is requested and saved for future uses.
    *
    * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   Form state
+   *   Form state.
    *
-   * @return \Drupal\os2web_datalookup\LookupResult\CvrLookupResult|NULL
+   * @return \Drupal\os2web_datalookup\LookupResult\CvrLookupResult|null
    *   CvrLookupResult or NULL.
    *
    * @throws \Drupal\Component\Plugin\Exception\PluginException
@@ -165,7 +174,7 @@ class FormsHelper {
       }
     }
 
-    /** @var CvrLookupResult $cvrLookupResult */
+    /** @var \Drupal\os2web_datalookup\LookupResult\CvrLookupResult $cvrLookupResult */
     $cvrLookupResult = NULL;
 
     // Trying to fetch company data from cache.
@@ -195,7 +204,7 @@ class FormsHelper {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   Form state object.
    *
-   * @return CvrLookupResult
+   * @return \Drupal\os2web_datalookup\LookupResult\CvrLookupResult
    *   CVRLookupResult as object.
    *
    * @throws \Drupal\Component\Plugin\Exception\PluginException
@@ -341,4 +350,5 @@ class FormsHelper {
 
     return $pNumber;
   }
+
 }

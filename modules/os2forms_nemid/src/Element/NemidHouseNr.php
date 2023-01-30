@@ -31,7 +31,7 @@ class NemidHouseNr extends NemidElementBase {
     ];
   }
 
-    /**
+  /**
    * {@inheritdoc}
    */
   public static function preRenderNemidHouseNr(array $element) {

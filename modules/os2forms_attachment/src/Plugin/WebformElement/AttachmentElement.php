@@ -24,10 +24,10 @@ class AttachmentElement extends WebformAttachmentBase {
    */
   protected function defineDefaultProperties() {
     $properties = [
-        'view_mode' => 'html',
-        'template' => '',
-        'export_type' => '',
-      ] + parent::defineDefaultProperties();
+      'view_mode' => 'html',
+      'template' => '',
+      'export_type' => '',
+    ] + parent::defineDefaultProperties();
     // PDF documents should never be trimmed.
     unset($properties['trim']);
     return $properties;
@@ -71,12 +71,12 @@ class AttachmentElement extends WebformAttachmentBase {
       ],
     ];
     $form['attachment']['help'] = WebformTwigExtension::buildTwigHelp() + [
-        '#states' => [
-          'visible' => [
-            ':input[name="properties[view_mode]"]' => ['value' => 'twig'],
-          ],
+      '#states' => [
+        'visible' => [
+          ':input[name="properties[view_mode]"]' => ['value' => 'twig'],
         ],
-      ];
+      ],
+    ];
     $form['attachment']['export_type'] = [
       '#type' => 'select',
       '#title' => $this->t('Export type'),
@@ -97,4 +97,5 @@ class AttachmentElement extends WebformAttachmentBase {
   public function getExportAttachmentsBatchLimit() {
     return 10;
   }
+
 }

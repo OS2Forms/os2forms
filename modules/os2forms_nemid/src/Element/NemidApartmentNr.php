@@ -2,8 +2,6 @@
 
 namespace Drupal\os2forms_nemid\Element;
 
-use Drupal\Core\Form\FormStateInterface;
-
 /**
  * Provides a 'os2forms_nemid_apartment_nr'.
  *
@@ -33,7 +31,7 @@ class NemidApartmentNr extends NemidElementBase {
     ];
   }
 
-    /**
+  /**
    * {@inheritdoc}
    */
   public static function preRenderNemidApartmentNr(array $element) {

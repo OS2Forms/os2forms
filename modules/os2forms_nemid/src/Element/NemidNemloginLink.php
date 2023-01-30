@@ -2,8 +2,8 @@
 
 namespace Drupal\os2forms_nemid\Element;
 
-use Drupal\Core\Render\Element\Link;
 use Drupal\Core\Link as CoreLink;
+use Drupal\Core\Render\Element\Link;
 
 /**
  * Provides a render element for more.
@@ -33,7 +33,10 @@ class NemidNemloginLink extends Link {
 
     // Checking if we have a share webform route, if yes open link in a new
     // tab.
-    $webformShareRoutes = ['entity.webform.share_page', 'entity.webform.share_page.javascript'];
+    $webformShareRoutes = [
+      'entity.webform.share_page',
+      'entity.webform.share_page.javascript',
+    ];
     $route_name = \Drupal::routeMatch()->getRouteName();
 
     if (in_array($route_name, $webformShareRoutes)) {

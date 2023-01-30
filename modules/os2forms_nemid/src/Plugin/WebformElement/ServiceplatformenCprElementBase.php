@@ -3,7 +3,6 @@
 namespace Drupal\os2forms_nemid\Plugin\WebformElement;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\os2web_datalookup\LookupResult\CprLookupResult;
 
 /**
  * Provides a abstract ServicePlatformenCpr Element.

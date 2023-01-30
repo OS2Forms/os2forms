@@ -27,9 +27,9 @@ class NemidChildrenSelect extends Select implements NemidElementPersonalInterfac
    */
   protected function defineDefaultProperties() {
     $properties = [
-        'cpr_output_type' => '',
-        'options' => [],
-      ] + parent::defineDefaultProperties();
+      'cpr_output_type' => '',
+      'options' => [],
+    ] + parent::defineDefaultProperties();
     return $properties;
   }
 
@@ -41,13 +41,13 @@ class NemidChildrenSelect extends Select implements NemidElementPersonalInterfac
     $form['options']['options']['#required'] = FALSE;
     $form['options']['#access'] = FALSE;
 
-    $form['element']['cpr_output_type'] = array(
+    $form['element']['cpr_output_type'] = [
       '#type' => 'radios',
-      '#options'=> ['cpr' => $this->t('CPR'), 'name' => $this->t('Name')],
+      '#options' => ['cpr' => $this->t('CPR'), 'name' => $this->t('Name')],
       '#title' => $this
         ->t('CPR output type'),
       '#required' => TRUE,
-    );
+    ];
 
     return $form;
   }
@@ -60,14 +60,13 @@ class NemidChildrenSelect extends Select implements NemidElementPersonalInterfac
     return [];
   }
 
-
   /**
    * {@inheritdoc}
    */
   public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
     // Setting empty options to avoid errors during load.
     $element['#options'] = [];
-    parent::prepare($element, $webform_submission );
+    parent::prepare($element, $webform_submission);
   }
 
   /**
@@ -113,14 +112,14 @@ class NemidChildrenSelect extends Select implements NemidElementPersonalInterfac
   }
 
   /**
-   * @inheritDoc
+   * {@inheritdoc}
    */
   public function getPrepopulateFieldFieldKey() {
     return 'children';
   }
 
   /**
-   * @inheritDoc
+   * {@inheritdoc}
    */
   public function handleElementPrepopulate(array &$element, FormStateInterface &$form_state) {
     /** @var \Drupal\os2forms_nemid\Service\FormsHelper $formsHelper */

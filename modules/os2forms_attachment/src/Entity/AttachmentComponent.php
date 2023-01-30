@@ -66,7 +66,7 @@ class AttachmentComponent extends ConfigEntityBase implements AttachmentComponen
   protected $body;
 
   /**
-   * The component type
+   * The component type.
    *
    * @var string
    */

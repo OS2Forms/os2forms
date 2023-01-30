@@ -5,9 +5,7 @@ namespace Drupal\os2forms_attachment\Form;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\webform\Utility\WebformArrayHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -15,8 +13,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class AttachmentComponentForm extends EntityForm {
 
-   /**
-   * Drupal entityTypeManager
+  /**
+   * Drupal entityTypeManager.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
@@ -90,7 +88,7 @@ class AttachmentComponentForm extends EntityForm {
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Component content'),
       '#default_value' => $component->getBody(),
-      '#format' => 'full_html'
+      '#format' => 'full_html',
     ];
 
     /** @var \Drupal\webform\WebformTokenManagerInterface $token_manager */
@@ -111,9 +109,10 @@ class AttachmentComponentForm extends EntityForm {
   }
 
   /**
-   * Helper function to check whether an Attachment component id is already in use.
+   * Helper function to check whether an component is is already in use.
    *
-   * @param $id
+   * @param int $id
+   *   Id of the component.
    *
    * @return bool
    *   True if a Attachment component exists with the given id. FALSE otherwise.

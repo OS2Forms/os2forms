@@ -22,4 +22,5 @@ class AttachmentComponentController extends ControllerBase {
   public function editTitle(AttachmentComponentInterface $os2forms_attachment_component) {
     return 'Edit ' . $os2forms_attachment_component->label();
   }
+
 }
