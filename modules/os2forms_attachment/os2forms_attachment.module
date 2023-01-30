@@ -246,7 +246,6 @@ function os2forms_attachment_webform_submission_view_alter(array &$build, Entity
   if ($is_entity_print) {
     // Overriding headers and footers added by webform_entity_print.
     // @see webform_entity_print_webform_admin_third_party_settings_form_alter().
-
     /** @var \Drupal\webform\WebformThirdPartySettingsManagerInterface $third_party_settings_manager */
     $third_party_settings_manager = \Drupal::service('webform.third_party_settings_manager');
 
@@ -266,7 +265,7 @@ function os2forms_attachment_webform_submission_view_alter(array &$build, Entity
 
     // Adding Colophon.
     if (!empty($template['os2form_colophon'])) {
-      /** @var AttachmentComponent $colophon */
+      /** @var \Drupal\os2forms_attachment\Entity\AttachmentComponent $colophon */
       $colophon = AttachmentComponent::load($template['os2form_colophon']);
 
       if ($colophon) {
@@ -281,14 +280,20 @@ function os2forms_attachment_webform_submission_view_alter(array &$build, Entity
         // Creating colophon.
         $build['webform_entity_print_wrapper']['webform_entity_print_colophon'] = [
           '#type' => 'container',
-          '#attributes' => ['class' => ['webform-entity-print-colophon'], 'style' => 'float:right;width:27%;margin-left:20px;word-wrap:break-word;'],
+          '#attributes' => [
+            'class' => ['webform-entity-print-colophon'],
+            'style' => 'float:right;width:27%;margin-left:20px;word-wrap:break-word;',
+          ],
           '#markup' => $colophonBody,
         ];
 
         // Creating page body.
         $build['webform_entity_print_wrapper']['webform_entity_print_body'] = [
           '#type' => 'container',
-          '#attributes' => ['class' => ['webform-entity-print-body'], 'style' => 'width:70%;'],
+          '#attributes' => [
+            'class' => ['webform-entity-print-body'],
+            'style' => 'width:70%;',
+          ],
         ];
         // Moving all elements into body.
         $build['webform_entity_print_wrapper']['webform_entity_print_body']['data'] = $build['data'];

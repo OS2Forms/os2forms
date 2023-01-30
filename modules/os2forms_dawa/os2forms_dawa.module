@@ -12,7 +12,7 @@
  *
  * @See https://www.drupal.org/project/webform_migrate/issues/3155073
  */
-function os2forms_nemid_webform_migrate_d7_webform_element_address_autocomp_alter(&$markup, $indent, array $element) {
+function os2forms_dawa_webform_migrate_d7_webform_element_address_autocomp_alter(&$markup, $indent, array $element) {
   $markup .= "$indent  '#type': os2forms_dawa_address\n";
 }
 
@@ -23,6 +23,6 @@ function os2forms_nemid_webform_migrate_d7_webform_element_address_autocomp_alte
  *
  * @See https://www.drupal.org/project/webform_migrate/issues/3155073
  */
-function os2forms_nemid_webform_migrate_d7_webform_element_addrs_autocomp_l_alter(&$markup, $indent, array $element) {
+function os2forms_dawa_webform_migrate_d7_webform_element_addrs_autocomp_l_alter(&$markup, $indent, array $element) {
   $markup .= "$indent  '#type': os2forms_dawa_address_matrikula\n";
 }
