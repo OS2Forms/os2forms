@@ -1,14 +1,14 @@
 <?php
 
-use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
-use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\os2forms_attachment\Entity\AttachmentComponent;
-
 /**
  * @file
  * OS2Forms Attachment functionality module.
  */
+
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\os2forms_attachment\Entity\AttachmentComponent;
 
 /**
  * Implements hook_theme().
@@ -33,7 +33,7 @@ function os2forms_attachment_theme($existing, $type, $theme, $path) {
 }
 
 /**
- * Implement HOOK_form_FORM_ID_alter().
+ * Implements hook_form_FORM_ID_alter().
  *
  * Exposing settings for general OS2forms admin settings.
  */
@@ -43,11 +43,11 @@ function os2forms_attachment_form_os2forms_settings_alter(&$form, FormStateInter
     '#title' => t('Template'),
   ];
 
-  os2forms_attachment_webform_admin_third_party_settings_form_alter($form,$form_state);
+  os2forms_attachment_webform_admin_third_party_settings_form_alter($form, $form_state);
 }
 
 /**
- * Implement HOOK_form_FORM_ID_alter().
+ * Implements hook_form_FORM_ID_alter().
  *
  * Exposing settings for OS2forms webform settings.
  */
@@ -57,13 +57,13 @@ function os2forms_attachment_form_webform_os2forms_settings_form_alter(&$form, F
     '#title' => t('Template'),
   ];
 
-  os2forms_attachment_webform_third_party_settings_form_alter($form,$form_state);
+  os2forms_attachment_webform_third_party_settings_form_alter($form, $form_state);
 }
 
 /**
  * Implements hook_preprocess_entity_print().
  *
- * Adds header and footer to be accessible in
+ * Adds header and footer to be accessible in.
  */
 function os2forms_attachment_preprocess_entity_print(array &$variables) {
   $webform_submission = _webform_entity_print_preprocess_entity_print_get_webform_submission($variables['content']);
@@ -84,7 +84,7 @@ function os2forms_attachment_preprocess_entity_print(array &$variables) {
 
   // Adding header to the theme template.
   if (!empty($template['os2form_header'])) {
-    /** @var AttachmentComponent $header */
+    /** @var \Drupal\os2forms_attachment\Entity\AttachmentComponent $header */
     $header = AttachmentComponent::load($template['os2form_header']);
 
     if ($header) {
@@ -101,7 +101,7 @@ function os2forms_attachment_preprocess_entity_print(array &$variables) {
 
   // Adding footer to the theme template.
   if (!empty($template['os2form_footer'])) {
-    /** @var AttachmentComponent $footer */
+    /** @var \Drupal\os2forms_attachment\Entity\AttachmentComponent $footer */
     $footer = AttachmentComponent::load($template['os2form_footer']);
     if ($footer) {
       $footerBody = $token_manager->replace($footer->getBody(), $webform_submission);
@@ -197,7 +197,7 @@ function _os2forms_attachment_print_form_add_template_override(array &$element, 
     'os2forms_colophon' => '',
     'os2forms_footer' => '',
   ];
-  $element['webform_entity_print']['template']['os2form_header'] = array(
+  $element['webform_entity_print']['template']['os2form_header'] = [
     '#type' => 'select',
     '#title' => t('OS2forms header override'),
     '#options' => $header_options,
@@ -205,9 +205,9 @@ function _os2forms_attachment_print_form_add_template_override(array &$element, 
     '#empty_option' => t('Use standard'),
     '#default_value' => $template_settings['os2form_header'],
     '#weight' => -1,
-  );
+  ];
 
-  $element['webform_entity_print']['template']['os2form_colophon'] = array(
+  $element['webform_entity_print']['template']['os2form_colophon'] = [
     '#type' => 'select',
     '#title' => t('OS2forms colophon override'),
     '#options' => $colophon_options,
@@ -215,9 +215,9 @@ function _os2forms_attachment_print_form_add_template_override(array &$element, 
     '#empty_option' => t('Use standard'),
     '#default_value' => $template_settings['os2form_colophon'],
     '#weight' => -1,
-  );
+  ];
 
-  $element['webform_entity_print']['template']['os2form_footer'] = array(
+  $element['webform_entity_print']['template']['os2form_footer'] = [
     '#type' => 'select',
     '#title' => t('OS2forms footer override'),
     '#options' => $footer_options,
@@ -225,7 +225,7 @@ function _os2forms_attachment_print_form_add_template_override(array &$element, 
     '#empty_option' => t('Use standard'),
     '#default_value' => $template_settings['os2form_footer'],
     '#weight' => 0,
-  );
+  ];
 
   // Showing/hiding default header/footer elements based on the permission.
   $element['webform_entity_print']['template']['header']['#access'] = \Drupal::currentUser()->hasPermission('os2forms webform header footer edit');
@@ -238,10 +238,10 @@ function _os2forms_attachment_print_form_add_template_override(array &$element, 
 function os2forms_attachment_webform_submission_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
   $route_name = \Drupal::routeMatch()->getRouteName();
   $is_entity_print = in_array($route_name, [
-      'entity_print.view.debug',
-      'entity_print.view'
-    ])
-    || \Drupal::request()->request->get('_webform_entity_print');
+    'entity_print.view.debug',
+    'entity_print.view',
+  ])
+  || \Drupal::request()->request->get('_webform_entity_print');
 
   if ($is_entity_print) {
     // Overriding headers and footers added by webform_entity_print.
@@ -264,7 +264,7 @@ function os2forms_attachment_webform_submission_view_alter(array &$build, Entity
     unset($build['webform_entity_print_header']);
     unset($build['webform_entity_print_footer']);
 
-    // adding Colophon.
+    // Adding Colophon.
     if (!empty($template['os2form_colophon'])) {
       /** @var AttachmentComponent $colophon */
       $colophon = AttachmentComponent::load($template['os2form_colophon']);
@@ -315,8 +315,5 @@ function os2forms_attachment_module_implements_alter(&$implementations, $hook) {
       $implementations['os2forms_attachment'] = $group;
       break;
   }
+
 }
-
-
-
-
