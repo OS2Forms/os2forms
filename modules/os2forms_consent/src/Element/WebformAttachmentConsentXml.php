@@ -52,9 +52,6 @@ class WebformAttachmentConsentXml extends WebformAttachmentXml {
       $cprResult = $cprPlugin->lookup($nemid_cpr);
       if ($cprResult->isSuccessful()) {
         $nemid_name = htmlspecialchars($cprResult->getName());
-        $nemid_address = htmlspecialchars($cprResult->getStreet() . ' ' . $cprResult->getHouseNr() . ' ' . $cprResult->getFloor() . ' ' . $cprResult->getApartmentNr());
-        $nemid_city = htmlspecialchars($cprResult->getCity());
-        $nemid_zipcode = htmlspecialchars($cprResult->getPostalCode());
       }
     }
     /** @var \Drupal\os2web_datalookup\Plugin\DataLookupManager $pluginManager */
@@ -67,23 +64,12 @@ class WebformAttachmentConsentXml extends WebformAttachmentXml {
 
       if ($cvrResult->isSuccessful()) {
         $nemid_name = htmlspecialchars($cvrResult->getName());
-        $nemid_address = htmlspecialchars($cvrResult->getStreet() . ' ' . $cvrResult->getHouseNr());
-        $nemid_city = htmlspecialchars($cvrResult->getCity());
-        $nemid_zipcode = htmlspecialchars($cvrResult->getPostalCode());
       }
     }
 
     $config = self::getElementConfiguration($element);
-    $os2formsId = self::getConfigurationValue('os2formsId', $config, $webform_submission);
-    $kle = self::getConfigurationValue('kle', $config, $webform_submission);
-    $sagSkabelonId = self::getConfigurationValue('sagSkabelonId', $config, $webform_submission);
-    $bodyText = self::getConfigurationValue('bodyText', $config, $webform_submission);
     $nemid_cpr_mapping_value = self::getConfigurationValue('nemid_cpr', $config, $webform_submission);
     $nemid_name_mapping_value = self::getConfigurationValue('nemid_name', $config, $webform_submission);
-    $nemid_address_mapping_value = self::getConfigurationValue('nemid_address', $config, $webform_submission);
-    $nemid_zipcode_mapping_value = self::getConfigurationValue('nemid_zipcode', $config, $webform_submission);
-    $nemid_city_mapping_value = self::getConfigurationValue('nemid_city', $config, $webform_submission);
-    $maa_sendes_til_dff = $config['MaaSendesTilDFF'] ?? 'ja';
 
     if ($nemid_cpr_mapping_value && $nemid_cpr_mapping_value != 'default_nemid_value') {
       $nemid_cpr = $nemid_cpr_mapping_value;
@@ -91,18 +77,7 @@ class WebformAttachmentConsentXml extends WebformAttachmentXml {
     if ($nemid_name_mapping_value && $nemid_name_mapping_value != 'default_nemid_value') {
       $nemid_name = $nemid_name_mapping_value;
     }
-    if ($nemid_address_mapping_value && $nemid_address_mapping_value != 'default_nemid_value') {
-      $nemid_address = $nemid_address_mapping_value;
-    }
-    if ($nemid_zipcode_mapping_value && $nemid_zipcode_mapping_value != 'default_nemid_value') {
-      $nemid_zipcode = $nemid_zipcode_mapping_value;
-    }
-    if ($nemid_city_mapping_value && $nemid_city_mapping_value != 'default_nemid_value') {
-      $nemid_city = $nemid_city_mapping_value;
-    }
 
-    $webform = $webform_submission->getWebform();
-    $webform_title = htmlspecialchars($webform->label());
     $fields = self::getWebformElementsAsList($webform_submission);
 
     $structuredData = [];
