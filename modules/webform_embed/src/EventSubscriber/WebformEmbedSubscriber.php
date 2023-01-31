@@ -13,7 +13,7 @@ class WebformEmbedSubscriber implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  static function getSubscribedEvents() {
+  public static function getSubscribedEvents() {
     $events['kernel.response'] = ['kernel_response'];
 
     return $events;
@@ -30,7 +30,7 @@ class WebformEmbedSubscriber implements EventSubscriberInterface {
     $patterns = "/webform_embed/displayForm/*\n/form/*";
     $match = \Drupal::service('path.matcher')->matchPath($current_path, $patterns);
 
-    if ($match == true) {
+    if ($match == TRUE) {
       $response = $event->getResponse();
       $response->headers->remove('X-Frame-Options');
     }
