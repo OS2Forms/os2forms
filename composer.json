@@ -29,7 +29,7 @@
         "drupal/webform": "^6.1",
         "drupal/webform_migrate": "^1.1",
         "drupal/webform_remote_select": "^1.0.6",
-        "drupal/webform_validation": "2.0.x-dev",
+        "drupal/webform_validation": "^2.0",
         "os2web/os2web_datalookup": "^1.0",
         "os2web/os2web_nemlogin": "^1.0",
         "phpoffice/phpword": "^0.18.2",
