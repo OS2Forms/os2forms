@@ -61,7 +61,6 @@ class WebformEmbedController extends ControllerBase {
 
   }
 
-
   /**
    * @param $machineName
    *

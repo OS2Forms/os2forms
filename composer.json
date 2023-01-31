@@ -17,28 +17,28 @@
     },
     "require": {
         "cweagans/composer-patches": "^1.6.5",
+        "drupal/entity_print": "^2.1",
         "drupal/eu_cookie_compliance": "^1.8",
-        "drupal/mailsystem": "^4.1",
-        "drupal/smtp": "^1.0@beta",
         "drupal/honeypot": "^2.0",
+        "drupal/mailsystem": "^4.1",
         "drupal/pathauto": "^1.5",
+        "drupal/permissions_by_term": "^3.1 || ^2.25",
         "drupal/redirect": "^1.4",
+        "drupal/smtp": "^1.0@beta",
         "drupal/token": "^1.5",
         "drupal/webform": "^6.1",
-        "drupal/entity_print": "^2.1",
         "drupal/webform_migrate": "^1.1",
-        "drupal/maillog": "1.x-dev",
-        "drupal/permissions_by_term": "^3.1 || ^2.25",
-        "phpoffice/phpword": "^0.18.2",
-        "tecnickcom/tcpdf": "~6",
+        "drupal/webform_remote_select": "^1.0.6",
+        "drupal/webform_validation": "^2.0",
         "os2web/os2web_datalookup": "^1.0",
         "os2web/os2web_nemlogin": "^1.0",
-        "drupal/webform_validation": "2.0.x-dev",
-        "drupal/webform_remote_select": "^1.0.6"
+        "phpoffice/phpword": "^0.18.2",
+        "tecnickcom/tcpdf": "~6"
     },
     "require-dev": {
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
         "drupal/coder": "^8.3",
-        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1"
+        "drupal/maillog": "^1.0"
     },
     "extra" : {
         "composer-exit-on-patch-failure": true,

@@ -5,4 +5,3 @@ webform_embed.webform_embed_controller_display_form:
     _title: 'Display Form'
   requirements:
     _permission: 'access content'
-
