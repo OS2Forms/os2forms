@@ -5,7 +5,7 @@ namespace Drupal\os2forms_nemid\Service;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\os2web_datalookup\LookupResult\CprLookupResult;
-use Drupal\os2web_datalookup\LookupResult\CvrLookupResult;
+use Drupal\os2web_datalookup\LookupResult\CompanyLookupResult;
 use Drupal\os2web_datalookup\Plugin\DataLookupManager;
 use Drupal\os2web_nemlogin\Service\AuthProviderService;
 
@@ -142,19 +142,19 @@ class FormsHelper {
   }
 
   /**
-   * Retrieves the CVRLookupResult which is stored in form_state.
+   * Retrieves the CompanyLookupResult which is stored in form_state.
    *
    * If there is no CBVRLookupResult, it is requested and saved for future uses.
    *
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   Form state.
    *
-   * @return \Drupal\os2web_datalookup\LookupResult\CvrLookupResult|null
-   *   CvrLookupResult or NULL.
+   * @return \Drupal\os2web_datalookup\LookupResult\CompanyLookupResult|null
+   *   CompanyLookupResult or NULL.
    *
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
-  public function retrieveCvrLookupResult(FormStateInterface $form_state) {
+  public function retrieveCompanyLookupResult(FormStateInterface $form_state) {
     // Handling P-number being changed/reset.
     if ($form_state->isRebuilding() && $this->isPnumberTrigger($form_state)) {
       // Resetting the current field value - it fetch is successfull,
@@ -163,10 +163,10 @@ class FormsHelper {
 
       $pNumber = $this->getPnumberValue($form_state);
 
-      // If another pNumber, resetting cached servicePlatformenCompanyData.
+      // If another pNumber, resetting cached companyLookupResult.
       if (strcmp($pNumber, $form_state->get('nemidCompanyPNumber')) !== 0) {
         $storage = $form_state->getStorage();
-        unset($storage['servicePlatformenCompanyData']);
+        unset($storage['companyLookupResult']);
         $form_state->setStorage($storage);
 
         // Saving the new P-number.
@@ -174,26 +174,26 @@ class FormsHelper {
       }
     }
 
-    /** @var \Drupal\os2web_datalookup\LookupResult\CvrLookupResult $cvrLookupResult */
-    $cvrLookupResult = NULL;
+    /** @var \Drupal\os2web_datalookup\LookupResult\CompanyLookupResult $companyLookupResult */
+    $companyLookupResult = NULL;
 
     // Trying to fetch company data from cache.
-    if ($form_state->has('cvrLookupResult')) {
-      $cvrLookupResult = $form_state->get('cvrLookupResult');
+    if ($form_state->has('companyLookupResult')) {
+      $companyLookupResult = $form_state->get('companyLookupResult');
     }
     else {
       // Cached version does not exist.
       //
       // Making the request to the plugin, and storing the data, so that it's
       // available on the next element within the same webform render.
-      if ($cvrLookupResult = $this->fetchCompanyData($form_state)) {
-        if ($cvrLookupResult->isSuccessful()) {
-          $form_state->set('cvrLookupResult', $cvrLookupResult);
+      if ($companyLookupResult = $this->fetchCompanyData($form_state)) {
+        if ($companyLookupResult->isSuccessful()) {
+          $form_state->set('companyLookupResult', $companyLookupResult);
         }
       }
     }
 
-    return $cvrLookupResult;
+    return $companyLookupResult;
   }
 
   /**
@@ -204,13 +204,13 @@ class FormsHelper {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   Form state object.
    *
-   * @return \Drupal\os2web_datalookup\LookupResult\CvrLookupResult
-   *   CVRLookupResult as object.
+   * @return \Drupal\os2web_datalookup\LookupResult\CompanyLookupResult
+   *   CompanyLookupResult as object.
    *
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
   private function fetchCompanyData(FormStateInterface $form_state) {
-    $cvrResult = new CvrLookupResult();
+    $companyResult = new CompanyLookupResult();
 
     // 1. Attempt to fetch data via CVR.
     /** @var \Drupal\os2web_nemlogin\Plugin\AuthProviderInterface $plugin */
@@ -218,13 +218,12 @@ class FormsHelper {
 
     if ($nemloginAuth->isAuthenticated()) {
       $cvr = $nemloginAuth->fetchValue('cvr');
-      $spCompanyData['cvr'] = $cvr;
 
-      /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupInterfaceCvr $cvrPlugin */
+      /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupInterfaceCompany $cvrPlugin */
       $cvrPlugin = $this->dataLookManager->createDefaultInstanceByGroup('cvr_lookup');
 
       if ($cvrPlugin->isReady()) {
-        $cvrResult = $cvrPlugin->lookup($cvr);
+        $companyResult = $cvrPlugin->lookup($cvr);
       }
     }
     // 2. Attempt to fetch data via P-number.
@@ -233,17 +232,17 @@ class FormsHelper {
         $pNumber = $this->getPnumberValue($form_state);
 
         if ($pNumber) {
-          /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\ServiceplatformenPNumber $servicePlatformentPNumberPlugin */
-          $servicePlatformentPNumberPlugin = $this->dataLookManager->createInstance('serviceplatformen_p_number');
+          /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupInterfaceCompany $pNumberPlugin */
+          $pNumberPlugin = $this->dataLookManager->createDefaultInstanceByGroup('pnumber_lookup');
 
-          if ($servicePlatformentPNumberPlugin->isReady()) {
-            $cvrResult = $servicePlatformentPNumberPlugin->lookup($pNumber);
+          if ($pNumberPlugin->isReady()) {
+            $companyResult = $pNumberPlugin->lookup($pNumber);
           }
         }
       }
     }
 
-    return $cvrResult;
+    return $companyResult;
   }
 
   /**

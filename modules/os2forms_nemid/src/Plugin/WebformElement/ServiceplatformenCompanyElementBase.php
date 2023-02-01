@@ -21,11 +21,11 @@ abstract class ServiceplatformenCompanyElementBase extends NemidElementBase {
   public function handleElementPrepopulate(array &$element, FormStateInterface &$form_state) {
     /** @var \Drupal\os2forms_nemid\Service\FormsHelper $formsHelper */
     $formsHelper = \Drupal::service('os2forms_nemid.forms_helper');
-    $cvrLookupResult = $formsHelper->retrieveCvrLookupResult($form_state);
+    $companyLookupResult = $formsHelper->retrieveCompanyLookupResult($form_state);
 
-    if ($cvrLookupResult) {
+    if ($companyLookupResult) {
       $prepopulateKey = $this->getPrepopulateFieldFieldKey();
-      if ($value = $cvrLookupResult->getFieldValue($prepopulateKey)) {
+      if ($value = $companyLookupResult->getFieldValue($prepopulateKey)) {
         $element['#value'] = $value;
       }
     }

@@ -2,7 +2,7 @@
 
 namespace Drupal\os2forms_nemid\Plugin\WebformElement;
 
-use Drupal\os2web_datalookup\LookupResult\CvrLookupResult;
+use Drupal\os2web_datalookup\LookupResult\CompanyLookupResult;
 
 /**
  * Provides a 'os2forms_nemid_company_cvr' element.
@@ -23,7 +23,7 @@ class NemidCompanyCvr extends ServiceplatformenCompanyElementBase implements Nem
    * {@inheritdoc}
    */
   public function getPrepopulateFieldFieldKey() {
-    return CvrLookupResult::CVR;
+    return CompanyLookupResult::CVR;
   }
 
 }
