@@ -4,8 +4,11 @@ namespace Drupal\os2forms_nemid\Service;
 
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\os2web_datalookup\LookupResult\CprLookupResult;
+use Drupal\os2forms_nemid\Element\NemidCompanyCvrFetchData;
+use Drupal\os2forms_nemid\Element\NemidCompanyPNumber;
+use Drupal\os2forms_nemid\Element\NemidCprFetchData;
 use Drupal\os2web_datalookup\LookupResult\CompanyLookupResult;
+use Drupal\os2web_datalookup\LookupResult\CprLookupResult;
 use Drupal\os2web_datalookup\Plugin\DataLookupManager;
 use Drupal\os2web_nemlogin\Service\AuthProviderService;
 
@@ -60,22 +63,10 @@ class FormsHelper {
    */
   public function retrieveCprLookupResult(FormStateInterface $form_state) {
     // Handling CPR being changed/reset.
-    if ($form_state->isRebuilding() && $this->isCprNumberTrigger($form_state)) {
-      // Resetting the current field value - it fetch is successfull,
-      // it will be filled later.
-      $element['#value'] = NULL;
-
-      $cpr = $this->getCprNumberValue($form_state);
-
-      // If another cprFetchData, resetting cached cprLookupResult.
-      if (strcmp($cpr, $form_state->get('nemidCprFetchData')) !== 0) {
-        $storage = $form_state->getStorage();
-        unset($storage['cprLookupResult']);
-        $form_state->setStorage($storage);
-
-        // Saving the new CPR-number.
-        $form_state->set('nemidCprFetchData', $cpr);
-      }
+    if ($form_state->isRebuilding() && $this->isDataFetchTriggeredBy(NemidCprFetchData::getFormElementId(), $form_state)) {
+      $storage = $form_state->getStorage();
+      unset($storage['cprLookupResult']);
+      $form_state->setStorage($storage);
     }
 
     /** @var Drupal\os2web_datalookup\LookupResult\CprLookupResult $cprLookupResult */
@@ -90,7 +81,7 @@ class FormsHelper {
       //
       // Making the request to the plugin, and storing the data, so that it's
       // available on the next element within the same webform render.
-      if ($cprLookupResult = $this->fetchPersonData($form_state)) {
+      if ($cprLookupResult = $this->lookupPersonData($form_state)) {
         if ($cprLookupResult->isSuccessful()) {
           $form_state->set('cprLookupResult', $cprLookupResult);
         }
@@ -101,7 +92,7 @@ class FormsHelper {
   }
 
   /**
-   * Makes request to serviceplatformen.
+   * Performs lookup of person data.
    *
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   Form state object.
@@ -111,31 +102,28 @@ class FormsHelper {
    *
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
-  protected function fetchPersonData(FormStateInterface $form_state) {
+  private function lookupPersonData(FormStateInterface $form_state) {
     $cprResult = new CprLookupResult();
+    $cpr = NULL;
 
     // 1. Getting CPR from Nemlogin.
     /** @var \Drupal\os2web_nemlogin\Plugin\AuthProviderInterface $plugin */
     $nemloginAuth = $this->authProviderService->getActivePlugin();
-
     if ($nemloginAuth->isAuthenticated()) {
       $cpr = $nemloginAuth->fetchValue('cpr');
     }
-    // 2. Getting CPR from CPR fetch data field
-    else {
-      if ($form_state->isRebuilding() && $this->isCprNumberTrigger($form_state)) {
-        $cpr = $this->getCprNumberValue($form_state);
-      }
+    // 2. Getting CPR from CPR fetch data field.
+    elseif ($form_state->isRebuilding() && $this->isDataFetchTriggeredBy(NemidCprFetchData::getFormElementId(), $form_state)) {
+      $cpr = $this->getDataFetchTriggerValue(NemidCprFetchData::getValueElementName(), $form_state);
     }
 
     if ($cpr) {
-      /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupCPRInterface $cprPlugin */
+      /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupInterfaceCpr $cprPlugin */
       $cprPlugin = $this->dataLookManager->createDefaultInstanceByGroup('cpr_lookup');
 
       if ($cprPlugin->isReady()) {
         $cprResult = $cprPlugin->lookup($cpr);
       }
-
     }
 
     return $cprResult;
@@ -155,23 +143,11 @@ class FormsHelper {
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
   public function retrieveCompanyLookupResult(FormStateInterface $form_state) {
-    // Handling P-number being changed/reset.
-    if ($form_state->isRebuilding() && $this->isPnumberTrigger($form_state)) {
-      // Resetting the current field value - it fetch is successfull,
-      // it will be filled later.
-      $element['#value'] = NULL;
-
-      $pNumber = $this->getPnumberValue($form_state);
-
-      // If another pNumber, resetting cached companyLookupResult.
-      if (strcmp($pNumber, $form_state->get('nemidCompanyPNumber')) !== 0) {
-        $storage = $form_state->getStorage();
-        unset($storage['companyLookupResult']);
-        $form_state->setStorage($storage);
-
-        // Saving the new P-number.
-        $form_state->set('nemidCompanyPNumber', $pNumber);
-      }
+    // Resetting cached companyLookupResult.
+    if ($form_state->isRebuilding() && ($this->isDataFetchTriggeredBy(NemidCompanyPNumber::getFormElementId(), $form_state) || $this->isDataFetchTriggeredBy(NemidCompanyCvrFetchData::getFormElementId(), $form_state))) {
+      $storage = $form_state->getStorage();
+      unset($storage['companyLookupResult']);
+      $form_state->setStorage($storage);
     }
 
     /** @var \Drupal\os2web_datalookup\LookupResult\CompanyLookupResult $companyLookupResult */
@@ -186,7 +162,7 @@ class FormsHelper {
       //
       // Making the request to the plugin, and storing the data, so that it's
       // available on the next element within the same webform render.
-      if ($companyLookupResult = $this->fetchCompanyData($form_state)) {
+      if ($companyLookupResult = $this->lookupCompanyData($form_state)) {
         if ($companyLookupResult->isSuccessful()) {
           $form_state->set('companyLookupResult', $companyLookupResult);
         }
@@ -197,9 +173,9 @@ class FormsHelper {
   }
 
   /**
-   * Makes request to serviceplatformen.
+   * Performs lookup of the company data..
    *
-   * Uses CVR or P-number based services depending on the available values/
+   * Uses CVR or P-number based services depending on the available values.
    *
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   Form state object.
@@ -209,16 +185,28 @@ class FormsHelper {
    *
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
-  private function fetchCompanyData(FormStateInterface $form_state) {
+  private function lookupCompanyData(FormStateInterface $form_state) {
     $companyResult = new CompanyLookupResult();
+    $cvr = NULL;
+    $pNumber = NULL;
 
-    // 1. Attempt to fetch data via CVR.
+    // 1. Attempt to fetch CVR from login.
     /** @var \Drupal\os2web_nemlogin\Plugin\AuthProviderInterface $plugin */
     $nemloginAuth = $this->authProviderService->getActivePlugin();
-
     if ($nemloginAuth->isAuthenticated()) {
       $cvr = $nemloginAuth->fetchValue('cvr');
+    }
+    // 2. Handling P-number fetch data.
+    elseif ($form_state->isRebuilding() && $this->isDataFetchTriggeredBy(NemidCompanyPNumber::getFormElementId(), $form_state)) {
+      $pNumber = $this->getDataFetchTriggerValue(NemidCompanyPNumber::getValueElementName(), $form_state);
+    }
+    // 3. Handling CVR fetch data.
+    elseif ($form_state->isRebuilding() && $this->isDataFetchTriggeredBy(NemidCompanyCvrFetchData::getFormElementId(), $form_state)) {
+      $cvr = $this->getDataFetchTriggerValue(NemidCompanyCvrFetchData::getValueElementName(), $form_state);
+    }
 
+    // Performing the lookup.
+    if ($cvr) {
       /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupInterfaceCompany $cvrPlugin */
       $cvrPlugin = $this->dataLookManager->createDefaultInstanceByGroup('cvr_lookup');
 
@@ -226,19 +214,12 @@ class FormsHelper {
         $companyResult = $cvrPlugin->lookup($cvr);
       }
     }
-    // 2. Attempt to fetch data via P-number.
-    else {
-      if ($form_state->isRebuilding() && $this->isPnumberTrigger($form_state)) {
-        $pNumber = $this->getPnumberValue($form_state);
+    elseif ($pNumber) {
+      /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupInterfaceCompany $pNumberPlugin */
+      $pNumberPlugin = $this->dataLookManager->createDefaultInstanceByGroup('pnumber_lookup');
 
-        if ($pNumber) {
-          /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupInterfaceCompany $pNumberPlugin */
-          $pNumberPlugin = $this->dataLookManager->createDefaultInstanceByGroup('pnumber_lookup');
-
-          if ($pNumberPlugin->isReady()) {
-            $companyResult = $pNumberPlugin->lookup($pNumber);
-          }
-        }
+      if ($pNumberPlugin->isReady()) {
+        $companyResult = $pNumberPlugin->lookup($pNumber);
       }
     }
 
@@ -246,15 +227,17 @@ class FormsHelper {
   }
 
   /**
-   * Checks if form rebuild trigger is CPR-number fetch button.
+   * Checks if form rebuild triggered by data fetch element.
    *
+   * @param string $dataFetchElementType
+   *   Data fetch element type to check against.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   Form state object.
    *
    * @return bool
    *   TRUE or FALSE.
    */
-  protected function isCprNumberTrigger(FormStateInterface $form_state) {
+  protected function isDataFetchTriggeredBy($dataFetchElementType, FormStateInterface $form_state) {
     if ($triggerElement = $form_state->getTriggeringElement()) {
       // Checking trigger element parent.
       $form_array = $form_state->getCompleteForm();
@@ -264,8 +247,8 @@ class FormsHelper {
       array_pop($triggerElParents);
       $parentElement = NestedArray::getValue($form_array, $triggerElParents);
 
-      // Checking if parent element is 'os2forms_nemid_cpr_fetch_data'.
-      if ($parentElement && isset($parentElement['#type']) && $parentElement['#type'] == 'os2forms_nemid_cpr_fetch_data') {
+      // Checking if parent element is the desired type.
+      if ($parentElement && isset($parentElement['#type']) && $parentElement['#type'] == $dataFetchElementType) {
         return TRUE;
       }
     }
@@ -274,77 +257,28 @@ class FormsHelper {
   }
 
   /**
-   * Gets the value from CPR-number field.
+   * Checks if form rebuild triggered by data fetch element.
    *
+   * @param string $dataFetchValueFieldName
+   *   Data fetch value fields name.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   Form state object.
    *
    * @return string
-   *   P-Number value from the field.
+   *   Field value.
    */
-  protected function getCprNumberValue(FormStateInterface $form_state) {
+  protected function getDataFetchTriggerValue($dataFetchValueFieldName, FormStateInterface $form_state) {
     $triggerElement = $form_state->getTriggeringElement();
 
-    $pNumberParents = $triggerElement['#parents'];
+    $elementParents = $triggerElement['#parents'];
 
     // Removing last element = current trigger elements.
-    array_pop($pNumberParents);
+    array_pop($elementParents);
 
-    array_push($pNumberParents, 'cpr_fetch_data_value');
-    $pNumber = $form_state->getValue($pNumberParents);
+    array_push($elementParents, $dataFetchValueFieldName);
+    $value = $form_state->getValue($elementParents);
 
-    return $pNumber;
-  }
-
-  /**
-   * Checks if form rebuild trigger is P-number fetch button.
-   *
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   Form state object.
-   *
-   * @return bool
-   *   TRUE or FALSE.
-   */
-  public function isPnumberTrigger(FormStateInterface $form_state) {
-    if ($triggerElement = $form_state->getTriggeringElement()) {
-      // Checking trigger element parent.
-      $form_array = $form_state->getCompleteForm();
-      $triggerElParents = $triggerElement['#array_parents'];
-
-      // Removing last element = current trigger elements.
-      array_pop($triggerElParents);
-      $parentElement = NestedArray::getValue($form_array, $triggerElParents);
-
-      // Checking if parent element is 'os2forms_nemid_company_p_number'.
-      if ($parentElement && isset($parentElement['#type']) && $parentElement['#type'] == 'os2forms_nemid_company_p_number') {
-        return TRUE;
-      }
-    }
-
-    return FALSE;
-  }
-
-  /**
-   * Gets the value from P-number field.
-   *
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   Form state object.
-   *
-   * @return string
-   *   P-Number value from the field.
-   */
-  public function getPnumberValue(FormStateInterface $form_state) {
-    $triggerElement = $form_state->getTriggeringElement();
-
-    $pNumberParents = $triggerElement['#parents'];
-
-    // Removing last element = current trigger elements.
-    array_pop($pNumberParents);
-
-    array_push($pNumberParents, 'p_number_value');
-    $pNumber = $form_state->getValue($pNumberParents);
-
-    return $pNumber;
+    return $value;
   }
 
 }
