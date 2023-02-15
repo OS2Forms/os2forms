@@ -9,6 +9,22 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## [3.4.0] 2023-02-15
+- Added github action for checking changelog changes when creating pull requests
+- Added webform_embed as custom module and removed from composer
+- Added cweagans/composer-patches as dependency
+- Removed vaimo/composer-patches as dependency
+- Changed composer patching configuration slightly
+- Applied coding standards. Updated GitHub Actions.
+- Removed NemID authentication message from AJAX requests
+- Added OS2forms consent module (OS-36)
+- Added GIT tag indicator (OS-34)
+- Added PDF author, subject and keywords (OS-26)
+- Added CVR datafordeler webservice (OS2FORMS-358)
+- Added P-Number webservice (OS2FORMS-358)
+- os2forms migrate_to_category default value fix (#17 issue)
+
+
 ## [3.3.0] 2022-12-22
 - Added OS2Forms attachment component (with custom heards, footer and colophon) (OS2FORMS-361)
 - Nemlogin link in shared webforms fix (OS-11)

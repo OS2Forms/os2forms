@@ -6,7 +6,6 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Link as CoreLink;
 use Drupal\Core\Render\Element;
 use Drupal\migrate\Plugin\MigrateSourceInterface;
 use Drupal\migrate\Plugin\MigrationInterface;
@@ -14,12 +13,12 @@ use Drupal\migrate\Row;
 use Drupal\os2forms_nemid\Plugin\WebformElement\NemidElementBase;
 
 /**
- * Implement HOOK_form_FORM_ID_alter().
+ * Implements hook_form_FORM_ID_alter().
  *
  * Exposing settings for OS2forms webform settings.
  */
 function os2forms_nemid_form_webform_os2forms_settings_form_alter(&$form, FormStateInterface $form_state) {
-  os2forms_nemid_webform_third_party_settings_form_alter($form,$form_state);
+  os2forms_nemid_webform_third_party_settings_form_alter($form, $form_state);
 }
 
 /**
@@ -71,7 +70,10 @@ function os2forms_nemid_webform_submission_form_alter(array &$form, FormStateInt
   $webform = $webformSubmission->getWebform();
   $webformNemidSettings = $webform->getThirdPartySetting('os2forms', 'os2forms_nemid');
 
-  $webformShareRoutes = ['entity.webform.share_page', 'entity.webform.share_page.javascript'];
+  $webformShareRoutes = [
+    'entity.webform.share_page',
+    'entity.webform.share_page.javascript',
+  ];
   $route_name = \Drupal::routeMatch()->getRouteName();
 
   // Checking if we have a share route.

@@ -17,14 +17,14 @@ class AttachmentElement extends WebformAttachmentBase {
    */
   public function getInfo() {
     return parent::getInfo() + [
-        '#view_mode' => 'html',
-        '#export_type' => 'pdf',
-        '#template' => '',
-      ];
+      '#view_mode' => 'html',
+      '#export_type' => 'pdf',
+      '#template' => '',
+    ];
   }
 
   /**
-   * @inheritDoc
+   * {@inheritdoc}
    */
   public static function getFileContent(array $element, WebformSubmissionInterface $webform_submission) {
     /** @var \Drupal\entity_print\Plugin\EntityPrintPluginManagerInterface $print_engine_manager */
@@ -88,4 +88,3 @@ class AttachmentElement extends WebformAttachmentBase {
   }
 
 }
-

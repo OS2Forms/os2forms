@@ -8,6 +8,7 @@ use Drupal\Core\Config\Entity\ConfigEntityInterface;
  * Provides an interface defining an Attachment Component entity.
  */
 interface AttachmentComponentInterface extends ConfigEntityInterface {
+
   /**
    * Get component body.
    *

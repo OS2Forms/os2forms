@@ -2,39 +2,32 @@
 
 namespace Drupal\os2forms_nemid\Element;
 
-use Drupal\webform\Element\WebformCompositeBase;
-
 /**
  * Provides a 'os2forms_nemid_cpr_fetch_data'.
  *
  * @FormElement("os2forms_nemid_cpr_fetch_data")
  */
-class NemidCprFetchData extends WebformCompositeBase {
+class NemidCprFetchData extends CompositeFetchDataBase {
 
   /**
    * {@inheritdoc}
    */
-  public static function getCompositeElements(array $element) {
-    $elements = [];
-    if ($element) {
-      $elements['cpr_fetch_data_value'] = [
-        '#type' => 'textfield',
-        '#title' => $element['#title'],
-      ];
+  public static function getFormElementId() {
+    return 'os2forms_nemid_cpr_fetch_data';
+  }
 
-      $elements['cpr_fetch_data_submit'] = [
-        '#type' => 'button',
-        '#value' => $element['#fetch_button_title'] ?? t('Hent'),
-        '#limit_validation_errors' => [
-          [
-            $element['#webform_key'],
-          ],
-        ],
-        '#name' => $element['#webform_key'] . '-fetch',
-      ];
-    }
+  /**
+   * {@inheritdoc}
+   */
+  public static function getValueElementName() {
+    return 'cpr_fetch_data_value';
+  }
 
-    return $elements;
+  /**
+   * {@inheritdoc}
+   */
+  public static function getSubmitElementName() {
+    return 'cpr_fetch_data_submit';
   }
 
 }

@@ -152,6 +152,11 @@ class WebformAttachmentSbsysXml extends WebformAttachmentXml {
     }
 
     foreach ($fields as $field_name => $field_value) {
+      // Taking care of the array values.
+      if (is_array($field_value)) {
+        $field_value = implode(', ', $field_value);
+      }
+
       $field_value = htmlspecialchars($field_value);
       $xml_data['FormularData'][$field_name] = $field_value;
     }

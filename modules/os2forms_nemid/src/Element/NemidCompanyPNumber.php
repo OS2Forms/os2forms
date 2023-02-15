@@ -2,39 +2,32 @@
 
 namespace Drupal\os2forms_nemid\Element;
 
-use Drupal\webform\Element\WebformCompositeBase;
-
 /**
  * Provides a 'os2forms_nemid_company_p_number'.
  *
  * @FormElement("os2forms_nemid_company_p_number")
  */
-class NemidCompanyPNumber extends WebformCompositeBase {
+class NemidCompanyPNumber extends CompositeFetchDataBase {
 
   /**
    * {@inheritdoc}
    */
-  public static function getCompositeElements(array $element) {
-    $elements = [];
-    if ($element) {
-      $elements['p_number_value'] = [
-        '#type' => 'textfield',
-        '#title' => $element['#title'],
-      ];
+  public static function getFormElementId() {
+    return 'os2forms_nemid_company_p_number';
+  }
 
-      $elements['p_number_submit'] = [
-        '#type' => 'button',
-        '#value' => $element['#fetch_button_title'] ?? t('Hent'),
-        '#limit_validation_errors' => [
-          [
-            $element['#webform_key'],
-          ],
-        ],
-        '#name' => $element['#webform_key'] . '-fetch',
-      ];
-    }
+  /**
+   * {@inheritdoc}
+   */
+  public static function getValueElementName() {
+    return 'p_number_value';
+  }
 
-    return $elements;
+  /**
+   * {@inheritdoc}
+   */
+  public static function getSubmitElementName() {
+    return 'p_number_submit';
   }
 
 }

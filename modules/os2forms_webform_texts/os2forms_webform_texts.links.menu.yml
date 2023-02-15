@@ -1,0 +1,7 @@
+system.admin.os2forms_forloeb.webform_texts.new_webform_text:
+  title: 'Tilføj fælles tekst'
+  menu_name: admin
+  parent: views_view:views.webformular_tekster.page_2
+  route_name: node.add
+  route_parameters: { node_type: 'os2forms_webform_text' }
+  weight: 1

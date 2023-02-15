@@ -1,0 +1,6 @@
+services:
+  webform_embed.subscriber:
+    class: Drupal\webform_embed\EventSubscriber\WebformEmbedSubscriber
+    arguments: []
+    tags:
+      - { name: event_subscriber }

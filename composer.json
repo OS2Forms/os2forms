@@ -6,19 +6,6 @@
     "prefer-stable": true,
     "license": "EUPL-1.2",
     "repositories": {
-        "webform_embed": {
-            "type": "package",
-            "package": {
-                "name": "drupal/webform_embed",
-                "type": "drupal-module",
-                "version": "1.x-dev",
-                "dist": {
-                    "type": "zip",
-                    "url": "https://ftp.drupal.org/files/projects/webform_embed-8.x-1.x-dev.zip",
-                    "shasum": ""
-                }
-            }
-        },
         "drupal": {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
@@ -29,36 +16,32 @@
         }
     },
     "require": {
+        "cweagans/composer-patches": "^1.6.5",
+        "drupal/entity_print": "^2.1",
         "drupal/eu_cookie_compliance": "^1.8",
-        "drupal/mailsystem": "^4.1",
-        "drupal/smtp": "^1.0@beta",
         "drupal/honeypot": "^2.0",
+        "drupal/mailsystem": "^4.1",
         "drupal/pathauto": "^1.5",
+        "drupal/permissions_by_term": "^3.1 || ^2.25",
         "drupal/redirect": "^1.4",
+        "drupal/smtp": "^1.0@beta",
         "drupal/token": "^1.5",
         "drupal/webform": "^6.1",
-        "drupal/webform_embed": "1.x-dev",
-        "drupal/entity_print": "^2.1",
         "drupal/webform_migrate": "^1.1",
-        "drupal/maillog": "1.x-dev",
-        "drupal/permissions_by_term": "^3.1 || ^2.25",
-        "phpoffice/phpword": "^0.18.2",
-        "tecnickcom/tcpdf": "~6",
-        "vaimo/composer-patches": "^4.20",
+        "drupal/webform_remote_select": "^1.0.6",
+        "drupal/webform_validation": "^2.0",
         "os2web/os2web_datalookup": "^1.0",
         "os2web/os2web_nemlogin": "^1.0",
-        "drupal/webform_validation": "2.0.x-dev",
-        "drupal/webform_remote_select": "^1.0.6"
+        "phpoffice/phpword": "^0.18.2",
+        "tecnickcom/tcpdf": "~6"
     },
     "require-dev": {
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
         "drupal/coder": "^8.3",
-        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1"
+        "drupal/maillog": "^1.0"
     },
     "extra" : {
         "composer-exit-on-patch-failure": true,
-        "patchLevel": {
-            "test": "-p2"
-        },
         "enable-patching" : true,
         "patches": {
             "drupal/entity_print": {
@@ -67,11 +50,6 @@
             "drupal/webform": {
                 "Unlock possibility of using Entity print module export to Word": "https://www.drupal.org/files/issues/2020-02-29/3096552-6.patch"
             }
-        }
-    },
-    "config": {
-        "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
     "scripts": {
@@ -87,5 +65,14 @@
         "coding-standards-apply": [
             "@coding-standards-apply/phpcs"
         ]
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "simplesamlphp/composer-module-installer": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "cweagans/composer-patches": true,
+            "zaporylie/composer-drupal-optimizations": true
+        }
     }
 }

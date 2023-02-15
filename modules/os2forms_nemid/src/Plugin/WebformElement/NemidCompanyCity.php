@@ -2,6 +2,8 @@
 
 namespace Drupal\os2forms_nemid\Plugin\WebformElement;
 
+use Drupal\os2web_datalookup\LookupResult\CompanyLookupResult;
+
 /**
  * Provides a 'os2forms_nemid_company_city' element.
  *
@@ -21,7 +23,7 @@ class NemidCompanyCity extends ServiceplatformenCompanyElementBase implements Ne
    * {@inheritdoc}
    */
   public function getPrepopulateFieldFieldKey() {
-    return 'company_city';
+    return CompanyLookupResult::CITY;
   }
 
 }
