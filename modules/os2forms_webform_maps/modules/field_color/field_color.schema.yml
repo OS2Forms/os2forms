@@ -1,0 +1,7 @@
+field.widget.settings.field_color_widget_type:
+  type: mapping
+  label: 'Field color widget type widget settings'
+  mapping:
+    size:
+      type: integer
+      label: 'Size'
