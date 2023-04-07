@@ -22,7 +22,7 @@ class NemidCompanyCvr extends ServiceplatformenCompanyElementBase implements Nem
   /**
    * {@inheritdoc}
    */
-  public function getPrepopulateFieldFieldKey() {
+  public function getPrepopulateFieldFieldKey(array &$element) {
     return CompanyLookupResult::CVR;
   }
 

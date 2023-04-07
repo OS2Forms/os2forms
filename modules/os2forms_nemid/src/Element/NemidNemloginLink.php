@@ -29,7 +29,14 @@ class NemidNemloginLink extends Link {
       $nemlogin_link_logout_text = $element['#nemlogin_link_logout_text'];
     }
 
-    $options = [];
+    // Getting auth plugin ID override.
+    $authPluginId = NULL;
+    /** @var \Drupal\webform\Entity\Webform $webform */
+    $webform = \Drupal::request()->attributes->get('webform');
+    $webformNemidSettings = $webform->getThirdPartySetting('os2forms', 'os2forms_nemid');
+    if (isset($webformNemidSettings['session_type']) && !empty($webformNemidSettings['session_type'])) {
+      $authPluginId = $webformNemidSettings['session_type'];
+    }
 
     // Checking if we have a share webform route, if yes open link in a new
     // tab.
@@ -39,19 +46,18 @@ class NemidNemloginLink extends Link {
     ];
     $route_name = \Drupal::routeMatch()->getRouteName();
 
+    $options = [];
     if (in_array($route_name, $webformShareRoutes)) {
       $element['#attributes']['target'] = '_blank';
 
       // Replacing return URL, as we are opening in a new window we want full
       // page webform, not embed form.
-      /** @var \Drupal\webform\Entity\Webform $webform */
-      $webform = \Drupal::request()->attributes->get('webform');
       if ($webform) {
         $options['query']['destination'] = $webform->toUrl()->toString();
       }
     }
 
-    $link = $authProviderService->generateLink($nemlogin_link_login_text, $nemlogin_link_logout_text, $options);
+    $link = $authProviderService->generateLink($nemlogin_link_login_text, $nemlogin_link_logout_text, $options, $authPluginId);
     if ($link instanceof CoreLink) {
       $element['#title'] = $link->getText();
       $element['#url'] = $link->getUrl();

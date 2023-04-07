@@ -93,13 +93,21 @@ class NemidChildrenSelect extends Select implements NemidElementPersonalInterfac
         }
       }
 
-      // Handle fields visibility depending on Authorization type.
+      // Getting auth plugin ID override.
+      $authPluginId = NULL;
+      if (isset($webformNemidSettings['session_type']) && !empty($webformNemidSettings['session_type'])) {
+        $authPluginId = $webformNemidSettings['session_type'];
+      }
+
       /** @var \Drupal\os2web_nemlogin\Service\AuthProviderService $authProviderService */
       $authProviderService = \Drupal::service('os2web_nemlogin.auth_provider');
-      /** @var \Drupal\os2web_nemlogin\Plugin\AuthProviderInterface $plugin */
-      $plugin = $authProviderService->getActivePlugin();
-      if ($plugin->isAuthenticated()) {
-        if ($plugin->isAuthenticatedCompany()) {
+
+      /** @var \Drupal\os2web_nemlogin\Plugin\AuthProviderInterface $authProviderPlugin */
+      $authProviderPlugin = ($authPluginId) ? $authProviderService->getPluginInstance($authPluginId) : $authProviderService->getActivePlugin();
+
+      // Handle fields visibility depending on Authorization type.
+      if ($authProviderPlugin->isAuthenticated()) {
+        if ($authProviderPlugin->isAuthenticatedCompany()) {
           $element['#access'] = FALSE;
         }
       }
@@ -114,7 +122,7 @@ class NemidChildrenSelect extends Select implements NemidElementPersonalInterfac
   /**
    * {@inheritdoc}
    */
-  public function getPrepopulateFieldFieldKey() {
+  public function getPrepopulateFieldFieldKey(array &$element) {
     return 'children';
   }
 
@@ -129,7 +137,7 @@ class NemidChildrenSelect extends Select implements NemidElementPersonalInterfac
     $options = [];
 
     if ($cprLookupResult) {
-      $prepopulateKey = $this->getPrepopulateFieldFieldKey();
+      $prepopulateKey = $this->getPrepopulateFieldFieldKey($element);
       if ($children = $cprLookupResult->getFieldValue($prepopulateKey)) {
         if (is_array($children) && !empty($children)) {
           foreach ($children as $child) {

@@ -20,7 +20,7 @@ class NemidUuid extends NemloginElementBase implements NemidElementPersonalInter
   /**
    * {@inheritdoc}
    */
-  public function getPrepopulateFieldFieldKey() {
+  public function getPrepopulateFieldFieldKey(array &$element) {
     return 'uuid';
   }
 

@@ -1,5 +1,5 @@
 os2forms_nemid.settings:
-  title: OS2Forms NemID settings
+  title: OS2Forms session settings
   description: Settings for OS2Forms NemID.
   route_name: os2web_nemid.settings_form
   parent: system.admin_config_system

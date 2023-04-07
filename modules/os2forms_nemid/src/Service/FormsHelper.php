@@ -106,11 +106,24 @@ class FormsHelper {
     $cprResult = new CprLookupResult();
     $cpr = NULL;
 
+    /** @var \Drupal\webform\WebformSubmissionInterface Interface $webformSubmission */
+    $webformSubmission = $form_state->getFormObject()->getEntity();
+    /** @var \Drupal\webform\WebformInterface $webform */
+    $webform = $webformSubmission->getWebform();
+    $webformNemidSettings = $webform->getThirdPartySetting('os2forms', 'os2forms_nemid');
+
+    // Getting auth plugin ID override.
+    $authPluginId = NULL;
+    if (isset($webformNemidSettings['session_type']) && !empty($webformNemidSettings['session_type'])) {
+      $authPluginId = $webformNemidSettings['session_type'];
+    }
+
+    /** @var \Drupal\os2web_nemlogin\Plugin\AuthProviderInterface $authProviderPlugin */
+    $authProviderPlugin = ($authPluginId) ? $this->authProviderService->getPluginInstance($authPluginId) : $this->authProviderService->getActivePlugin();
+
     // 1. Getting CPR from Nemlogin.
-    /** @var \Drupal\os2web_nemlogin\Plugin\AuthProviderInterface $plugin */
-    $nemloginAuth = $this->authProviderService->getActivePlugin();
-    if ($nemloginAuth->isAuthenticated()) {
-      $cpr = $nemloginAuth->fetchValue('cpr');
+    if ($authProviderPlugin->isAuthenticated()) {
+      $cpr = $authProviderPlugin->fetchValue('cpr');
     }
     // 2. Getting CPR from CPR fetch data field.
     elseif ($form_state->isRebuilding() && $this->isDataFetchTriggeredBy(NemidCprFetchData::getFormElementId(), $form_state)) {
@@ -190,11 +203,24 @@ class FormsHelper {
     $cvr = NULL;
     $pNumber = NULL;
 
+    /** @var \Drupal\webform\WebformSubmissionInterface Interface $webformSubmission */
+    $webformSubmission = $form_state->getFormObject()->getEntity();
+    /** @var \Drupal\webform\WebformInterface $webform */
+    $webform = $webformSubmission->getWebform();
+    $webformNemidSettings = $webform->getThirdPartySetting('os2forms', 'os2forms_nemid');
+
+    // Getting auth plugin ID override.
+    $authPluginId = NULL;
+    if (isset($webformNemidSettings['session_type']) && !empty($webformNemidSettings['session_type'])) {
+      $authPluginId = $webformNemidSettings['session_type'];
+    }
+
+    /** @var \Drupal\os2web_nemlogin\Plugin\AuthProviderInterface $authProviderPlugin */
+    $authProviderPlugin = ($authPluginId) ? $this->authProviderService->getPluginInstance($authPluginId) : $this->authProviderService->getActivePlugin();
+
     // 1. Attempt to fetch CVR from login.
-    /** @var \Drupal\os2web_nemlogin\Plugin\AuthProviderInterface $plugin */
-    $nemloginAuth = $this->authProviderService->getActivePlugin();
-    if ($nemloginAuth->isAuthenticated()) {
-      $cvr = $nemloginAuth->fetchValue('cvr');
+    if ($authProviderPlugin->isAuthenticated()) {
+      $cvr = $authProviderPlugin->fetchValue('cvr');
     }
     // 2. Handling P-number fetch data.
     elseif ($form_state->isRebuilding() && $this->isDataFetchTriggeredBy(NemidCompanyPNumber::getFormElementId(), $form_state)) {

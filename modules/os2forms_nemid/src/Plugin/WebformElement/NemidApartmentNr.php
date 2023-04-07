@@ -22,7 +22,7 @@ class NemidApartmentNr extends ServiceplatformenCprElementBase implements NemidE
   /**
    * {@inheritdoc}
    */
-  public function getPrepopulateFieldFieldKey() {
+  public function getPrepopulateFieldFieldKey(array &$element) {
     return CprLookupResult::APARTMENT_NR;
   }
 

@@ -22,7 +22,7 @@ class NemidFloor extends ServiceplatformenCprElementBase implements NemidElement
   /**
    * {@inheritdoc}
    */
-  public function getPrepopulateFieldFieldKey() {
+  public function getPrepopulateFieldFieldKey(array &$element) {
     return CprLookupResult::FLOOR;
   }
 

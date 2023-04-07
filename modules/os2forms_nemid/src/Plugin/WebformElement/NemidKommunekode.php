@@ -22,7 +22,7 @@ class NemidKommunekode extends ServiceplatformenCprElementBase implements NemidE
   /**
    * {@inheritdoc}
    */
-  public function getPrepopulateFieldFieldKey() {
+  public function getPrepopulateFieldFieldKey(array &$element) {
     return CprLookupResult::MUNICIPALITY_CODE;
   }
 

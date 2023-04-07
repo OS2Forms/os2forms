@@ -22,7 +22,7 @@ class NemidPostalCode extends ServiceplatformenCprElementBase implements NemidEl
   /**
    * {@inheritdoc}
    */
-  public function getPrepopulateFieldFieldKey() {
+  public function getPrepopulateFieldFieldKey(array &$element) {
     return CprLookupResult::POSTAL_CODE;
   }
 

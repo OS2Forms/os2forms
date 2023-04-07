@@ -22,7 +22,7 @@ class NemidCpr extends ServiceplatformenCprElementBase implements NemidElementPe
   /**
    * {@inheritdoc}
    */
-  public function getPrepopulateFieldFieldKey() {
+  public function getPrepopulateFieldFieldKey(array &$element) {
     return CprLookupResult::CPR;
   }
 

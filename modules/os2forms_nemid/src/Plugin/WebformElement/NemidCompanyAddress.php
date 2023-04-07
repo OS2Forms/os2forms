@@ -22,7 +22,7 @@ class NemidCompanyAddress extends ServiceplatformenCompanyElementBase implements
   /**
    * {@inheritdoc}
    */
-  public function getPrepopulateFieldFieldKey() {
+  public function getPrepopulateFieldFieldKey(array &$element) {
     return CompanyLookupResult::ADDRESS;
   }
 

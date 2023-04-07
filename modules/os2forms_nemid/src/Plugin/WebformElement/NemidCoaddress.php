@@ -22,7 +22,7 @@ class NemidCoaddress extends ServiceplatformenCprElementBase implements NemidEle
   /**
    * {@inheritdoc}
    */
-  public function getPrepopulateFieldFieldKey() {
+  public function getPrepopulateFieldFieldKey(array &$element) {
     return CprLookupResult::CO_NAME;
   }
 
