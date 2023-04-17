@@ -9,6 +9,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- Added missing dependency
+
 ## [3.4.0] 2023-02-15
 - Added github action for checking changelog changes when creating pull requests
 - Added webform_embed as custom module and removed from composer
