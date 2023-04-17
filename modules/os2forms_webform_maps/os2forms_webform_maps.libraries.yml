@@ -1,0 +1,22 @@
+webformmap:
+  version: 1.x
+  css:
+    theme:
+      css/webform_map.css: {}
+  js:
+    js/webform_map.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/once
+
+webform_leaflet:
+  version: 1.x
+  js:
+    js/webform_leaflet.js: {}
+    https://unpkg.com/dom-to-image@2.6.0/dist/dom-to-image.min.js: { type: external, minified: true }
+  dependencies:
+    - core/jquery
+    - leaflet/general
+    - leaflet/leaflet-drupal
+    - leaflet/leaflet-geoman

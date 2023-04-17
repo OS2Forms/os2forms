@@ -1,0 +1,11 @@
+name: 'OS2forms Webform maps'
+type: module
+description: 'Provides integration with Leaflet maps and provides map element for webform.'
+package: OS2Forms
+core_version_requirement: ^9.4 || ^10
+
+dependencies:
+  - 'drupal:os2forms'
+  - 'drupal:leaflet'
+  - 'drupal:leaflet_layers'
+  - 'dompdf:dompdf'
