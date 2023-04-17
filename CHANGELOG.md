@@ -8,6 +8,7 @@ See ["how do I make a good changelog record?"](https://keepachangelog.com/en/1.0
 before starting to add changes. Use example [placed in the end of the page](#example-of-change-log-record)
 
 ## [Unreleased]
+- Fixed `Undefined array key` in os2forms_attachment module
 
 - Added Maps element (<https://github.com/OS2Forms/os2forms/pull/39>).
 
