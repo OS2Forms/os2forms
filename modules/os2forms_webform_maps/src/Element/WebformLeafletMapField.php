@@ -3,12 +3,8 @@
 namespace Drupal\os2forms_webform_maps\Element;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Element\FormElement;
-use Drupal\Core\Render\Element\Textarea;
-use Drupal\leaflet\LeafletService;
 use Drupal\webform\Element\WebformCompositeFormElementTrait;
-use Drupal\webform\Utility\WebformElementHelper;
 
 /**
  * Provides a webform_map_field.
@@ -118,7 +114,7 @@ class WebformLeafletMapField extends FormElement {
     ];
     $map['context'] = 'widget';
 
-    /** @var LeafletService $leaflet_service */
+    /** @var \Drupal\leaflet\LeafletService $leaflet_service */
     $leaflet_service = \Drupal::service('leaflet.service');
     $element['map'] = $leaflet_service->leafletRenderMap($map, $feature, $element['#mapHeight'] . 'px');
 
@@ -172,7 +168,6 @@ class WebformLeafletMapField extends FormElement {
     ];
     $element['image_data']['#attributes']['class'][] = 'leaflet-widget-image';
 
-
     // Initialize the mail elements to allow for webform enhancements.
     /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
     $element_manager = \Drupal::service('plugin.manager.webform.element');
@@ -194,7 +189,6 @@ class WebformLeafletMapField extends FormElement {
       $element['#help_title'],
       $element['#help_display']
     );
-
 
     // Add validate callback.
     $element += ['#element_validate' => []];
@@ -236,7 +230,6 @@ class WebformLeafletMapField extends FormElement {
       'image' => $image_data,
     ]) : $mail_2;
 
-
     // Field must be converted from a two-element array into a single
     // string regardless of validation results.
     $form_state->setValueForElement($mail_element['mail_2'], NULL);
@@ -245,4 +238,5 @@ class WebformLeafletMapField extends FormElement {
     $element['#value'] = $result;
     $form_state->setValueForElement($element, $result);
   }
+
 }

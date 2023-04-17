@@ -5,7 +5,6 @@ namespace Drupal\os2forms_webform_maps\Plugin\WebformElement;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\leaflet\LeafletSettingsElementsTrait;
 use Drupal\webform\Plugin\WebformElementBase;
-use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * Provides a 'webform_map_field' element.
@@ -16,9 +15,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *   description = @Translation("Provides a webform map field."),
  *   category = @Translation("OS2Forms"),
  * )
- *
  */
-
 class WebformLeafletMapField extends WebformElementBase {
 
   use LeafletSettingsElementsTrait;
@@ -28,44 +25,44 @@ class WebformLeafletMapField extends WebformElementBase {
    */
   public function defineDefaultProperties(): array {
     return [
-        'mapHeight' => 600,
-        'map_layers' => '',
-        'lat' => 0,
-        'lon' => 0,
-        'zoom' => 12,
-        'minZoom' => 1,
-        'maxZoom' => 18,
-        'zoomFiner' => 0,
-        'scrollWheelZoom' => 0,
-        'doubleClickZoom' => 1,
+      'mapHeight' => 600,
+      'map_layers' => '',
+      'lat' => 0,
+      'lon' => 0,
+      'zoom' => 12,
+      'minZoom' => 1,
+      'maxZoom' => 18,
+      'zoomFiner' => 0,
+      'scrollWheelZoom' => 0,
+      'doubleClickZoom' => 1,
 
-        'position' => 'topleft',
-        'marker' => 'defaultMarker',
-        'drawPolyline' => 0,
-        'drawRectangle' => 0,
-        'drawPolygon' => 0,
-        'drawCircle' => 0,
-        'drawText' => 0,
-        'editMode' => 0,
-        'dragMode' => 0,
-        'cutPolygon' => 0,
-        'removalMode' => 0,
-        'rotateMode' => 0,
+      'position' => 'topleft',
+      'marker' => 'defaultMarker',
+      'drawPolyline' => 0,
+      'drawRectangle' => 0,
+      'drawPolygon' => 0,
+      'drawCircle' => 0,
+      'drawText' => 0,
+      'editMode' => 0,
+      'dragMode' => 0,
+      'cutPolygon' => 0,
+      'removalMode' => 0,
+      'rotateMode' => 0,
 
-        'polyline_color' => '#3388FF',
-        'polyline_intersection' => 0,
-        'polyline_error_color' => '#3388FF',
-        'polyline_error_message' => '',
+      'polyline_color' => '#3388FF',
+      'polyline_intersection' => 0,
+      'polyline_error_color' => '#3388FF',
+      'polyline_error_message' => '',
 
-        'polygon_color' => '#3388FF',
-        'polygon_intersection' => 0,
-        'polygon_error_color' => '#3388FF',
-        'polygon_error_message' => '',
+      'polygon_color' => '#3388FF',
+      'polygon_intersection' => 0,
+      'polygon_error_color' => '#3388FF',
+      'polygon_error_message' => '',
 
-        'circle_color' => '#3388FF',
-        'rectangle_color' => '#3388FF',
+      'circle_color' => '#3388FF',
+      'rectangle_color' => '#3388FF',
 
-      ] + parent::defineDefaultProperties();
+    ] + parent::defineDefaultProperties();
   }
 
   /**
@@ -334,4 +331,5 @@ class WebformLeafletMapField extends WebformElementBase {
 
     return $form;
   }
+
 }

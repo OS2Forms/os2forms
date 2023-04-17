@@ -1,6 +1,9 @@
 <?php
 
-use Drupal\Component\Render\FormattableMarkup;
+/**
+ * @file
+ * Module file for os2forms_webform_maps.
+ */
 
 /**
  * Implements hook_theme().

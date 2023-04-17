@@ -9,6 +9,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- Added Maps element (<https://github.com/OS2Forms/os2forms/pull/39>).
+
 ## [3.4.0] 2023-02-15
 - Added github action for checking changelog changes when creating pull requests
 - Added webform_embed as custom module and removed from composer

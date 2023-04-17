@@ -6,6 +6,8 @@
   <exclude-pattern>vendor/</exclude-pattern>
   <!-- Exclude our copy of the abandoned https://www.drupal.org/project/webform_embed -->
   <exclude-pattern>modules/webform_embed/</exclude-pattern>
+  <!-- Exclude our copy of the abandoned https://www.drupal.org/project/field_color -->
+  <exclude-pattern>modules/os2forms_webform_maps/modules/field_color/</exclude-pattern>
 
   <!-- Show progress of the run -->
   <arg value="p"/>
