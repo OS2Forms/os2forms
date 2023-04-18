@@ -2,7 +2,6 @@
 
 namespace Drupal\os2forms_nemid\Plugin\WebformElement;
 
-use Drupal\Component\Utility\Variable;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 
@@ -81,7 +80,7 @@ class SessionDynamicValueElement extends NemloginElementBase {
       '#type' => 'textfield',
       '#title' => $this->t('OS2Forms session prepopulate key'),
       '#description' => $this->t('Value will be attempted to be fetched from session using this key. Use the following notation for arrays: department[0] or department[0][title]'),
-      '#suffix' => t('Login here to see available values: <a target="_blank" href="@link">login</a>', ['@link' => Url::fromRoute('os2web_nemlogin.test', ['plugin_id' => $authPluginId])->toString()]),
+      '#suffix' => $this->t('Login here to see available values: <a target="_blank" href="@link">login</a>', ['@link' => Url::fromRoute('os2web_nemlogin.test', ['plugin_id' => $authPluginId])->toString()]),
     ];
 
     return $form;

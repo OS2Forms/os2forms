@@ -36,7 +36,10 @@ class SessionDynamicValueElement extends NemidElementBase {
    */
   public static function preRenderSessionDynamicValue(array $element) {
     $element = parent::prerenderNemidElementBase($element);
-    static::setAttributes($element, ['form-text', 'os2forms-session-dynamic-value']);
+    static::setAttributes($element, [
+      'form-text',
+      'os2forms-session-dynamic-value',
+    ]);
     return $element;
   }
 
