@@ -22,7 +22,7 @@ class NemidCompanyCity extends ServiceplatformenCompanyElementBase implements Ne
   /**
    * {@inheritdoc}
    */
-  public function getPrepopulateFieldFieldKey() {
+  public function getPrepopulateFieldFieldKey(array &$element) {
     return CompanyLookupResult::CITY;
   }
 

@@ -22,7 +22,7 @@ class NemidName extends ServiceplatformenCprElementBase implements NemidElementP
   /**
    * {@inheritdoc}
    */
-  public function getPrepopulateFieldFieldKey() {
+  public function getPrepopulateFieldFieldKey(array &$element) {
     return CprLookupResult::NAME;
   }
 

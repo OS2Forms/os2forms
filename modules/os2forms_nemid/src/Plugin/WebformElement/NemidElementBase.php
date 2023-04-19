@@ -71,16 +71,24 @@ abstract class NemidElementBase extends WebformElementBase implements NemidPrepo
         $this->handleElementVisibility($element, $webform_type);
       }
 
-      // Handle fields visibility depending on Authorization type.
+      // Getting auth plugin ID override.
+      $authPluginId = NULL;
+      if (isset($webformNemidSettings['session_type']) && !empty($webformNemidSettings['session_type'])) {
+        $authPluginId = $webformNemidSettings['session_type'];
+      }
+
       /** @var \Drupal\os2web_nemlogin\Service\AuthProviderService $authProviderService */
       $authProviderService = \Drupal::service('os2web_nemlogin.auth_provider');
-      /** @var \Drupal\os2web_nemlogin\Plugin\AuthProviderInterface $plugin */
-      $plugin = $authProviderService->getActivePlugin();
-      if ($plugin->isAuthenticated()) {
-        if ($plugin->isAuthenticatedCompany()) {
+
+      /** @var \Drupal\os2web_nemlogin\Plugin\AuthProviderInterface $authProviderPlugin */
+      $authProviderPlugin = ($authPluginId) ? $authProviderService->getPluginInstance($authPluginId) : $authProviderService->getActivePlugin();
+
+      // Handle fields visibility depending on Authorization type.
+      if ($authProviderPlugin->isAuthenticated()) {
+        if ($authProviderPlugin->isAuthenticatedCompany()) {
           $this->handleElementVisibility($element, self::WEBFORM_TYPE_COMPANY);
         }
-        elseif ($plugin->isAuthenticatedPerson()) {
+        elseif ($authProviderPlugin->isAuthenticatedPerson()) {
           $this->handleElementVisibility($element, self::WEBFORM_TYPE_PERSONAL);
         }
       }

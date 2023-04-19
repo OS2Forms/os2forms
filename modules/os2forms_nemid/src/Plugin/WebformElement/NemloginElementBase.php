@@ -19,15 +19,28 @@ abstract class NemloginElementBase extends NemidElementBase {
    * {@inheritdoc}
    */
   public function handleElementPrepopulate(array &$element, FormStateInterface &$form_state) {
-    $prepopulateKey = $this->getPrepopulateFieldFieldKey();
+    /** @var \Drupal\webform\WebformSubmissionInterface Interface $webformSubmission */
+    $webformSubmission = $form_state->getFormObject()->getEntity();
+    /** @var \Drupal\webform\WebformInterface $webform */
+    $webform = $webformSubmission->getWebform();
+    $webformNemidSettings = $webform->getThirdPartySetting('os2forms', 'os2forms_nemid');
+
+    // Getting auth plugin ID override.
+    $authPluginId = NULL;
+    if (isset($webformNemidSettings['session_type']) && !empty($webformNemidSettings['session_type'])) {
+      $authPluginId = $webformNemidSettings['session_type'];
+    }
 
     /** @var \Drupal\os2web_nemlogin\Service\AuthProviderService $authProviderService */
     $authProviderService = \Drupal::service('os2web_nemlogin.auth_provider');
-    /** @var \Drupal\os2web_nemlogin\Plugin\AuthProviderInterface $plugin */
-    $plugin = $authProviderService->getActivePlugin();
 
-    if ($plugin->isAuthenticated()) {
-      $value = $plugin->fetchValue($prepopulateKey);
+    /** @var \Drupal\os2web_nemlogin\Plugin\AuthProviderInterface $authProviderPlugin */
+    $authProviderPlugin = ($authPluginId) ? $authProviderService->getPluginInstance($authPluginId) : $authProviderService->getActivePlugin();
+
+    $prepopulateKey = $this->getPrepopulateFieldFieldKey($element);
+
+    if ($authProviderPlugin->isAuthenticated()) {
+      $value = $authProviderPlugin->fetchValue($prepopulateKey);
       $element['#value'] = $value;
     }
   }

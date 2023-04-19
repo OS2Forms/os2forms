@@ -32,8 +32,22 @@ function os2forms_nemid_webform_third_party_settings_form_alter(&$form, FormStat
   // OS2Forms NemID.
   $form['third_party_settings']['os2forms']['os2forms_nemid'] = [
     '#type' => 'details',
-    '#title' => t('OS2Forms NemID settings'),
+    '#title' => t('OS2Forms session settings'),
     '#open' => TRUE,
+  ];
+
+  // Session type.
+  /** @var \Drupal\os2web_nemlogin\Service\AuthProviderService $authProviderService */
+  $authProviderService = \Drupal::service('os2web_nemlogin.auth_provider');
+  $session_types = $authProviderService->getInitializedPlugins();
+
+  $form['third_party_settings']['os2forms']['os2forms_nemid']['session_type'] = [
+    '#type' => 'select',
+    '#title' => t('Session type'),
+    '#default_value' => !(empty($settings)) ? $settings['session_type'] : NULL,
+    '#empty_option' => t('Default'),
+    '#options' => $session_types,
+    '#description' => t('Which OS2 session types can be user on this form. Selecting more than one will render a popup for the end user with the choice'),
   ];
 
   // Webform type.
@@ -104,11 +118,18 @@ function os2forms_nemid_webform_submission_form_alter(array &$form, FormStateInt
 
   // Webform type is set and not empty.
   if ($webform_type) {
+    // Getting auth plugin ID override.
+    $authPluginId = NULL;
+    if (isset($webformNemidSettings['session_type']) && !empty($webformNemidSettings['session_type'])) {
+      $authPluginId = $webformNemidSettings['session_type'];
+    }
+
     // Initializing AuthProviderInterface plugin.
     /** @var \Drupal\os2web_nemlogin\Service\AuthProviderService $authProviderService */
     $authProviderService = \Drupal::service('os2web_nemlogin.auth_provider');
+
     /** @var \Drupal\os2web_nemlogin\Plugin\AuthProviderInterface $authProviderPlugin */
-    $authProviderPlugin = $authProviderService->getActivePlugin();
+    $authProviderPlugin = ($authPluginId) ? $authProviderService->getPluginInstance($authPluginId) : $authProviderService->getActivePlugin();
 
     // User is authenticated, check if the form type is corresponding to
     // authentication type.

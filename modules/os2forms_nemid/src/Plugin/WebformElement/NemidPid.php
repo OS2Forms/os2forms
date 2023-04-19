@@ -20,7 +20,7 @@ class NemidPid extends NemloginElementBase implements NemidElementPersonalInterf
   /**
    * {@inheritdoc}
    */
-  public function getPrepopulateFieldFieldKey() {
+  public function getPrepopulateFieldFieldKey(array &$element) {
     return 'pid';
   }
 

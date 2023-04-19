@@ -24,7 +24,7 @@ abstract class ServiceplatformenCprElementBase extends NemidElementBase {
     $cprLookupResult = $formsHelper->retrieveCprLookupResult($form_state);
 
     if ($cprLookupResult) {
-      $prepopulateKey = $this->getPrepopulateFieldFieldKey();
+      $prepopulateKey = $this->getPrepopulateFieldFieldKey($element);
       if ($value = $cprLookupResult->getFieldValue($prepopulateKey)) {
         $element['#value'] = $value;
       }

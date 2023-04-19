@@ -160,8 +160,14 @@ class NemloginRedirectSubscriber implements EventSubscriberInterface {
       // cached.
       $this->pageCacheKillSwitch->trigger();
 
+      // Getting auth plugin ID override.
+      $authPluginId = NULL;
+      if (isset($webformNemidSettings['session_type']) && !empty($webformNemidSettings['session_type'])) {
+        $authPluginId = $webformNemidSettings['session_type'];
+      }
+
       /** @var \Drupal\os2web_nemlogin\Plugin\AuthProviderInterface $authProviderPlugin */
-      $authProviderPlugin = $this->nemloginAuthProvider->getActivePlugin();
+      $authProviderPlugin = ($authPluginId) ? $this->nemloginAuthProvider->getPluginInstance($authPluginId) : $this->nemloginAuthProvider->getActivePlugin();
 
       if (!$authProviderPlugin->isAuthenticated()) {
         // Redirect directly to the external IdP.
