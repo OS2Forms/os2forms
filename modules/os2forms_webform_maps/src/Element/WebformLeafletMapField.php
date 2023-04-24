@@ -3,12 +3,8 @@
 namespace Drupal\os2forms_webform_maps\Element;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Element\FormElement;
-use Drupal\Core\Render\Element\Textarea;
-use Drupal\leaflet\LeafletService;
 use Drupal\webform\Element\WebformCompositeFormElementTrait;
-use Drupal\webform\Utility\WebformElementHelper;
 
 /**
  * Provides a webform_map_field.
@@ -108,17 +104,17 @@ class WebformLeafletMapField extends FormElement {
       'gestureHandling' => FALSE,
       'reset_map' => [
         'control' => FALSE,
-        'options' => '{"position":"' . $element['#position'] . '","title":"'.t('Reset View').'"}',
+        'options' => '{"position":"' . $element['#position'] . '","title":"' . t('Reset View') . '"}',
       ],
       'locate' => [
         'control' => TRUE,
-        'options' => '{"position":"' . $element['#position'] . '","setView":"untilPanOrZoom","returnToPrevBounds":true,"keepCurrentZoomLevel":true,"strings":{"title":"'.t('Locate my position').'"}}',
+        'options' => '{"position":"' . $element['#position'] . '","setView":"untilPanOrZoom","returnToPrevBounds":true,"keepCurrentZoomLevel":true,"strings":{"title":"' . t('Locate my position') . '"}}',
         'automatic' => FALSE,
       ],
     ];
     $map['context'] = 'widget';
 
-    /** @var LeafletService $leaflet_service */
+    /** @var \Drupal\leaflet\LeafletService $leaflet_service */
     $leaflet_service = \Drupal::service('leaflet.service');
     $element['map'] = $leaflet_service->leafletRenderMap($map, $feature, $element['#mapHeight'] . 'px');
 

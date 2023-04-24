@@ -12,6 +12,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - Fixed `Undefined array key` in os2forms_attachment module
 - Added Maps element (<https://github.com/OS2Forms/os2forms/pull/39>).
 - Added missing dependency
+- Added changes to Map element after external review
 
 ## [3.4.0] 2023-02-15
 - Added github action for checking changelog changes when creating pull requests
