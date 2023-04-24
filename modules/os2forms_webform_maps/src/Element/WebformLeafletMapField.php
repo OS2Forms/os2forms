@@ -69,6 +69,8 @@ class WebformLeafletMapField extends FormElement {
     $map = $map_info[$element['#map_layers']];
     $map_settings = $map['settings'];
     $json_element_name = 'leaflet-widget-input';
+    $reset_title = t('Reset View');
+    $locate_title = t('Locate my position');
 
     $feature = [];
     $map['id'] = $map_el;
@@ -104,11 +106,11 @@ class WebformLeafletMapField extends FormElement {
       'gestureHandling' => FALSE,
       'reset_map' => [
         'control' => FALSE,
-        'options' => '{"position":"' . $element['#position'] . '","title":"' . t('Reset View') . '"}',
+        'options' => '{"position":"' . $element['#position'] . '","title":"' . $reset_title . '"}',
       ],
       'locate' => [
         'control' => TRUE,
-        'options' => '{"position":"' . $element['#position'] . '","setView":"untilPanOrZoom","returnToPrevBounds":true,"keepCurrentZoomLevel":true,"strings":{"title":"' . t('Locate my position') . '"}}',
+        'options' => '{"position":"' . $element['#position'] . '","setView":"untilPanOrZoom","returnToPrevBounds":true,"keepCurrentZoomLevel":true,"strings":{"title":"' . $locate_title . '"}}',
         'automatic' => FALSE,
       ],
     ];
