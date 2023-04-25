@@ -1,0 +1,10 @@
+name: Field Color
+type: module
+core: 8.x
+core_version_requirement: ^8 || ^9
+description: 'Provides a color picker.'
+package: Custom
+# Information added by Drupal.org packaging script on 2020-10-28
+version: '1.0.x-dev'
+project: 'field_color'
+datestamp: 1603925235

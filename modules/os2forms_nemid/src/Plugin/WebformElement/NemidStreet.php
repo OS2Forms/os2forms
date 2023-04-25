@@ -22,7 +22,7 @@ class NemidStreet extends ServiceplatformenCprElementBase implements NemidElemen
   /**
    * {@inheritdoc}
    */
-  public function getPrepopulateFieldFieldKey() {
+  public function getPrepopulateFieldFieldKey(array &$element) {
     return CprLookupResult::STREET;
   }
 

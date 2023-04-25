@@ -1,0 +1,59 @@
+<?php
+
+/**
+ * @file
+ * Module file for os2forms_webform_maps.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function os2forms_webform_maps_theme() {
+  return [
+    'webform_element_base_html__webform_map_field' => [
+      'variables' => [
+        'element' => [],
+        'value' => NULL,
+        'webform_submission' => NULL,
+        'options' => [],
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_locale_translation_projects_alter().
+ */
+function os2forms_webform_maps_locale_translation_projects_alter(&$projects) {
+  $module_handler = \Drupal::service('module_handler');
+  $path = $module_handler->getModule('os2forms_webform_maps')->getPath();
+  $projects['os2forms_webform_maps']['info']['interface translation server pattern'] = $path . '/translations/%language.po';
+}
+
+/**
+ * Implements hook_preprocess_webform_element_base_html__webform_map_field().
+ */
+function os2forms_webform_maps_preprocess_webform_element_base_html__webform_map_field(array &$variables) {
+  // Decode the plain text value once.
+  $decoded_value = json_decode($variables['value']['#plain_text']);
+
+  // Use the decoded geojson property.
+  $variables['value']['#plain_text'] = $decoded_value->geojson;
+
+  // Load the webform element base HTML template.
+  \Drupal::moduleHandler()->loadInclude('webform', 'inc', 'webform.theme.template');
+  template_preprocess_webform_element_base_html($variables);
+
+  // Generate a unique ID for the map image.
+  $map_image_id = 'map-image-' . $variables['element']['#webform_key'];
+
+  $variables['map_image'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'img',
+    '#attributes' => [
+      'class' => ['handler-help-message'],
+      'id' => [$map_image_id],
+      'src' => $decoded_value->image ?? '',
+    ],
+  ];
+}

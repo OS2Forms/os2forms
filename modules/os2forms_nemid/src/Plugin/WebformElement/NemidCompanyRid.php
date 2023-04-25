@@ -20,7 +20,7 @@ class NemidCompanyRid extends NemloginElementBase implements NemidElementCompany
   /**
    * {@inheritdoc}
    */
-  public function getPrepopulateFieldFieldKey() {
+  public function getPrepopulateFieldFieldKey(array &$element) {
     return 'rid';
   }
 

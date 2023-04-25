@@ -24,7 +24,7 @@ abstract class ServiceplatformenCompanyElementBase extends NemidElementBase {
     $companyLookupResult = $formsHelper->retrieveCompanyLookupResult($form_state);
 
     if ($companyLookupResult) {
-      $prepopulateKey = $this->getPrepopulateFieldFieldKey();
+      $prepopulateKey = $this->getPrepopulateFieldFieldKey($element);
       if ($value = $companyLookupResult->getFieldValue($prepopulateKey)) {
         $element['#value'] = $value;
       }

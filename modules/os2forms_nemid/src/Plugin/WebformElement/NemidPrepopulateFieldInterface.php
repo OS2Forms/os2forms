@@ -16,10 +16,13 @@ interface NemidPrepopulateFieldInterface {
    *
    * Is used to prepopulate the field from the corresponding plugin..
    *
+   * @param array $element
+   *   The element to prepopulate value for.
+   *
    * @return string
    *   Field key.
    */
-  public function getPrepopulateFieldFieldKey();
+  public function getPrepopulateFieldFieldKey(array &$element);
 
   /**
    * Prepopulating of the field on webform load.

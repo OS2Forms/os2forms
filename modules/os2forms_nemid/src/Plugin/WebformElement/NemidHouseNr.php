@@ -22,7 +22,7 @@ class NemidHouseNr extends ServiceplatformenCprElementBase implements NemidEleme
   /**
    * {@inheritdoc}
    */
-  public function getPrepopulateFieldFieldKey() {
+  public function getPrepopulateFieldFieldKey(array &$element) {
     return CprLookupResult::HOUSE_NR;
   }
 

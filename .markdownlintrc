@@ -1,0 +1,12 @@
+{
+    // @see https://github.com/DavidAnson/markdownlint/blob/main/schema/.markdownlint.jsonc
+    // MD013/line-length - Line length
+    "MD013": {
+        // Exclude code blocks
+        "code_blocks": false
+    }
+}
+
+// Local Variables:
+// mode: json
+// End:
