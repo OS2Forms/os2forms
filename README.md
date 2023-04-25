@@ -3,7 +3,8 @@
 ## Install
 
 OS2Forms Drupal 8 module is available to download via composer.
-```
+
+```sh
 composer require os2forms/os2forms
 drush en os2forms
 ```
@@ -16,7 +17,8 @@ We are recommending to install drupal via composer by using
 By this way you will get standalone project with OS2Forms module on board, plus
 all the other contrib modules you will probably need to configure OS2Forms to
 your specific demands.
-```
+
+```sh
 composer create-project os2forms/composer-project:8.x-dev some-dir --no-interaction
 ```
 
@@ -27,19 +29,23 @@ mentioned above.
 
 You can easy download and install OS2web installation profile to your
 composer based Drupal project with commands:
-```
+
+```sh
 composer require os2web/os2web
 drush si os2web --db-url=mysql://db_user:db_pass@mysql_host/db_name --locale=da --site-name="OS2Forms" --account-pass=admin -y
 ```
 
 ## Update
+
 Updating process for OS2forms module is similar to usual Drupal 8 module.
 Use Composer's built-in command for listing packages that have updates available:
 
-```
+```sh
 composer outdated os2forms/os2forms
 ```
+
 ## Automated testing and code quality
+
 See [OS2Forms testing and CI information](https://github.com/OS2Forms/docs#testing-and-ci)
 
 ## Contribution
@@ -51,13 +57,17 @@ For issue description there is expected that you will provide clear and
 sufficient information about your feature request or bug report.
 
 ### Code review policy
+
 See [OS2Forms code review policy](https://github.com/OS2Forms/docs#code-review)
 
 ### Git name convention
+
 See [OS2Forms git name convention](https://github.com/OS2Forms/docs#git-guideline)
 
 ## Important notes
+
 ### Webforms
+
 Each webform, including all its settings, is stored as configuration in db and
 will(could) be exported as `yml` file via Drupal configuration management
 system. And afterwards could be tracked by `git`.
@@ -72,6 +82,7 @@ you can add all settings you do not want to export/import via configuration
 management system.
 
 ### Serviceplatformen plugins
+
 Settings for CPR and CVR serviceplantormen plugins are storing as configuration
 in db and will(could) be exported as `yml` file via Drupal configuration
 management system. And afterwards could be tracked by `git`.
@@ -84,12 +95,45 @@ you can add all settings you do not want to export/import via configuration
 management system.
 
 ## Unstable features
+
 ### Export submissions to Word
+
 This feature is still not part of Webform and Entity print modules stable versions
 due to following issues:
-* [[Webform] Unlock possibility of using Entity print module export to Word feature](https://www.drupal.org/project/webform/issues/3096552)
-* [[Entity Print] Add Export to Word Support](https://www.drupal.org/project/entity_print/issues/2733781)
 
-To get this functionality on drupal project there will be applied patches from issues above via Composer.
+* [[Webform] Unlock possibility of using Entity print module export to Word
+  feature](https://www.drupal.org/project/webform/issues/3096552)
+* [[Entity Print] Add Export to Word
+  Support](https://www.drupal.org/project/entity_print/issues/2733781)
 
-NOTE: If you are downloading os2forms module without using composer, be aware that you have apply those patches by yourself.
+To get this functionality on drupal project there will be applied patches from
+issues above via Composer.
+
+NOTE: If you are downloading os2forms module without using composer, be aware
+that you have apply those patches by yourself.
+
+## Coding standards
+
+Our coding are checked by GitHub Actions (cf.
+[.github/workflows/pr.yml](.github/workflows/pr.yml)). Use the commands below to
+run the checks locally.
+
+### PHP
+
+```sh
+docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.1-fpm composer install
+docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.1-fpm composer coding-standards-check
+
+# Fix (some) coding standards issues.
+docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.1-fpm composer coding-standards-apply
+```
+
+### Markdown
+
+```sh
+docker run --rm --volume ${PWD}:/app --workdir /app node:18 yarn install
+docker run --rm --volume ${PWD}:/app --workdir /app node:18 yarn coding-standards-check/markdownlint
+
+# Fix (some) coding standards issues.
+docker run --rm --volume ${PWD}:/app --workdir /app node:18 yarn coding-standards-apply/markdownlint
+```
