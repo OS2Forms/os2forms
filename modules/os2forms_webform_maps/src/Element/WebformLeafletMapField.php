@@ -95,21 +95,21 @@ class WebformLeafletMapField extends FormElement {
         'lon' => (float) $element['#lon'],
       ],
       'path' => json_encode([
-        'color'=> '#3388ff',
+        'color' => '#3388ff',
         'opacity' => '1.0',
-        'stroke' => true,
+        'stroke' => TRUE,
         'weight' => 3,
         'fill' => 'depends',
         'fillColor' => '*',
         'fillOpacity' => '0.2',
-        'radius' => '6'
+        'radius' => '6',
       ]),
       'leaflet_markercluster' => [
         'control' => FALSE,
         'options' => json_encode([
-          'spiderfyOnMaxZoom' => true,
-          'showCoverageOnHover' => true,
-          'removeOutsideVisibleBounds' => false
+          'spiderfyOnMaxZoom' => TRUE,
+          'showCoverageOnHover' => TRUE,
+          'removeOutsideVisibleBounds' => FALSE,
         ]),
         'excluded' => FALSE,
         'include_path' => FALSE,
@@ -131,7 +131,7 @@ class WebformLeafletMapField extends FormElement {
           'keepCurrentZoomLevel' => TRUE,
           'strings' => [
             'title' => t('Locate my position'),
-          ]
+          ],
         ]),
         'automatic' => FALSE,
       ],
