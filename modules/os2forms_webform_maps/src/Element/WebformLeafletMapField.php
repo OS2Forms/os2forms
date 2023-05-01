@@ -69,8 +69,6 @@ class WebformLeafletMapField extends FormElement {
     $map = $map_info[$element['#map_layers']];
     $map_settings = $map['settings'];
     $json_element_name = 'leaflet-widget-input';
-    $reset_title = t('Reset View');
-    $locate_title = t('Locate my position');
 
     $feature = [];
     $map['id'] = $map_el;
@@ -96,21 +94,45 @@ class WebformLeafletMapField extends FormElement {
         'lat' => (float) $element['#lat'],
         'lon' => (float) $element['#lon'],
       ],
-      'path' => '{"color":"#3388ff","opacity":"1.0","stroke":true,"weight":3,"fill":"depends","fillColor":"*","fillOpacity":"0.2","radius":"6"}',
+      'path' => json_encode([
+        'color'=> '#3388ff',
+        'opacity' => '1.0',
+        'stroke' => true,
+        'weight' => 3,
+        'fill' => 'depends',
+        'fillColor' => '*',
+        'fillOpacity' => '0.2',
+        'radius' => '6'
+      ]),
       'leaflet_markercluster' => [
         'control' => FALSE,
-        'options' => '{"spiderfyOnMaxZoom":true,"showCoverageOnHover":true,"removeOutsideVisibleBounds": false}',
+        'options' => json_encode([
+          'spiderfyOnMaxZoom' => true,
+          'showCoverageOnHover' => true,
+          'removeOutsideVisibleBounds' => false
+        ]),
         'excluded' => FALSE,
         'include_path' => FALSE,
       ],
       'gestureHandling' => FALSE,
       'reset_map' => [
         'control' => FALSE,
-        'options' => '{"position":"' . $element['#position'] . '","title":"' . $reset_title . '"}',
+        'options' => json_encode([
+          'position' => $element['#position'],
+          'title' => t('Reset View'),
+        ]),
       ],
       'locate' => [
         'control' => TRUE,
-        'options' => '{"position":"' . $element['#position'] . '","setView":"untilPanOrZoom","returnToPrevBounds":true,"keepCurrentZoomLevel":true,"strings":{"title":"' . $locate_title . '"}}',
+        'options' => json_encode([
+          'position' => $element['#position'],
+          'setView' => 'untilPanOrZoom',
+          'returnToPrevBounds' => TRUE,
+          'keepCurrentZoomLevel' => TRUE,
+          'strings' => [
+            'title' => t('Locate my position'),
+          ]
+        ]),
         'automatic' => FALSE,
       ],
     ];
