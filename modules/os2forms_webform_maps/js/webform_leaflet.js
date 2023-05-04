@@ -37,8 +37,8 @@
     this.json_selector = this.widgetsettings.jsonElement;
     this.img_selector = '.leaflet-widget-image';
 
-    if (settings['langcode'] && lMap.pm) {
-      lMap.pm.setLang(settings['langcode']);
+    if (settings.leaflet_widget.langcode && lMap.pm) {
+      lMap.pm.setLang(settings.leaflet_widget.langcode);
     }
 
     // Initialise a property to store/manage the map in.
