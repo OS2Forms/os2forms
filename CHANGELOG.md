@@ -11,6 +11,9 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- Resolved “Undefined array key” warning
+  (<https://github.com/OS2Forms/os2forms/pull/46>)
+
 ## [3.5.0] 2023-04-25
 
 - Added SessionDynamicValue webform element
