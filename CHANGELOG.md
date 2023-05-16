@@ -18,6 +18,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - Added Maps element (<https://github.com/OS2Forms/os2forms/pull/39>).
 - Added missing dependency
 - Added changes to Map element after external review
+- Fixed non-existent service "entity.manager" in webform_embed module
 
 ## [3.4.0] 2023-02-15
 
