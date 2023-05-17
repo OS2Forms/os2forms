@@ -44,7 +44,7 @@ function os2forms_nemid_webform_third_party_settings_form_alter(&$form, FormStat
   $form['third_party_settings']['os2forms']['os2forms_nemid']['session_type'] = [
     '#type' => 'select',
     '#title' => t('Session type'),
-    '#default_value' => !(empty($settings)) ? $settings['session_type'] : NULL,
+    '#default_value' => $settings['session_type'] ?? NULL,
     '#empty_option' => t('Default'),
     '#options' => $session_types,
     '#description' => t('Which OS2 session types can be user on this form. Selecting more than one will render a popup for the end user with the choice'),
@@ -58,7 +58,7 @@ function os2forms_nemid_webform_third_party_settings_form_alter(&$form, FormStat
   $form['third_party_settings']['os2forms']['os2forms_nemid']['webform_type'] = [
     '#type' => 'select',
     '#title' => t('Webform type'),
-    '#default_value' => !(empty($settings)) ? $settings['webform_type'] : NULL,
+    '#default_value' => $settings['webform_type'] ?? NULL,
     '#empty_option' => t('Not specified'),
     '#options' => $webform_types,
     '#description' => t('Based on the selected type form irrelevant fields will not be shown to the end user'),
@@ -68,7 +68,7 @@ function os2forms_nemid_webform_third_party_settings_form_alter(&$form, FormStat
   $form['third_party_settings']['os2forms']['os2forms_nemid']['nemlogin_auto_redirect'] = [
     '#type' => 'checkbox',
     '#title' => t('Redirect to nemlogin automatically'),
-    '#default_value' => !(empty($settings)) ? $settings['nemlogin_auto_redirect'] : FALSE,
+    '#default_value' => $settings['nemlogin_auto_redirect'] ?? FALSE,
     '#description' => t('Redirection will happen right after user has is accessing the form, if user is already authenticated via NemID, redirection will not happen.'),
   ];
 }
