@@ -1,0 +1,7 @@
+langcode: da
+status: true
+dependencies: {  }
+name: Affiliation
+vid: user_affiliation
+description: ''
+weight: 0

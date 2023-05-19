@@ -1,0 +1,3 @@
+.ui-dialog:not(.ui-dialog-off-canvas) {
+  width: 70vw!important;
+}

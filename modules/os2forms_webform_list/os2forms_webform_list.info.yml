@@ -1,0 +1,9 @@
+name: OS2forms webform list
+type: module
+description: Alters display of webform list and maestro template list
+package: OS2Web
+core: 8.x
+core_version_requirement: ^8 || ^9
+dependencies:
+  - 'drupal:webform'
+  - 'drupal:maestro'

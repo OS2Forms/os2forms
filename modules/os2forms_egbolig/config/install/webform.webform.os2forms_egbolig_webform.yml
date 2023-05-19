@@ -1,0 +1,853 @@
+langcode: da
+status: open
+dependencies: {  }
+open: null
+close: null
+weight: 0
+uid: 1
+template: false
+archive: false
+id: os2forms_egbolig_webform
+title: Boligansøgningsformular
+description: ''
+category: ''
+elements: |
+  nemlogin_link:
+    '#type': os2forms_nemid_nemlogin_link
+  row1:
+    '#type': container
+    '#attributes':
+      class:
+        - row
+    col1:
+      '#type': container
+      '#attributes':
+        class:
+          - col-sm-6
+      cpr:
+        '#type': os2forms_nemid_cpr
+        '#title': 'CPR nr.'
+        '#multiple': false
+        '#readonly': true
+        '#required': true
+      name:
+        '#type': os2forms_nemid_name
+        '#title': Navn
+        '#multiple': false
+        '#readonly': true
+        '#required': true
+      address:
+        '#type': os2forms_nemid_address
+        '#title': Adresse
+        '#multiple': false
+        '#readonly': true
+        '#required': true
+      c_o_address:
+        '#type': os2forms_nemid_coaddress
+        '#title': 'C/O Adresse'
+        '#multiple': false
+        '#description': 'Ballerup Kommune kan ikke akut hj&aelig;lpe dig med en bolig, hvis du er flyttet til kommunen med et s&aring;kaldt forudsigeligt boligproblem. Fx hvis du er flyttet ind hos familie eller bekendte eller har en midlertidig lejekontrakt'
+        '#description_display': after
+        '#readonly': true
+      city_zip:
+        '#type': os2forms_nemid_city
+        '#title': 'Post nr. / by'
+        '#multiple': false
+        '#readonly': true
+        '#required': true
+      maanedlig_brutto_indkomst_foer_skat_:
+        '#type': textfield
+        '#title': 'Månedlig brutto indkomst (før skat)'
+        '#description': 'Du bedes venligst angive din m&aring;nedlige brutto indkomst (f&oslash;r skat), idet det har stor betydning for hvordan vi kan prioritere din ans&oslash;gning'
+        '#description_display': after
+        '#required': true
+    col2:
+      '#type': container
+      '#attributes':
+        class:
+          - col-sm-6
+      email:
+        '#type': email
+        '#title': Email
+        '#required': true
+      phone_nr:
+        '#type': tel
+        '#title': 'Telefonnummer fastnet'
+        '#description': 'Fastnet eller alternativt telefonnummer'
+        '#description_display': after
+      phone_mobile:
+        '#type': tel
+        '#title': 'Telefonnummer mobil'
+        '#description': 'Ved at oplyse dit telefonnummer er du sikker p&aring;, at vi kan f&aring; fat p&aring; dig, hvis vi mangler nogle oplysninger. Husk altid at opdatere dine oplysninger, fx hvis du f&aring;r nyt tlf.nr.'
+        '#description_display': after
+        '#required': true
+      fs_partner:
+        '#type': fieldset
+        '#title': Ægtefælle/Samlever
+        '#description': 'Hvis du har en &aelig;gtef&aelig;lle/samlever, der skal bo sammen med dig i boligen, skal du oplyse cpr. nr. p&aring; ham/hende. Du skal oplyse dette, s&aring; vi har de rigtige oplysninger, n&aring;r vi behandler din boligans&oslash;gning'
+        '#description_display': before
+        has_partner:
+          '#type': checkbox
+          '#title': 'Jeg har ægtefælle/samlever'
+        container_partner:
+          '#type': container
+          '#states':
+            visible:
+              ':input[name="has_partner"]':
+                checked: true
+          partner_cpr:
+            '#type': textfield
+            '#title': 'CPR Nr Ægtefælle/Samlever'
+            '#required': true
+          partner_adresse:
+            '#type': textfield
+            '#title': Adresse
+            '#description': 'Anføres kun hvis forskellig for din'
+            '#description_display': after
+          partner_postnr_by:
+            '#type': textfield
+            '#title': Postnr/by
+            '#description': 'Anføres kun hvis forskellig for din'
+            '#description_display': after
+          partner_telefonnummer_mobil:
+            '#type': tel
+            '#title': 'Telefonnummer mobil'
+            '#description': 'Anføres kun hvis forskellig for dit'
+            '#description_display': after
+          partner_email_adresse:
+            '#type': email
+            '#title': 'E-mail adresse'
+            '#description': 'Anføres kun hvis forskellig for din'
+            '#description_display': after
+          partner_maanedlig_brutto_indkomst_foer_skat:
+            '#type': textfield
+            '#title': 'Månedlig brutto indkomst (før skat)'
+            '#description': 'Du bedes venligst angive din hustrus eller samlevers månedlige brutto indkomst (før skat), idet det har stor betydning for hvordan vi kan prioritere din ansøgning'
+            '#description_display': after
+            '#required': true
+  fs_more_info:
+    '#type': fieldset
+    '#title': 'Øvrige oplysninger'
+    hvorfor_soeger_du_:
+      '#type': textarea
+      '#title': 'Hvorfor søger du ?'
+      '#placeholder': 'Begrund din ansøgning her'
+      '#required': true
+    job_status:
+      '#type': select
+      '#title': 'Job, uddannelse eller andet'
+      '#options':
+        4: 'Ballerup borger - i job'
+        5: 'Tilpendler - i job'
+        6: 'Bor og arbejder ikke i Ballerup - i job'
+        11: 'Ballerup borger - uden arbejde'
+        8: 'Ballerup borger - under uddannelse'
+        12: 'Tilpendler - under uddannelse'
+        14: 'Ballerup borger - over 60 år'
+      '#empty_option': 'Vælg mellem'
+      '#required': true
+    has_children_markup:
+      '#type': webform_markup
+      '#markup': 'Hvis du har hjemmeboende b&oslash;rn eller dine b&oslash;rn boende hos dig noget af tiden, skal du oplyse cpr. nr. p&aring; dem.'
+    has_children:
+      '#type': checkbox
+      '#title': 'Børn i hustanden'
+  fs_children:
+    '#type': fieldset
+    '#title': Børn
+    '#description': 'Her skal du oplyse, hvor mange b&oslash;rn der skal bo sammen med dig i boligen, uanset om b&oslash;rnene bor helt eller delvist hos dig. Du skal oplyse barnets cpr. nr., s&aring; vi har de korrekte oplysninger, n&aring;r vi behandler din ans&oslash;gning.'
+    '#description_display': before
+    '#states':
+      visible:
+        ':input[name="has_children"]':
+          checked: true
+    fs_children_row1:
+      '#type': container
+      '#attributes':
+        class:
+          - row
+        style: row
+      fs_children_col1:
+        '#type': container
+        '#attributes':
+          class:
+            - col-sm-6
+        child_cpr_nr_1:
+          '#type': textfield
+          '#title': 'Cpr nr'
+          '#required': true
+        child_cpr_nr_2:
+          '#type': textfield
+          '#title': 'Cpr nr'
+          '#states':
+            visible:
+              ':input[name="child_cpr_nr_1"]':
+                filled: true
+        child_cpr_nr_3:
+          '#type': textfield
+          '#title': 'Cpr nr'
+          '#states':
+            visible:
+              ':input[name="child_cpr_nr_2"]':
+                filled: true
+        child_cpr_nr_4:
+          '#type': textfield
+          '#title': 'Cpr nr'
+          '#states':
+            visible:
+              ':input[name="child_cpr_nr_3"]':
+                filled: true
+        child_cpr_nr_5:
+          '#type': textfield
+          '#title': 'Cpr nr'
+          '#states':
+            visible:
+              ':input[name="child_cpr_nr_4"]':
+                filled: true
+        child_cpr_nr_6:
+          '#type': textfield
+          '#title': 'Cpr nr'
+          '#states':
+            visible:
+              ':input[name="child_cpr_nr_5"]':
+                filled: true
+        child_cpr_nr_7:
+          '#type': textfield
+          '#title': 'Cpr nr'
+          '#states':
+            visible:
+              ':input[name="child_cpr_nr_6"]':
+                filled: true
+        child_cpr_nr_8:
+          '#type': textfield
+          '#title': 'Cpr nr'
+          '#states':
+            visible:
+              ':input[name="child_cpr_nr_7"]':
+                filled: true
+        child_cpr_nr_9:
+          '#type': textfield
+          '#title': 'Cpr nr'
+          '#states':
+            visible:
+              ':input[name="child_cpr_nr_8"]':
+                filled: true
+        child_cpr_nr_10:
+          '#type': textfield
+          '#title': 'Cpr nr'
+          '#states':
+            visible:
+              ':input[name="child_cpr_nr_9"]':
+                filled: true
+  fs_under_education:
+    '#type': fieldset
+    '#title': 'Under uddannelse'
+    '#description': |
+      Du skal bede dit uddannelsessted om dokumentation p&aring;, at du er i gang med en uddannelse. Af dokumentationen skal det fremg&aring;, hvorn&aring;r din uddannelse starter og slutter. Du skal nedenfor vedh&aelig;fte en kopi eller et billede af dokumentationen.&nbsp;<br />
+      Hvis du f&aring;r tilbudt en bolig, skal du igen sende dokumentation p&aring;, at du fortsat er i gang med din uddannelse.
+
+    '#description_display': before
+    '#states':
+      visible:
+        - ':input[name="job_status"]':
+            value: '8'
+        - or
+        - ':input[name="job_status"]':
+            value: '12'
+    fs_under_education_row1:
+      '#type': container
+      '#attributes':
+        class:
+          - row
+      fs_under_education_col1:
+        '#type': container
+        '#attributes':
+          class:
+            - col-sm-6
+        institution_name:
+          '#type': select
+          '#title': Uddannelsessted
+          '#options': os2forms_egbolig_inst_name
+          '#required': true
+          '#default_value': '1'
+        education_type:
+          '#type': select
+          '#title': Uddannelsestype
+          '#options': os2forms_egbolig_educ_type
+          '#required': true
+          '#default_value': '909'
+      fs_under_education_col2:
+        '#type': container
+        '#attributes':
+          class:
+            - col-sm-3
+        education_start_date:
+          '#type': date
+          '#title': Uddannelsesstart
+          '#placeholder': dd/mm/yyyy
+          '#datepicker': true
+          '#datepicker_button': true
+          '#date_date_format': d/m/Y
+      fs_under_education_col3:
+        '#type': container
+        '#attributes':
+          class:
+            - col-sm-3
+        education_end_date:
+          '#type': date
+          '#title': Uddannelsesophør
+          '#placeholder': dd/mm/yyyy
+          '#datepicker': true
+          '#datepicker_button': true
+          '#date_date_format': d/m/Y
+      fs_under_education_col4:
+        '#type': container
+        '#attributes':
+          class:
+            - col-sm-6
+        education_doc:
+          '#type': webform_document_file
+          '#title': 'Vedhæft dokumentation'
+          '#required': true
+          '#max_filesize': '4'
+          '#file_extensions': 'jpg png pdf doc docx'
+  fs_work:
+    '#type': fieldset
+    '#title': 'I job'
+    '#states':
+      visible:
+        - ':input[name="job_status"]':
+            value: '4'
+        - or
+        - ':input[name="job_status"]':
+            value: '5'
+        - or
+        - ':input[name="job_status"]':
+            value: '6'
+    i_job_markup:
+      '#type': webform_markup
+      '#markup': |
+        <p>G&aelig;lder for:</p>
+
+        <ul>
+        	<li>Boligs&oslash;gende med fast arbejde p&aring; en virksomhed med adresse i Ballerup Kommune, som har fastans&aelig;ttelse mindst 30 timer om ugen</li>
+        	<li>Boligs&oslash;gende med fast arbejde og bosat i Ballerup Kommune, som har fastans&aelig;ttelse mindst 30 timer om ugen</li>
+        	<li>Boligs&oslash;gende med fast tilknytning til arbejdsmarkedet i mindst 30 timer om ugen &ndash; uanset hvor arbejdspladsen er beliggende</li>
+        </ul>
+
+        <p>Hvis du er nyansat, skal du vedh&aelig;fte en kopi eller billede af din ans&aelig;ttelseskontrakt. S&aring; snart du f&aring;r din f&oslash;rste l&oslash;n, kan vi se dit ans&aelig;ttelsessted i vore systemer</p>
+
+    job_doc:
+      '#type': webform_document_file
+      '#title': 'Vedhæft dokumentation'
+      '#max_filesize': '4'
+      '#file_extensions': 'jpg png pdf doc docx'
+  fs_nuvaerende_situation:
+    '#type': fieldset
+    '#title': 'Nuværende situation'
+    '#description': 'Hvis du bor i lejebolig i dag, skal du f&oslash;rst kontakte dit boligselskab. Her er der ofte mulighed for at blive prioriteret h&oslash;jere p&aring; ventelisten, n&aring;r du er lejer i forvejen. Ved at benytte denne mulighed vil du hurtigere f&aring; anvist en bolig. Ballerup Kommune har fire bydele. Hvis det vurderes af Boligkontoret, at du har et akut boligbehov, er du automatisk skrevet op til alle fire bydele.'
+    '#description_display': before
+    '#states':
+      visible:
+        - ':input[name="job_status"]':
+            value: '4'
+        - or
+        - ':input[name="job_status"]':
+            value: '11'
+        - or
+        - ':input[name="job_status"]':
+            value: '8'
+        - or
+        - ':input[name="job_status"]':
+            value: '12'
+    fs_nuvaerende_situation_row1:
+      '#type': container
+      '#attributes':
+        class:
+          - row
+      fs_nuvaerende_situation_col1:
+        '#type': container
+        '#attributes':
+          class:
+            - col-sm-6
+        home_exists:
+          '#type': select
+          '#title': 'Har du egen bolig i dag?'
+          '#description': |
+            Hvis du har ejer-/andel- eller lejebolig, skal du v&aelig;lge &quot;ja&quot;.<br />
+            Hvis du er hjeml&oslash;s (eller tilmeldt c/o), skal du v&aelig;lge &quot;nej&quot;.
+
+          '#description_display': before
+          '#options':
+            1: Ja
+            0: Nej
+          '#options_display': two_columns
+          '#required': true
+          '#default_value': '1'
+      fs_nuvaerende_situation_col2:
+        '#type': container
+        '#attributes':
+          class:
+            - col-sm-6
+        hvilken_boligtype_soeger_du:
+          '#type': checkboxes
+          '#title': 'Hvilken boligtype søger du ?'
+          '#options':
+            1: Familiebolig
+            2: Ungdomsbolig
+          '#required': true
+    fs_nuvaerende_situation_row2:
+      '#type': container
+      '#attributes':
+        class:
+          - row
+      fs_nuvaerende_situation_col3:
+        '#type': container
+        '#attributes':
+          class:
+            - col-sm-6
+        hvorfor_soeger_du_left:
+          '#type': webform_markup
+          '#markup': |
+            <p><strong>Skilsmisse / samlivsoph&oslash;r med b&oslash;rn</strong><br />
+            Du skal vedh&aelig;fte en kopi eller billede af din separationsbevilling eller dokumentation p&aring; samlivsoph&oslash;r. Du skal samtidig oplyse, om barnet/b&oslash;rnene skal bo hos dig eller om du skal have samv&aelig;r.</p>
+
+            <p><strong>Graviditet</strong><br />
+            Hvis du er gravid og ikke har din egen bolig, kan du s&oslash;ge om bolig hos Ballerup Kommune. Du skal vedh&aelig;fte kopi eller billede af din vandrejournal, hvor det fremg&aring;r, hvorn&aring;r du har termin. Din ans&oslash;gning kan ikke behandles f&oslash;r vandrejournalen er modtaget og du er i 20. graviditetsuge</p>
+
+        arsog:
+          '#type': select
+          '#title': 'Vælg årsag'
+          '#options':
+            1: 'Skilsmisse/samlivsophør med børn'
+            3: 'Ændret økonomi'
+            4: 'Ældre-/handicapegnet bolig'
+            6: Graviditet
+            10: Andet
+          '#default_value': '10'
+      fs_nuvaerende_situation_col4:
+        '#type': container
+        '#attributes':
+          class:
+            - col-sm-6
+        hvorfor_soeger_du_right:
+          '#type': webform_markup
+          '#markup': |
+            <p><strong>&AElig;ndret &oslash;konomi</strong><br />
+            Du skal vedh&aelig;fte en kopi eller billede af &aring;rsagen til din/jeres &aelig;ndrede &oslash;konomi. Det kan fx v&aelig;re andet arbejde/ledighedtvangsauktio/d&oslash;dsfald mm.</p>
+
+            <p><strong>&AElig;ldre- / handicapegnet bolig</strong><br />
+            Herunder g&aelig;lder sygdom med nedsat funktionsevne, handicap mm. Du skal vedh&aelig;fte en kopi eller billede med dokumentation fra egen l&aelig;ge, hospital eller lign. Din ans&oslash;gning kan f&oslash;rst behandles, n&aring;r dokumentationen er modtaget. Hvis du skal s&oslash;ge om &aelig;ldrebolig eller plejebolig, skal du kontakte&nbsp;<a href="https://ballerup.dk/borger/seniorer/boliger-aeldre/aeldre-og-handicapegnede-boliger">Visitationen</a></p>
+
+        attachment_ballerup_other:
+          '#type': webform_document_file
+          '#title': 'Vedhæft dokumentation'
+          '#states':
+            visible:
+              ':input[name="arsog"]':
+                '!value': '10'
+            required:
+              - ':input[name="arsog"]':
+                  value: '1'
+              - xor
+              - ':input[name="arsog"]':
+                  value: '3'
+              - xor
+              - ':input[name="arsog"]':
+                  value: '4'
+              - xor
+              - ':input[name="arsog"]':
+                  value: '6'
+          '#max_filesize': '4'
+          '#file_extensions': 'jpg png pdf doc docx'
+  fs_opskrivnings_berettiget:
+    '#type': fieldset
+    '#title': 'Nuværende situation'
+    '#states':
+      visible:
+        ':input[name="job_status"]':
+          value: '14'
+    help_text:
+      '#type': webform_markup
+      '#markup': |
+        <p>Er du over 60 &aring;r og bosiddende i Ballerup Kommune og har behov for en mindre eller mere &aelig;ldreegnet bolig, kan du blive skrevet op til bolig hos Boligkontoret.</p>
+
+        <p>Hvis du bor i lejebolig i dag, skal du ogs&aring; kontakte dit boligselskab. Her er der ofte mulighed for at blive prioriteret h&oslash;jere p&aring; ventelisten, n&aring;r du er lejer i forvejen. Husk du har ogs&aring; mulighed for at bytte dig til en anden bolig igennem dit boligselskab.</p>
+
+        <p>Hvis du skal s&oslash;ge om &aelig;ldrebolig eller plejebolig, skal du kontakte Visitationen p&aring;:&nbsp;<a href="https://ballerup.dk/borger/seniorer/boliger-aeldre/aeldre-og-handicapegnede-boliger">https://ballerup.dk/borger/seniorer/boliger-aeldre/aeldre-og-handicapegnede-boliger</a></p>
+
+  fs_zone:
+    '#type': fieldset
+    '#title': Områder
+    '#description': |
+      Hvilke områder ønsker du at blive skrevet op til?<br/>
+      Ballerup Kommune har fem bydele. Du skal mindst søge bolig i to bydele.<br/>
+      Du kan læse mere om de enkelte områder på <a href="http://www.ballerup.dk/boliganvisning">www.ballerup.dk/boliganvisning</a>. Dine muligheder for at få anvist en bolig bliver større, hvis du skriver dig op til flere områder.
+
+    '#description_display': before
+    fs_zone_row1:
+      '#type': container
+      '#attributes':
+        class:
+          - row
+      fs_zone_col1:
+        '#type': container
+        '#attributes':
+          class:
+            - col-sm-6
+        priority_1:
+          '#type': select
+          '#title': '1. Boligområde'
+          '#options':
+            1: Ballerup
+            2: Skovlunde
+            3: Måløv/Østerhøj
+            4: Egebjerg/Lundegården
+          '#required': true
+        priority_2:
+          '#type': select
+          '#title': '2. Boligområde'
+          '#options':
+            1: Ballerup
+            2: Skovlunde
+            3: Måløv/Østerhøj
+            4: Egebjerg/Lundegården
+          '#required': true
+      fs_zone_row2:
+        '#type': container
+        '#attributes':
+          class:
+            - col-sm-6
+        priority_3:
+          '#type': select
+          '#title': '3. Boligområde'
+          '#options':
+            1: Ballerup
+            2: Skovlunde
+            3: Måløv/Østerhøj
+            4: Egebjerg/Lundegården
+        priority_4:
+          '#type': select
+          '#title': '4. Boligområde'
+          '#options':
+            1: Ballerup
+            2: Skovlunde
+            3: Måløv/Østerhøj
+            4: Egebjerg/Lundegården
+  fs_additional_info:
+    '#type': fieldset
+    '#title': 'Informationer om bolig'
+    '#description': 'Det er vigtigt, at du oplyser, hvor meget du kan betale i husleje pr. m&aring;ned inkl. vand, varme mm.&nbsp;I din vurdering af udgiften til husleje, skal du overveje, hvor mange penge du har tilbage.&nbsp;Du skal v&aelig;re opm&aelig;rksom p&aring;, at der er f&aring; billige boliger i Ballerup Kommune.&nbsp;Du kan l&aelig;se mere om de enkelte huslejesatser p&aring; boligselskabets hjemmeside.'
+    '#description_display': before
+    fs_additional_info_row1:
+      '#type': container
+      '#attributes':
+        class:
+          - row
+      fs_additional_info_col1:
+        '#type': container
+        '#attributes':
+          class:
+            - col-sm-6
+        additional_info_markup:
+          '#type': webform_markup
+          '#markup': 'Her skal du oplyse, hvor stor en bolig du har behov for.'
+        antal_rum_min:
+          '#type': select
+          '#title': 'Antal rum - Minimum'
+          '#options':
+            1: '1'
+            2: '2'
+            3: '3'
+            4: '4'
+            5: '5'
+            6: '6'
+          '#required': true
+          '#default_value': '1'
+        antal_rum_max:
+          '#type': select
+          '#title': 'Antal rum - Maximum'
+          '#options':
+            1: '1'
+            2: '2'
+            3: '3'
+            4: '4'
+            5: '5'
+            6: '6'
+          '#default_value': '1'
+          '#required': true
+      fs_additional_info_col2:
+        '#type': container
+        '#attributes':
+          class:
+            - col-sm-6
+        additional_info_markup2:
+          '#type': webform_markup
+          '#markup': |
+            Her skal du oplyse, hvor meget du max kan betale i husleje pr m&aring;ned inkl. forbrug.&nbsp;<br />
+            Du kan l&aelig;se mere om de enkelte huslejesatser p&aring; boligselskabets hjemmeside.&nbsp;<br />
+            <br />
+            Du skal v&aelig;re opm&aelig;rksom p&aring;, at der er f&aring; billige boliger i Ballerup Kommune, det er derfor vigtigt at du oplyser, hvad din huslejeudgift max m&aring; v&aelig;re p&aring;.
+
+        husleje_max:
+          '#type': textfield
+          '#title': 'Husleje - Maksimum'
+          '#required': true
+        husdyr:
+          '#type': select
+          '#title': Husdyr
+          '#description': 'Du kan l&aelig;se p&aring; det enkelte boligselskabs hjemmeside, om du m&aring; have hund eller kat i boligen. Du skal v&aelig;re opm&aelig;rksom p&aring;, at det er f&aring; steder du m&aring; have husdyr samt at der kan v&aelig;re s&aelig;rlige regler i forhold til muskelhunde.'
+          '#description_display': after
+          '#options':
+            - Nej
+            - Ja
+          '#default_value': '0'
+  fs_agreements:
+    '#type': fieldset
+    '#title': 'Tilladelse til at vi må hente yderligere oplysninger om dig'
+    '#description': 'For at vi kan behandle din ans&oslash;gning, skal du give tilladelse (samtykke) til, at vi m&aring; hente oplysninger om dig i kommunens andre systemer i forhold til ans&aelig;ttelsessted, indkomst, bop&aelig;l og andre folkeregisteroplysninger.'
+    '#description_display': before
+    is_confirmed:
+      '#type': checkbox
+      '#title': 'Ja, jeg giver samtykke til at Ballerup Kommune må hente ovenstående oplysninger i kommunens andre systemer.'
+      '#required': true
+  fs_agreements2:
+    '#type': fieldset
+    '#title': "Tilladelse til at dele oplysninger om dig\t"
+    '#description': 'Herudover giver jeg samtykke til, at kommunen m&aring; dele oplysningerne om mit navn, adresse, telefon nr., mail-adresse, samt person nr. med et boligselskab &ndash; s&aring;fremt jeg anvises en bolig via kommunen.'
+    '#description_display': before
+    is_confirmed2:
+      '#type': checkbox
+      '#title': 'Jeg erklærer hermed, at mine oplysninger må deles til boligselskab'
+      '#required': true
+  fs_tro_og_love_erklaering:
+    '#type': fieldset
+    '#title': 'Tro og love erklæring'
+    '#description': 'N&aring;r du sender ans&oslash;gningen, skriver du under p&aring;, at de oplysninger du har givet er korrekte. Hvis du har givet forkerte oplysninger, kan din boligans&oslash;gning blive stoppet'
+    '#description_display': before
+    is_confirmed3:
+      '#type': checkbox
+      '#title': 'Når du sender ansøgningen, skriver du under på, at de oplysninger du har givet er korrekte. Hvis du har givet forkerte oplysninger, kan din boligansøgning blive stoppet'
+      '#required': true
+  fs_personoplysninger:
+    '#type': details
+    '#title': 'Sådan behandler vi dine personoplysninger'
+    personoplysninger_markup:
+      '#type': webform_markup
+      '#markup': |
+        <p>Vi behandler og registrer de oplysninger du giver, n&aring;r du udfylder denne ans&oslash;gning. Ballerup Kommune skal i den forbindelse oplyse dig om f&oslash;lgende:</p>
+
+        <p><strong>Dataansvarlig</strong><br />
+        Ballerup kommune er ansvarlig for behandlingen af dine personoplysninger. Vores kontaktoplysninger er:</p>
+
+        <p><strong>Ballerup kommune</strong><br />
+        Hold-An Vej 7<br />
+        2750 Ballerup<br />
+        CVR 58271713<br />
+        Telefon 4477 2000</p>
+
+        <p><strong>Form&aring;l og behandling</strong><br />
+        Form&aring;let med at registrere dine oplysninger er&nbsp;at behandle din boligans&oslash;gning.</p>
+
+        <p>Din ans&oslash;gning gemmes i kommunens journalsystem og arkiveres efter g&aelig;ldende lov p&aring; omr&aring;det.</p>
+
+        <p><strong>Dine rettigheder</strong></p>
+
+        <p><strong>Ret til at se oplysninger (indsigtsret)</strong><br />
+        Du har ret til at f&aring; indsigt i de oplysninger, som vi behandler om dig, samt en r&aelig;kke yderligere oplysninger.</p>
+
+        <p><strong>Ret til berigtigelse (rettelse)</strong><br />
+        Du har ret til at f&aring; urigtige oplysninger om dig selv rettet. Du har ogs&aring; ret til at f&aring; dine oplysninger suppleret med yderligere oplysninger, hvis dette vil g&oslash;re dine personoplysninger mere fuldst&aelig;ndige og/eller ajourf&oslash;rte.</p>
+
+        <p><strong>Ret til sletning</strong><br />
+        Da kommunen er en offentlig myndighed, vil kommunen som udgangspunkt alene kunne slette oplysninger om dig, n&aring;r vi ikke l&aelig;ngere har pligt til at opbevare oplysningerne.</p>
+
+        <p><strong>Ret til begr&aelig;nsning af behandling</strong><br />
+        Du har i visse tilf&aelig;lde ret til at f&aring; behandlingen af dine personoplysninger begr&aelig;nset. Hvis du har ret til at f&aring; begr&aelig;nset behandlingen, m&aring; vi fremover kun behandle oplysningerne &ndash; bortset fra opbevaring &ndash; med dit samtykke, eller med henblik p&aring; at retskrav kan fastl&aelig;gges, g&oslash;res g&aelig;ldende eller forsvares, eller for at beskytte en person eller vigtige samfundsinteresser.</p>
+
+        <p><strong>Ret til indsigelse</strong><br />
+        Du har i visse tilf&aelig;lde ret til at g&oslash;re indsigelse mod vores ellers lovlige behandling af dine personoplysninger. Dette g&aelig;lder dog kun, hvis vores behandling hviler p&aring; databeskyttelsesforordningens artikel 6, stk. 1, litra a om behandling af almindelige personoplysninger, artikel 9 stk. 2, litra a om behandling af f&oslash;lsomme personoplysninger samt artikel 10 om behandling af oplysninger om strafbare forhold.</p>
+
+        <p>Du kan l&aelig;se mere om dine rettigheder i Datatilsynets vejledning om de registreredes rettigheder, som du finder p&aring;&nbsp;<a href="http://www.datatilsynet.dk/" target="_blank">www.datatilsynet.dk</a>.</p>
+
+        <p><strong>Retten til at tr&aelig;kke samtykke tilbage</strong></p>
+
+        <p>Du har til enhver tid ret til at tr&aelig;kke dit samtykke tilbage. Det g&oslash;r du ved at kontakte os p&aring; ovenst&aring;ende kontaktoplysninger. Hvis du tr&aelig;kker dit samtykke tilbage, p&aring;virker det kun den fremadrettede behandling af dine personoplysninger.</p>
+
+        <p><strong>Kontakt DPO&rsquo;en</strong><br />
+        Hvis du har sp&oslash;rgsm&aring;l til databeskyttelsesforordningen, hvordan Ballerup Kommune passer p&aring; dine persondata eller oplever, at der ikke passes godt nok p&aring; dine persondata i kommunen, kan du henvende dig til vores&nbsp;<a href="https://ballerup.dk/sikker-besked-til-databeskyttelsesraadgiver" target="_blank">databeskyttelsesr&aring;dgiver</a>&nbsp;eller ring p&aring; telefon: 4477 1907</p>
+
+        <p>Du kan ogs&aring; sende et almindeligt brev til DPO&rsquo;en:</p>
+
+        <p>Ballerup R&aring;dhus<br />
+        DPO<br />
+        Hold-an Vej 7<br />
+        2750 Ballerup</p>
+
+        <p><strong>Klage til Datatilsynet</strong><br />
+        Du har ret til at indgive en klage til Datatilsynet, hvis du er utilfreds med den m&aring;de, vi behandler dine personoplysninger p&aring;. Du finder Datatilsynets kontaktoplysninger p&aring;&nbsp;<a href="http://www.datatilsynet.dk/" target="_blank">www.datatilsynet.dk</a>.</p>
+css: ''
+javascript: ''
+settings:
+  ajax: false
+  ajax_scroll_top: form
+  ajax_progress_type: ''
+  ajax_effect: ''
+  ajax_speed: null
+  page: true
+  page_submit_path: ''
+  page_confirm_path: ''
+  page_admin_theme: false
+  form_title: both
+  form_submit_once: false
+  form_exception_message: ''
+  form_open_message: ''
+  form_close_message: ''
+  form_previous_submissions: true
+  form_confidential: false
+  form_confidential_message: ''
+  form_remote_addr: true
+  form_convert_anonymous: false
+  form_prepopulate: false
+  form_prepopulate_source_entity: false
+  form_prepopulate_source_entity_required: false
+  form_prepopulate_source_entity_type: ''
+  form_reset: false
+  form_disable_autocomplete: false
+  form_novalidate: false
+  form_disable_inline_errors: false
+  form_required: false
+  form_unsaved: false
+  form_disable_back: false
+  form_submit_back: false
+  form_autofocus: false
+  form_details_toggle: false
+  form_access_denied: default
+  form_access_denied_title: ''
+  form_access_denied_message: ''
+  form_access_denied_attributes: {  }
+  form_file_limit: ''
+  submission_label: ''
+  submission_log: false
+  submission_views: {  }
+  submission_views_replace: {  }
+  submission_user_columns: {  }
+  submission_user_duplicate: false
+  submission_access_denied: default
+  submission_access_denied_title: ''
+  submission_access_denied_message: ''
+  submission_access_denied_attributes: {  }
+  submission_exception_message: ''
+  submission_locked_message: ''
+  submission_excluded_elements: {  }
+  submission_exclude_empty: false
+  submission_exclude_empty_checkbox: false
+  previous_submission_message: ''
+  previous_submissions_message: ''
+  autofill: false
+  autofill_message: ''
+  autofill_excluded_elements: {  }
+  wizard_progress_bar: true
+  wizard_progress_pages: false
+  wizard_progress_percentage: false
+  wizard_progress_link: false
+  wizard_progress_states: false
+  wizard_start_label: ''
+  wizard_preview_link: false
+  wizard_confirmation: true
+  wizard_confirmation_label: ''
+  wizard_track: ''
+  preview: 0
+  preview_label: ''
+  preview_title: ''
+  preview_message: ''
+  preview_attributes: {  }
+  preview_excluded_elements: {  }
+  preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
+  draft: none
+  draft_multiple: false
+  draft_auto_save: false
+  draft_saved_message: ''
+  draft_loaded_message: ''
+  draft_pending_single_message: ''
+  draft_pending_multiple_message: ''
+  confirmation_type: page
+  confirmation_title: ''
+  confirmation_message: ''
+  confirmation_url: ''
+  confirmation_attributes: {  }
+  confirmation_back: true
+  confirmation_back_label: ''
+  confirmation_back_attributes: {  }
+  confirmation_exclude_query: false
+  confirmation_exclude_token: false
+  confirmation_update: false
+  limit_total: null
+  limit_total_interval: null
+  limit_total_message: ''
+  limit_total_unique: false
+  limit_user: null
+  limit_user_interval: null
+  limit_user_message: ''
+  limit_user_unique: false
+  entity_limit_total: null
+  entity_limit_total_interval: null
+  entity_limit_user: null
+  entity_limit_user_interval: null
+  purge: none
+  purge_days: null
+  results_disabled: false
+  results_disabled_ignore: false
+  results_customize: false
+  token_view: false
+  token_update: false
+access:
+  create:
+    roles:
+      - anonymous
+      - authenticated
+    users: {  }
+    permissions: {  }
+  view_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  update_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  delete_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  purge_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  view_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  update_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  delete_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  administer:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  test:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  configuration:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+handlers: {  }
+variants: {  }

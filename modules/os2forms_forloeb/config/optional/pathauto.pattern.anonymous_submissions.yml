@@ -1,0 +1,13 @@
+status: true
+dependencies:
+  module:
+  - ctools
+  - webform
+id: anonymous_submissions
+label: 'Anonymisering af indsendelser'
+type: 'canonical_entities:webform_submission'
+pattern: 'indsendelse/[random:hash:sha1]'
+selection_criteria: {  }
+selection_logic: and
+weight: 0
+relationships: {  }

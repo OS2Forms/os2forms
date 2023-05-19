@@ -1,0 +1,10 @@
+name: 'OS2Forms EGBolig'
+type: module
+description: 'Provides advanced webform for EGBolig.'
+package: OS2Forms
+core: 8.x
+core_version_requirement: ^8 || ^9
+
+dependencies:
+  - os2forms
+  - os2forms_nemid

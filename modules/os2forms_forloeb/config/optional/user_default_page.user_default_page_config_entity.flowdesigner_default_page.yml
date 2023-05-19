@@ -1,0 +1,16 @@
+langcode: da
+status: true
+dependencies:
+  enforced:
+    module:
+      - os2forms_forloeb
+id: flowdesigner_default_page
+label: 'Flowdesigner default page'
+user_roles:
+  flowdesigner: flowdesigner
+users: null
+weight: 1
+login_redirect: /admin/structure/webform
+login_redirect_message: 'Velkommen tilbage, her kan du arbejde med webformularer.'
+logout_redirect: ''
+logout_redirect_message: ''

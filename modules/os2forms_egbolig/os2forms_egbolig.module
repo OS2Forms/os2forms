@@ -1,0 +1,287 @@
+<?php
+
+/**
+ * @file
+ * OS2Forms Egbolig module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * @file
+ * OS2Forms EGBolig functionality module.
+ */
+
+module_load_include('inc', 'os2forms_egbolig', 'os2forms_egbolig.utils');
+
+const CACHE_ID_OS2FORMS_EGBOLIG_INSTITUTION_NAME_OPTIONS = 'os2forms_egbolig_institution_name_options';
+const CACHE_ID_OS2FORMS_EGBOLIG_EDUCATION_TYPE_OPTIONS = 'os2forms_egbolig_education_type_options';
+const OS2FORMS_EGBOLIG_MEMBER_DEFAULT_COUNTRY = 'DANMARK';
+const OS2FORMS_EGBOLIG_MEMBER_DEFAULT_PASSWORD = 'retmig';
+const OS2FORMS_EGBOLIG_MEMBER_DEFAULT_OFFER_BY_EMAIL = 0;
+const OS2FORMS_EGBOLIG_MEMBER_DEFAULT_COMPANY_NO = 99;
+const OS2FORMS_EGBOLIG_MEMBER_DEFAULT_COMPANY_NO_PAY_IN = 9;
+const OS2FORMS_EGBOLIG_MEMBER_DEFAULT_NO_OF_YEARS = 1;
+const OS2FORMS_EGBOLIG_MEMBER_DEFAULT_STATUS = 0;
+const OS2FORMS_EGBOLIG_MEMBER_DEFAULT_TENANCY_TYPE = 1;
+const OS2FORMS_EGBOLIG_MEMBER_DEFAULT_TYPE_UPDATE = 'I';
+const OS2FORMS_EGBOLIG_MEMBER_DEFAULT_TYPE_CREATE = 'A';
+const OS2FORMS_EGBOLIG_MEMBER_DEFAULT_MIN_FLOOR = 1;
+const OS2FORMS_EGBOLIG_MEMBER_DEFAULT_MAX_FLOOR = 99;
+const OS2FORMS_EGBOLIG_MEMBER_DEFAULT_MIN_SQM = 1;
+const OS2FORMS_EGBOLIG_MEMBER_DEFAULT_MAX_SQM = 9999;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function os2forms_egbolig_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'webform_submission_os2forms_egbolig_webform_add_form') {
+    $pluginManager = \Drupal::service('plugin.manager.os2web_datalookup');
+
+    /** @var \Drupal\os2forms_egbolig\Plugin\os2web\DataLookup\EgboligDatalookupInterface $egboligClient */
+    $egboligClient = $pluginManager->createInstance('egbolig');
+
+    // Webservice cannot be used, abort.
+    if (!$egboligClient->isReady()) {
+      \Drupal::logger('OS2Forms EGBolig')->error(t('Submission will no be synced. Aborting'));
+      return;
+    }
+
+    /** @var \Drupal\webform\WebformSubmissionForm $submissionForm */
+    $submissionForm = $form_state->getFormObject();
+    /** @var \Drupal\webform\WebformInterface $webform */
+    $webform = $submissionForm->getWebform();
+
+    if (!$egboligClient->isTestMode()) {
+      /** @var \Drupal\os2web_nemlogin\Service\AuthProviderService $authProviderService */
+      $authProviderService = \Drupal::service('os2web_nemlogin.auth_provider');
+      /** @var \Drupal\os2web_nemlogin\Plugin\AuthProviderInterface $plugin */
+      $plugin = $authProviderService->getActivePlugin();
+
+      // User not authenticated.
+      if (!$plugin->isAuthenticated()) {
+        return;
+      }
+
+      $cpr = $plugin->fetchValue('cpr');
+    }
+    else {
+      $cpr = $egboligClient->getTestCpr();
+
+      // Filling basic info that would otherwise come from CPR login.
+      $cprInfo = \Drupal::service('plugin.manager.os2web_datalookup')->createInstance('serviceplatformen_cpr')->getAddress($cpr);
+      os2forms_egbolig_set_field_default_value($form, $webform, 'cpr', $cpr);
+      os2forms_egbolig_set_field_default_value($form, $webform, 'name', $cprInfo['name']);
+      os2forms_egbolig_set_field_default_value($form, $webform, 'address', $cprInfo['road'] . ' ' . $cprInfo['road_no'] . ' ' . $cprInfo['floor'] . ' ' . $cprInfo['door']);
+      os2forms_egbolig_set_field_default_value($form, $webform, 'c_o_address', $cprInfo['coname']);
+      os2forms_egbolig_set_field_default_value($form, $webform, 'city_zip', $cprInfo['zipcode'] . ' ' . $cprInfo['city']);
+
+      \Drupal::messenger()->addWarning(t('EGBolig is running in with TEST CPR. Submitting this webform will overwrite submission for this CPR: %cpr', ['%cpr' => $cpr]));
+    }
+
+    // Aborting if no CPR available.
+    if (!$cpr) {
+      return;
+    }
+
+    $member = NULL;
+    try {
+      $member = $egboligClient->fetchMember($cpr);
+
+      if ($member && !$form_state->isSubmitted()) {
+        // Filling basic info.
+        os2forms_egbolig_set_field_default_value($form, $webform, 'phone_nr', $member->HomePhone);
+        os2forms_egbolig_set_field_default_value($form, $webform, 'phone_mobile', $member->MobilePhone);
+        os2forms_egbolig_set_field_default_value($form, $webform, 'email', $member->Email);
+
+        // Filling partner.
+        if ($member->Cpr62) {
+          os2forms_egbolig_set_field_default_value($form, $webform, 'has_partner', TRUE);
+          os2forms_egbolig_set_field_default_value($form, $webform, 'partner_cpr', $member->Cpr62 . $member->Cpr42);
+        }
+
+        // Job status.
+        os2forms_egbolig_set_field_default_value($form, $webform, 'job_status', intval($member->Criteria1));
+
+        // Filling children.
+        if ($member->Children > 0) {
+          $children = $egboligClient->fetchChildren($member);
+          os2forms_egbolig_set_field_default_value($form, $webform, 'has_children', TRUE);
+
+          foreach ($children as $child_key => $child) {
+            $childIndex = $child_key + 1;
+            os2forms_egbolig_set_field_default_value($form, $webform, "child_cpr_nr_$childIndex", $child['Cpr6'] . $child['Cpr4']);
+          }
+        }
+
+        // Filling current situation.
+        if ($member->Criteria2) {
+          os2forms_egbolig_set_field_default_value($form, $webform, 'arsog', intval($member->Criteria2));
+        }
+
+        // Filling education.
+        os2forms_egbolig_set_field_default_value($form, $webform, 'institution_name', $member->EducationalInstitution);
+        os2forms_egbolig_set_field_default_value($form, $webform, 'education_type', $member->Education);
+        os2forms_egbolig_set_field_default_value($form, $webform, 'education_start_date', date('d/m/Y', strtotime($member->EducationStart)));
+        os2forms_egbolig_set_field_default_value($form, $webform, 'education_end_date', date('d/m/Y', strtotime($member->EducationEnd)));
+
+        // Filling additional info.
+        $roomInformation = $egboligClient->fetchRoomWishes($member);
+        os2forms_egbolig_set_field_default_value($form, $webform, 'antal_rum_min', $roomInformation['minRoom']);
+        os2forms_egbolig_set_field_default_value($form, $webform, 'antal_rum_max', $roomInformation['maxRoom']);
+        os2forms_egbolig_set_field_default_value($form, $webform, 'husleje_min', $member->MinimumRent);
+        os2forms_egbolig_set_field_default_value($form, $webform, 'husleje_max', $member->MaximumRent);
+        os2forms_egbolig_set_field_default_value($form, $webform, 'husdyr', $member->Pet);
+
+        // Filling agreements.
+        os2forms_egbolig_set_field_default_value($form, $webform, 'is_confirmed', TRUE);
+        os2forms_egbolig_set_field_default_value($form, $webform, 'is_confirmed3', TRUE);
+      }
+
+      $form['actions']['submit']['#submit'][] = 'os2forms_egbolig_sync_submission';
+    }
+    catch (Exception $e) {
+      \Drupal::logger('OS2Forms EGBolig')->error(t('Member info cannot be fetched: @message', ['@message' => $e->getMessage()]));
+    }
+  }
+}
+
+/**
+ * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter().
+ *
+ * Options for os2forms_egbolig_inst_name.
+ */
+function os2forms_egbolig_webform_options_os2forms_egbolig_inst_name_alter(array &$options, array &$element) {
+  $cid = CACHE_ID_OS2FORMS_EGBOLIG_INSTITUTION_NAME_OPTIONS;
+
+  if ($cache = \Drupal::cache()->get($cid)) {
+    $options = $cache->data;
+  }
+  else {
+    $pluginManager = \Drupal::service('plugin.manager.os2web_datalookup');
+
+    /** @var \Drupal\os2forms_egbolig\Plugin\os2web\DataLookup\EgboligDatalookupInterface $egboligClient */
+    $egboligClient = $pluginManager->createInstance('egbolig');
+
+    if ($egboligClient->isReady()) {
+      try {
+        $options = $egboligClient->fetchInstitutionNameOptions();
+
+        // Cache for 12 hours = 12*60*60.
+        $h12 = 43200;
+        \Drupal::cache()
+          ->set($cid, $options, time() + $h12, [$cid]);
+      }
+      catch (Exception $e) {
+        \Drupal::logger('OS2Forms EGBolig')->error(t('Options cannot be fetched: @message', ['@message' => $e->getMessage()]));
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter().
+ *
+ * Options for os2forms_egbolig_educ_type.
+ */
+function os2forms_egbolig_webform_options_os2forms_egbolig_educ_type_alter(array &$options, array &$element) {
+  $cid = CACHE_ID_OS2FORMS_EGBOLIG_EDUCATION_TYPE_OPTIONS;
+
+  if ($cache = \Drupal::cache()->get($cid)) {
+    $options = $cache->data;
+  }
+  else {
+    $pluginManager = \Drupal::service('plugin.manager.os2web_datalookup');
+
+    /** @var \Drupal\os2forms_egbolig\Plugin\os2web\DataLookup\EgboligDatalookupInterface $egboligClient */
+    $egboligClient = $pluginManager->createInstance('egbolig');
+
+    if ($egboligClient->isReady()) {
+      try {
+        $options = $egboligClient->fetchEducationTypeOptions();
+
+        // Cache for 12 hours = 12*60*60.
+        $h12 = 43200;
+        \Drupal::cache()
+          ->set($cid, $options, time() + $h12, [$cid]);
+      }
+      catch (Exception $e) {
+        \Drupal::logger('OS2Forms EGBolig')->error(t('Options cannot be fetched: @message', ['@message' => $e->getMessage()]));
+      }
+
+    }
+  }
+}
+
+/**
+ * Custom submit handler to sync EGBolig submission.
+ *
+ * @param array $form
+ *   The form object.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The current state of the form.
+ */
+function os2forms_egbolig_sync_submission(array $form, FormStateInterface $form_state) {
+  $pluginManager = \Drupal::service('plugin.manager.os2web_datalookup');
+
+  /** @var \Drupal\os2forms_egbolig\Plugin\os2web\DataLookup\EgboligDatalookupInterface $egboligClient */
+  $egboligClient = $pluginManager->createInstance('egbolig');
+
+  // Webservice cannot be used, abort.
+  if (!$egboligClient->isReady()) {
+    \Drupal::logger('OS2Forms EGBolig')->error(t('Submission will no be synced. Aborting'));
+    return;
+  }
+
+  if (!$egboligClient->isTestMode()) {
+    /** @var \Drupal\os2web_nemlogin\Service\AuthProviderService $authProviderService */
+    $authProviderService = \Drupal::service('os2web_nemlogin.auth_provider');
+    /** @var \Drupal\os2web_nemlogin\Plugin\AuthProviderInterface $plugin */
+    $plugin = $authProviderService->getActivePlugin();
+
+    // User not authenticated.
+    if (!$plugin->isAuthenticated()) {
+      return;
+    }
+
+    $cpr = $plugin->fetchValue('cpr');
+  }
+  else {
+    $cpr = $egboligClient->getTestCpr();
+  }
+
+  // Aborting if no CPR available.
+  if (!$cpr) {
+    return;
+  }
+
+  try {
+    $member = $egboligClient->fetchMember($cpr);
+    if (!$member) {
+      $member = os2forms_egbolig_populate_member(NULL, $form_state);
+      $member->CprNo = $cpr;
+      $egboligClient->createMember($member);
+
+      // Getting the member from webservice with default fields filled.
+      $member = $egboligClient->fetchMember($cpr);
+    }
+    else {
+      $egboligClient->activateMembership($member);
+    }
+
+    $member = os2forms_egbolig_populate_member($member, $form_state);
+    $egboligClient->updateMember($member);
+
+    $partner = os2forms_egbolig_populate_partner($member, $form_state);
+    $egboligClient->updatePartner($partner);
+
+    os2forms_egbolig_sync_children($member, $form_state);
+    os2forms_egbolig_sync_wishes($member, $form_state);
+    \Drupal::messenger()->addMessage(t('EGBolig submission is successfully synced'));
+  }
+  catch (Exception $e) {
+    \Drupal::messenger()->addWarning(t('EGBolig submission sync has failed'));
+    \Drupal::logger('OS2Forms EGBolig')->error(t('Error during submission sync: @message', ['@message' => $e->getMessage()]));
+  }
+
+}

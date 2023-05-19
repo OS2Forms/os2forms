@@ -1,0 +1,16 @@
+langcode: da
+status: true
+dependencies:
+  enforced:
+    module:
+    - os2forms_forloeb
+id: selvbetjeningsdesigner_default_page
+label: 'Selvbetjeningsdesigner default page'
+user_roles:
+  selvbetjeningsdesigner: selvbetjeningsdesigner
+users: null
+weight: 2
+login_redirect: /admin/structure/webform
+login_redirect_message: 'Velkommen tilbage, her kan du arbejde med webformularer.'
+logout_redirect: ''
+logout_redirect_message: ''
