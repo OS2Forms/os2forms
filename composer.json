@@ -67,7 +67,6 @@
         "drupal/webform_validation": "^2.0",
         "drupal/webform_views": "^5.0@alpha",
         "drupal/workflow_participants": "^2.4",
-        "os2forms/os2forms": "^3.3",
         "os2web/os2web_datalookup": "^1.0",
         "os2web/os2web_nemlogin": "^1.0",
         "phpoffice/phpword": "^0.18.2",
