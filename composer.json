@@ -51,7 +51,7 @@
         "drupal/simple_ldap": "^1.0@alpha",
         "drupal/simplesamlphp_auth": "^3.2",
         "drupal/smtp": "^1.0@beta",
-        "drupal/switch_page_theme": "^4.0'",
+        "drupal/switch_page_theme": "^4.0",
         "drupal/telephone_validation": "^2.2",
         "drupal/token": "^1.5",
         "drupal/ultimate_cron": "^2.0.0",
