@@ -1,0 +1,274 @@
+langcode: da
+status: open
+dependencies:
+  module:
+  - maestro_webform
+  - os2forms
+  - webform_entity_print
+  - webform_revisions
+third_party_settings:
+  os2forms:
+    os2forms_nemid:
+      webform_type: ''
+      nemlogin_auto_redirect: 0
+  webform_entity_print:
+    template:
+      header: ''
+      footer: ''
+      css: ''
+    export_types:
+      pdf:
+        enabled: true
+        link_text: ''
+        link_attributes: {  }
+      word_docx:
+        enabled: false
+        link_text: ''
+        link_attributes: {  }
+  webform_revisions:
+    contentEntity_id: '1'
+open: null
+close: null
+weight: 0
+uid: 4
+template: false
+archive: false
+id: grundskabelon
+title: 'Grundskabelon'
+description: 'Denne webform er en grundskabelon.'
+category: ''
+elements: "forlob_type:\n  '#type': hidden\n  '#title': 'Forløb type'\nsbsip_rules_flow:\n  '#type': value\n  '#title': 'A SBSIP Afleveringsregel'\n  '#value': |\n    //Her skal slette de regler som ikke gælder for denne formular.\n    //Hvis der skal afleveres til SBSYS skal du også redigere sbsip_xml elementet\n    sbsys_standard //Hvis sag eksisterer bliver dokument tilføjet eller ny sag\n    sbsys_ny //Opret altid en ny SBSYS sag\n    sbsys_direkte_sag_2 //aflever direkte til en sag, husk at udfylde sbsys_sags_nr\n    digital_post //Aflever kvittering til digital post\n    \n  '#default_value': digital_post\nsbsys_sags_nr:\n  '#type': value\n  '#title': 'B sbsys_sags_nr // bruges ved sbsys_direkte_sag_2 ellers tom'\nsbsip_xml:\n  '#type': webform_attachment_os2forms_sbsys_xml\n  '#os2formsId': _custom_\n  '#os2formsId_custom': angiv_uuid_her\n  '#sagSkabelonId': _custom_\n  '#sagSkabelonId_custom': 'angiv SBSYS sagsskabelon id'\n  '#nemid_cpr': default_nemid_value\n  '#nemid_name': default_nemid_value\n  '#nemid_address': default_nemid_value\n  '#nemid_zipcode': default_nemid_value\n  '#nemid_city': default_nemid_value\n  '#bodyText': _custom_\n  '#bodyText_custom': |\n    Tak - vi har nu modtaget de indtastede oplysninger. Du kan se dem i den vedhæftede kvittering.\n    \n    Venlig hilsen\n    ****Indsæt firmanavn\n    \n  '#MaaSendesTilDFF': ja\n  '#title': 'C SBSIP XML  // 1 ) Angiv altid UUID, 2) Angiv SBSYS skabelon id ved sbsip_rules_flow(sbsys_standard eller sbsys_ny)'\n  '#filename': os2forms.xml\nlogind_oplysninger:\n  '#type': webform_wizard_page\n  '#title': Start\n  cpr:\n    '#type': os2forms_nemid_cpr\n    '#title': Cpr\n    '#multiple': false\n    '#title_display': none\n    '#readonly': true\n    '#wrapper_attributes':\n      style: 'display:none'\n  navn:\n    '#type': os2forms_nemid_name\n    '#title': Navn\n    '#multiple': false\n    '#title_display': none\n    '#readonly': true\n    '#wrapper_attributes':\n      style: 'display:none'\n  privat_adresse:\n    '#type': os2forms_nemid_address\n    '#title': Adresse\n    '#multiple': false\n    '#title_display': none\n    '#readonly': true\n    '#wrapper_attributes':\n      style: 'display:none'\n  cvr:\n    '#type': os2forms_nemid_company_cvr\n    '#title': CVR\n    '#multiple': false\n    '#title_display': none\n    '#readonly': true\n    '#wrapper_attributes':\n      style: 'display:none'\n  firmanavn:\n    '#type': os2forms_nemid_company_name\n    '#title': Firmanavn\n    '#multiple': false\n    '#title_display': none\n    '#readonly': true\n    '#wrapper_attributes':\n      style: 'display:none'\n  adresse:\n    '#type': os2forms_nemid_company_address\n    '#title': Adresse\n    '#multiple': false\n    '#title_display': none\n    '#readonly': true\n    '#wrapper_attributes':\n      style: 'display:none'\n  firma_by:\n    '#type': os2forms_nemid_company_city\n    '#title': 'Postnummer og By'\n    '#multiple': false\n    '#title_display': none\n    '#readonly': true\n    '#wrapper_attributes':\n      style: 'display:none'\n  flexboxlogind:\n    '#type': webform_flexbox\n    introtekstfeltgruppe:\n      '#type': fieldset\n      '#title': Kontaktoplysninger\n      '#title_display': invisible\n      '#flex': 3\n      introtekst:\n        '#type': processed_text\n        '#text': |\n          <p>(Evt. beskriv hvad brugeren skal have klar på forhånd, eller anden vigtig information)&nbsp;</p>\n          \n          <p>Du er allerede logget ind. Du kan logge ud igen med linket i højre kolonne under dine personoplysninger.</p>\n          \n          <p>&nbsp;</p>\n          \n        '#format': full_html\n      flexbox_01:\n        '#type': webform_flexbox\n        oplysninger:\n          '#type': container\n          '#flex': 3\n          e_mail_:\n            '#type': email\n            '#title': E-mail\n            '#states_clear': false\n          telefon:\n            '#type': tel\n            '#title': Telefon\n            '#states_clear': false\n            '#telephone_validation_format': '2'\n            '#telephone_validation_country': DK\n        tom:\n          '#type': container\n          '#flex': 3\n    du_er_logget_ind_som:\n      '#type': fieldset\n      '#title': 'Du er logget ind som'\n      brugerinformation_1:\n        '#type': webform_computed_token\n        '#title': 'Du er logget ind som:'\n        '#title_display': invisible\n        '#display_on': form\n        '#template': |\n          [webform_submission:values:navn][current-user:display-name][webform_submission:values:firmanavn]</br>\n          [webform_submission:values:e_mail_]</br>\n          [webform_submission:values:telefon]\n          \n        '#hide_empty': true\n        '#ajax': true\n      nemidlogin:\n        '#type': os2forms_nemid_nemlogin_link\n        '#nemlogin_link_login_text': 'Log på'\n        '#nemlogin_link_logout_text': 'Log af'\n  samtykkeerklaering:\n    '#type': fieldset\n    '#title': 'Samtykke eller oplysningspligt'\n    '#flex': 3\n    databeskyttelse:\n      '#type': checkboxes\n      '#title': Databeskyttelse\n      '#title_display': none\n      '#options':\n        'Ja, jeg accepterer kommunens registrering og eventuelle videregivelse af oplysninger.': 'Jeg accepterer kommunens registrering og eventuelle videregivelse af oplysninger.'\n      '#options_all_value': ''\n      '#options_all_text': ''\n      '#options_none_value': ''\n      '#options_none_text': ''\n    databeskyttelsestekst:\n      '#type': webform_more\n      '#more_title': 'Læs mere om samtykke'\n      '#more': '<p>***Inds&aelig;t tekst om samtykke</p>'\n    oplysningspligt:\n      '#type': webform_more\n      '#more_title': 'Læs mere om oplysningspligt'\n      '#more': '<p>***Inds&aelig;t tekst om oplysningspligt</p>'\nudfyld:\n  '#type': webform_wizard_page\n  '#title': Udfyld\n  flexbox_kontaktopl:\n    '#type': webform_flexbox\n    tekst_side2:\n      '#type': fieldset\n      '#title': 'Skriv forklarende overskrift'\n      '#flex': 3\n      tekst:\n        '#type': textarea\n        '#title': tekst\n        '#title_display': none\n        '#flex': 3\n    du_er_logget_ind_som_3:\n      '#type': fieldset\n      '#title': 'Du er logget ind som:'\n      brugerinformation_2:\n        '#type': webform_computed_token\n        '#title': 'Du er logget ind som:'\n        '#title_display': invisible\n        '#display_on': form\n        '#template': |\n          [webform_submission:values:navn][current-user:display-name][webform_submission:values:firmanavn]</br>\n          [webform_submission:values:e_mail_]</br>\n          [webform_submission:values:telefon]\n          \n        '#hide_empty': true\n        '#ajax': true\nudfyld_2:\n  '#type': webform_wizard_page\n  '#title': 'Udfyld 2'\n  flexbox_02:\n    '#type': webform_flexbox\n    skriv_forklarende_overskrift:\n      '#type': fieldset\n      '#title': 'Skriv forklarende overskrift'\n      '#flex': 3\n      tekst2:\n        '#type': textarea\n        '#title': tekst\n        '#title_display': none\n        '#flex': 3\n    du_er_logget_ind_som_4:\n      '#type': fieldset\n      '#title': 'Du er logget ind som'\n      brugerinformation_3:\n        '#type': webform_computed_token\n        '#title': 'Du er logget ind som:'\n        '#title_display': invisible\n        '#display_on': form\n        '#template': |\n          [webform_submission:values:navn][current-user:display-name][webform_submission:values:firmanavn]</br>\n          [webform_submission:values:e_mail_]</br>\n          [webform_submission:values:telefon]\n          \n        '#hide_empty': true\n        '#ajax': true\nudfyld_3:\n  '#type': webform_wizard_page\n  '#title': 'Udfyld 3'\n  flexbox_03:\n    '#type': webform_flexbox\n    skriv_forklarende_overskrift_6:\n      '#type': fieldset\n      '#title': 'Skriv forklarende overskrift'\n      '#flex': 3\n      tekst10:\n        '#type': textarea\n        '#title': tekst\n        '#title_display': none\n        '#flex': 3\n    du_er_logget_ind_som_7:\n      '#type': fieldset\n      '#title': 'Du er logget ind som'\n      brugerinformation_4:\n        '#type': webform_computed_token\n        '#title': 'Du er logget ind som:'\n        '#title_display': invisible\n        '#display_on': form\n        '#template': |\n          [webform_submission:values:navn][current-user:display-name][webform_submission:values:firmanavn]</br>\n          [webform_submission:values:e_mail_]</br>\n          [webform_submission:values:telefon]\n          \n        '#hide_empty': true\n        '#ajax': true\nafslut_det_videre_forloeb:\n  '#type': webform_wizard_page\n  '#title': Afslut\n  afslutning:\n    '#type': processed_text\n    '#text': |\n      <p>(Beskriv efterfølgende forløb - Hvad kan borgeren forvente nu?</p>\n      \n      <p>Eksempelvis: Din ansøgning&nbsp;vil blive behandlet snarest og du vil modtage en&nbsp;afgørelse inden for 14&nbsp;dage.)</p>\n      \n    '#format': full_html\nactions:\n  '#type': webform_actions\n  '#title': 'Submit button(s)'\n  '#submit__label': 'Send XXX'\nvedhaeftet_pdf:\n  '#type': 'webform_entity_print_attachment:pdf'\n  '#title': 'Vedhæftet PDF'\n  '#filename': Example-Kvittering.pdf\n  '#link_title': Kvittering\n  '#view_mode': twig\n  '#template': |\n    <h1>Kvittering</h1>\n    <h2>[webform:title]</h2>\n    <p>Indsendt den [webform_submission:created:custom:d-m-Y - H:i]</p>\n    \n    [webform_submission:values:logind_oplysninger:html]\n    \n    [webform_submission:values:udfyld:format:html]\n    \n    [webform_submission:values:udfyld_2:format:html]\n    \n    [webform_submission:values:udfyld_3:format:html]"
+css: ''
+javascript: ''
+settings:
+  ajax: true
+  ajax_scroll_top: form
+  ajax_progress_type: ''
+  ajax_effect: ''
+  ajax_speed: null
+  page: true
+  page_submit_path: ''
+  page_confirm_path: ''
+  page_theme_name: ''
+  form_title: source_entity_webform
+  form_submit_once: false
+  form_exception_message: ''
+  form_open_message: ''
+  form_close_message: ''
+  form_previous_submissions: true
+  form_confidential: false
+  form_confidential_message: ''
+  form_remote_addr: true
+  form_convert_anonymous: false
+  form_prepopulate: false
+  form_prepopulate_source_entity: false
+  form_prepopulate_source_entity_required: false
+  form_prepopulate_source_entity_type: ''
+  form_reset: false
+  form_disable_autocomplete: false
+  form_novalidate: false
+  form_disable_inline_errors: false
+  form_required: false
+  form_unsaved: false
+  form_disable_back: false
+  form_submit_back: false
+  form_autofocus: false
+  form_details_toggle: false
+  form_access_denied: default
+  form_access_denied_title: ''
+  form_access_denied_message: ''
+  form_access_denied_attributes: {  }
+  form_file_limit: ''
+  share: true
+  share_node: true
+  share_theme_name: ''
+  share_title: true
+  share_page_body_attributes: {  }
+  submission_label: ''
+  submission_log: false
+  submission_views: {  }
+  submission_views_replace: {  }
+  submission_user_columns: {  }
+  submission_user_duplicate: false
+  submission_access_denied: default
+  submission_access_denied_title: ''
+  submission_access_denied_message: ''
+  submission_access_denied_attributes: {  }
+  submission_exception_message: ''
+  submission_locked_message: ''
+  submission_excluded_elements: {  }
+  submission_exclude_empty: false
+  submission_exclude_empty_checkbox: false
+  previous_submission_message: ''
+  previous_submissions_message: ''
+  autofill: false
+  autofill_message: ''
+  autofill_excluded_elements: {  }
+  wizard_progress_bar: true
+  wizard_progress_pages: false
+  wizard_progress_percentage: false
+  wizard_progress_link: false
+  wizard_progress_states: true
+  wizard_auto_forward: true
+  wizard_start_label: ''
+  wizard_preview_link: false
+  wizard_confirmation: false
+  wizard_confirmation_label: ''
+  wizard_track: ''
+  wizard_prev_button_label: ''
+  wizard_next_button_label: ''
+  wizard_toggle: false
+  wizard_toggle_show_label: ''
+  wizard_toggle_hide_label: ''
+  preview: 0
+  preview_label: Gennemse
+  preview_title: 'Gennemse dine oplysninger'
+  preview_message: ''
+  preview_attributes: {  }
+  preview_excluded_elements:
+    sbsip_rules_flow: sbsip_rules_flow
+    sbsys_sags_nr: sbsys_sags_nr
+    vedhaeftet_pdf: vedhaeftet_pdf
+    sbsip_xml: sbsip_xml
+  preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
+  draft: none
+  draft_multiple: false
+  draft_auto_save: false
+  draft_saved_message: ''
+  draft_loaded_message: ''
+  draft_pending_single_message: ''
+  draft_pending_multiple_message: ''
+  confirmation_type: page
+  confirmation_title: ''
+  confirmation_message: "<h2>Tak - vi har nu modtaget de indtastede oplysninger</h2>\n\n<p>Du vil modtage en kvittering med de indtastede oplysninger&nbsp;i din digitale postkasse p&aring; <a href=\"https://post.borger.dk\" target=\"_blank\" title=\"Den Digitale Postkasse\">post.borger.dk</a>&nbsp;eller <a href=\"https://post.virk.dk/\" target=\"_blank\" title=\"Digital Post på virk.dk\">post.virk.dk</a>. Her kan du ogs&aring; skrive til os hvis du har sp&oslash;rgsm&aring;l.&nbsp;<br />\n<br />\nKvitteringen kommer&nbsp;inden for 24 timer.<br />\n<br />\nVenlig hilsen<br />\nAfdeling<br />\nTelefon 9611 xxxx</p>\n"
+  confirmation_url: ''
+  confirmation_attributes: {  }
+  confirmation_back: true
+  confirmation_back_label: ''
+  confirmation_back_attributes: {  }
+  confirmation_exclude_query: false
+  confirmation_exclude_token: false
+  confirmation_update: false
+  limit_total: null
+  limit_total_interval: null
+  limit_total_message: ''
+  limit_total_unique: false
+  limit_user: null
+  limit_user_interval: null
+  limit_user_message: ''
+  limit_user_unique: false
+  entity_limit_total: null
+  entity_limit_total_interval: null
+  entity_limit_user: null
+  entity_limit_user_interval: null
+  purge: completed
+  purge_days: 7
+  results_disabled: false
+  results_disabled_ignore: false
+  results_customize: false
+  token_view: false
+  token_update: false
+  wizard_auto_forward_hide_next_button: false
+  wizard_keyboard: true
+  token_delete: false
+  serial_disabled: false
+access:
+  create:
+    roles:
+    - anonymous
+    - authenticated
+    users: {  }
+    permissions: {  }
+  view_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  update_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  delete_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  purge_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  view_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  update_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  delete_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  administer:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  test:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  configuration:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+handlers:
+  e_mail:
+    id: email
+    label: 'SBSIP PROD'
+    notes: ''
+    handler_id: e_mail
+    status: false
+    conditions: {  }
+    weight: 0
+    settings:
+      states:
+      - completed
+      to_mail: example@example.dk
+      to_options: {  }
+      cc_mail: ''
+      cc_options: {  }
+      bcc_mail: ''
+      bcc_options: {  }
+      from_mail: _default
+      from_options: {  }
+      from_name: _default
+      subject: _default
+      body: _default
+      excluded_elements:
+        nemidlogin: nemidlogin
+      ignore_access: true
+      exclude_empty: true
+      exclude_empty_checkbox: false
+      exclude_attachments: false
+      html: true
+      attachments: true
+      twig: false
+      debug: false
+      reply_to: ''
+      return_path: ''
+      sender_mail: ''
+      sender_name: ''
+      theme_name: ''
+      parameters: {  }
+  spawn_maestro_workflow:
+    id: maestro
+    label: 'Spawn Maestro Workflow'
+    notes: ''
+    handler_id: spawn_maestro_workflow
+    status: true
+    conditions: {  }
+    weight: 0
+    settings:
+      maestro_template: content_moderation
+      maestro_message_success: 'Din indsendelse er modtaget.'
+      maestro_message_failure: 'Der er sket en fejl med din indsendelse.'
+variants: {  }

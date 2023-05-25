@@ -1,0 +1,5 @@
+os2forms_forloeb:
+  version: 1.x
+  css:
+    theme:
+      css/gin-custom.css: {}

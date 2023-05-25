@@ -1,0 +1,882 @@
+# Dansk translation of OS2forms med Forløb
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2021-09-28 12:24+0200\n"
+"PO-Revision-Date: 2021-09-10 12:24+0200\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "Submissions"
+msgstr "Besvarelser"
+
+msgid "Help"
+msgstr "Hjælp"
+
+msgid "Maestro Process"
+msgstr "Flow Proces"
+
+msgid "Maestro Queue"
+msgstr "Flow kø"
+
+msgid "City/Town"
+msgstr "By"
+
+msgid "Maestro Process Status"
+msgstr "Flow Proces Status"
+
+msgid "Maestro Process Variables"
+msgstr "Flow Proces Variabler"
+
+msgid "Webform"
+msgstr "Formular"
+
+msgid "Search"
+msgstr "Search"
+
+msgid "Page title"
+msgstr "Page title"
+
+msgid "Filter"
+msgstr "Filtrér"
+
+msgid "Tools"
+msgstr "Værktøjer"
+
+msgid "Tabs"
+msgstr "Tabs"
+
+msgid "Main navigation"
+msgstr "Main navigation"
+
+msgid "Powered by Drupal"
+msgstr "Powered by Drupal"
+
+msgid "Breadcrumbs"
+msgstr "Breadcrumbs"
+
+msgid "Status messages"
+msgstr "Status messages"
+
+msgid "Main page content"
+msgstr "Main page content"
+
+msgid "Footer menu"
+msgstr "Footer menu"
+
+msgid "Primary admin actions"
+msgstr "Primary admin actions"
+
+msgid "User account menu"
+msgstr "User account menu"
+
+msgid "Variable"
+msgstr "Variabler"
+
+msgid "Maestro"
+msgstr "Flow"
+
+msgid "Assigned To:"
+msgstr "Tildelt til:"
+
+msgid "Webforms"
+msgstr "Formularer"
+
+msgid "Webform submission"
+msgstr "Indsendelse af formular"
+
+msgid "References"
+msgstr "Referencer"
+
+msgid "Webform %label created."
+msgstr "Formular %label oprettet."
+
+msgid "Webform %label elements saved."
+msgstr "Formular %label elementer gemt."
+
+msgid "Webforms: Submissions"
+msgstr "Webforme: Besvarelser"
+
+msgid ""
+"Allows a user to view their submissions via 'Submissions' tab on their "
+"profile page."
+msgstr ""
+"Tillader at en bruger kan se deres besvarelser via \"Besvarelser\" "
+"fanebladet på deres profil side."
+
+msgid "Danish"
+msgstr "Dansk"
+
+msgid "Maestro All Flows"
+msgstr "Alle Flows"
+
+msgid "Shows all Maestro workflows regardless of completion status."
+msgstr "Vis alle Flow workflows uafhængigt af status"
+
+msgid "ProcessID"
+msgstr "Proces id"
+
+msgid "Process Name"
+msgstr "Procesnavn"
+
+msgid "Template Machine Name/ID"
+msgstr "Skabelon etiketnavn/Id"
+
+msgid "The initiator of the process."
+msgstr "Opstarter af proces"
+
+msgid "Process Details"
+msgstr "Procesdetaljer"
+
+msgid "Template Name"
+msgstr "Skabelonnavn"
+
+msgid "Maestro All Active Tasks"
+msgstr "Flow Alle aktive opgaver"
+
+msgid "All tasks that are currently active in the Maestro Queue"
+msgstr "Alle opgaver, der aktuelt er aktive i Flow køen"
+
+msgid "Class Name"
+msgstr "Type webform"
+
+msgid "Is Interactive"
+msgstr "Er interaktiv"
+
+msgid "Assigned To"
+msgstr "Tildelt til"
+
+msgid "Filter on process name"
+msgstr "Filtrér ud fra procesnavn"
+
+msgid "Task Name"
+msgstr "Opgavenavn"
+
+msgid "Filter on task name"
+msgstr "Filtrer på opgave navn"
+
+msgid "All Active Maestro Workflow Tasks"
+msgstr "Alle aktive Flow workflow opgaver"
+
+msgid ""
+"Report of all outstanding or active tasks including batch tasks and "
+"conditional tasks - all task types. This is for all workflow processes "
+"that are active and have not yet completed. You are able to filter the "
+"results to view only the tasks for a selected process, for which there "
+"could be many active instances at different points in the workflow. "
+"Also filter the results for only a selected task name. The available "
+"actions include the ability to re-assign the task owner for a selected "
+"task."
+msgstr ""
+"Rapport om alle udestående eller aktive opgaver inklusive "
+"batchopgaver og betingede opgaver. Dette gælder for alle "
+"arbejdsgange, der er aktive og endnu ikke er afsluttet. Du er i stand "
+"til at filtrere resultaterne for kun at se opgaverne for en valgt "
+"arbejdsgang, hvor der kan være mange aktive forekomster på "
+"forskellige punkter i arbejdsgangen. Filtrer også resultaterne for "
+"kun en valgt opgave. De tilgængelige handlinger inkluderer muligheden "
+"for at give opgaven videre."
+
+msgid "Total Records: [view:total-rows]"
+msgstr "Total antal: [view:total-rows] "
+
+msgid "Started Time"
+msgstr "Starttid"
+
+msgid "Interactive"
+msgstr "Interaktiv"
+
+msgid "All Maestro Active Tasks"
+msgstr "Alle aktive opgaver"
+
+msgid "The Active Assignees of this task"
+msgstr "De aktiv tildelte til denne opgave"
+
+msgid "Maestro Completed Tasks"
+msgstr "Flow Udførte Opgaver "
+
+msgid "Shows all Maestro Completed Tasks"
+msgstr "Vi alle udførte opgaver i Flows"
+
+msgid "Completed By"
+msgstr "Gennemført af"
+
+msgid "Maestro Outstanding Tasks"
+msgstr "Flow udestående opgaver"
+
+msgid "Task Assigned"
+msgstr "Opgave tildelt"
+
+msgid "Process Started"
+msgstr "Proces startet"
+
+msgid ""
+"Report of outstanding or active interactive tasks for all workflow "
+"processes that are active and have not completed. You are able to "
+"filter the results to view only the tasks for a selected process, for "
+"which there could be many active instances at different points in the "
+"workflow. Also filter the results for only a selected task name. The "
+"available actions include the ability to re-assign the task owner for "
+"a selected task."
+msgstr ""
+"Rapport over udestående eller aktive interaktive opgaver for alle "
+"Flows som er aktive og ikke er færdige. Du har mulighed for at "
+"filtrere resultaterne til kun at vise opgaver fra et specifik Flow, "
+"hvor der kan være mange selvbetjeningsforløb i et Flow. Filtréring "
+"af resultater ud fra opgave navn er også mulig. Mulighederne "
+"inkluderer også muligheden for at omfordele den opgaveansvarlige på "
+"en udvalgt opgave. "
+
+msgid "Total Records: [view:total-rows] "
+msgstr "Total antal: [view:total-rows] "
+
+msgid "Outstanding Interactive Tasks"
+msgstr "Udestående interaktive opgaver"
+
+msgid "Outstanding Tasks"
+msgstr "Udestående opgaver"
+
+msgid "< Previous"
+msgstr "< Forrige"
+
+msgid "Next >"
+msgstr "Næste >"
+
+msgid "Save Draft"
+msgstr "Gem kladde"
+
+msgid "New submission added to [webform:title]."
+msgstr "Ny besvarelse oprettet vedrørende [webform:title]."
+
+msgid "Back to form"
+msgstr "Tilbage til formular"
+
+msgid ""
+"You have already submitted this webform. <a href=\"#\">View your "
+"previous submission</a>."
+msgstr ""
+"Du har allerede udfyldt denne formular. <a href=\"#\">Se din tidligere "
+"besvarelse</a>."
+
+msgid ""
+"You have already submitted this webform. <a href=\"#\">View your "
+"previous submissions</a>."
+msgstr ""
+"Du har allerede udfyldt denne formular. <a href=\"#\">Se din tidligere "
+"besvarelse</a>."
+
+msgid "Webform submission from: [webform_submission:source-title]"
+msgstr ""
+"Formular udfyldt fra [site:name]: [webform_submission:source-title]"
+
+msgid ""
+"Submitted on [webform_submission:created]\n"
+"Submitted by: "
+"[webform_submission:user]\n"
+"\n"
+"Submitted values "
+"are:\n"
+"[webform_submission:values]\n"
+""
+msgstr ""
+"Submitted on [webform_submission:created]\r\n"
+"Submitted by: "
+"[webform_submission:user]\r\n"
+"\r\n"
+"Submitted values "
+"are:\r\n"
+"[webform_submission:values]\r\n"
+""
+
+msgid ""
+"<p>Submitted on [webform_submission:created]</p>\n"
+"<p>Submitted by: "
+"[webform_submission:user]</p>\n"
+"<p>Submitted values "
+"are:</p>\n"
+"[webform_submission:values]\n"
+""
+msgstr ""
+"<p>Submitted on [webform_submission:created]</p>\r\n"
+"<p>Submitted by: "
+"[webform_submission:user]</p>\r\n"
+"<p>Submitted values "
+"are:</p>\r\n"
+"[webform_submission:values]\r\n"
+""
+
+msgid "Country codes"
+msgstr "Landekode"
+
+msgid "Geographic"
+msgstr "Geografisk"
+
+msgid "Country names"
+msgstr "Landsnavne"
+
+msgid ""
+"Sunday: Sunday\n"
+"Monday: Monday\n"
+"Tuesday: Tuesday\n"
+"Wednesday: "
+"Wednesday\n"
+"Thursday: Thursday\n"
+"Friday: Friday\n"
+"Saturday: "
+"Saturday\n"
+""
+msgstr ""
+"Søndag: Søndag Mandag: Mandag Tirsdag: Tirsdag Onsdag: Onsdag "
+"Torsdag: Torsdag Fredag: Fredag Lørdag: Lørdag"
+
+msgid "Education"
+msgstr "Uddannelse"
+
+msgid "Demographic"
+msgstr "Demografisk"
+
+msgid "Ethnicity"
+msgstr "Etnicitet"
+
+msgid "Industry"
+msgstr "Industri"
+
+msgid "Likert"
+msgstr "Likert"
+
+msgid "Likert: Comparison"
+msgstr "Likert: Sammenligning"
+
+msgid "Likert: Importance"
+msgstr "Likert: Vigtighed"
+
+msgid "Likert: Quality"
+msgstr "Likert: Kvalitet"
+
+msgid "Likert: Satisfaction"
+msgstr "Likert: Tilfredshed"
+
+msgid "Likert: Ten Scale"
+msgstr "Likert: 10 skala"
+
+msgid "Marital status"
+msgstr "Civilstand"
+
+msgid "Phone type"
+msgstr "Telefontype"
+
+msgid "State codes"
+msgstr "Regionskoder"
+
+msgid "State names"
+msgstr "Regionsnavne"
+
+msgid "State/Province codes"
+msgstr "Landsdelskode"
+
+msgid "State/Province names"
+msgstr "Landsdelsnavne"
+
+msgid "Titles"
+msgstr "Titler"
+
+msgid "Yes/No"
+msgstr "Ja/nej"
+
+msgid ""
+"Yes: Yes\n"
+"No: No\n"
+""
+msgstr "Yes: Ja No: Nej"
+
+msgid "Contact Us"
+msgstr "Kontakt"
+
+msgid "A basic contact webform template."
+msgstr "En grundl&aelig;ggende kontaktformularskabelon."
+
+msgid "An employee evaluation webform template."
+msgstr "En formularskabelon til evaluering af medarbejdere."
+
+msgid "A basic feedback template."
+msgstr "En grundl&aelig;ggende feedback-skabelon."
+
+msgid "An issue webform template."
+msgstr "En sagsskabelon "
+
+msgid "A job application webform template."
+msgstr "En formularskabelon til jobans&oslash;gning."
+
+msgid "A job seeker profile webform template."
+msgstr "En skabelon til jobs&oslash;gende."
+
+msgid "User Profile"
+msgstr "Brugerprofil"
+
+msgid "A user profile webform template."
+msgstr "Brugerprofilskabelon"
+
+msgid "More info"
+msgstr "Mere information"
+
+msgid "Moderation state"
+msgstr "Modereringstilstand"
+
+msgid "Webformular"
+msgstr "Formular"
+
+msgid "Add Template"
+msgstr "Tilføj skabelon"
+
+msgid "Maestro Templates"
+msgstr "Flow skabeloner"
+
+msgid "Maestro Admin Settings"
+msgstr "Flow admin indstillinger"
+
+msgid "Maestro Template Builder Settings"
+msgstr "Flow skabelonindstillinger"
+
+msgid "Configure the Maestro Module"
+msgstr "Konfigurer Flow modulet"
+
+msgid "Configure the Maestro Template Builder"
+msgstr "Konfigurer Flow skabeloner"
+
+msgid "Assign By Variable"
+msgstr "Tildel ud fra variabel"
+
+msgid "Process Variable ID"
+msgstr "Flow variabel id"
+
+msgid "You have no tasks."
+msgstr "Du har ingen opgaver."
+
+msgid "Task Console"
+msgstr "Mine opgaver"
+
+msgid "Apply to selected items"
+msgstr "Anvend på valgte "
+
+msgid "Filter by title, description, elements, user name, or role"
+msgstr "Filtrér efter titel, beskrivelse, elementer, brugernavn eller rolle"
+
+msgid "All [@total]"
+msgstr "Alle [@total]"
+
+msgid "Open [@total]"
+msgstr "Åben [@total]"
+
+msgid "Closed [@total]"
+msgstr "Lukket [@total]"
+
+msgid "Scheduled [@total]"
+msgstr "Planlagt [@total]"
+
+msgid "Archived [@total]"
+msgstr "Arkiveret [@total]"
+
+msgid "Filter webforms"
+msgstr "Filtrér formularer"
+
+msgid "Watch video"
+msgstr "Se video"
+
+msgid "Expand all"
+msgstr "Udvid alle"
+
+msgid "Information message"
+msgstr "Besked"
+
+msgid "Information message"
+msgstr "Besked"
+
+msgid "Altered"
+msgstr "Ændret"
+
+msgid "Used by"
+msgstr "Brugt af"
+
+msgid "Show all webforms"
+msgstr "Vis alle formularer"
+
+msgid "Filter webforms default category"
+msgstr "Filtrér standard kategori for formularer"
+
+msgid "Filter webforms default state"
+msgstr "Filtrér standardtilstand for formularer "
+
+msgid "Form overview settings"
+msgstr "Indstillinger for formularoversigt"
+
+msgid "Form URL path settings"
+msgstr "Formularlink indstillinger"
+
+msgid "Default open message"
+msgstr "Standard åben formular besked"
+
+msgid "Default required indicator label"
+msgstr "Standard hjælpetekst til obligatorisk identifikation"
+
+msgid "Default submit button label"
+msgstr "Standard titel på indsendelses knap "
+
+msgid "Default reset button label"
+msgstr "Standardtitel på nulstil knap"
+
+msgid "Form general settings"
+msgstr "Formular indstillinger"
+
+msgid "Form behaviors"
+msgstr "Formular adfærd"
+
+msgid "Default wizard previous page button label"
+msgstr "Standard etiket på forrige side knap"
+
+msgid "Default wizard next page button label"
+msgstr ""
+"Standardetiket på næste side knap\r\n"
+""
+
+msgid "Default wizard start label"
+msgstr "Standardetiket start knap"
+
+msgid "Default wizard end label"
+msgstr "Standardetiket slut knap"
+
+msgid "Form preview settings"
+msgstr "Formular forhåndsvisningsindstillinger"
+
+msgid "Exporters"
+msgstr "Eksport"
+
+msgid "Exporters"
+msgstr "Eksport"
+
+msgid "Exports results as delimited text file."
+msgstr "Eksporter resultater som tekstfil."
+
+msgid ""
+"Exports results in CSV that can be imported back into the current "
+"webform."
+msgstr ""
+"Eksporter resultater som CSV som kan blive importeret tilbage i "
+"formularen."
+
+msgid "Exports results as an HTML table."
+msgstr "Eksporter resultater som en HTML tabel."
+
+msgid "Exports results as JSON documents."
+msgstr "Eksporter resultater som JSON."
+
+msgid "Exports results as YAML documents."
+msgstr "Eksporter resultater som YAML."
+
+msgid "Export general settings"
+msgstr "Generelle eksportindstillinger"
+
+msgid "Export default settings"
+msgstr "Standard eksportindstillinger"
+
+msgid "Webforms: Exporters configuration"
+msgstr "Formular: Eksport konfiguration"
+
+msgid "Filter by title, description, or elements"
+msgstr "Filtrer efter titel, beskrivelse eller indhold"
+
+msgid "Filter templates"
+msgstr "Filtrér skabeloner"
+
+msgid "@total template"
+msgid_plural "@total templates"
+msgstr[0] "@total skabelon"
+msgstr[1] "@total skabeloner"
+
+msgid ""
+"The <strong>Templates</strong> page lists reusable templates that can "
+"be duplicated and customized to create new webforms."
+msgstr ""
+"Siden Skabeloner viser genanvendelige skabeloner, der kan duplikeres "
+"og tilpasses for at oprette nye webformularer"
+
+msgid "Webforms: Help"
+msgstr "Formular: Hjælp"
+
+msgid "Filter by submitted data and/or notes"
+msgstr "Filtrér efter indsendelser og/eller noter"
+
+msgid "Starred [@total]"
+msgstr "Stjernemarkeret [@total]"
+
+msgid "Unstarred [@total]"
+msgstr "ikke stjernemarkeret [@total]"
+
+msgid "Locked [@total]"
+msgstr "Låst [@total]"
+
+msgid "Unlocked [@total]"
+msgstr "Åben [@total]"
+
+msgid "Completed [@total]"
+msgstr "Gennemført [@total]"
+
+msgid "Draft [@total]"
+msgstr "Kladde  [@total]"
+
+msgid "Filter submissions"
+msgstr "Filtrér indsendelser"
+
+msgid ""
+"The <strong>Elements</strong>  page allows users to add, update, "
+"duplicate and delete elements and wizard pages."
+msgstr ""
+"<strong>Element</strong> siden giver brugeren mulighed for at "
+"tilføje, opdatere og slette elementer, samt wizard sider"
+
+msgid "Allow this webform to be used as a template"
+msgstr "Tillad formular kan bruges som skabelon"
+
+msgid "Archive this webform"
+msgstr "Arkivér formular"
+
+msgid "Disable saving of submissions"
+msgstr "Deaktivér gem af indsendelser"
+
+msgid "Allow users to post submissions from a dedicated URL"
+msgstr "Tillad brugere at lave indsendelser fra url"
+
+msgid "Redirect to nemlogin automatically"
+msgstr "Viderestil til Nemlogin automatisk"
+
+msgid "A unique element key. Can only contain @requirements."
+msgstr "Et unikt navn til elementet. kan kun indeholde @requirements"
+
+msgid "lowercase letters, numbers, and underscores"
+msgstr "små bogstaver, tal og understregning"
+
+msgid ""
+"This is used as a descriptive label when displaying this webform "
+"element."
+msgstr ""
+"Dette benyttes som en beskrivelse label når dette formular element "
+"bliver vist"
+
+msgid "Filled"
+msgstr "Udfyldt"
+
+msgid "Clear value(s) when hidden"
+msgstr "Slet værdi(er) når feltet er skjult"
+
+msgid "Conditional logic"
+msgstr "Logisk begrænsning"
+
+msgid "Add another state"
+msgstr "Tilføj flere vilkår"
+
+msgid "Please note when an element is hidden it will not be required."
+msgstr "Dette er ikke nødvendigt når et element er gemt. "
+
+msgid ""
+"Webforms must first be <a href=\":href\">created</a> before "
+"referencing them."
+msgstr ""
+"Formularer skal være <a href=\":href\">oprettet</a> før du kan "
+"referere til dem."
+
+msgid "Default submission data (YAML)"
+msgstr "Standard indsendelsesdata (YAML)"
+
+msgid ""
+"Enter submission data as name and value pairs as <a "
+"href=\":href\">YAML</a> which will be used to prepopulate the selected "
+"webform."
+msgstr ""
+"Indtast indsendelsesdata som navn og værdipar som <a "
+"href=\":href\">YAML</a> Dette vil blive benyttet til at forudindtaste "
+"den valget formular.\r\n"
+""
+
+msgid "Starred"
+msgstr "Stjernemarkeret"
+
+msgid "Admin theme settings"
+msgstr "Indstillinger til Admin tema"
+
+msgid "Please select predefined options."
+msgstr "Vælg foruddefineret valgmuligheder."
+
+msgid "Needs Validation"
+msgstr "Skal godkendes"
+
+msgid "Needs Validation"
+msgstr "Skal godkendes"
+
+msgid "<p>This is the full listing of Maestro Templates in your system.</p>"
+msgstr "<p>Dette er den fulde liste over Flows i på siden. </p>"
+
+msgid "Task Editor"
+msgstr "Tilpas skabelon"
+
+msgid "Task Editor"
+msgstr "Tilpas skabelon"
+
+msgid "Add a Maestro Template Definition"
+msgstr "Tilføj Flow skabelon indstillinger"
+
+msgid "Canvas Height in pixels"
+msgstr "Lærred størrelse i pixels"
+
+msgid "Canvas Width in pixels"
+msgstr "Lærred bredde i pixels"
+
+msgid "Show details of this template's process in Task Console details?"
+msgstr "Vis proces detaljer i Mine opgaver"
+
+msgid ""
+"When checked, the task console will enable the showing of details of "
+"the process/task."
+msgstr "Vis detaljer i Flow og opgaver i Mine opgaver "
+
+msgid "The default number of stages you wish to show this workflow having"
+msgstr "Standard antal trin i dette Flow"
+
+msgid ""
+"Default 0 will show no stages in the task console. Process variable "
+"for worflow_timeline_stage_count will\n"
+"          be set with the "
+"value configured"
+msgstr ""
+"0 (standard) betyder at der ikke er nogle trin i Mine opgaver. Proces "
+"variabler for workflow_timeline_stage_count vil blive sat, når "
+"værdien er konfigureret"
+
+msgid "Variable name"
+msgstr "Variabel navn"
+
+msgid "Create Template"
+msgstr "Opret skabelon"
+
+msgid "List of Templates"
+msgstr "Template liste"
+
+msgid "Interactive Task"
+msgstr "Interaktiv opgave"
+
+msgid "Set Process Variable"
+msgstr "Definér variabel"
+
+msgid "By Variable"
+msgstr "Ud fra variabel"
+
+msgid "Variable value"
+msgstr "Variabel værdi"
+
+msgid "By Variable Options"
+msgstr "Ud fra Variabel optioner"
+
+msgid "Editing the Process Variable Task"
+msgstr "Rediger flow variabel opgave"
+
+msgid "Interactive Task Edit"
+msgstr "Interaktiv opgave redigering"
+
+msgid "Spawn Maestro Workflow"
+msgstr "Opret forløb fra Flow"
+
+msgid "Success Message:"
+msgstr "Succesmeddelelse"
+
+msgid "Failure Message:"
+msgstr "Fejlmeddelelse"
+
+msgid "Trace"
+msgstr "Se status"
+
+msgid "Trace"
+msgstr "Se status"
+
+msgid "Successfully Completed"
+msgstr "Succesfuldt gennemført"
+
+msgid "Variables in this Process"
+msgstr "Variabler i dette Flow"
+
+msgid "Sign in with"
+msgstr "Login med"
+
+msgid "Not Started"
+msgstr "Ikke startet"
+
+msgid "Reassign"
+msgstr "Tildel igen"
+
+msgid "Completed date"
+msgstr "Gennemført dato"
+
+msgid "Starred/flagged submissions"
+msgstr "stjerne-/flagmarkeret indsendelser"
+
+msgid "Enable Automatic Export"
+msgstr "Aktivér automatisk eksport"
+
+msgid "Export will include results in CSV file according to the selection."
+msgstr "Eksport resultater som CSV i henhold til markeringen."
+
+msgid ""
+"Required if you want to change the %mail or %pass below. <a "
+"href=\":request_new_url\" title=\"Send password reset instructions via "
+"email.\">Reset your password</a>."
+msgstr ""
+"Krævet hvis du vil ændre %mail eller %pass below. <a "
+"href=\":request_new_url\" title=\"Send password reset instructions via "
+"email.\">Reset your password</a>."
+
+msgid "User to Reassign To"
+msgstr "Tildel til bruger"
+
+msgid "Do Reassignment"
+msgstr "Tildel igen"
+
+msgid "Expand all menu items"
+msgstr "Udvid alle menupunkter"
+
+msgid "Select new element type"
+msgstr "Vælg ny type"
+
+msgid "Submission title"
+msgstr "Titel til indsendelser"
+
+msgid ""
+"Please select <a href=\":href\">predefined @type</a> or enter custom "
+"@type."
+msgstr ""
+"Vælg <a href=\":href\">foruddefineret @type</a> eller indtast "
+"brugerdefineret @type."
+
+msgid "Draft and completed"
+msgstr "Kladder og gennemførte"
+
+msgid "Opens in new window"
+msgstr "Åbner i nyt vindue"
+
+msgid "Likert settings"
+msgstr "Likert indstillinger"
+
+msgid "Workflow participants"
+msgstr "Flow deltagere"
+
+msgid ""
+"This webform is <a href=\":href\">closed</a>. Only submission "
+"administrators are allowed to access this webform and create new "
+"submissions."
+msgstr ""
+"Denne formular er <a href=\":href\">lukket</a>. Kun administratorer "
+"har adgang til at tilgå formularen og lave nye besvarelser. "
+
+msgid "Hide preview"
+msgstr "Skjul forhåndsvisning"

@@ -11,6 +11,10 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [OSF-25] added modules/os2forms_forloeb
+- [OSF-25] added modules/os2forms_permissions_by_term
+- [OSF-25] added modules/os2forms_webform_list
+
 ## [3.5.0] 2023-04-25
 
 - Added SessionDynamicValue webform element

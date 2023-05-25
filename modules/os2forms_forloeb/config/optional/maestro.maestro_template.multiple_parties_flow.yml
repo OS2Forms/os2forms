@@ -1,0 +1,325 @@
+status: true
+dependencies:
+  enforced:
+    module:
+    - os2forms_forloeb
+id: multiple_parties_flow
+label: 'Flow med to parter'
+app_group: 0
+canvas_height: 900
+canvas_width: 1000
+default_workflow_timeline_stage_count: 4
+show_details: true
+validated: true
+views_attached:
+  maestro_entity_identifiers:
+    view_machine_name: maestro_entity_identifiers
+    view_weight: -10
+    view_display: 'taskconsole_display;Task Console Display'
+  maestro_completed_tasks:
+    view_machine_name: maestro_completed_tasks
+    view_weight: -9
+    view_display: default;Master
+variables:
+  initiator:
+    variable_id: initiator
+    variable_value: '0'
+  workflow_timeline_stage_count:
+    variable_id: workflow_timeline_stage_count
+    variable_value: ''
+  workflow_current_stage:
+    variable_id: workflow_current_stage
+    variable_value: ''
+  workflow_current_stage_message:
+    variable_id: workflow_current_stage_message
+    variable_value: ''
+  part_one_id:
+    variable_id: part_one_id
+    variable_value: ''
+  part_two_id:
+    variable_id: part_two_id
+    variable_value: ''
+initiator: null
+workflow_timeline_stage_count: null
+workflow_current_stage: null
+workflow_current_stage_message: null
+tasks:
+  start:
+    id: start
+    tasktype: MaestroStart
+    label: Start
+    nextstep: 'set_part_1,set_part_2'
+    nextfalsestep: ''
+    top: '50'
+    left: '280'
+    assignby: fixed
+    assignto: engine
+  end:
+    id: end
+    tasktype: MaestroEnd
+    label: End
+    nextstep: ''
+    nextfalsestep: ''
+    top: '710'
+    left: '290'
+    assignby: fixed
+    assignto: engine
+  form2:
+    id: form2
+    label: 'Formular part 2'
+    tasktype: MaestroWebform
+    nextstep: all
+    nextfalsestep: ''
+    top: '227'
+    left: '457'
+    assignby: fixed
+    assignto: ''
+    raphael: ''
+    to: ''
+    pointedfrom: ''
+    falsebranch: ''
+    lines: {  }
+    data:
+      unique_id: part2
+      webform_machine_name: part_2_formular
+      modal: notmodal
+      skip_webform_handlers: 1
+      webform_nodes_attached_to: none
+      use_nodes_attached: 0
+      webform_nodes_attached_variable: none
+      redirect_to: taskconsole
+      show_edit_form: 1
+    assigned: 'user:variable:part_two_id'
+    runonce: false
+    handler: ''
+    showindetail: true
+    participate_in_workflow_status_stage: true
+    workflow_status_stage_number: 1
+    workflow_status_stage_message: 'Afventer svar fra part 2'
+    notifications:
+      notification_assignment_subject: ''
+      notification_assignment: ''
+      notification_reminder_subject: ''
+      notification_reminder: ''
+      notification_escalation_subject: ''
+      notification_escalation: ''
+      reminder_after: 0
+      escalation_after: 0
+      notification_assignments: 'user:variable:part_two_id:assignment'
+  send:
+    id: send
+    label: Afsend
+    tasktype: MaestroBatchFunction
+    nextstep: end
+    nextfalsestep: ''
+    top: '610'
+    left: '290'
+    assignby: fixed
+    assignto: ''
+    raphael: ''
+    to: ''
+    pointedfrom: ''
+    falsebranch: ''
+    lines: {  }
+    handler: end_notification_batch_function
+    assigned: ''
+    runonce: false
+    showindetail: true
+    participate_in_workflow_status_stage: false
+    workflow_status_stage_number: 0
+    workflow_status_stage_message: ''
+    notifications:
+      notification_assignment_subject: null
+      notification_assignment: null
+      notification_reminder_subject: null
+      notification_reminder: null
+      notification_escalation_subject: null
+      notification_escalation: null
+      reminder_after: null
+      escalation_after: null
+  form1:
+    id: form1
+    label: 'Formular part 1'
+    tasktype: MaestroWebform
+    nextstep: all
+    nextfalsestep: ''
+    top: '245'
+    left: '95'
+    assignby: fixed
+    assignto: ''
+    raphael: ''
+    to: ''
+    pointedfrom: ''
+    falsebranch: ''
+    lines: {  }
+    data:
+      unique_id: part1
+      webform_machine_name: part_1_formular
+      modal: notmodal
+      skip_webform_handlers: 1
+      webform_nodes_attached_to: none
+      use_nodes_attached: 0
+      webform_nodes_attached_variable: none
+      redirect_to: taskconsole
+      show_edit_form: 1
+    assigned: 'user:variable:part_one_id,user:variable:part_one_id'
+    runonce: false
+    handler: ''
+    showindetail: true
+    participate_in_workflow_status_stage: true
+    workflow_status_stage_number: 1
+    workflow_status_stage_message: 'Afventer accept fra part 1'
+    notifications:
+      notification_assignment_subject: ''
+      notification_assignment: ''
+      notification_reminder_subject: ''
+      notification_reminder: ''
+      notification_escalation_subject: ''
+      notification_escalation: ''
+      reminder_after: 0
+      escalation_after: 0
+      notification_assignments: 'user:variable:part_one_id:assignment'
+  all:
+    id: all
+    label: 'alle svaret'
+    tasktype: MaestroAnd
+    nextstep: se_samlet
+    nextfalsestep: ''
+    top: '400'
+    left: '290'
+    assignby: fixed
+    assignto: ''
+    raphael: ''
+    to: ''
+    pointedfrom: ''
+    falsebranch: ''
+    lines: {  }
+    assigned: ''
+    runonce: false
+    handler: ''
+    showindetail: true
+    participate_in_workflow_status_stage: true
+    workflow_status_stage_number: 2
+    workflow_status_stage_message: 'Alle parter har svaret'
+    notifications:
+      notification_assignment_subject: null
+      notification_assignment: null
+      notification_reminder_subject: null
+      notification_reminder: null
+      notification_escalation_subject: null
+      notification_escalation: null
+      reminder_after: null
+      escalation_after: null
+  set_part_1:
+    id: set_part_1
+    label: 'Set Part 1 Responsible'
+    tasktype: MaestroSetProcessVariable
+    nextstep: form1
+    nextfalsestep: ''
+    top: '117'
+    left: '127'
+    assignby: fixed
+    assignto: ''
+    raphael: ''
+    to: ''
+    pointedfrom: ''
+    falsebranch: ''
+    lines: {  }
+    data:
+      spv:
+        variable: part_one_id
+        method: bycontentfunction
+        variable_value: 'os2forms_forloeb_spv_fetch_entity_username:submission,part1'
+    assigned: ''
+    runonce: false
+    handler: ''
+    showindetail: true
+    participate_in_workflow_status_stage: false
+    workflow_status_stage_number: 0
+    workflow_status_stage_message: ''
+    notifications:
+      notification_assignment_subject: null
+      notification_assignment: null
+      notification_reminder_subject: null
+      notification_reminder: null
+      notification_escalation_subject: null
+      notification_escalation: null
+      reminder_after: null
+      escalation_after: null
+  set_part_2:
+    id: set_part_2
+    label: 'Set Part 2 Responsible'
+    tasktype: MaestroSetProcessVariable
+    nextstep: form2
+    nextfalsestep: ''
+    top: '122'
+    left: '422'
+    assignby: fixed
+    assignto: ''
+    raphael: ''
+    to: ''
+    pointedfrom: ''
+    falsebranch: ''
+    lines: {  }
+    data:
+      spv:
+        variable: part_two_id
+        method: bycontentfunction
+        variable_value: 'os2forms_forloeb_spv_fetch_entity_username:submission,part2'
+    assigned: ''
+    runonce: false
+    handler: ''
+    showindetail: true
+    participate_in_workflow_status_stage: false
+    workflow_status_stage_number: 0
+    workflow_status_stage_message: ''
+    notifications:
+      notification_assignment_subject: null
+      notification_assignment: null
+      notification_reminder_subject: null
+      notification_reminder: null
+      notification_escalation_subject: null
+      notification_escalation: null
+      reminder_after: null
+      escalation_after: null
+  se_samlet:
+    id: se_samlet
+    label: 'Se samlet'
+    tasktype: MaestroWebformMultiple
+    nextstep: send
+    nextfalsestep: ''
+    top: '500'
+    left: '290'
+    assignby: fixed
+    assignto: ''
+    raphael: ''
+    to: ''
+    pointedfrom: ''
+    falsebranch: ''
+    lines: {  }
+    data:
+      unique_id: se_samlet
+      webform_machine_name: opsamlingsformular_til_flere_par
+      modal: notmodal
+      skip_webform_handlers: 0
+      webform_nodes_attached_to: none
+      use_nodes_attached: 0
+      webform_nodes_attached_variable: none
+      redirect_to: taskconsole
+      show_edit_form: 1
+    assigned: 'user:variable:initiator'
+    runonce: false
+    handler: ''
+    showindetail: true
+    participate_in_workflow_status_stage: false
+    workflow_status_stage_number: 0
+    workflow_status_stage_message: ''
+    notifications:
+      notification_assignment_subject: ''
+      notification_assignment: ''
+      notification_reminder_subject: ''
+      notification_reminder: ''
+      notification_escalation_subject: ''
+      notification_escalation: ''
+      reminder_after: 0
+      escalation_after: 0
