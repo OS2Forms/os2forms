@@ -80,7 +80,7 @@
         "drupal/maillog": "^1.0"
     },
     "extra" : {
-        "composer-exit-on-patch-failure": true,
+        "composer-exit-on-patch-failure": false,
         "enable-patching" : true,
         "patches": {
             "drupal/entity_print": {
