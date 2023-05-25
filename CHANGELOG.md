@@ -10,6 +10,7 @@ See ["how do I make a good changelog record?"](https://keepachangelog.com/en/1.0
 before starting to add changes. Use example [placed in the end of the page](#example-of-change-log-record)
 
 ## [Unreleased]
+
 - [OSF-25] added modules/os2forms_forloeb
 - [OSF-25] added modules/os2forms_permissions_by_term
 - [OSF-25] added modules/os2forms_webform_list
