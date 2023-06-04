@@ -1,0 +1,38 @@
+{
+    "name": "os2forms/os2forms_webform_maps",
+    "type": "drupal-module",
+    "description": "This module adds maps with draw functionality to webforms",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "license": "EUPL-1.2",
+    "repositories": {
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        },
+        "assets": {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    },
+    "require": {
+        "dompdf/dompdf": "^2.0",
+        "drupal/leaflet": "^10.0",
+        "drupal/leaflet_layers": "^1.1"
+    },
+    "extra": {
+        "composer-exit-on-patch-failure": false,
+        "patchLevel": {
+            "test": "-p2"
+        },
+        "enable-patching": true,
+        "patcher": {
+            "force-reset": true
+        },
+        "patches": {
+            "tecnickcom/tcpdf" : {
+                "(#179) In TCPDF 6.3.4 after pdf render images with base64 not appear #179" : "./patches/tcpdf-doesnt-render-base64.patch"
+            }
+        }
+    }
+}

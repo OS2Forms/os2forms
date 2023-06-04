@@ -1,6 +1,0 @@
-enable_notifications: true
-participant_message:
-  subject: 'Du er blever sat på som reviewer af forløbet [node:title]'
-  body:
-    value: "Hej [user:name],\r\n\r\nDu er blever sat på som reviewer af forløbet [node:title].\r\n\r\n[node:url:absolute]"
-    format: plain_text

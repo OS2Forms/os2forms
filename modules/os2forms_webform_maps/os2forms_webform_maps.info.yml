@@ -8,3 +8,4 @@ dependencies:
   - 'drupal:os2forms'
   - 'drupal:leaflet'
   - 'drupal:leaflet_layers'
+  - 'dompdf:dompdf'
