@@ -22,6 +22,7 @@ class WebformAttachmentSbsysXml extends WebformAttachmentXml {
 
     return $xmlContext;
   }
+
   /**
    * {@inheritdoc}
    */

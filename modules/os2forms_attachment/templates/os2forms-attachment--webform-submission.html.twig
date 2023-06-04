@@ -6,9 +6,71 @@
   <meta name="author" content="{{ author }}">
   <title>{{ title }}</title>
   {{ entity_print_css }}
+  <style>
+    @page {
+      margin: 180px 35px 150px 35px;
+    }
+
+    header {
+      position: fixed;
+      top: -150px;
+      left: 25px;
+      right: 0px;
+      height: 50px;
+      font-size: 12px;
+    }
+
+    footer {
+      position: fixed;
+      bottom: -50px;
+      left: 25px;
+      right: 0px;
+      height: 50px;
+      font-size: 12px;
+    }
+
+    .webform-entity-print-body {
+      font-size: 14px;
+      width: 65% !important;
+    }
+
+    .webform-element {
+      padding: 5px 0;
+      margin: 5px 0;
+      font-size: 12px;
+    }
+
+    .webform-entity-print-colophon {
+      font-size: 12px;
+      margin-top: -11px;
+    }
+
+    thead {
+      border-bottom: 1px solid black;
+    }
+
+    th {
+      text-align: left;
+    }
+
+    details, .claro-details {
+      border: none !important;
+    }
+
+    summary {
+      font-size: 20px !important;
+    }
+
+    .webform-section-title {
+      font-size: 14px !important;
+    }
+
+    .table {
+      width: 100%;
+    }
+  </style>
 </head>
 <body>
-
 {% if header %}
 <header>
   {{ header }}

@@ -1,0 +1,19 @@
+os2forms_forloeb.forloeb_task_console_controller_execute:
+  path: 'os2forms-forloeb/execute-task'
+  defaults:
+    _controller: '\Drupal\os2forms_forloeb\Controller\ForloebTaskConsoleController::execute'
+    _title: 'Execute task'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: TRUE
+
+os2forms_forloeb.forloeb_task_console_controller_execute_retry:
+  path: 'os2forms-forloeb/execute-task-retry'
+  defaults:
+    _controller: '\Drupal\os2forms_forloeb\Controller\ForloebTaskConsoleController::retry'
+    _title: 'Task not yet ready'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: TRUE

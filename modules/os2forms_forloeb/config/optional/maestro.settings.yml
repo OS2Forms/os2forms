@@ -1,0 +1,12 @@
+dependencies:
+  config:
+  - maestro
+  enforced:
+    module:
+    - os2forms_forloeb
+maestro_send_notifications: 1
+maestro_orchestrator_task_console: 1
+maestro_redirect_location: /taskconsole
+maestro_orchestrator_token: AvfWr5bXdQcMpGTw4NHCMdjY44JXC8w0WOJUnq5s2zA3jh45TRHhCJfxcob0AqS
+maestro_orchestrator_lock_execution_time: '30'
+maestro_orchestrator_development_mode: 0

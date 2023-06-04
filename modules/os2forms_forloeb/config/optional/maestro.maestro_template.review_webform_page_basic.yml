@@ -1,0 +1,224 @@
+langcode: da
+status: true
+dependencies:
+  enforced:
+    module:
+    - os2forms_forloeb
+id: review_webform_page_basic
+label: 'Review af Selvbetjeningsside simpel'
+app_group: 0
+canvas_height: 900
+canvas_width: 800
+default_workflow_timeline_stage_count: 4
+show_details: true
+validated: true
+views_attached:
+  maestro_entity_identifiers:
+    view_machine_name: maestro_entity_identifiers
+    view_weight: -10
+    view_display: 'taskconsole_display;Task Console Display'
+  maestro_completed_tasks:
+    view_machine_name: maestro_completed_tasks
+    view_weight: -9
+    view_display: default;Master
+variables:
+  initiator:
+    variable_id: initiator
+    variable_value: '0'
+  workflow_timeline_stage_count:
+    variable_id: workflow_timeline_stage_count
+    variable_value: ''
+  workflow_current_stage:
+    variable_id: workflow_current_stage
+    variable_value: ''
+  workflow_current_stage_message:
+    variable_id: workflow_current_stage_message
+    variable_value: ''
+  assigned_to:
+    variable_id: assigned_to
+    variable_value: ''
+initiator: null
+workflow_timeline_stage_count: null
+workflow_current_stage: null
+workflow_current_stage_message: null
+tasks:
+  start:
+    id: start
+    tasktype: MaestroStart
+    label: Start
+    nextstep: create_content
+    nextfalsestep: ''
+    top: '35'
+    left: '115'
+    assignby: fixed
+    assignto: engine
+  end:
+    id: end
+    tasktype: MaestroEnd
+    label: End
+    nextstep: ''
+    nextfalsestep: ''
+    top: '440'
+    left: '290'
+    assignby: fixed
+    assignto: engine
+  create_content:
+    id: create_content
+    label: 'Opret indhold'
+    tasktype: MaestroContentType
+    nextstep: assign_sagsbehandler
+    nextfalsestep: ''
+    top: '132'
+    left: '112'
+    assignby: fixed
+    assignto: ''
+    raphael: ''
+    to: ''
+    pointedfrom: ''
+    falsebranch: ''
+    lines: {  }
+    data:
+      unique_id: webform
+      content_type: webform
+      save_edit_later: 1
+      link_to_edit: 1
+      show_maestro_buttons_on_view: 0
+      accept_label: ''
+      reject_label: ''
+      accept_redirect_to: ''
+      reject_redirect_to: ''
+      supply_maestro_ids_in_url: 0
+      redirect_to: taskconsole
+    handler: '/node/add/webform?maestro=1'
+    assigned: 'user:variable:initiator'
+    runonce: false
+    showindetail: true
+    participate_in_workflow_status_stage: true
+    workflow_status_stage_number: 1
+    workflow_status_stage_message: 'Opret indhold'
+    notifications:
+      notification_assignment_subject: ''
+      notification_assignment: ''
+      notification_reminder_subject: ''
+      notification_reminder: ''
+      notification_escalation_subject: ''
+      notification_escalation: ''
+      reminder_after: 0
+      escalation_after: 0
+  content_review:
+    id: content_review
+    label: 'Review indhold'
+    tasktype: MaestroContentType
+    nextstep: approve_status
+    nextfalsestep: ''
+    top: '147'
+    left: '447'
+    assignby: fixed
+    assignto: ''
+    raphael: ''
+    to: ''
+    pointedfrom: ''
+    falsebranch: ''
+    lines: {  }
+    data:
+      unique_id: webform
+      content_type: webform
+      save_edit_later: 0
+      link_to_edit: 0
+      show_maestro_buttons_on_view: 1
+      accept_label: Accepter
+      reject_label: Afvis
+      accept_redirect_to: /taskconsole
+      reject_redirect_to: /taskconsole
+      supply_maestro_ids_in_url: 0
+      redirect_to: taskconsole
+    handler: '/node/add/webform?maestro=1'
+    assigned: 'user:variable:assigned_to'
+    runonce: false
+    showindetail: true
+    participate_in_workflow_status_stage: true
+    workflow_status_stage_number: 3
+    workflow_status_stage_message: 'Review indhold'
+    notifications:
+      notification_assignment_subject: ''
+      notification_assignment: ''
+      notification_reminder_subject: ''
+      notification_reminder: ''
+      notification_escalation_subject: ''
+      notification_escalation: ''
+      reminder_after: 0
+      escalation_after: 0
+      notification_assignments: 'role:fixed:flow_designer:assignment,user:variable:assigned_to:assignment'
+  approve_status:
+    id: approve_status
+    label: 'If approved'
+    tasktype: MaestroIf
+    nextstep: end
+    nextfalsestep: create_content
+    top: '295'
+    left: '295'
+    assignby: fixed
+    assignto: ''
+    raphael: ''
+    to: ''
+    pointedfrom: ''
+    falsebranch: ''
+    lines: {  }
+    data:
+      if:
+        method: bylasttaskstatus
+        variable: initiator
+        operator: '='
+        variable_value: ''
+        status: '1'
+    assigned: ''
+    runonce: false
+    handler: ''
+    showindetail: true
+    participate_in_workflow_status_stage: false
+    workflow_status_stage_number: null
+    workflow_status_stage_message: 'Task status'
+    notifications:
+      notification_assignment_subject: null
+      notification_assignment: null
+      notification_reminder_subject: null
+      notification_reminder: null
+      notification_escalation_subject: null
+      notification_escalation: null
+      reminder_after: null
+      escalation_after: null
+  assign_sagsbehandler:
+    id: assign_sagsbehandler
+    label: 'Læg til review'
+    tasktype: MaestroInteractive
+    nextstep: content_review
+    nextfalsestep: ''
+    top: '24'
+    left: '284'
+    assignby: fixed
+    assignto: ''
+    raphael: ''
+    to: ''
+    pointedfrom: ''
+    falsebranch: ''
+    lines: {  }
+    handler: os2forms_forloeb_workflow_maestro_reassign_form
+    data:
+      modal: modal
+      redirect_to: taskconsole
+    assigned: 'user:variable:initiator'
+    runonce: false
+    showindetail: true
+    participate_in_workflow_status_stage: true
+    workflow_status_stage_number: 2
+    workflow_status_stage_message: 'Læg til review'
+    notifications:
+      notification_assignments: 'user:variable:initiator:assignment'
+      notification_assignment_subject: ''
+      notification_assignment: ''
+      notification_reminder_subject: ''
+      notification_reminder: ''
+      notification_escalation_subject: ''
+      notification_escalation: ''
+      reminder_after: 0
+      escalation_after: 0

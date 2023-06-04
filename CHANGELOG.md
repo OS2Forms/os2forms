@@ -11,12 +11,18 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [OSF-25] added modules/os2forms_forloeb
+- [OSF-25] added modules/os2forms_permissions_by_term
+- [OSF-25] added modules/os2forms_webform_list
+
 ## [3.5.0] 2023-04-25
 
 - Added SessionDynamicValue webform element
 - Fixed `Undefined array key` in os2forms_attachment module
 - Added Maps element (<https://github.com/OS2Forms/os2forms/pull/39>).
 - Added missing dependency
+- Added changes to Map element after external review
+- Fixed non-existent service "entity.manager" in webform_embed module
 
 ## [3.4.0] 2023-02-15
 

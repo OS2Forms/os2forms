@@ -1,0 +1,9 @@
+name: OS2Forms permissions by term
+type: module
+description: Adds taxonomy to webform configuration
+package: OS2Web
+core: 8.x
+core_version_requirement: ^8 || ^9
+dependencies:
+  - 'drupal:webform'
+  - 'drupal:permissions_by_term'

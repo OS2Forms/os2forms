@@ -94,21 +94,45 @@ class WebformLeafletMapField extends FormElement {
         'lat' => (float) $element['#lat'],
         'lon' => (float) $element['#lon'],
       ],
-      'path' => '{"color":"#3388ff","opacity":"1.0","stroke":true,"weight":3,"fill":"depends","fillColor":"*","fillOpacity":"0.2","radius":"6"}',
+      'path' => json_encode([
+        'color' => '#3388ff',
+        'opacity' => '1.0',
+        'stroke' => TRUE,
+        'weight' => 3,
+        'fill' => 'depends',
+        'fillColor' => '*',
+        'fillOpacity' => '0.2',
+        'radius' => '6',
+      ]),
       'leaflet_markercluster' => [
         'control' => FALSE,
-        'options' => '{"spiderfyOnMaxZoom":true,"showCoverageOnHover":true,"removeOutsideVisibleBounds": false}',
+        'options' => json_encode([
+          'spiderfyOnMaxZoom' => TRUE,
+          'showCoverageOnHover' => TRUE,
+          'removeOutsideVisibleBounds' => FALSE,
+        ]),
         'excluded' => FALSE,
         'include_path' => FALSE,
       ],
       'gestureHandling' => FALSE,
       'reset_map' => [
         'control' => FALSE,
-        'options' => '{"position":"topleft","title":"Reset View"}',
+        'options' => json_encode([
+          'position' => $element['#position'],
+          'title' => t('Reset View'),
+        ]),
       ],
       'locate' => [
         'control' => TRUE,
-        'options' => '{"position":"' . $element['#position'] . '","setView":"untilPanOrZoom","returnToPrevBounds":true,"keepCurrentZoomLevel":true,"strings":{"title":"Locate my position"}}',
+        'options' => json_encode([
+          'position' => $element['#position'],
+          'setView' => 'untilPanOrZoom',
+          'returnToPrevBounds' => TRUE,
+          'keepCurrentZoomLevel' => TRUE,
+          'strings' => [
+            'title' => t('Locate my position'),
+          ],
+        ]),
         'automatic' => FALSE,
       ],
     ];
@@ -144,7 +168,7 @@ class WebformLeafletMapField extends FormElement {
       'toolbarSettings' => $leaflet_widget_toolbar,
       'scrollZoomEnabled' => 1,
       'map_position' => $map_settings['map_position'] ?? [],
-      'langcode' => \Drupal::languageManager()->getCurrentLanguage()->getId(),
+      'langcode' => \Drupal::languageManager()->getCurrentLanguage()->getId() ?? 'da',
     ];
 
     $element['map']['#attached']['drupalSettings']['leaflet'][$map_el]['map_settings'] = $element;

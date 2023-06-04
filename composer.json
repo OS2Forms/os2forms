@@ -17,23 +17,62 @@
     },
     "require": {
         "cweagans/composer-patches": "^1.6.5",
+        "dompdf/dompdf": "^2.0",
+        "drupal/admin_toolbar": "^3.0",
+        "drupal/chosen": "^2.10",
+        "drupal/ckeditor_a11ychecker": "^2.0@alpha",
+        "drupal/clientside_validation": "^3.0",
+        "drupal/coc_forms_auto_export": "^2.0@alpha",
+        "drupal/config_entity_revisions": "^1.7.0",
+        "drupal/diff": "^1.0",
+        "drupal/embed": "^1.4",
         "drupal/entity_print": "^2.1",
         "drupal/eu_cookie_compliance": "^1.8",
+        "drupal/events_logging": "^1.5",
+        "drupal/header_and_footer_scripts": "^3.0",
         "drupal/honeypot": "^2.0",
+        "drupal/image_widget_crop": "^2.3",
+        "drupal/ldap": "^4.2",
+        "drupal/ldap_auth": "^1.17",
+        "drupal/leaflet": "^10.0",
+        "drupal/leaflet_layers": "^1.1",
+        "drupal/libraries": "^3.0@beta",
+        "drupal/linkit": "^5.0",
+        "drupal/logging_alerts": "^2.0",
+        "drupal/maestro": "^3.0",
         "drupal/mailsystem": "^4.1",
+        "drupal/masquerade": "^2.0@RC",
         "drupal/pathauto": "^1.5",
         "drupal/permissions_by_term": "^3.1 || ^2.25",
+        "drupal/queue_mail": "^1.4",
+        "drupal/queue_ui": "^2.1",
+        "drupal/r4032login": "^2.1",
         "drupal/redirect": "^1.4",
+        "drupal/simple_ldap": "^1.0@alpha",
+        "drupal/simplesamlphp_auth": "^3.2",
         "drupal/smtp": "^1.0@beta",
+        "drupal/switch_page_theme": "^4.0",
+        "drupal/telephone_validation": "^2.2",
         "drupal/token": "^1.5",
+        "drupal/ultimate_cron": "^2.0.0",
+        "drupal/user_default_page": "^2.1",
         "drupal/webform": "^6.1",
+        "drupal/webform_composite": "^1.0@RC",
         "drupal/webform_migrate": "^1.1",
+        "drupal/webform_node_element": "^1.2",
+        "drupal/webform_remote_handlers": "^1.6.0",
         "drupal/webform_remote_select": "^1.0.6",
+        "drupal/webform_rest": "^4.0.0-beta2",
+        "drupal/webform_scheduled_tasks": "^2.0",
         "drupal/webform_validation": "^2.0",
+        "drupal/webform_views": "^5.0@alpha",
+        "drupal/workflow_participants": "^2.4",
         "os2web/os2web_datalookup": "^1.0",
         "os2web/os2web_nemlogin": "^1.0",
         "phpoffice/phpword": "^0.18.2",
-        "tecnickcom/tcpdf": "~6"
+        "tecnickcom/tcpdf": "~6",
+        "webmozart/path-util": "^2.3",
+        "zaporylie/composer-drupal-optimizations": "^1.2"
     },
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
@@ -41,7 +80,7 @@
         "drupal/maillog": "^1.0"
     },
     "extra" : {
-        "composer-exit-on-patch-failure": true,
+        "composer-exit-on-patch-failure": false,
         "enable-patching" : true,
         "patches": {
             "drupal/entity_print": {
@@ -49,6 +88,15 @@
             },
             "drupal/webform": {
                 "Unlock possibility of using Entity print module export to Word": "https://www.drupal.org/files/issues/2020-02-29/3096552-6.patch"
+            },
+            "drupal/user_default_page": {
+                "Warning: in_array() expects parameter 2 to be array, null given in user_default_page_user_logout() (https://www.drupal.org/node/3246986)": "https://www.drupal.org/files/issues/2021-11-01/user_default_page-3246986-2.patch"
+            },
+            "drupal/coc_forms_auto_export": {
+                "3240592 - Problem with phpseclib requirement in 2.x (https://www.drupal.org/project/coc_forms_auto_export/issues/3240592)": "https://www.drupal.org/files/issues/2021-10-04/requirement-namespace-3240592-1.patch"
+            },
+            "drupal/dynamic_entity_reference": {
+                "entityQuery reference JOINs should specify target_type (https://www.drupal.org/project/dynamic_entity_reference/issues/3120952#comment-14141038)": "https://www.drupal.org/files/issues/2021-06-22/entityquery-reference-joins-should-specify-target_type-3120952-24.patch"
             }
         }
     },

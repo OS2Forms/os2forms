@@ -1,0 +1,15 @@
+langcode: da
+status: true
+dependencies: {  }
+id: redirect_all_roles_to_taskconsole
+label: 'Redirect all roles to Taskconsole'
+user_roles:
+  sagsbehandler: sagsbehandler
+  medarbejder: medarbejder
+  leder: leder
+users: null
+weight: 3
+login_redirect: /taskconsole
+login_redirect_message: 'Velkommen tilbage, her kan du se dine aktive opgaver.'
+logout_redirect: ''
+logout_redirect_message: ''
