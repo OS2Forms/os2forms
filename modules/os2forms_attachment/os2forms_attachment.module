@@ -198,7 +198,7 @@ function _os2forms_attachment_print_form_add_template_override(array &$element, 
     '#options' => $header_options,
     '#description' => t('Select default header that will be used on all forms (use standard for no override)'),
     '#empty_option' => t('Use standard'),
-    '#default_value' => $template_settings['os2forms_header'] ?? '',
+    '#default_value' => $template_settings['os2form_header'] ?? '',
     '#weight' => -1,
   ];
 
@@ -208,7 +208,7 @@ function _os2forms_attachment_print_form_add_template_override(array &$element, 
     '#options' => $colophon_options,
     '#description' => t('Select default colophon that will be used on all forms (use standard for no override)'),
     '#empty_option' => t('Use standard'),
-    '#default_value' => $template_settings['os2forms_colophon'] ?? '',
+    '#default_value' => $template_settings['os2form_colophon'] ?? '',
     '#weight' => -1,
   ];
 
@@ -218,7 +218,7 @@ function _os2forms_attachment_print_form_add_template_override(array &$element, 
     '#options' => $footer_options,
     '#description' => t('Select default footer that will be used on all forms (use standard for no override)'),
     '#empty_option' => t('Use standard'),
-    '#default_value' => $template_settings['os2forms_footer'] ?? '',
+    '#default_value' => $template_settings['os2form_footer'] ?? '',
     '#weight' => 0,
   ];
 
