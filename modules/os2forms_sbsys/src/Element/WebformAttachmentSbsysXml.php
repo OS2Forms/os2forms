@@ -230,6 +230,7 @@ class WebformAttachmentSbsysXml extends WebformAttachmentXml {
       $field_name = $key;
       $field_name = preg_replace('/\W/', '_', $field_name);
       $webform_element['#type'];
+
       if ($webform_element['#type'] == 'markup') {
         $elements_list[$field_name] = $webform_element['value'];
       }
@@ -240,10 +241,19 @@ class WebformAttachmentSbsysXml extends WebformAttachmentXml {
           }
         }
         else {
-          $elements_list[$field_name] = $data[$key];
+          // For arrays (for example: composite elements), splitting values.
+          if (is_array($data[$key])) {
+            foreach ($data[$key] as $child_key => $child_data) {
+              $elements_list[$field_name . "_" . $child_key] = $child_data;
+            }
+          }
+          else {
+            $elements_list[$field_name] = $data[$key];
+          }
         }
       }
     }
+
     return $elements_list;
   }
 
