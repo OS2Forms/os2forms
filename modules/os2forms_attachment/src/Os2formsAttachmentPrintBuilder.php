@@ -46,7 +46,12 @@ class Os2formsAttachmentPrintBuilder extends PrintBuilder {
       '#attached' => [],
     ];
 
-    $print_engine->addPage($renderer->generateHtml($entities, $render, $use_default_css, TRUE));
+    // Adding hardcoded negative margin to avoid margins in <fieldset> <legend>
+    // structure. That margin is automatically added in PDF and PDF only.
+    $generatedHtml = (string) $renderer->generateHtml($entities, $render, $use_default_css, TRUE);
+    $generatedHtml .= "<style>fieldset legend {margin-left: -12px;}</style>";
+
+    $print_engine->addPage($generatedHtml);
 
     return $renderer;
   }
