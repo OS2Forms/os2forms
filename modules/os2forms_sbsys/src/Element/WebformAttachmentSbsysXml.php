@@ -241,14 +241,14 @@ class WebformAttachmentSbsysXml extends WebformAttachmentXml {
           }
         }
         else {
-          // For arrays (for example: composite elements), splitting values.
+          $elements_list[$field_name] = $data[$key];
+
+          // For arrays (for example: composite elements),
+          // values are aldo duplicated by splitting them.
           if (is_array($data[$key])) {
             foreach ($data[$key] as $child_key => $child_data) {
               $elements_list[$field_name . "_" . $child_key] = $child_data;
             }
-          }
-          else {
-            $elements_list[$field_name] = $data[$key];
           }
         }
       }
