@@ -11,6 +11,10 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## [3.7.0] 2023-06-22
+
+- [S2FRMS-18] - Fixing PDF styles
+
 ## [3.6.0] 2023-06-07
 
 - [OSF-25] added modules/os2forms_forloeb
