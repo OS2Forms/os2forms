@@ -3,8 +3,8 @@
 namespace Drupal\os2forms_attachment\Form;
 
 use Drupal\Core\Entity\EntityConfirmFormBase;
-use Drupal\Core\Url;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 
 /**
  * Class AttachmentComponentDeleteForm.

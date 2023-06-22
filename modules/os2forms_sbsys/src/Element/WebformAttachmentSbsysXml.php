@@ -2,9 +2,9 @@
 
 namespace Drupal\os2forms_sbsys\Element;
 
-use Drupal\webform\WebformSubmissionInterface;
 use Drupal\os2forms\Element\WebformAttachmentXml;
 use Drupal\os2forms_sbsys\Plugin\WebformElement\WebformAttachmentSbsysXml as WebformElementAttachmentSbsysXml;
+use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * Provides a 'webform_attachment_os2forms_sbsys_xml' element.
