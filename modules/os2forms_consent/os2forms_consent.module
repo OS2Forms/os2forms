@@ -5,8 +5,8 @@
  * OS2Forms Consent functionality module.
  */
 
-use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\migrate\Plugin\MigrateSourceInterface;
+use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\migrate\Row;
 use Symfony\Component\Yaml\Yaml;
 

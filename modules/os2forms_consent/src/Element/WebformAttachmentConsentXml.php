@@ -2,9 +2,9 @@
 
 namespace Drupal\os2forms_consent\Element;
 
-use Drupal\webform\WebformSubmissionInterface;
 use Drupal\os2forms\Element\WebformAttachmentXml;
 use Drupal\os2forms_consent\Plugin\WebformElement\WebformAttachmentConsentXml as WebformElementAttachmentConsentXml;
+use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * Provides a 'webform_attachment_os2forms_consent_xml' element.

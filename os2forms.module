@@ -5,10 +5,10 @@
  * OS2Forms functionality module.
  */
 
-use Drupal\migrate\Plugin\MigrationInterface;
-use Drupal\migrate\Plugin\MigrateSourceInterface;
-use Drupal\migrate\Row;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\migrate\Plugin\MigrateSourceInterface;
+use Drupal\migrate\Plugin\MigrationInterface;
+use Drupal\migrate\Row;
 
 /**
  * Implements hook_entity_type_build().
