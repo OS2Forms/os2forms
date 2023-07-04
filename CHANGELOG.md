@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- S2FRMS-37 - PDF attachment elements choosing
+
 ## [3.7.0] 2023-06-22
 
 - [S2FRMS-18] - Fixing PDF styles
