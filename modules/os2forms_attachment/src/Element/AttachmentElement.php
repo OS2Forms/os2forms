@@ -2,6 +2,7 @@
 
 namespace Drupal\os2forms_attachment\Element;
 
+use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\WebformSubmissionInterface;
 use Drupal\webform_attachment\Element\WebformAttachmentBase;
 
@@ -27,6 +28,9 @@ class AttachmentElement extends WebformAttachmentBase {
    * {@inheritdoc}
    */
   public static function getFileContent(array $element, WebformSubmissionInterface $webform_submission) {
+    // Override webform settings.
+    static::overrideWebformSettings($element, $webform_submission);
+
     /** @var \Drupal\entity_print\Plugin\EntityPrintPluginManagerInterface $print_engine_manager */
     $print_engine_manager = \Drupal::service('plugin.manager.entity_print.print_engine');
 
@@ -85,6 +89,52 @@ class AttachmentElement extends WebformAttachmentBase {
     else {
       return parent::getFileName($element, $webform_submission);
     }
+  }
+
+  /**
+   * Overrides connected webform settings.
+   *
+   * Does that by creating a duplicate webform element with connected to a
+   * webform with the settings updated.
+   *
+   * @param array $element
+   *   The webform attachment element.
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
+   */
+  public static function overrideWebformSettings(array $element, WebformSubmissionInterface &$webform_submission) {
+    $webform = $webform_submission->getWebform();
+
+    // Rewriting webform settings.
+    $webform->setSetting('submission_excluded_elements', $element['#excluded_elements'] ?? FALSE);
+    $webform->setSetting('submission_exclude_empty', $element['#exclude_empty'] ?? FALSE);
+    $webform->setSetting('submission_exclude_empty_checkbox', $element['#exclude_empty_checkbox'] ?? FALSE);
+
+    // Creating temporary submission to be able to swap original webform
+    // settings.
+    $webform_submission_temp = WebformSubmission::create([
+      'webform' => $webform,
+      'entity_type' => $webform_submission->getEntityTypeId(),
+      'entity_id' => $webform_submission->id(),
+      'data' => $webform_submission->getData(),
+    ]);
+    // Clone ids.
+    $webform_submission_temp->set('serial', $webform_submission->get('serial')->value);
+    $webform_submission_temp->set('token', $webform_submission->get('token')->value);
+    // Clone states.
+    $webform_submission_temp->set('in_draft', $webform_submission->get('in_draft')->value);
+    $webform_submission_temp->set('current_page', $webform_submission->get('current_page')->value);
+    // Clone timestamps.
+    $webform_submission_temp->set('created', $webform_submission->get('created')->value);
+    $webform_submission_temp->set('changed', $webform_submission->get('changed')->value);
+    $webform_submission_temp->set('completed', $webform_submission->get('completed')->value);
+    // Clone admin notes, sticky, and locked.
+    $webform_submission_temp->set('notes', $webform_submission->get('notes')->value);
+    $webform_submission_temp->set('sticky', $webform_submission->get('sticky')->value);
+    $webform_submission_temp->set('sticky', $webform_submission->get('locked')->value);
+
+    // Finalize cloning: swap the webform submission.
+    $webform_submission = $webform_submission_temp;
   }
 
 }
