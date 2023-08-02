@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- Fixed NemID fields populate caching issue
+
 - Fixed issue with wrong authorization provider used when multiple are enabled
 
 ## [3.8.0] 2023-07-12
