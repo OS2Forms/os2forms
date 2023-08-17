@@ -38,7 +38,7 @@ class NemidNemloginLink extends Link {
     if ($route_name === 'entity.webform.canonical') {
       $webform = \Drupal::request()->attributes->get('webform');
     }
-    else {
+    elseif ($route_name == 'entity.node.canonical') {
       $node = \Drupal::request()->attributes->get('node');
       $nodeType = $node->getType();
 
