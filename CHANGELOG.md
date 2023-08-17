@@ -11,6 +11,10 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## [3.8.2] 2023-08-17
+
+- Fixed webform fetching from NemID Nemlogin link
+
 ## [3.8.1] 2023-08-02
 
 - Fixed issue with wrong authorization provider used when multiple are enabled
