@@ -13,6 +13,23 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 - [OS-57] - SBSIP XML element - Computed TWIG
 
+## [3.8.3] 2023-08-17
+
+- Fixed webform fetching from NemID Nemlogin link
+
+## [3.8.2] 2023-08-17
+
+- Fixed webform fetching from NemID Nemlogin link
+
+## [3.8.1] 2023-08-02
+
+- Fixed issue with wrong authorization provider used when multiple are enabled
+- Fixed NemID fields populate caching issue
+
+## [3.8.0] 2023-07-12
+
+- [S2FRMS-37] - PDF attachment elements choosing
+
 ## [3.7.0] 2023-06-22
 
 - [S2FRMS-18] - Fixing PDF styles
