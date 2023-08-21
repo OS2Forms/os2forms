@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [OS-57] - SBSIP XML element - Computed TWIG
+
 ## [3.8.3] 2023-08-17
 
 - Fixed webform fetching from NemID Nemlogin link
