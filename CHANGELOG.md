@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## [3.9.0] 2023-08-22
+
 - [OS-57] - SBSIP XML element - Computed TWIG
 
 ## [3.8.3] 2023-08-17
