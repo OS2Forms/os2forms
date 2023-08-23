@@ -5,6 +5,10 @@ namespace Drupal\os2forms_sbsys\Plugin\WebformElement;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\os2forms\Plugin\WebformElement\WebformAttachmentXml;
+use Drupal\os2forms_nemid\Plugin\WebformElement\NemidElementBase;
+use Drupal\webform\Plugin\WebformElement\DateBase;
+use Drupal\webform\Plugin\WebformElement\TextBase;
+use Drupal\webform\Plugin\WebformElement\WebformComputedBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -110,31 +114,19 @@ class WebformAttachmentSbsysXml extends WebformAttachmentXml {
     $elements = $webform->getElementsInitializedAndFlattened();
     $element_options = ['' => $this->t('None')];
     foreach ($elements as $element_key => $element) {
-      $element_plugin = $this->elementManager->getElementInstance($element);
-      $allowed_elements = [
-        'textfield',
-        'select',
-        'email',
-        'os2forms_nemid_cpr',
-        'os2forms_nemid_name',
-        'os2forms_nemid_pid',
-        'os2forms_nemid_address',
-        'os2forms_nemid_coaddress',
-        'os2forms_nemid_zipcode',
-        'os2forms_nemid_city',
-        'os2forms_nemid_company_cvr',
-        'os2forms_nemid_company_name',
-        'os2forms_nemid_company_address',
-        'os2forms_nemid_company_city',
-        'os2forms_nemid_company_rid',
-        'date',
-      ];
-      if (!$element_plugin->isInput($element)
-        || !isset($element['#type'])
-        || !in_array($element['#type'], $allowed_elements)
-        || $element_plugin->hasMultipleValues($element)) {
+      $elementInstance = $this->elementManager->getElementInstance($element);
+
+      // Skipping if not input or has multiple values.
+      if (!$elementInstance->isInput($element)
+        || $elementInstance->hasMultipleValues($element)) {
         continue;
       }
+
+      // Skipping if is of type we do not support.
+      if (!$elementInstance instanceof TextBase && !$elementInstance instanceof NemidElementBase && !$elementInstance instanceof DateBase && !$elementInstance instanceof WebformComputedBase) {
+        continue;
+      }
+
       $element_options[$element_key] = (isset($element['#title'])) ? new FormattableMarkup('@title (@key)', [
         '@title' => $element['#title'],
         '@key' => $element_key,

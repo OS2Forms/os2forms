@@ -4,6 +4,7 @@ namespace Drupal\os2forms_nemid\Element;
 
 use Drupal\Core\Link as CoreLink;
 use Drupal\Core\Render\Element\Link;
+use Drupal\webform\Entity\Webform;
 
 /**
  * Provides a render element for more.
@@ -19,6 +20,8 @@ class NemidNemloginLink extends Link {
     /** @var \Drupal\os2web_nemlogin\Service\AuthProviderService $authProviderService */
     $authProviderService = \Drupal::service('os2web_nemlogin.auth_provider');
 
+    $route_name = \Drupal::routeMatch()->getRouteName();
+
     $nemlogin_link_login_text = NULL;
     if (isset($element['#nemlogin_link_login_text'])) {
       $nemlogin_link_login_text = $element['#nemlogin_link_login_text'];
@@ -29,13 +32,40 @@ class NemidNemloginLink extends Link {
       $nemlogin_link_logout_text = $element['#nemlogin_link_logout_text'];
     }
 
+    /** @var \Drupal\webform\WebformInterface $webform */
+    $webform = NULL;
+
+    if ($route_name === 'entity.webform.canonical') {
+      $webform = \Drupal::request()->attributes->get('webform');
+    }
+    elseif ($route_name == 'entity.node.canonical') {
+      $node = \Drupal::request()->attributes->get('node');
+      $nodeType = $node->getType();
+
+      // Search if this node type is related with field of type 'webform'.
+      $webformFieldMap = \Drupal::service('entity_field.manager')->getFieldMapByFieldType('webform');
+      if (isset($webformFieldMap['node'])) {
+        foreach ($webformFieldMap['node'] as $field_name => $field_meta) {
+          // We found field of type 'webform' in this node, let's try fetching
+          // the webform.
+          if (in_array($nodeType, $field_meta['bundles'])) {
+            if ($webformId = $node->get($field_name)->target_id) {
+              $webform = Webform::load($webformId);
+              break;
+            }
+          }
+        }
+      }
+    }
+
     // Getting auth plugin ID override.
     $authPluginId = NULL;
-    /** @var \Drupal\webform\Entity\Webform $webform */
-    $webform = \Drupal::request()->attributes->get('webform');
-    $webformNemidSettings = $webform->getThirdPartySetting('os2forms', 'os2forms_nemid');
-    if (isset($webformNemidSettings['session_type']) && !empty($webformNemidSettings['session_type'])) {
-      $authPluginId = $webformNemidSettings['session_type'];
+
+    if ($webform) {
+      $webformNemidSettings = $webform->getThirdPartySetting('os2forms', 'os2forms_nemid');
+      if (isset($webformNemidSettings['session_type']) && !empty($webformNemidSettings['session_type'])) {
+        $authPluginId = $webformNemidSettings['session_type'];
+      }
     }
 
     // Checking if we have a share webform route, if yes open link in a new
@@ -44,7 +74,6 @@ class NemidNemloginLink extends Link {
       'entity.webform.share_page',
       'entity.webform.share_page.javascript',
     ];
-    $route_name = \Drupal::routeMatch()->getRouteName();
 
     $options = [];
     if (in_array($route_name, $webformShareRoutes)) {

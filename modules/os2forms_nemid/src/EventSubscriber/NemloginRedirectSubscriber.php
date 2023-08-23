@@ -9,13 +9,13 @@ use Drupal\Core\PageCache\ResponsePolicy\KillSwitch;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
-use Drupal\os2web_nemlogin\Service\AuthProviderService;
 use Drupal\os2forms_nemid\Form\SettingsForm;
+use Drupal\os2web_nemlogin\Service\AuthProviderService;
 use Drupal\webform\Entity\Webform;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * Event subscriber subscribing to KernelEvents::REQUEST.
@@ -147,6 +147,9 @@ class NemloginRedirectSubscriber implements EventSubscriberInterface {
       return;
     }
 
+    // Killing cache on webform so that populated values are never cached.
+    $this->pageCacheKillSwitch->trigger();
+
     $webformNemidSettings = $webform->getThirdPartySetting('os2forms', 'os2forms_nemid');
 
     // Getting nemlogin_auto_redirect setting.
@@ -156,10 +159,6 @@ class NemloginRedirectSubscriber implements EventSubscriberInterface {
     }
     // Checking if $nemlogin_auto_redirect is on.
     if ($nemlogin_auto_redirect) {
-      // Killing cache so that positive or negative redirect decision is not
-      // cached.
-      $this->pageCacheKillSwitch->trigger();
-
       // Getting auth plugin ID override.
       $authPluginId = NULL;
       if (isset($webformNemidSettings['session_type']) && !empty($webformNemidSettings['session_type'])) {
@@ -171,7 +170,7 @@ class NemloginRedirectSubscriber implements EventSubscriberInterface {
 
       if (!$authProviderPlugin->isAuthenticated()) {
         // Redirect directly to the external IdP.
-        $response = new RedirectResponse($this->nemloginAuthProvider->getLoginUrl()->toString());
+        $response = new RedirectResponse($this->nemloginAuthProvider->getLoginUrl([], $authProviderPlugin->getPluginId())->toString());
         $event->setResponse($response);
         $event->stopPropagation();
       }

@@ -27,6 +27,9 @@ class AttachmentElement extends WebformAttachmentBase {
       'view_mode' => 'html',
       'template' => '',
       'export_type' => '',
+      'exclude_empty' => '',
+      'exclude_empty_checkbox' => '',
+      'excluded_elements' => '',
     ] + parent::defineDefaultProperties();
     // PDF documents should never be trimmed.
     unset($properties['trim']);
@@ -87,6 +90,34 @@ class AttachmentElement extends WebformAttachmentBase {
     ];
     // Set #access so that help is always visible.
     WebformElementHelper::setPropertyRecursive($form['attachment']['help'], '#access', TRUE);
+
+    // Elements.
+    $form['elements'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Included elements'),
+      '#description' => $this->t('The selected elements will be included in the [webform_submission:values] token. Individual values may still be printed if explicitly specified as a [webform_submission:values:?] in the email body template.'),
+      '#open' => $this->configuration['excluded_elements'] ? TRUE : FALSE,
+    ];
+    $form['elements']['excluded_elements'] = [
+      '#type' => 'webform_excluded_elements',
+      '#exclude_markup' => FALSE,
+      '#webform_id' => $this->webform->id(),
+      '#default_value' => $this->configuration['excluded_elements'],
+    ];
+    $form['elements']['exclude_empty'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Exclude empty elements'),
+      '#description' => $this->t('If checked, empty elements will be excluded from the email values.'),
+      '#return_value' => TRUE,
+      '#default_value' => $this->configuration['exclude_empty'],
+    ];
+    $form['elements']['exclude_empty_checkbox'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Exclude unselected checkboxes'),
+      '#description' => $this->t('If checked, empty checkboxes will be excluded from the email values.'),
+      '#return_value' => TRUE,
+      '#default_value' => $this->configuration['exclude_empty_checkbox'],
+    ];
 
     return $form;
   }
