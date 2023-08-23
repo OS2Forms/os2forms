@@ -18,64 +18,63 @@ class DawaElementAddressMatrikula extends WebformCompositeBase {
    */
   public static function getCompositeElements(array $element) {
     $elements = [];
-    if ($element) {
-      $elements['address'] = [
-        '#type' => 'os2forms_dawa_address',
-        '#title' => $element['#address_field_title'] ?? t('Address'),
-        '#remove_place_name' => $element['#remove_place_name'] ?? FALSE,
-        '#remove_code' => $element['#remove_code'] ?? FALSE,
-        '#limit_by_municipality' => $element['#limit_by_municipality'] ?? FALSE,
-      ];
 
-      $elements['matrikula'] = [
-        '#type' => 'select',
-        '#title' => $element['#matrikula_field_title'] ?? t('Matrikula'),
-        '#options' => [],
-        '#empty_value' => NULL,
-        '#validated' => TRUE,
-        '#attributes' => [
-          'disabled' => 'disabled',
+    $elements['address'] = [
+      '#type' => 'os2forms_dawa_address',
+      '#title' => $element['#address_field_title'] ?? t('Address'),
+      '#remove_place_name' => $element['#remove_place_name'] ?? FALSE,
+      '#remove_code' => $element['#remove_code'] ?? FALSE,
+      '#limit_by_municipality' => $element['#limit_by_municipality'] ?? FALSE,
+    ];
+
+    $elements['matrikula'] = [
+      '#type' => 'select',
+      '#title' => $element['#matrikula_field_title'] ?? t('Matrikula'),
+      '#options' => [],
+      '#empty_value' => NULL,
+      '#validated' => TRUE,
+      '#attributes' => [
+        'disabled' => 'disabled',
+      ],
+      '#description' => t('Options autofill is disabled during the element preview'),
+    ];
+
+    // If that is just element preview (no webform_id), then keep the
+    // element simple. Don't add AJAX behaviour.
+    if (isset($element['#webform_id'])) {
+      $matrikula_wrapper_id = $element['#webform_id'] . '-matrikula-wrapper';
+
+      $elements['address']['#ajax'] = [
+        'callback' => [
+          DawaElementAddressMatrikula::class,
+          'matrikulaUpdateSelectOptions',
         ],
-        '#description' => t('Options autofill is disabled during the element preview'),
+        'event' => 'change',
+        'wrapper' => $matrikula_wrapper_id,
+        'progress' => [
+          'type' => 'none',
+        ],
       ];
 
-      // If that is just element preview (no webform_id), then keep the
-      // element simple. Don't add AJAX behaviour.
-      if (isset($element['#webform_id'])) {
-        $matrikula_wrapper_id = $element['#webform_id'] . '-matrikula-wrapper';
+      $elements['matrikula'] += [
+        '#prefix' => '<div id="' . $matrikula_wrapper_id . '">',
+        '#suffix' => '</div>',
+      ];
+      unset($elements['matrikula']['#description']);
 
-        $elements['address']['#ajax'] = [
-          'callback' => [
-            DawaElementAddressMatrikula::class,
-            'matrikulaUpdateSelectOptions',
-          ],
-          'event' => 'change',
-          'wrapper' => $matrikula_wrapper_id,
-          'progress' => [
-            'type' => 'none',
-          ],
-        ];
+      if (isset($element['#value']) && !empty($element['#value']['address'])) {
+        $addressValue = $element['#value']['address'];
 
-        $elements['matrikula'] += [
-          '#prefix' => '<div id="' . $matrikula_wrapper_id . '">',
-          '#suffix' => '</div>',
-        ];
-        unset($elements['matrikula']['#description']);
+        $matrikulaOptions = self::getMatrikulaOptions($addressValue, $element);
 
-        if (isset($element['#value']) && !empty($element['#value']['address'])) {
-          $addressValue = $element['#value']['address'];
+        // Populating the element.
+        if (!empty($matrikulaOptions)) {
+          $elements['matrikula']['#options'] = $matrikulaOptions;
+          $matrikulaOptionKeys = array_keys($matrikulaOptions);
+          $elements['matrikula']['matrikula']['#value'] = reset($matrikulaOptionKeys);
 
-          $matrikulaOptions = self::getMatrikulaOptions($addressValue, $element);
-
-          // Populating the element.
-          if (!empty($matrikulaOptions)) {
-            $elements['matrikula']['#options'] = $matrikulaOptions;
-            $matrikulaOptionKeys = array_keys($matrikulaOptions);
-            $elements['matrikula']['matrikula']['#value'] = reset($matrikulaOptionKeys);
-
-            // Make element enabled.
-            unset($elements['matrikula']['#attributes']['disabled']);
-          }
+          // Make element enabled.
+          unset($elements['matrikula']['#attributes']['disabled']);
         }
       }
     }
