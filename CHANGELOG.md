@@ -11,6 +11,9 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [OSF-55] DAWA Address-Matrikula (autocomplete) (required)
+- [OSF-56] DAWA Address-Matrikula (autocomplete) (value in XML-file)
+
 ## [3.6.0] 2023-06-07
 
 - [OSF-25] added modules/os2forms_forloeb
