@@ -1,0 +1,63 @@
+{#
+/**
+ * @file
+ * Template for Maestro notification PDF.
+ *
+ * Available variables:
+ * - message: The notification message
+ *   - subject: the notification subject
+ *   - contect: the notification content. Must be rendered as `processed_text`, i.e.:
+ *     @code
+ *       {{ {
+ *       '#type':   'processed_text',
+ *       '#text':    message.content.value,
+ *       '#format':  message.content.format,
+ *       } }}
+ *     @endcode
+ * - notification_type: The type of notification ()
+ * - task_url: URL of the task.
+ * - action_label: Optional label for the task action.
+ */
+#}
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ message.subject }}</title>
+  <style>
+    @page {
+      size: a4 portrait;
+      margin: 40mm 20mm;
+    }
+
+    header {
+      position: fixed;
+      top: -30mm;
+      left: 0;
+      right: 0;
+      height: 20mm;
+    }
+
+    header img {
+      height: 100%;
+    }
+</style>
+</head>
+<body>
+  <header>
+    <img alt="Aarhus Kommune-logo" src="https://cdn.aarhus.dk/bundled/static/aak-logo.svg?hash=6780e75ca799a9b45bb0e51ff430010b" />
+  </header>
+
+  <main>
+    {# @see https://api.drupal.org/api/drupal/core%21modules%21filter%21filter.module/function/check_markup/9 #}
+    <div class="notification-content">
+      {{ {
+        '#type':   'processed_text',
+        '#text':    message.content.value,
+        '#format':  message.content.format,
+        } }}
+    </div>
+  </main>
+</body>
+</html>
