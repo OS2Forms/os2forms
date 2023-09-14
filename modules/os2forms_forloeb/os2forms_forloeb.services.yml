@@ -19,4 +19,3 @@ services:
       - '@logger.channel.os2forms_forloeb_submission'
       - '@module_handler'
       - '@plugin.manager.entity_print.print_engine'
-      - '@Drupal\os2forms_digital_post\Helper\DigitalPostHelper'

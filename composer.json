@@ -67,13 +67,15 @@
         "drupal/webform_validation": "^2.0",
         "drupal/webform_views": "^5.0@alpha",
         "drupal/workflow_participants": "^2.4",
-        "os2forms/os2forms_digital_post": "^3.0",
         "os2web/os2web_datalookup": "^1.0",
         "os2web/os2web_nemlogin": "^1.0",
         "phpoffice/phpword": "^0.18.2",
         "tecnickcom/tcpdf": "~6",
         "webmozart/path-util": "^2.3",
         "zaporylie/composer-drupal-optimizations": "^1.2"
+    },
+    "suggest": {
+        "os2forms/os2forms_digital_post": "Send Maestro notifications via digital post (see https://github.com/itk-dev/os2forms_digital_post/blob/main/README.md)"
     },
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",

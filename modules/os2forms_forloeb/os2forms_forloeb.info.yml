@@ -49,6 +49,8 @@ dependencies:
   - 'drupal:webform_submission_log'
   - 'drupal:webform_templates'
   - 'drupal:workflow_participants'
-  - 'os2forms_digital_post:os2forms_digital_post'
+  # os2forms_digital_post may be used for sending Meastro notifications via digital post
+  # - 'os2forms_digital_post:os2forms_digital_post'
+
 'interface translation project': os2forms_forloeb
 'interface translation server pattern': modules/contrib/os2forms_forloeb/translations/os2forms_forloeb.da.po

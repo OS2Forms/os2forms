@@ -88,7 +88,6 @@ class MaestroHelper implements LoggerInterface {
     readonly private LoggerChannelInterface $submissionLogger,
     readonly private ModuleHandlerInterface $moduleHandler,
     readonly private EntityPrintPluginManagerInterface $entityPrintPluginManager,
-    readonly private DigitalPostHelper $digitalPostHelper
   ) {
     $this->config = $configFactory->get(SettingsForm::SETTINGS);
     $this->webformSubmissionStorage = $entityTypeManager->getStorage('webform_submission');
@@ -342,8 +341,8 @@ class MaestroHelper implements LoggerInterface {
     WebformSubmissionInterface $submission,
     string $notificationType
   ): void {
-    if (!$this->moduleHandler->moduleExists('os2forms_digital_post')) {
-      throw new RuntimeException('Cannot send digital post. Module os2forms_digital_post not installed.');
+    if (NULL === $this->digitalPostHelper) {
+      throw new RuntimeException('Cannot send digital post. Module OS2Forms Digital Post (os2forms_digital_post) not installed.');
     }
 
     try {
