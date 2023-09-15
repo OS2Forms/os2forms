@@ -43,7 +43,6 @@
         "drupal/mailsystem": "^4.1",
         "drupal/masquerade": "^2.0@RC",
         "drupal/pathauto": "^1.5",
-        "drupal/permissions_by_term": "^3.1 || ^2.25",
         "drupal/queue_mail": "^1.4",
         "drupal/queue_ui": "^2.1",
         "drupal/r4032login": "^2.1",

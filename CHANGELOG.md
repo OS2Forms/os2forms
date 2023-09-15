@@ -11,6 +11,14 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+### Removed
+
+- [OS2FRMS-11] - Uninstalled the following modules on update if they were
+  previously installed: `os2forms_permissions_by_term`, `webform_permissions_by_term`,
+  and `permissions_by_term`.
+- [OS2FRMS-11] - Removed the `os2forms_permissions_by_term` submodule.
+- [OS2FRMS-11] - Removed the `permissions_by_term` module from `composer.json` file.
+
 ## [3.10.0] 2023-08-23
 
 - [OSF-55] DAWA Address-Matrikula (autocomplete) (required)
