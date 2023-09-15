@@ -357,3 +357,44 @@ function os2forms_module_implements_alter(&$implementations, $hook) {
       break;
   }
 }
+
+/**
+ * Uninstall specific modules.
+ *
+ * This update hook uninstalls the os2forms_permissions_by_term,
+ * webform_permissions_by_term, and permissions_by_term modules if they
+ * are currently installed.
+ */
+function os2forms_update_8001() {
+  $module_installer = \Drupal::service('module_installer');
+  $messages = [];
+
+  // Uninstall os2forms_permissions_by_term if installed.
+  if ($module_installer->moduleExists('os2forms_permissions_by_term')) {
+    $module_installer->uninstall(['os2forms_permissions_by_term']);
+    $messages[] = t('The os2forms_permissions_by_term module has been uninstalled.');
+  }
+  else {
+    $messages[] = t('The os2forms_permissions_by_term module was not installed.');
+  }
+
+  // Uninstall webform_permissions_by_term if installed.
+  if ($module_installer->moduleExists('webform_permissions_by_term')) {
+    $module_installer->uninstall(['webform_permissions_by_term']);
+    $messages[] = t('The webform_permissions_by_term module has been uninstalled.');
+  }
+  else {
+    $messages[] = t('The webform_permissions_by_term module was not installed.');
+  }
+
+  // Uninstall permissions_by_term if installed.
+  if ($module_installer->moduleExists('permissions_by_term')) {
+    $module_installer->uninstall(['permissions_by_term']);
+    $messages[] = t('The permissions_by_term module has been uninstalled.');
+  }
+  else {
+    $messages[] = t('The permissions_by_term module was not installed.');
+  }
+
+  return $messages;
+}
