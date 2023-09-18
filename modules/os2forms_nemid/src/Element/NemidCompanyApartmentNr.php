@@ -46,7 +46,7 @@ class NemidCompanyApartmentNr extends NemidElementBase {
   }
 
   /**
-   * Webform element validation handler for #type 'os2forms_nemid_company_apartment_nr'.
+   * Webform element validation for 'os2forms_nemid_company_apartment_nr'.
    */
   public static function validateNemidCompanyApartmentNr(&$element, FormStateInterface $form_state, &$complete_form) {
     // Here you can add custom validation logic.
