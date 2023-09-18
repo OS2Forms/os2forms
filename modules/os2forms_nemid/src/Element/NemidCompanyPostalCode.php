@@ -46,7 +46,7 @@ class NemidCompanyPostalCode extends NemidElementBase {
   }
 
   /**
-   * Webform element validation handler for #type 'os2forms_nemid_company_postal_code'.
+   * Webform element validation for 'os2forms_nemid_company_postal_code'.
    */
   public static function validateNemidCompanyPostalCode(&$element, FormStateInterface $form_state, &$complete_form) {
     // Here you can add custom validation logic.

@@ -46,7 +46,7 @@ class NemidCompanyKommunekode extends NemidElementBase {
   }
 
   /**
-   * Webform element validation handler for #type 'os2forms_nemid_company_kommunekode'.
+   * Webform element validation for 'os2forms_nemid_company_kommunekode'.
    */
   public static function validateNemidCompanyKommunekode(&$element, FormStateInterface $form_state, &$complete_form) {
     // Here you can add custom validation logic.

@@ -46,7 +46,7 @@ class NemidCompanyFloor extends NemidElementBase {
   }
 
   /**
-   * Webform element validation handler for #type 'os2forms_nemid_company_floor'.
+   * Webform element validation handler for 'os2forms_nemid_company_floor'.
    */
   public static function validateNemidCompanyFloor(&$element, FormStateInterface $form_state, &$complete_form) {
     // Here you can add custom validation logic.
