@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [OS-58] New company address fields
+
 ## [3.10.0] 2023-08-23
 
 - [OSF-55] DAWA Address-Matrikula (autocomplete) (required)
