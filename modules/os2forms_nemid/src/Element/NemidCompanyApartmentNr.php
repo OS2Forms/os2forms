@@ -5,9 +5,9 @@ namespace Drupal\os2forms_nemid\Element;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Provides a 'os2forms_nemid_company_street'.
+ * Provides a 'os2forms_nemid_company_apartment_nr'.
  *
- * @FormElement("os2forms_nemid_company_street")
+ * @FormElement("os2forms_nemid_company_apartment_nr")
  *
  * @see \Drupal\Core\Render\Element\FormElement
  * @see https://api.drupal.org/api/drupal/core%21lib%21Drupal%21Core%21Render%21Element%21FormElement.php/class/FormElement
