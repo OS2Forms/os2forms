@@ -1,0 +1,5 @@
+os2web_permissions_by_term.settings:
+  title: OS2Forms permissions by term
+  description: Settings for OS2Forms permissions by term.
+  route_name: os2web_permissions_by_term.settings_form
+  parent: system.admin_config_system
