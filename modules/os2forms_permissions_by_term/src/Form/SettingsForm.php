@@ -2,11 +2,16 @@
 
 namespace Drupal\os2forms_permissions_by_term\Form;
 
+use Drupal\Core\Entity\EntityFieldManagerInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\webform\WebformTokenManagerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Configure os2web_permissions_by_term settings for this site.
+ * Configure os2forms_permissions_by_term settings for this site.
  */
 class SettingsForm extends ConfigFormBase {
 
@@ -16,6 +21,32 @@ class SettingsForm extends ConfigFormBase {
    * @var string
    */
   public static $configName = 'os2web_permissions_by_term.settings';
+
+  /**
+   * Entity field manager.
+   *
+   * @var \Drupal\Core\Entity\EntityFieldManagerInterface
+   */
+  private $entityFieldTypeManager;
+
+  /**
+   * Constructs an SettingsForm object.
+   *
+   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager
+   *   Entity field manager.
+   */
+  public function __construct(EntityFieldManagerInterface $entity_field_manager) {
+    $this->entityFieldTypeManager = $entity_field_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('entity_field.manager'),
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -35,9 +66,9 @@ class SettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $options = [0 => t('None')];
+    $options = [0 => $this->t('None')];
 
-    $userFields = \Drupal::service('entity_field.manager')->getFieldDefinitions('user', 'user');
+    $userFields = $this->entityFieldTypeManager->getFieldDefinitions('user', 'user');
 
     /** @var \Drupal\field\Entity\FieldConfig $field */
     foreach ($userFields as $field_key => $field) {
