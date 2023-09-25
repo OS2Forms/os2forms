@@ -7,8 +7,6 @@ core_version_requirement: ^8 || ^9
 
 dependencies:
   - 'drupal:admin_toolbar_tools'
-  - 'drupal:coc_forms_auto_export'
-  - 'drupal:config_entity_revisions'
   - 'drupal:diff'
   - 'drupal:entity_print'
   - 'drupal:eu_cookie_compliance'
@@ -44,7 +42,6 @@ dependencies:
   - 'drupal:webform_node_element'
   - 'drupal:webform_remote_handlers'
   - 'drupal:webform_rest'
-  - 'drupal:webform_revisions'
   - 'drupal:webform_share'
   - 'drupal:webform_scheduled_email'
   - 'drupal:webform_submission_export_import'

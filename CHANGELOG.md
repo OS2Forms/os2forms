@@ -13,6 +13,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 - [OS-58] New company address fields
 - Custom permissions by term field
+- Removing dependency to config_entity_revisions, webform_revisions, coc_forms_auto_export
 
 ## [3.10.0] 2023-08-23
 
