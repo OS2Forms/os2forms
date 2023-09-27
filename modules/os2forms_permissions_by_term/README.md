@@ -19,7 +19,7 @@ Alternative change your site configuration on admin/permissions-by-term/settings
 be thoroughly tested.
 
 ## Usage
-- The user affiliation taxonomy is added to webform config form, nodes (of type webform) and Maestro workflow forms.
+- The user affiliation taxonomy is added to webform config form and Maestro workflow forms.
 - The Permissions by Term module adds a form element to the user form.
 - When a user visits an entity of the above mentioned this module checks for match between the entity and the users
   affiliation. If no match is found access is denied.

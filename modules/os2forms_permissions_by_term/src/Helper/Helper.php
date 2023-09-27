@@ -11,10 +11,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\Url;
-use Drupal\node\NodeInterface;
 use Drupal\permissions_by_term\Service\AccessStorage;
-use Drupal\user\Entity\User;
 use Drupal\webform\WebformInterface;
 
 /**
@@ -210,34 +207,6 @@ class Helper {
   }
 
   /**
-   * Implementation of hook_ENTITY_TYPE_access().
-   *
-   * Check access on node related operations.
-   *
-   * @param \Drupal\node\NodeInterface $node
-   *   The node entity.
-   * @param string $operation
-   *   The operation being performed on the node.
-   * @param \Drupal\Core\Session\AccountInterface $account
-   *   The current user.
-   *
-   * @return mixed
-   *   The resulting access permission.
-   */
-  public function nodeAccess(NodeInterface $node, $operation, AccountInterface $account) {
-    if ('webform' === $node->bundle()) {
-      switch ($operation) {
-        case 'view':
-          // Deny access to node view if no permission by term is set.
-          $nodePermissionsByTerm = $node->field_os2forms_permissions->getValue();
-          return empty($nodePermissionsByTerm)
-            ? AccessResult::forbidden()
-            : AccessResult::neutral();
-      }
-    }
-  }
-
-  /**
    * Custom submit handler for webform add/edit form.
    *
    * Set permission by term as a thirdPartySetting of the webform.
@@ -264,54 +233,6 @@ class Helper {
   }
 
   /**
-   * Implementation of hook_form_FORM_ID_alter().
-   *
-   * Add permission by term selection to node "add" and "edit".
-   *
-   * @param array $form
-   *   The form being altered.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The state of the form.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-   */
-  public function nodeFormAlter(array &$form, FormStateInterface $form_state) {
-    /** @var \Drupal\Core\Entity\EntityForm $formObject */
-    $formObject = $form_state->getFormObject();
-    $nodeBundle = $formObject->getEntity()->bundle();
-    if (1 === (int) $this->account->id() || 'webform' !== $nodeBundle) {
-      return;
-    }
-
-    // Run custom submit handler before default node submission.
-    array_unshift(
-      $form['actions']['submit']['#submit'],
-      [$this, 'nodeWebformPermisisonsByTermSubmit']
-    );
-    $user = $this->entityTypeManager->getStorage('user')->load($this->account->id());
-    $userTerms = $this->accessStorage->getPermittedTids($user->id(), $user->getRoles());
-    $anonymousTerms = $this->accessStorage->getPermittedTids(0, ['anonymous']);
-    $webformReference = $form['webform']['widget'][0]['target_id']['#default_value'];
-    // If a webform is referenced from the node add message.
-    if ($webformReference) {
-      $url = URL::fromRoute('entity.webform.settings_access', ['webform' => $webformReference])->toString();
-      $form['field_os2forms_permissions']['widget'][0]['#prefix'] =
-        '<div class="alert alert-warning">' . $this->t('Anonymous access to view this content is set on <a href="@url">the related webform access page</a> . (Create submissions permission)', ['@url' => $url]) . '</div>';
-    }
-    // Disable anonymous terms. They should always be fetched from webform.
-    foreach ($anonymousTerms as $termId) {
-      $form['field_os2forms_permissions']['widget'][$termId]['#disabled'] = TRUE;
-    }
-
-    // Set access value automatically if user only has one term option.
-    if (1 === count($userTerms)) {
-      $form['field_os2forms_permissions']['widget']['#disabled'] = TRUE;
-      $form['field_os2forms_permissions']['widget']['#default_value'][] = $userTerms[0];
-    }
-  }
-
-  /**
    * Implements hook_field_widget_multivalue_WIDGET_TYPE_form_alter().
    *
    * Alter the field webform_entity_reference widget.
@@ -328,67 +249,6 @@ class Helper {
     $result = [];
     $this->filterWebformSelectOptions($options, $result);
     $elements[0]['target_id']['#options'] = $result;
-  }
-
-  /**
-   * Implements hook_options_list_alter().
-   *
-   * Change options list field for node.field_os2forms_permissions.
-   * Add anonymous option to allow the form to be displayed for anonymous users.
-   *
-   * @param array $options
-   *   The options of the list.
-   * @param array $context
-   *   The context of the options list.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-   */
-  public function optionsListAlter(array &$options, array $context) {
-    // Alter the field_os2forms_permissions options list.
-    if ('node.field_os2forms_permissions' !== $context['fieldDefinition']->getFieldStorageDefinition()->id()) {
-      return;
-    }
-    // Limit options to those available on user profile.
-    $options = [];
-    $user = $this->entityTypeManager->getStorage('user')->load($this->account->id());
-    $userTerms = $this->accessStorage->getPermittedTids($user->id(), $user->getRoles());
-    foreach ($userTerms as $userTerm) {
-      $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($userTerm);
-      $options[$userTerm] = $term->label();
-    }
-    $anonymousTerms = $this->accessStorage->getPermittedTids(0, ['anonymous']);
-    foreach ($anonymousTerms as $termId) {
-      $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($termId);
-      $label = $this->t('@term_label (Note: View permission only. This setting depends on the related webform.)', ['@term_label' => $term->label()]);
-      $options = [$termId => $label] + $options;
-    }
-  }
-
-  /**
-   * Custom submit handler for setting permissions by term on node.
-   *
-   * @param array $form
-   *   The form that is being submitted.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The state of the form being submitted.
-   */
-  public function nodeWebformPermisisonsByTermSubmit(array $form, FormStateInterface $form_state) {
-    $webformReference = $form_state->getValue('webform');
-    $webformTarget = $webformReference['0']['target_id'] ?? NULL;
-    if (!$webformTarget) {
-      return;
-    }
-    $existingValues = $form_state->getValue('field_os2forms_permissions');
-    $anonymousTerms = $this->accessStorage->getPermittedTids(0, ['anonymous']);
-    $anonymousUser = User::getAnonymousUser();
-    $referencedWebform = $this->entityTypeManager->getStorage('webform')->load($webformTarget);
-    foreach ($anonymousTerms as $termId) {
-      if ($referencedWebform->access('submission_create', $anonymousUser)) {
-        $existingValues[] = ['target_id' => $termId];
-      }
-    }
-    $form_state->setValue('field_os2forms_permissions', $existingValues);
   }
 
   /**
