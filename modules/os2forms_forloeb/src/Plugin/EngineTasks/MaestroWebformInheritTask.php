@@ -68,6 +68,11 @@ class MaestroWebformInheritTask extends MaestroWebformTask {
       $template->tasks,
       static fn(array $t) => $t['id'] !== $task['id'] && self::isWebformTask($t)
     );
+    // Index by tasks' unique id.
+    $webformTasksByUniqueId = [];
+    foreach ($webformTasks as $id => $webformTask) {
+      $webformTasksByUniqueId[$webformTask['data']['unique_id'] ?? $id] = $webformTask;
+    }
 
     // We call the parent, as we need to add a field to the inherited form.
     $form = parent::getTaskEditForm($task, $templateMachineName);
@@ -75,8 +80,8 @@ class MaestroWebformInheritTask extends MaestroWebformTask {
       '#type' => 'select',
       '#options' => ['submission' => $this->t('Start')]
       + array_map(
-          static fn(array $task) => sprintf('%s (%s)', $task['label'], $task['id']),
-          $webformTasks
+          static fn(array $task) => sprintf('%s (%s)', $task['label'], $task['data']['unique_id'] ?? $task['id']),
+          $webformTasksByUniqueId
       ),
       '#title' => $this->t('Inherit Webform from:'),
       '#description' => $this->t('Put the unique identifier of the webform you want to inherit from (start-task=submission'),
