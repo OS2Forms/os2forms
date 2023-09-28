@@ -117,9 +117,9 @@ final class MaestroNotificationHandler extends WebformHandlerBase {
     ];
 
     foreach ([
-      MaestroHelper::OS2FORMS_FORLOEB_NOTIFICATION_ASSIGNMENT => $this->t('Assignment'),
-      MaestroHelper::OS2FORMS_FORLOEB_NOTIFICATION_REMINDER => $this->t('Reminder'),
-      MaestroHelper::OS2FORMS_FORLOEB_NOTIFICATION_ESCALATION => $this->t('Escalation'),
+      MaestroHelper::NOTIFICATION_ASSIGNMENT => $this->t('Assignment'),
+      MaestroHelper::NOTIFICATION_REMINDER => $this->t('Reminder'),
+      MaestroHelper::NOTIFICATION_ESCALATION => $this->t('Escalation'),
     ] as $notificationType => $label) {
       $states = static function (bool $required = TRUE) use ($notificationType): array {
         $states = [
@@ -145,10 +145,10 @@ final class MaestroNotificationHandler extends WebformHandlerBase {
       $form[self::NOTIFICATION][$notificationType][self::NOTIFICATION_ENABLE] = [
         '#type' => 'checkbox',
         '#title' => $this->t('Enable @type notification', ['@type' => $label]),
-        '#default_value' => $this->configuration[self::NOTIFICATION][$notificationType][self::NOTIFICATION_ENABLE] ?? ($notificationType === MaestroHelper::OS2FORMS_FORLOEB_NOTIFICATION_ASSIGNMENT),
+        '#default_value' => $this->configuration[self::NOTIFICATION][$notificationType][self::NOTIFICATION_ENABLE] ?? ($notificationType === MaestroHelper::NOTIFICATION_ASSIGNMENT),
       ];
 
-      if ($notificationType === MaestroHelper::OS2FORMS_FORLOEB_NOTIFICATION_ESCALATION) {
+      if ($notificationType === MaestroHelper::NOTIFICATION_ESCALATION) {
         $form[self::NOTIFICATION][$notificationType][self::NOTIFICATION_RECIPIENT] = [
           '#type' => 'email',
           '#title' => $this->t('@type recipient', ['@type' => $label]),
@@ -200,9 +200,9 @@ final class MaestroNotificationHandler extends WebformHandlerBase {
     parent::validateConfigurationForm($form, $formState);
 
     foreach ([
-      MaestroHelper::OS2FORMS_FORLOEB_NOTIFICATION_ASSIGNMENT,
-      MaestroHelper::OS2FORMS_FORLOEB_NOTIFICATION_REMINDER,
-      MaestroHelper::OS2FORMS_FORLOEB_NOTIFICATION_ESCALATION,
+      MaestroHelper::NOTIFICATION_ASSIGNMENT,
+      MaestroHelper::NOTIFICATION_REMINDER,
+      MaestroHelper::NOTIFICATION_ESCALATION,
     ] as $notificationType) {
       $key = [self::NOTIFICATION, $notificationType, self::NOTIFICATION_ENABLE];
       $enabled = $formState->getValue($key);
@@ -268,9 +268,9 @@ final class MaestroNotificationHandler extends WebformHandlerBase {
     $enabledNotificationTypes = [];
 
     foreach ([
-      MaestroHelper::OS2FORMS_FORLOEB_NOTIFICATION_ASSIGNMENT,
-      MaestroHelper::OS2FORMS_FORLOEB_NOTIFICATION_REMINDER,
-      MaestroHelper::OS2FORMS_FORLOEB_NOTIFICATION_ESCALATION,
+      MaestroHelper::NOTIFICATION_ASSIGNMENT,
+      MaestroHelper::NOTIFICATION_REMINDER,
+      MaestroHelper::NOTIFICATION_ESCALATION,
     ] as $notificationType) {
       if ($this->configuration[self::NOTIFICATION][$notificationType][self::NOTIFICATION_ENABLE] ?? FALSE) {
         $enabledNotificationTypes[$notificationType] = $notificationType;

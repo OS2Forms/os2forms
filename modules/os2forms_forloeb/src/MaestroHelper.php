@@ -42,9 +42,9 @@ use Psr\Log\LoggerTrait;
 class MaestroHelper implements LoggerInterface {
   use LoggerTrait;
 
-  public const OS2FORMS_FORLOEB_NOTIFICATION_ASSIGNMENT = 'assignment';
-  public const OS2FORMS_FORLOEB_NOTIFICATION_REMINDER = 'reminder';
-  public const OS2FORMS_FORLOEB_NOTIFICATION_ESCALATION = 'escalation';
+  const NOTIFICATION_ASSIGNMENT = 'assignment';
+  const NOTIFICATION_REMINDER = 'reminder';
+  const NOTIFICATION_ESCALATION = 'escalation';
 
   /**
    * The config.
@@ -432,7 +432,7 @@ class MaestroHelper implements LoggerInterface {
       ?? $data[$recipientElement]
       ?? NULL;
 
-    if ($notificationType === self::OS2FORMS_FORLOEB_NOTIFICATION_ESCALATION) {
+    if ($notificationType === self::NOTIFICATION_ESCALATION) {
       $recipient = $settings[MaestroNotificationHandler::NOTIFICATION][$notificationType][MaestroNotificationHandler::NOTIFICATION_RECIPIENT] ?? NULL;
     }
 
