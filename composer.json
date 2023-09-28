@@ -19,6 +19,7 @@
         "cweagans/composer-patches": "^1.6.5",
         "dompdf/dompdf": "^2.0",
         "drupal/admin_toolbar": "^3.0",
+        "drupal/advancedqueue": "^1.0",
         "drupal/chosen": "^2.10",
         "drupal/ckeditor_a11ychecker": "^2.0@alpha",
         "drupal/clientside_validation": "^3.0",
