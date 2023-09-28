@@ -104,7 +104,6 @@ class MaestroHelper implements LoggerInterface {
    * Implements hook_maestro_zero_user_notification().
    */
   public function maestroZeroUserNotification($templateMachineName, $taskMachineName, $queueID, $notificationType) {
-    // @todo Clean up and align with MaestroWebformInheritTask::webformSubmissionFormAlter().
     $templateTask = MaestroEngine::getTemplateTaskByID($templateMachineName, $taskMachineName);
     if (MaestroWebformInheritTask::isWebformTask($templateTask)) {
       if ($inheritWebformUniqueId = ($templateTask['data'][MaestroWebformInheritTask::INHERIT_WEBFORM_UNIQUE_ID] ?? NULL)) {
@@ -144,6 +143,19 @@ class MaestroHelper implements LoggerInterface {
 
   /**
    * Handle submission notification.
+   *
+   * Creates job for sending notification to assigned user.
+   *
+   * @param string $notificationType
+   *   The notification type (one of the NOTIFICATION_* constannts).
+   * @param \Drupal\webform\WebformSubmissionInterface $submission
+   *   The webform submission.
+   * @param array $templateTask
+   *   The template task.
+   * @param int $maestroQueueID
+   *   The Maestro queue ID.
+   *
+   * @see self::processJob()
    */
   private function handleSubmissionNotification(
     string $notificationType,
@@ -187,7 +199,12 @@ class MaestroHelper implements LoggerInterface {
   }
 
   /**
-   * Process a job.
+   * Process a job to send out a notification.
+   *
+   * @param \Drupal\advancedqueue\Job $job
+   *   The job (created by handleSubmissionNotification)
+   *
+   * @see self::handleSubmissionNotification()
    */
   public function processJob(Job $job): JobResult {
     $payload = $job->getPayload();
@@ -207,6 +224,15 @@ class MaestroHelper implements LoggerInterface {
 
   /**
    * Send notification.
+   *
+   * @param string $notificationType
+   *   The notification type (one of the NOTIFICATION_* constannts).
+   * @param \Drupal\webform\WebformSubmissionInterface $submission
+   *   The webform submission.
+   * @param array $templateTask
+   *   The template task.
+   * @param int $maestroQueueID
+   *   The Maestro queue ID.
    */
   private function sendNotification(
     string $notificationType,
@@ -253,13 +279,11 @@ class MaestroHelper implements LoggerInterface {
         'operation' => 'notification failed',
         'exception' => $exception,
       ]);
-
-      return NULL;
     }
   }
 
   /**
-   * Load advanced queue if any.
+   * Load advanced queue used to process notification jobs.
    *
    * @return \Drupal\advancedqueue\Entity\QueueInterface
    *   The queue.
@@ -281,6 +305,17 @@ class MaestroHelper implements LoggerInterface {
 
   /**
    * Send notification email.
+   *
+   * @param string $recipient
+   *   The recipient.
+   * @param string $subject
+   *   The subject.
+   * @param string $body
+   *   The body.
+   * @param \Drupal\webform\WebformSubmissionInterface $submission
+   *   The webform submission.
+   * @param string $notificationType
+   *   The notification type (one of the NOTIFICATION_* constannts).
    */
   private function sendNotificationEmail(
     string $recipient,
@@ -331,6 +366,21 @@ class MaestroHelper implements LoggerInterface {
 
   /**
    * Send notification digital post.
+   *
+   * @param string $recipient
+   *   The recipient.
+   * @param string $subject
+   *   The subject.
+   * @param string $content
+   *   The content.
+   * @param string $taskUrl
+   *   The Maestro task URL.
+   * @param string $actionLabel
+   *   The action label.
+   * @param \Drupal\webform\WebformSubmissionInterface $submission
+   *   The webform submission.
+   * @param string $notificationType
+   *   The notification type (one of the NOTIFICATION_* constannts).
    */
   private function sendNotificationDigitalPost(
     string $recipient,
@@ -402,7 +452,7 @@ class MaestroHelper implements LoggerInterface {
    * @param string $handlerId
    *   The handler ID.
    * @param string $notificationType
-   *   The notification type.
+   *   The notification type (one of the NOTIFICATION_* constannts).
    * @param array $templateTask
    *   The Maestro template task.
    * @param int $maestroQueueID
@@ -419,6 +469,8 @@ class MaestroHelper implements LoggerInterface {
    *   - subject
    *   - taskUrl (for digital post)
    *   - actionLabel (for digital post)
+   *
+   * @see self::renderHtml()
    */
   public function renderNotification(WebformSubmissionInterface $submission, string $handlerId, string $notificationType, array $templateTask, int $maestroQueueID, string $contentType = NULL): array {
     $handler = $submission->getWebform()->getHandler($handlerId);
@@ -523,7 +575,23 @@ class MaestroHelper implements LoggerInterface {
   }
 
   /**
-   * Build HTML.
+   * Render HTML for a notification.
+   *
+   * @param string $type
+   *   The notification content type ('email' or 'pdf').
+   * @param string $subject
+   *   The subject.
+   * @param array $content
+   *   The content.
+   * @param string $taskUrl
+   *   The Maestro taks URL.
+   * @param string $actionLabel
+   *   The action label.
+   * @param \Drupal\webform\WebformSubmissionInterface $submission
+   *   The webform submission.
+   *
+   * @return string|MarkupInterface
+   *   The rendered content.
    */
   private function renderHtml(
     string $type,
