@@ -51,28 +51,28 @@ class MaestroHelper implements LoggerInterface {
    *
    * @var \Drupal\Core\Config\ImmutableConfig
    */
-  readonly private ImmutableConfig $config;
+  private readonly ImmutableConfig $config;
 
   /**
    * The webform submission storage.
    *
    * @var \Drupal\webform\WebformSubmissionStorageInterface|\Drupal\Core\Entity\EntityStorageInterface
    */
-  readonly private WebformSubmissionStorageInterface $webformSubmissionStorage;
+  private readonly WebformSubmissionStorageInterface $webformSubmissionStorage;
 
   /**
    * The queue storage.
    *
    * @var \Drupal\Core\Entity\EntityStorageInterface
    */
-  readonly private EntityStorageInterface $queueStorage;
+  private readonly EntityStorageInterface $queueStorage;
 
   /**
    * The Digital post helper.
    *
    * @var \Drupal\os2forms_digital_post\Helper\DigitalPostHelper|null
    */
-  readonly private ?DigitalPostHelper $digitalPostHelper;
+  private readonly ?DigitalPostHelper $digitalPostHelper;
 
   /**
    * Constructor.
@@ -80,14 +80,14 @@ class MaestroHelper implements LoggerInterface {
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
     ConfigFactoryInterface $configFactory,
-    readonly private WebformTokenManagerInterface $tokenManager,
-    readonly private MailManagerInterface $mailManager,
-    readonly private LanguageManagerInterface $languageManager,
-    readonly private WebformThemeManagerInterface $webformThemeManager,
-    readonly private LoggerChannelInterface $logger,
-    readonly private LoggerChannelInterface $submissionLogger,
-    readonly private ModuleHandlerInterface $moduleHandler,
-    readonly private EntityPrintPluginManagerInterface $entityPrintPluginManager,
+    private readonly WebformTokenManagerInterface $tokenManager,
+    private readonly MailManagerInterface $mailManager,
+    private readonly LanguageManagerInterface $languageManager,
+    private readonly WebformThemeManagerInterface $webformThemeManager,
+    private readonly LoggerChannelInterface $logger,
+    private readonly LoggerChannelInterface $submissionLogger,
+    private readonly ModuleHandlerInterface $moduleHandler,
+    private readonly EntityPrintPluginManagerInterface $entityPrintPluginManager,
   ) {
     $this->config = $configFactory->get(SettingsForm::SETTINGS);
     $this->webformSubmissionStorage = $entityTypeManager->getStorage('webform_submission');

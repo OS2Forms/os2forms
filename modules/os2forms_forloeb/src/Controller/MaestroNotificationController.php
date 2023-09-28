@@ -23,8 +23,8 @@ class MaestroNotificationController extends ControllerBase {
    * Constructor.
    */
   public function __construct(
-    readonly private WebformSubmissionStorageInterface $webformSubmissionStorage,
-    readonly private MaestroHelper $maestroHelper
+    private readonly WebformSubmissionStorageInterface $webformSubmissionStorage,
+    private readonly MaestroHelper $maestroHelper
   ) {
   }
 
