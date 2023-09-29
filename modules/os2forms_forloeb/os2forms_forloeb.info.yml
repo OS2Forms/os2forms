@@ -2,11 +2,13 @@ name: 'OS2forms med Forløb Module'
 description: 'Adds a Maestro workflow engine and advanced workflow functionality to OS2forms.'
 package: OS2Forms
 type: module
-core: 8.x
-core_version_requirement: ^8 || ^9
+core_version_requirement: ^9 || ^10
+
+configure: os2forms_forloeb.settings
 
 dependencies:
   - 'drupal:admin_toolbar_tools'
+  - 'drupal:advancedqueue'
   - 'drupal:diff'
   - 'drupal:entity_print'
   - 'drupal:eu_cookie_compliance'
@@ -18,20 +20,19 @@ dependencies:
   - 'drupal:mailsystem'
   - 'drupal:masquerade'
   - 'drupal:os2forms'
-  - 'drupal:os2forms_nemid'
   - 'drupal:os2forms_dawa'
+  - 'drupal:os2forms_nemid'
   - 'drupal:os2forms_sbsys'
   - 'drupal:os2web_simplesaml'
   - 'drupal:pathauto'
   - 'drupal:r4032login'
   - 'drupal:redirect'
   - 'drupal:smtp'
-  - 'drupal:system'
   - 'drupal:switch_page_theme'
+  - 'drupal:system'
   - 'drupal:token'
   - 'drupal:ultimate_cron'
   - 'drupal:webform'
-  - 'drupal:webform_ui'
   - 'drupal:webform_access'
   - 'drupal:webform_attachment'
   - 'drupal:webform_composite'
@@ -41,11 +42,15 @@ dependencies:
   - 'drupal:webform_node_element'
   - 'drupal:webform_remote_handlers'
   - 'drupal:webform_rest'
-  - 'drupal:webform_share'
   - 'drupal:webform_scheduled_email'
+  - 'drupal:webform_share'
   - 'drupal:webform_submission_export_import'
   - 'drupal:webform_submission_log'
   - 'drupal:webform_templates'
+  - 'drupal:webform_ui'
   - 'drupal:workflow_participants'
+  # os2forms_digital_post may be used for sending Meastro notifications via digital post
+  # - 'os2forms_digital_post:os2forms_digital_post'
+
 'interface translation project': os2forms_forloeb
 'interface translation server pattern': modules/contrib/os2forms_forloeb/translations/os2forms_forloeb.da.po

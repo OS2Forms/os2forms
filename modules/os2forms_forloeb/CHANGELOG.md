@@ -4,15 +4,19 @@ All notable changes to this project should be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-See ["how do I make a good changelog record?"](https://keepachangelog.com/en/1.0.0/#how) 
+See ["how do I make a good changelog record?"](https://keepachangelog.com/en/1.0.0/#how)
 before starting to add changes.
 
 ## [Unreleased]
 
+- Implemented `hook_maestro_zero_user_notification` and added *Maestro
+  notification* handler for sending notifications via email or digital post.
+- Cleaned up prefilling of forms in `MaestroWebformInheritTask`.
+
 ## 2.5.2 - 27.03.2023
 
 ### Updated
-- Bumped drupal/ultimate_cron version fixing [Deprecated function: Implicit conversion from float-string](https://www.drupal.org/project/ultimate_cron/issues/3256142). 
+- Bumped drupal/ultimate_cron version fixing [Deprecated function: Implicit conversion from float-string](https://www.drupal.org/project/ultimate_cron/issues/3256142).
 
 ## 2.5.1 - 10.03.2023
 - Added github action for checking changelog changes when creating pull requests
@@ -24,11 +28,11 @@ before starting to add changes.
 
 ## 2.5.0 - 11.10.2022
 
-### Added 
+### Added
 - retry task controller action
 - Added support for inheriting values without creating a submission
 
-## 2.4.0 
+## 2.4.0
 
 ### Added
 - Github CI action for checking Drupal Coding standards with PHP Code Sniffer
