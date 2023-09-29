@@ -3,7 +3,6 @@
 namespace Drupal\os2forms_forloeb\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
 use Drupal\os2forms_digital_post\Model\Document;
 use Drupal\os2forms_forloeb\MaestroHelper;
@@ -39,9 +38,23 @@ class MaestroNotificationController extends ControllerBase {
   }
 
   /**
-   * Preview action.
+   * Preview notification action.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   The request.
+   * @param \Drupal\webform\WebformInterface $webform
+   *   The webform.
+   * @param string $handler
+   *   The handler ID.
+   * @param string $notification_type
+   *   The notification type.
+   * @param string $content_type
+   *   The content type.
+   *
+   * @return array
+   *   A render array.
    */
-  public function preview(Request $request, WebformInterface $webform, string $handler, string $notification_type, string $content_type, RouteMatchInterface $routeMatch) {
+  public function preview(Request $request, WebformInterface $webform, string $handler, string $notification_type, string $content_type): array {
     $handler = $webform->getHandler($handler);
     $submissionIds = array_keys($this->webformSubmissionStorage->getQuery()
       ->condition('webform_id', $webform->id())
@@ -103,8 +116,20 @@ class MaestroNotificationController extends ControllerBase {
 
   /**
    * Render notification preview.
+   *
+   * @param string $handler
+   *   The handler ID.
+   * @param string $notification_type
+   *   The notification type.
+   * @param string $content_type
+   *   The content type.
+   * @param \Drupal\webform\WebformSubmissionInterface $submission
+   *   The webform submission.
+   *
+   * @return \Symfony\Component\HttpFoundation\Response
+   *   The response.
    */
-  public function previewRender(Request $request, WebformInterface $webform, string $handler, string $notification_type, string $content_type, WebformSubmissionInterface $submission) {
+  public function previewRender(string $handler, string $notification_type, string $content_type, WebformSubmissionInterface $submission) {
     $templateTask = [];
     $maestroQueueID = 0;
     [
@@ -122,6 +147,15 @@ class MaestroNotificationController extends ControllerBase {
 
   /**
    * Message action.
+   *
+   * Used only to show a message when a Maestro task link from a notification
+   * preview is clicked.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   The request.
+   *
+   * @return \Symfony\Component\HttpFoundation\Response
+   *   The response.
    */
   public function message(Request $request): Response {
     $content[] = '<h1>' . $request->get('message') . '</h1>';
