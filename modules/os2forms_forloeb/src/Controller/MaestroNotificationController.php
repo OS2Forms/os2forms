@@ -126,7 +126,7 @@ class MaestroNotificationController extends ControllerBase {
   public function message(Request $request): Response {
     $content[] = '<h1>' . $request->get('message') . '</h1>';
     if ($referer = $request->headers->get('referer')) {
-      $content[] = sprintf('<a href="%s">Go back</a>', $referer);
+      $content[] = $this->t('<a href=":url">Back to preview</a>', [':url' => $referer]);
     }
 
     return new Response(implode(PHP_EOL, $content));
