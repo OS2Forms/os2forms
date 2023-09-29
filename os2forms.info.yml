@@ -17,7 +17,6 @@ dependencies:
   - 'drupal:webform_submission_log'
   - 'drupal:webform_templates'
   - 'drupal:webform_composite'
-  - 'drupal:webform_embed'
   - 'drupal:entity_print'
   - 'drupal:webform_migrate'
   - 'drupal:redirect'
