@@ -11,11 +11,18 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## [3.12.0] 2023-10-02
+
+- Removing webform_embed
+- os2forms_permissions_by_term: removing node access control
+
 ## [3.11.0] 2023-09-25
 
 - [OS-58] New company address fields
 - Custom permissions by term field
 - Removing dependency to config_entity_revisions, webform_revisions, coc_forms_auto_export
+- [PR-56](https://github.com/OS2Forms/os2forms/pull/56)
+  Handled anonymous users in notifications and flow tasks
 
 ## [3.10.0] 2023-08-23
 

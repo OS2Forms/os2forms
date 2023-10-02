@@ -1,19 +1,42 @@
-os2forms_forloeb.forloeb_task_console_controller_execute:
-  path: 'os2forms-forloeb/execute-task'
+os2forms_forloeb.settings:
+  path: '/admin/config/system/os2forms_forloeb'
   defaults:
-    _controller: '\Drupal\os2forms_forloeb\Controller\ForloebTaskConsoleController::execute'
-    _title: 'Execute task'
+    _form: '\Drupal\os2forms_forloeb\Form\SettingsForm'
+    _title: 'OS2Forms forløb'
   requirements:
-    _permission: 'access content'
-  options:
-    no_cache: TRUE
+    _permission: 'administer site configuration'
 
-os2forms_forloeb.forloeb_task_console_controller_execute_retry:
-  path: 'os2forms-forloeb/execute-task-retry'
+os2forms_forloeb.meastro_notification.preview:
+  path: '/admin/structure/webform/manage/{webform}/os2forms_forloeb/notification/{handler}/preview/{notification_type}/{content_type}'
   defaults:
-    _controller: '\Drupal\os2forms_forloeb\Controller\ForloebTaskConsoleController::retry'
-    _title: 'Task not yet ready'
-  requirements:
-    _permission: 'access content'
+    _controller: '\Drupal\os2forms_forloeb\Controller\MaestroNotificationController::preview'
+    _title: 'Maestro notification preview'
+    notification_type: assignment
   options:
-    no_cache: TRUE
+    parameters:
+      webform:
+        type: 'entity:webform'
+  requirements:
+    _permission: 'view any webform submission'
+
+os2forms_forloeb.meastro_notification.preview_render:
+  path: '/admin/structure/webform/manage/{webform}/os2forms_forloeb/notification/{handler}/preview/{notification_type}/{content_type}/render/{submission}'
+  defaults:
+    _controller: '\Drupal\os2forms_forloeb\Controller\MaestroNotificationController::previewRender'
+    _title: 'Maestro notification render preview'
+  options:
+    parameters:
+      webform:
+        type: 'entity:webform'
+      submission:
+        type: 'entity:webform_submission'
+  requirements:
+    _permission: 'view any webform submission'
+
+os2forms_forloeb.meastro_notification.preview_message:
+  path: '/os2forms_forloeb/notification/message'
+  defaults:
+    _controller: '\Drupal\os2forms_forloeb\Controller\MaestroNotificationController::message'
+    _title: 'Maestro notification message'
+  requirements:
+    _permission: 'view any webform submission'

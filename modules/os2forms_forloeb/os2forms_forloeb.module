@@ -5,18 +5,13 @@
  * Install, update and uninstall functions for the os2forms_forloeb.
  */
 
-use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\BubbleableMetadata;
-use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Url;
 use Drupal\maestro\Engine\MaestroEngine;
+use Drupal\os2forms_forloeb\MaestroHelper;
 use Drupal\os2forms_forloeb\Plugin\EngineTasks\MaestroWebformInheritTask;
 use Drupal\user\Entity\User;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\WebformInterface;
-use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * Implements hook_maestro_interactive_handlers().
@@ -289,66 +284,93 @@ function os2forms_forloeb_preprocess_page(&$variables) {
 }
 
 /**
- * Implements hook_token_info_alter().
+ * Implements hook_webform_submission_form_alter().
  */
-function os2forms_forloeb_token_info_alter(&$data) {
-  $data['tokens']['webform_submission']['os2forms_forloeb_execute_task'] = [
-    'name' => t('Execute task path for webform submission'),
-    'description' => t("The token that can be user to get path for webform submission redirect URL."),
-    'type' => 'webform_submission',
+function os2forms_forloeb_webform_submission_form_alter(array &$form, FormStateInterface $formState, string $formId) {
+  MaestroWebformInheritTask::webformSubmissionFormAlter($form, $formState, $formId);
+}
+
+/**
+ * Implements hook_maestro_zero_user_notification().
+ */
+function os2forms_forloeb_maestro_zero_user_notification($templateMachineName, $taskMachineName, $queueID, $notificationType) {
+  _os2forms_forloeb_helper()->maestroZeroUserNotification($templateMachineName, $taskMachineName, $queueID, $notificationType);
+}
+
+/**
+ * Implements hook_maestro_can_user_execute_task_alter().
+ *
+ * For OS2Forms, you may have a consistent assignment to an "anonymous" user via
+ * a role. Use the QueueID and userID to drill into the task and alter the
+ * returnValue to TRUE if this is a user that should be looking at this task.
+ *
+ * You can make this as complex as you'd like it to be, checking things like
+ * sessions, login tokens, email addresses etc.
+ */
+function os2forms_forloeb_maestro_can_user_execute_task_alter(&$returnValue, $queueID, $userID) {
+  _os2forms_forloeb_helper()->maestroCanUserExecuteTaskAlter($returnValue, $queueID, $userID);
+}
+
+/**
+ * Implements hook_mail().
+ */
+function os2forms_forloeb_mail($key, &$message, $params) {
+  _os2forms_forloeb_helper()->mail($key, $message, $params);
+}
+
+/**
+ * Implements hook_mail_alter().
+ */
+function os2forms_forloeb_mail_alter(&$message) {
+  _os2forms_forloeb_helper()->mailAlter($message);
+}
+
+/**
+ * Implements hook_theme().
+ */
+function os2forms_forloeb_theme(array &$variables) {
+  $theme['os2forms_forloeb_notification_preview'] = [
+    'variables' => [
+      'webform' => NULL,
+      'handler' => NULL,
+      'notification_type' => NULL,
+      'subject' => NULL,
+      'recipient' => NULL,
+      'content_type' => NULL,
+      'submission' => NULL,
+      'return_url' => NULL,
+      'render_url' => NULL,
+      'preview_urls' => [
+        'prev' => NULL,
+        'self' => NULL,
+        'next' => NULL,
+      ],
+    ],
   ];
+
+  $theme['os2forms_forloeb_notification_message_email_html'] = [
+    'variables' => [
+      'message' => [
+        'content' => [
+          'value' => NULL,
+          'format' => NULL,
+        ],
+      ],
+      'task_url' => NULL,
+      'action_label' => NULL,
+      'webform_submission' => NULL,
+      'handler' => NULL,
+    ],
+  ];
+
+  $theme['os2forms_forloeb_notification_message_pdf_html'] = $theme['os2forms_forloeb_notification_message_email_html'];
+
+  return $theme;
 }
 
 /**
- * Implements hook_tokens().
- *
- * Provides token value for webform_submission:os2forms_forloeb_execute_task.
+ * Get MaestroHelper.
  */
-function os2forms_forloeb_tokens($type, array $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata) {
-  $replacements = [];
-
-  if ($type === 'webform_submission' && !empty($data['webform_submission']) && isset($tokens['os2forms_forloeb_execute_task'])) {
-    $replacements[$tokens['os2forms_forloeb_execute_task']] = Url::fromRoute(
-      'os2forms_forloeb.forloeb_task_console_controller_execute',
-      ['os2forms-forloeb-ws-token' => $data['webform_submission']->getToken()],
-      ['absolute' => TRUE]
-    )->toString(TRUE)->getGeneratedUrl();
-  }
-
-  return $replacements;
-}
-
-/**
- * Implements hook_entity_access().
- *
- * Allows requests with tokens to view the entity.
- */
-function os2forms_forloeb_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
-  if ($operation == 'update' && $entity instanceof WebformSubmission) {
-    $token = \Drupal::request()->query->get('os2forms-forloeb-ws-token');
-    if ($token && $token === $entity->getToken()) {
-      return AccessResult::allowed();
-    }
-  }
-  return AccessResult::neutral();
-}
-
-/**
- * Implements hook_maestro_post_fetch_assigned_queue_tasks().
- */
-function os2forms_forloeb_maestro_post_fetch_assigned_queue_tasks($userID, &$queueIDs) {
-  $token = \Drupal::request()->query->get('os2forms-forloeb-ws-token', '');
-  if ($token) {
-    $forloebTaskConsole = Drupal::service('os2forms_forloeb.task_console');
-    $queueRecord = $forloebTaskConsole->getQueueIdByWebformSubmissionToken($token);
-    $queueIDs[] = $queueRecord->id();
-    $queueIDs = array_unique($queueIDs);
-  }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_prepare_form().
- */
-function os2forms_forloeb_webform_submission_prepare_form(WebformSubmissionInterface $webform_submission, string $operation, FormStateInterface $form_state) {
-  MaestroWebformInheritTask::webformSubmissionPrepareForm($webform_submission, $operation, $form_state);
+function _os2forms_forloeb_helper(): MaestroHelper {
+  return Drupal::service(MaestroHelper::class);
 }

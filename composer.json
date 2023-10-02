@@ -19,6 +19,7 @@
         "cweagans/composer-patches": "^1.6.5",
         "dompdf/dompdf": "^2.0",
         "drupal/admin_toolbar": "^3.0",
+        "drupal/advancedqueue": "^1.0",
         "drupal/chosen": "^2.10",
         "drupal/ckeditor_a11ychecker": "^2.0@alpha",
         "drupal/clientside_validation": "^3.0",
@@ -39,7 +40,7 @@
         "drupal/libraries": "^3.0@beta",
         "drupal/linkit": "^5.0",
         "drupal/logging_alerts": "^2.0",
-        "drupal/maestro": "^3.0",
+        "drupal/maestro": "^3.1",
         "drupal/mailsystem": "^4.1",
         "drupal/masquerade": "^2.0@RC",
         "drupal/pathauto": "^1.5",
@@ -73,6 +74,9 @@
         "tecnickcom/tcpdf": "~6",
         "webmozart/path-util": "^2.3",
         "zaporylie/composer-drupal-optimizations": "^1.2"
+    },
+    "suggest": {
+        "os2forms/os2forms_digital_post": "Send Maestro notifications via digital post (see https://github.com/itk-dev/os2forms_digital_post/blob/main/README.md)"
     },
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",

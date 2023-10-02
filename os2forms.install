@@ -170,6 +170,15 @@ function os2forms_update_8904() {
 }
 
 /**
+ * Implements hook_update_N().
+ *
+ * Uninstalling webform_embed module.
+ */
+function os2forms_update_8905() {
+  \Drupal::service('module_installer')->uninstall(['webform_embed']);
+}
+
+/**
  * Creates a list of predefined terms for Application vocabulary.
  */
 function _os2form_install_init_application_terms() {

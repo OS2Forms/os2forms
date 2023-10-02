@@ -1,0 +1,35 @@
+{#
+/**
+ * @file
+ * Template for Maestro notification email.
+ *
+ * Available variables:
+ * - message: The notification message
+ *   - subject: the notification subject
+ *   - contect: the notification content. Must be rendered as `processed_text`, i.e.:
+ *     @code
+ *       {{ {
+ *       '#type':   'processed_text',
+ *       '#text':    message.content.value,
+ *       '#format':  message.content.format,
+ *       } }}
+ *     @endcode
+ * - notification_type: The type of notification ()
+ * - task_url: URL of the task.
+ * - action_label: Optional label for the task action.
+ */
+#}
+<main>
+  {# @see https://api.drupal.org/api/drupal/core%21modules%21filter%21filter.module/function/check_markup/9 #}
+  <div class="notification-content">
+    {{ {
+      '#type':   'processed_text',
+      '#text':    message.content.value,
+      '#format':  message.content.format,
+      } }}
+  </div>
+
+  {% if task_url|default(false) %}
+    <a class="task-url" href="{{ task_url }}" style="display: block; background: green; color: white; padding: 1em; text-decoration: none; text-align: center">{{ action_label|default('Go to your task'|t) }}</a>
+  {% endif %}
+</main>
