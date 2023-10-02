@@ -11,7 +11,11 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## [3.12.0] 2023-10-02
+
 - Removing webform_embed
+- os2forms_permissions_by_term: removing node access control
+
 
 ## [3.11.0] 2023-09-25
 
