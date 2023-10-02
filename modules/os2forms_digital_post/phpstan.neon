@@ -1,0 +1,20 @@
+parameters:
+  level: 6
+  paths:
+    - .
+  excludePaths:
+    # @see https://github.com/mglaman/drupal-check/issues/261#issuecomment-1030141772/
+    - vendor
+    - '*/node_modules/*'
+  ignoreErrors:
+    -
+      # Ignore some weird errors reported by PHPStan
+      # @todo Investigate further
+      messages:
+        # These errors may be related to classes that don't add anything to their base class (e.g. `class BrugerFlerRelationType extends FlerRelationType {}`)
+        - '#expects (DataGovDk\\Model\\Core\\)(.+)(\|null)?, \1\2\\\2AType given.#'
+        - '#expects (DigitalPost\\MeMo\\)(.+)(\|null)?, \1\2\\\2AType given.#'
+        - '#expects (Oio\\(?:.+\\)*)(.+)(\|null)?, \1\2Type given.#'
+        - '#expects array<(DigitalPost\\MeMo\\)(.+)>(\|null)?, array<int, \1\2\\\2AType> given.#'
+        - '#should return (DigitalPost\\MeMo\\)(.+) but returns \1\2\\\2AType.#'
+        - '#should return (Oio\\Fjernprint\\)(.+) but returns \1\2Type.#'

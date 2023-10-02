@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the os2forms_forloeb.
+ */
+
+/**
+ * Install os2forms_digital_post module.
+ */
+function os2forms_forloeb_update_9001(&$sandbox) {
+  \Drupal::service('module_installer')->install([
+    'os2forms_digital_post',
+  ]);
+}

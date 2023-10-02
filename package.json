@@ -2,12 +2,12 @@
   "license": "UNLICENSED",
   "private": true,
   "devDependencies": {
-    "markdownlint-cli": "^0.31.1"
+    "markdownlint-cli": "^0.32.2"
   },
   "scripts": {
-    "coding-standards-check/markdownlint": "markdownlint '*.md' 'web/modules/custom/**/*.md'",
+    "coding-standards-check/markdownlint": "yarn markdownlint --ignore LICENSE.md --ignore vendor --ignore node_modules '*.md' 'modules/os2forms_digital_post/**/*.md'",
     "coding-standards-check": "yarn coding-standards-check/markdownlint",
-    "coding-standards-apply/markdownlint": "markdownlint --fix '*.md' 'web/modules/custom/**/*.md'",
+    "coding-standards-apply/markdownlint": "yarn markdownlint --ignore LICENSE.md --ignore vendor --ignore node_modules '*.md' 'modules/os2forms_digital_post/**/*.md' --fix",
     "coding-standards-apply": "yarn coding-standards-apply/markdownlint"
   }
 }

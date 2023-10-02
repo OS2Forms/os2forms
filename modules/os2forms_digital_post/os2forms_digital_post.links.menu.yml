@@ -1,0 +1,5 @@
+os2forms_digital_post.admin.settings:
+  title: OS2Forms digital post
+  description: Configure the OS2Forms digital post module
+  parent: system.admin_config_system
+  route_name: os2forms_digital_post.admin.settings
