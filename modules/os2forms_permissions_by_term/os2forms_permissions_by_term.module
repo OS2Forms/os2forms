@@ -14,24 +14,6 @@ use Drupal\views\ViewExecutable;
 use Drupal\webform\WebformInterface;
 
 /**
- * Implements hook_module_implements_alter().
- *
- * We need the hook_options_list_alter() in this module to trigger after the one
- * in permissions_by_term module.
- */
-function os2forms_permissions_by_term_module_implements_alter(&$implementations, $hook) {
-  switch ($hook) {
-    // Move our hook_options_list_alter() implementation to the end of the list
-    // so it is handled after permissions_by_term module.
-    case 'options_list_alter':
-      $temp = $implementations['os2forms_permissions_by_term'];
-      unset($implementations['os2forms_permissions_by_term']);
-      $implementations['os2forms_permissions_by_term'] = $temp;
-      break;
-  }
-}
-
-/**
  * Implements hook_form_FORM_ID_alter().
  *
  * Alter the webform add form.

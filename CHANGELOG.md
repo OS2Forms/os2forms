@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- os2forms_permissions_by_term: removing node access control - WSOD fix
+
 ## [3.12.0] 2023-10-02
 
 - Removing webform_embed
