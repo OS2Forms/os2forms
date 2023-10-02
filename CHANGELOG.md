@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- os2forms_permissions_by_term: removing node access control - WSOD fix
+
 - [OS-58] New company address fields
 - Custom permissions by term field
 - Removing dependency to config_entity_revisions, webform_revisions, coc_forms_auto_export
