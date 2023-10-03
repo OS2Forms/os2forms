@@ -148,6 +148,3 @@ we use a helper script to run the analysis:
 ```sh
 ./scripts/code-analysis
 ```
-
-**TODO**: Make the code analysis run in GitHub Actions (cf.
-<https://github.com/itk-dev/os2forms_digital_post/blob/main/.github/workflows/pr.yaml#L86-L144>).

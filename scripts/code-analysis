@@ -1,41 +1,35 @@
 #!/usr/bin/env bash
-set -o errexit -o errtrace -o nounset -o pipefail
-IFS=$'\n\t'
-
 script_dir=$(pwd)
+module_name=$(basename "$script_dir")
+drupal_dir=vendor/drupal-module-code-analysis
+# Relative to $drupal_dir
+module_path=web/modules/contrib/$module_name
 
-# @see https://unix.stackexchange.com/a/13474
-upsearch () {
-  slashes=${PWD//[^\/]/}
-  directory="$PWD"
-  for (( n=${#slashes}; n>0; --n ))
-  do
-    test -e "$directory/$1" && echo "$directory/$1" && return
-    directory="$directory/.."
-  done
+cd "$script_dir" || exit
+
+drupal_composer() {
+  composer --working-dir="$drupal_dir" --no-interaction "$@"
 }
 
+# Create new Drupal 9 project
+if [ ! -f "$drupal_dir/composer.json" ]; then
+  composer --no-interaction create-project drupal/recommended-project:^9 "$drupal_dir"
+fi
+# Copy our code into the modules folder
+mkdir -p "$drupal_dir/$module_path"
+# https://stackoverflow.com/a/15373763
+rsync --archive --compress . --filter=':- .gitignore' --exclude "$drupal_dir" --exclude .git "$drupal_dir/$module_path"
 
-# The Drupal root contains a `web` folder.
-drupal_root=$(dirname "$(cd "$(upsearch web)" && pwd)")
-# Module path from drupal_root (note trailing slash) (cf. https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html)
-module_path=${script_dir#"${drupal_root}/"}
+drupal_composer config minimum-stability dev
 
-echo "Drupal root: $drupal_root"
-echo "Module path: $module_path"
+# Allow ALL plugins
+# https://getcomposer.org/doc/06-config.md#allow-plugins
+drupal_composer config --no-plugins allow-plugins true
 
-# Work around
-# PHP Fatal error:  Cannot redeclare drupal_get_filename() (previously declared in /Users/rimi/ITK/github/itk-dev/os2forms_selvbetjening/web/sites/default/modules/os2forms/vendor/drupal/core/includes/bootstrap.inc:190) in /Users/rimi/ITK/github/itk-dev/os2forms_selvbetjening/web/core/includes/bootstrap.inc on line 223
-# Remove our non-develop requirements and a develop dependency requiring drupal/core.
-docker run --volume ${PWD}:/app --workdir /app --rm efrecon/jq:1.7 'del(.require, ."require-dev"["drupal/maillog"])' composer.json > drupal-module-code-analysis-composer.json
+drupal_composer require wikimedia/composer-merge-plugin
+drupal_composer config extra.merge-plugin.include "$module_path/composer.json"
+# https://www.drupal.org/project/drupal/issues/3220043#comment-14845434
+drupal_composer require --dev symfony/phpunit-bridge
 
-# It seems that the file system needs a little time to sync.
-sleep 1
-
-docker run --rm --env COMPOSER=drupal-module-code-analysis-composer.json --volume "${script_dir}":/app itkdev/php8.1-fpm:latest composer install
-# Clean up
-rm drupal-module-code-analysis-composer.*
-
-# https://getcomposer.org/doc/03-cli.md#global-options
-# docker run --rm --interactive --tty --volume ${drupal_root}:/app itkdev/php8.1-fpm:latest composer --working-dir $module_path code-analysis/drupal-check
-docker run --rm --env PHP_MEMORY_LIMIT=-1 --interactive --tty --volume "${drupal_root}":/app itkdev/php8.1-fpm:latest composer --working-dir "$module_path" code-analysis/phpstan
+# Run PHPStan
+(cd "$drupal_dir" && vendor/bin/phpstan --configuration="$module_path/phpstan.neon")
