@@ -21,7 +21,6 @@ dependencies:
   - 'drupal:webform_access'
   - 'drupal:webform_attachment'
   - 'drupal:webform_composite'
-  - 'drupal:webform_embed'
   - 'drupal:webform_entity_print'
   - 'drupal:webform_entity_print_attachment'
   - 'drupal:webform_migrate'
