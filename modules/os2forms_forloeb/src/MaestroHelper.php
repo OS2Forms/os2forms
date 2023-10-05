@@ -12,7 +12,6 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Mail\MailManagerInterface;
@@ -77,11 +76,10 @@ class MaestroHelper implements LoggerInterface {
     private readonly MailManagerInterface $mailManager,
     private readonly LanguageManagerInterface $languageManager,
     private readonly WebformThemeManagerInterface $webformThemeManager,
-    private readonly LoggerChannelInterface $logger,
-    private readonly LoggerChannelInterface $submissionLogger,
-    private readonly ModuleHandlerInterface $moduleHandler,
     private readonly EntityPrintPluginManagerInterface $entityPrintPluginManager,
-    private readonly DigitalPostHelper $digitalPostHelper
+    private readonly DigitalPostHelper $digitalPostHelper,
+    private readonly LoggerChannelInterface $logger,
+    private readonly LoggerChannelInterface $submissionLogger
   ) {
     $this->config = $configFactory->get(SettingsForm::SETTINGS);
     $this->webformSubmissionStorage = $entityTypeManager->getStorage('webform_submission');
