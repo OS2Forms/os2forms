@@ -54,6 +54,8 @@ class BeskedfordelerHelper {
    *
    * @return \Drupal\os2forms_digital_post\Model\Message|null
    *   The message.
+   *
+   * @see Message::__set()
    */
   public function loadMessage(string $messageUUID): ?Message {
     // @phpstan-ignore-next-line (fetchObject invoked with 2 parameters)

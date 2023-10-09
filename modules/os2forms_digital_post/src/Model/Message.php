@@ -44,7 +44,16 @@ class Message {
   public ?string $beskedfordelerMessage;
 
   /**
-   * Called when using \PDO::FETCH_CLASS.
+   * Allow setting property using snake_case name.
+   *
+   * BeskedfordelerHelper::loadMessage() loads Messages via
+   * Drupal\Core\Database::fetchObject() which in turn uses \PDO::FETCH_CLASS
+   * (cf.
+   * https://www.php.net/manual/en/pdostatement.fetch.php#refsect1-pdostatement.fetch-parameters)
+   * so we need to translate from database column names (snake_case) to class
+   * property names (camelCase).
+   *
+   * @see BeskedfordelerHelper::loadMessage()
    */
   public function __set(string $name, mixed $value): void {
     $property = [
