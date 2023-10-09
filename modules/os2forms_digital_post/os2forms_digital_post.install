@@ -17,17 +17,3 @@ use Drupal\os2forms_digital_post\Helper\BeskedfordelerHelper;
 function os2forms_digital_post_schema() {
   return Drupal::service(BeskedfordelerHelper::class)->schema();
 }
-
-/**
- * Enable Beskedfordeler module.
- */
-function os2forms_digital_post_update_9001(): void {
-  Drupal::service('module_installer')->install(['beskedfordeler']);
-}
-
-/**
- * Create beskedfordeler table.
- */
-function os2forms_digital_post_update_9002(): void {
-  Drupal::service(BeskedfordelerHelper::class)->update9002();
-}
