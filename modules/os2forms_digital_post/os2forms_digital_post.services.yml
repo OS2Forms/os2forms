@@ -1,0 +1,68 @@
+services:
+  logger.channel.os2forms_digital_post:
+    parent: logger.channel_base
+    arguments: [ 'os2forms_digital_post' ]
+
+  logger.channel.os2forms_digital_post_submission:
+    parent: logger.channel_base
+    arguments: [ 'os2forms_digital_post_submission' ]
+
+  Drupal\os2forms_digital_post\Helper\Settings:
+    arguments:
+      - "@keyvalue"
+
+  Drupal\os2forms_digital_post\Helper\CertificateLocatorHelper:
+    arguments:
+      - "@Drupal\\os2forms_digital_post\\Helper\\Settings"
+
+  Drupal\os2forms_digital_post\Helper\MeMoHelper:
+    arguments:
+      - "@Drupal\\os2forms_digital_post\\Helper\\Settings"
+      - "@plugin.manager.element_info"
+      - "@webform.token_manager"
+
+  Drupal\os2forms_digital_post\Helper\ForsendelseHelper:
+    arguments:
+      - "@Drupal\\os2forms_digital_post\\Helper\\Settings"
+      - "@plugin.manager.element_info"
+      - "@webform.token_manager"
+
+  Drupal\os2forms_digital_post\Helper\DigitalPostHelper:
+    arguments:
+      - "@Drupal\\os2forms_digital_post\\Helper\\Settings"
+      - "@Drupal\\os2forms_digital_post\\Helper\\CertificateLocatorHelper"
+      - "@plugin.manager.os2web_datalookup"
+      - "@Drupal\\os2forms_digital_post\\Helper\\MeMoHelper"
+      - "@Drupal\\os2forms_digital_post\\Helper\\ForsendelseHelper"
+      - "@Drupal\\os2forms_digital_post\\Helper\\BeskedfordelerHelper"
+      - "@logger.channel.os2forms_digital_post"
+      - "@logger.channel.os2forms_digital_post_submission"
+
+  Drupal\os2forms_digital_post\Helper\WebformHelperSF1601:
+    arguments:
+      - "@Drupal\\os2forms_digital_post\\Helper\\Settings"
+      - "@entity_type.manager"
+      - "@plugin.manager.os2web_datalookup"
+      - "@Drupal\\os2forms_digital_post\\Helper\\MeMoHelper"
+      - "@Drupal\\os2forms_digital_post\\Helper\\ForsendelseHelper"
+      - "@Drupal\\os2forms_digital_post\\Helper\\BeskedfordelerHelper"
+      - "@logger.channel.os2forms_digital_post"
+      - "@logger.channel.os2forms_digital_post_submission"
+      - "@Drupal\\os2forms_digital_post\\Helper\\DigitalPostHelper"
+
+  Drupal\os2forms_digital_post\Helper\SF1461Helper:
+
+  Drupal\os2forms_digital_post\EventSubscriber\BeskedfordelerEventSubscriber:
+    arguments:
+      - '@Drupal\os2forms_digital_post\Helper\BeskedfordelerHelper'
+      - '@Drupal\beskedfordeler\Helper\MessageHelper'
+      - '@Drupal\os2forms_digital_post\Helper\WebformHelperSF1601'
+      - '@logger.channel.os2forms_digital_post'
+    tags:
+      - { name: 'event_subscriber' }
+
+  Drupal\os2forms_digital_post\Helper\BeskedfordelerHelper:
+    arguments:
+      - '@database'
+      - '@Drupal\os2forms_digital_post\Helper\MeMoHelper'
+      - '@logger.channel.os2forms_digital_post'

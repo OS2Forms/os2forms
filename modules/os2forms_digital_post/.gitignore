@@ -1,0 +1,6 @@
+vendor
+composer.lock
+node_modules
+yarn.lock
+
+src/Controller/SF1601Controller.php.log

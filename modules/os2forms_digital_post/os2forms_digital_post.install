@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Install hooks for os2forms_digital_post.
+ */
+
+use Drupal\os2forms_digital_post\Helper\BeskedfordelerHelper;
+
+/**
+ * Implements hook_schema().
+ *
+ * @see BeskedfordelerHelper::schema()
+ *
+ * @phpstan-return array<string, mixed>
+ */
+function os2forms_digital_post_schema() {
+  return Drupal::service(BeskedfordelerHelper::class)->schema();
+}

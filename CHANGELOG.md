@@ -11,6 +11,9 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [#62](https://github.com/OS2Forms/os2forms/pull/62)
+  Added digital post module
+
 ## [3.12.2] 2023-10-03
 
 - Removing webform_embed - fix
