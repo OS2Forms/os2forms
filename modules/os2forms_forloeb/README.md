@@ -44,13 +44,3 @@ must be processed asynchronously. Specify the queue handling notification jobs.
 #### Templates
 
 Define templates for emails and digital post (PDF).
-
-### Note on digital post
-
-Digital post is sent using the API provided by the [OS2Forms Digital Post
-module](https://github.com/itk-dev/os2forms_digital_post)
-(`os2forms_digital_post`) which in turn uses [SF1600: Print på
-serviceplatformen](https://digitaliseringskataloget.dk/integration/sf1600). Not
-all OS2Forms projects use `os2forms_digital_post` and in the future we should
-generalize the API for sending digital post to allow other implementations (not
-based on [SF1600](https://digitaliseringskataloget.dk/integration/sf1600)).

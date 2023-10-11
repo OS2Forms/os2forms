@@ -1,0 +1,16 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - os2forms_digital_post
+  enforced:
+    module:
+      - os2forms_digital_post
+id: os2forms_digital_post
+label: 'OSForms digital post'
+backend: database
+backend_configuration:
+  lease_time: 300
+processor: cron
+processing_time: 90
+locked: false

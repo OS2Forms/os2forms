@@ -1,0 +1,8 @@
+name: 'OS2Forms Digital Post examples'
+type: module
+description: 'Example forms for OS2Forms Digital Post.'
+package: 'OS2Forms'
+
+core_version_requirement: ^9
+dependencies:
+  - 'os2forms_digital_post:os2forms_digital_post'

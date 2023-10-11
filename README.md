@@ -131,9 +131,20 @@ docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.1-fpm composer c
 ### Markdown
 
 ```sh
-docker run --rm --volume ${PWD}:/app --workdir /app node:18 yarn install
-docker run --rm --volume ${PWD}:/app --workdir /app node:18 yarn coding-standards-check/markdownlint
+docker run --rm --volume ${PWD}:/app --workdir /app node:20 yarn install
+docker run --rm --volume ${PWD}:/app --workdir /app node:20 yarn coding-standards-check/markdownlint
 
 # Fix (some) coding standards issues.
-docker run --rm --volume ${PWD}:/app --workdir /app node:18 yarn coding-standards-apply/markdownlint
+docker run --rm --volume ${PWD}:/app --workdir /app node:20 yarn coding-standards-apply/markdownlint
+```
+
+## Code analysis
+
+We use [PHPStan](https://phpstan.org/) for static code analysis.
+
+Running statis code analysis on a standalone Drupal module is a bit tricky, so
+we use a helper script to run the analysis:
+
+```sh
+./scripts/code-analysis
 ```

@@ -4,6 +4,7 @@
 
   <file>.</file>
   <exclude-pattern>vendor/</exclude-pattern>
+  <exclude-pattern>node_modules/</exclude-pattern>
   <!-- Exclude our copy of the abandoned https://www.drupal.org/project/webform_embed -->
   <exclude-pattern>modules/webform_embed/</exclude-pattern>
   <!-- Exclude our copy of the abandoned https://www.drupal.org/project/field_color -->
@@ -15,6 +16,12 @@
   <arg name="extensions" value="php,module,inc,install,test,profile,theme,css,info,txt,yml"/>
   <config name="drupal_core_version" value="9"/>
 
-  <rule ref="vendor/drupal/coder/coder_sniffer/Drupal" />
-  <rule ref="vendor/drupal/coder/coder_sniffer/DrupalPractice"/>
+
+  <rule ref="Drupal">
+    <!-- We want to be able to use "package" and "version" in our custom modules -->
+    <exclude name="Drupal.InfoFiles.AutoAddedKeys.Project"/>
+    <exclude name="Drupal.InfoFiles.AutoAddedKeys.Version"/>
+  </rule>
+
+  <rule ref="DrupalPractice"/>
 </ruleset>

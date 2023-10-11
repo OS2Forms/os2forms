@@ -16,6 +16,9 @@
         }
     },
     "require": {
+        "php": "^8.1",
+        "ext-dom": "*",
+        "ext-soap": "*",
         "cweagans/composer-patches": "^1.6.5",
         "dompdf/dompdf": "^2.0",
         "drupal/admin_toolbar": "^3.0",
@@ -68,20 +71,28 @@
         "drupal/webform_validation": "^2.0",
         "drupal/webform_views": "^5.0@alpha",
         "drupal/workflow_participants": "^2.4",
-        "os2web/os2web_datalookup": "^1.0",
+        "http-interop/http-factory-guzzle": "^1.0.0",
+        "itk-dev/beskedfordeler-drupal": "^1.0",
+        "itk-dev/serviceplatformen": "dev-feature/guzzle6-adapter as 1.5",
+        "os2web/os2web_datalookup": "^1.5",
         "os2web/os2web_nemlogin": "^1.0",
+        "php-http/guzzle6-adapter": "^2.0",
         "phpoffice/phpword": "^0.18.2",
+        "symfony/options-resolver": "^5.4 || ^6.0",
         "tecnickcom/tcpdf": "~6",
         "webmozart/path-util": "^2.3",
+        "wsdltophp/packagebase": "^5.0",
         "zaporylie/composer-drupal-optimizations": "^1.2"
-    },
-    "suggest": {
-        "os2forms/os2forms_digital_post": "Send Maestro notifications via digital post (see https://github.com/itk-dev/os2forms_digital_post/blob/main/README.md)"
     },
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
         "drupal/coder": "^8.3",
-        "drupal/maillog": "^1.0"
+        "drupal/maillog": "^1.0",
+        "mglaman/phpstan-drupal": "^1.1",
+        "phpstan/extension-installer": "^1.3",
+        "phpstan/phpstan-deprecation-rules": "^1.1",
+        "phpunit/phpunit": "^9.5",
+        "wsdltophp/packagegenerator": "^4.0"
     },
     "extra" : {
         "composer-exit-on-patch-failure": false,
@@ -105,6 +116,12 @@
         }
     },
     "scripts": {
+        "code-analysis/phpstan": [
+            "phpstan analyse"
+        ],
+        "code-analysis": [
+            "@code-analysis/phpstan"
+        ],
         "coding-standards-check/phpcs": [
             "phpcs --standard=phpcs.xml.dist"
         ],
@@ -121,9 +138,11 @@
     "config": {
         "sort-packages": true,
         "allow-plugins": {
-            "simplesamlphp/composer-module-installer": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true,
             "cweagans/composer-patches": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "phpstan/extension-installer": true,
+            "simplesamlphp/composer-module-installer": true,
+            "vaimo/composer-patches": true,
             "zaporylie/composer-drupal-optimizations": true
         }
     }

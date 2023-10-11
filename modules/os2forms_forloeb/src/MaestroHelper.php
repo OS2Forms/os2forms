@@ -12,7 +12,6 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Mail\MailManagerInterface;
@@ -68,13 +67,6 @@ class MaestroHelper implements LoggerInterface {
   private readonly EntityStorageInterface $queueStorage;
 
   /**
-   * The Digital post helper.
-   *
-   * @var \Drupal\os2forms_digital_post\Helper\DigitalPostHelper|null
-   */
-  private readonly ?DigitalPostHelper $digitalPostHelper;
-
-  /**
    * Constructor.
    */
   public function __construct(
@@ -84,20 +76,14 @@ class MaestroHelper implements LoggerInterface {
     private readonly MailManagerInterface $mailManager,
     private readonly LanguageManagerInterface $languageManager,
     private readonly WebformThemeManagerInterface $webformThemeManager,
-    private readonly LoggerChannelInterface $logger,
-    private readonly LoggerChannelInterface $submissionLogger,
-    private readonly ModuleHandlerInterface $moduleHandler,
     private readonly EntityPrintPluginManagerInterface $entityPrintPluginManager,
+    private readonly DigitalPostHelper $digitalPostHelper,
+    private readonly LoggerChannelInterface $logger,
+    private readonly LoggerChannelInterface $submissionLogger
   ) {
     $this->config = $configFactory->get(SettingsForm::SETTINGS);
     $this->webformSubmissionStorage = $entityTypeManager->getStorage('webform_submission');
     $this->queueStorage = $entityTypeManager->getStorage('advancedqueue_queue');
-
-    // The OS2Forms Digital Post (os2forms_digital_post) module may not be
-    // installed.
-    $this->digitalPostHelper = \Drupal::hasService(DigitalPostHelper::class)
-      ? \Drupal::service(DigitalPostHelper::class)
-      : NULL;
   }
 
   /**
@@ -391,10 +377,6 @@ class MaestroHelper implements LoggerInterface {
     WebformSubmissionInterface $submission,
     string $notificationType
   ): void {
-    if (NULL === $this->digitalPostHelper) {
-      throw new RuntimeException('Cannot send digital post. Module OS2Forms Digital Post (os2forms_digital_post) not installed.');
-    }
-
     try {
       $document = new Document(
         $content,

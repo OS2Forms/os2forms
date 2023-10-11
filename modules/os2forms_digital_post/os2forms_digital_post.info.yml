@@ -1,0 +1,13 @@
+name: 'OS2Forms Digital Post'
+type: module
+description: 'Provides integration to Print service provided by Serviceplatformen.'
+package: 'OS2Forms'
+core_version_requirement: ^9
+dependencies:
+  - 'beskedfordeler:beskedfordeler'
+  - 'drupal:advancedqueue'
+  - 'os2web_datalookup:os2web_datalookup'
+  - 'webform:webform'
+  - 'webform:webform_submission_log'
+
+configure: os2forms_digital_post.admin.settings
