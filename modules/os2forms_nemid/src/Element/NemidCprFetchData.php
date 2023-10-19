@@ -16,7 +16,7 @@ class NemidCprFetchData extends CompositeFetchDataBase {
     $elements = parent::getCompositeElements($element);
 
     // Pattern for CPR.
-    $elements[self::getValueElementName()]['#pattern'] = '\d{6}-\d{4}';
+    $elements[self::getValueElementName()]['#pattern'] = '\d{6}(-)?\d{4}';
 
     return $elements;
   }
