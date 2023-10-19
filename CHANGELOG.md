@@ -11,6 +11,10 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## [3.13.2] 2023-10-19
+
+- Fixing CPR fetch pattern
+
 ## [3.13.1] 2023-10-19
 
 - Checking CPR format before fetching data
