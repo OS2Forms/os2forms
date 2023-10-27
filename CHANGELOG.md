@@ -185,3 +185,4 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 [3.5.0]: https://github.com/OS2Forms/os2forms/compare/3.2.5...3.5.0
 [3.2.6]: https://github.com/OS2Forms/os2forms/compare/3.2.5...3.2.6
 [3.2.5]: https://github.com/OS2Forms/os2forms/compare/3.2.4...3.2.5
+
