@@ -258,9 +258,26 @@ final class SettingsForm extends FormBase {
   private function testCertificate(): void {
     try {
       $certificateLocator = $this->certificateLocatorHelper->getCertificateLocator();
-      $certificate = $this->settings->getCertificate();
-      ($certificate[CertificateLocatorHelper::LOCATOR_TYPE_FILE_SYSTEM]['path'] != NULL) ? $certificateLocator->getCertificate() : $certificateLocator->getCertificates();
-      $this->messenger()->addStatus($this->t('Certificate succesfully tested'));
+
+      // Check if the certificate has the pkcs12 extension or not.
+      if (pathinfo($certificateLocator->getAbsolutePathToCertificate(), PATHINFO_EXTENSION) == 'pkcs12') {
+        // Check the certificate if it is a valid pkcs12 certificate.
+        $certificateLocator->getCertificates();
+      }
+      else {
+        // Get contents of certificate.
+        $certificateKeyFile = $certificateLocator->getCertificate();
+        // Create an array for checking the key with the certificate.
+        $keyCheckData = [$certificateKeyFile, $certificateLocator->getPassphrase()];
+        // Check the private key against the certificate.
+        $result = openssl_x509_check_private_key($certificateKeyFile, $keyCheckData);
+        // If the result is not "1", throw an exception.
+        if ($result != 1) {
+          throw new \ErrorException('PEM certificate is not valid.');
+        }
+      }
+
+      $this->messenger()->addStatus($this->t('Certificate successfully tested'));
     }
     catch (\Throwable $throwable) {
       $message = $this->t('Error testing certificate: %message', ['%message' => $throwable->getMessage()]);

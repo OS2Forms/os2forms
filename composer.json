@@ -82,8 +82,9 @@
         "tecnickcom/tcpdf": "~6",
         "webmozart/path-util": "^2.3",
         "wsdltophp/packagebase": "^5.0",
-        "zaporylie/composer-drupal-optimizations": "^1.2"
-    },
+        "zaporylie/composer-drupal-optimizations": "^1.2",
+				"ext-openssl": "*"
+		},
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
         "drupal/coder": "^8.3",
