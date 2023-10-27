@@ -258,9 +258,10 @@ final class SettingsForm extends FormBase {
   private function testCertificate(): void {
     try {
       $certificateLocator = $this->certificateLocatorHelper->getCertificateLocator();
+      $certificatePath = $this->settings->getCertificate()[CertificateLocatorHelper::LOCATOR_TYPE_FILE_SYSTEM]['path'];
 
       // Check if the certificate has the pkcs12 extension or not.
-      if (pathinfo($certificateLocator->getAbsolutePathToCertificate(), PATHINFO_EXTENSION) == 'pkcs12') {
+      if (pathinfo($certificatePath, PATHINFO_EXTENSION) == 'pkcs12') {
         // Check the certificate if it is a valid pkcs12 certificate.
         $certificateLocator->getCertificates();
       }
