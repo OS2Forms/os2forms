@@ -10,6 +10,8 @@ See ["how do I make a good changelog record?"](https://keepachangelog.com/en/1.0
 before starting to add changes. Use example [placed in the end of the page](#example-of-change-log-record)
 
 ## [Unreleased]
+- [#72](https://github.com/OS2Forms/os2forms/pull/72)
+  Fix certificate testing, also testing for RSA/PEM certs as well as PKCS12.
 
 ## [3.13.2] 2023-10-19
 
