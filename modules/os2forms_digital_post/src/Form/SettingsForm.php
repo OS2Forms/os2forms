@@ -286,3 +286,4 @@ final class SettingsForm extends FormBase {
   }
 
 }
+
