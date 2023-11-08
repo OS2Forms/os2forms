@@ -243,12 +243,12 @@ final class MaestroNotificationHandler extends WebformHandlerBase {
 
     // Expand composite elements, NOT custom composite elements.
     foreach ($elements as $key => $element) {
-      $orgElement = $this->getWebform()->getElement($key);
+      $formElement = $this->getWebform()->getElement($key);
 
-      if (array_key_exists('#webform_composite_elements', $orgElement)) {
-        foreach ($orgElement['#webform_composite_elements'] as $compositeElement) {
+      if (isset($formElement['#webform_composite_elements'])) {
+        foreach ($formElement['#webform_composite_elements'] as $compositeElement) {
           // If composite element is not accessible ignore it.
-          if (array_key_exists('#access', $compositeElement) && !$compositeElement['#access']) {
+          if (!($compositeElement['#access'] ?? TRUE)) {
             continue;
           }
 
