@@ -99,7 +99,7 @@ final class MaestroNotificationHandler extends WebformHandlerBase {
       '#title' => $this->t('Notification'),
     ];
 
-    $availableElements = $this->getRecipientElementsOptions();
+    $availableElements = $this->getRecipientElementOptions();
     $form[self::NOTIFICATION][static::RECIPIENT_ELEMENT] = [
       '#type' => 'select',
       '#title' => $this->t('Element that contains the recipient identifier (email, CPR or CVR) of the notification'),
@@ -228,7 +228,7 @@ final class MaestroNotificationHandler extends WebformHandlerBase {
   /**
    * Get recipient elements.
    */
-  private function getRecipientElementsOptions(): array {
+  private function getRecipientElementOptions(): array {
     $elements = $this->getWebform()->getElementsDecodedAndFlattened();
 
     $elementTypes = [
@@ -270,7 +270,7 @@ final class MaestroNotificationHandler extends WebformHandlerBase {
       $elements,
       static fn (array $element) => $isAllowedElement($element)
           // Composite elements are already filtered,
-          //i.e. they do not need to be filtered here.
+          // i.e. they do not need to be filtered here.
           || ($element['#is_composite'] ?? FALSE)
     );
 
@@ -281,7 +281,8 @@ final class MaestroNotificationHandler extends WebformHandlerBase {
 
           return array_map(
             static fn (array $compositeElement) => $compositeElement['#title'],
-            // Consider only elements with a title, i.e. the subelements we added earlier.
+            // Consider only elements with a title,
+            // i.e. the subelements we added earlier.
             array_filter($element, static fn ($e) => isset($e['#title'])));
         }
 
