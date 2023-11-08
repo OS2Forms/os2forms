@@ -99,7 +99,7 @@ final class MaestroNotificationHandler extends WebformHandlerBase {
       '#title' => $this->t('Notification'),
     ];
 
-    $availableElements = $this->getRecipientElements();
+    $availableElements = $this->getRecipientElementsOptions();
     $form[self::NOTIFICATION][static::RECIPIENT_ELEMENT] = [
       '#type' => 'select',
       '#title' => $this->t('Element that contains the recipient identifier (email, CPR or CVR) of the notification'),
@@ -228,7 +228,7 @@ final class MaestroNotificationHandler extends WebformHandlerBase {
   /**
    * Get recipient elements.
    */
-  private function getRecipientElements(): array {
+  private function getRecipientElementsOptions(): array {
     $elements = $this->getWebform()->getElementsDecodedAndFlattened();
 
     $elementTypes = [
@@ -241,6 +241,8 @@ final class MaestroNotificationHandler extends WebformHandlerBase {
       'os2forms_person_lookup',
     ];
 
+    $isAllowedElement = static fn ($e) => in_array($e['#type'], $elementTypes, TRUE);
+
     // Expand composite elements, NOT custom composite elements.
     foreach ($elements as $key => $element) {
       $formElement = $this->getWebform()->getElement($key);
@@ -252,11 +254,13 @@ final class MaestroNotificationHandler extends WebformHandlerBase {
             continue;
           }
 
-          if (in_array($compositeElement['#type'], $elementTypes, TRUE)) {
-            $elements[$compositeElement['#webform_composite_key']] = [
-              '#title' => (string) $compositeElement['#title'],
-              '#type' => $compositeElement['#type'],
+          if ($isAllowedElement($compositeElement)) {
+            // Group composite subelements.
+            $elements[$element['#title']][$compositeElement['#webform_composite_key']] = [
+              '#title' => $compositeElement['#title'],
             ];
+
+            $elements[$element['#title']]['#is_composite'] = TRUE;
           }
         }
       }
@@ -264,14 +268,27 @@ final class MaestroNotificationHandler extends WebformHandlerBase {
 
     $elements = array_filter(
       $elements,
-      static function (array $element) use ($elementTypes) {
-        return in_array($element['#type'], $elementTypes, TRUE);
-      }
+      static fn (array $element) => $isAllowedElement($element)
+          // Composite elements are already filtered,
+          //i.e. they do not need to be filtered here.
+          || ($element['#is_composite'] ?? FALSE)
     );
 
-    return array_map(static function (array $element) {
-      return $element['#title'];
-    }, $elements);
+    // Get titles of remaining elements.
+    return array_map(
+      static function (array $element) {
+        if ($element['#is_composite'] ?? FALSE) {
+
+          return array_map(
+            static fn (array $compositeElement) => $compositeElement['#title'],
+            // Consider only elements with a title, i.e. the subelements we added earlier.
+            array_filter($element, static fn ($e) => isset($e['#title'])));
+        }
+
+        return $element['#title'];
+      },
+      $elements
+    );
   }
 
   /**
