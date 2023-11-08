@@ -466,6 +466,21 @@ class MaestroHelper implements LoggerInterface {
       ?? $data[$recipientElement]
       ?? NULL;
 
+    // Handle composite elements.
+    if ($recipient === NULL) {
+      if (str_contains($recipientElement, '__')) {
+        $keys = explode('__', $recipientElement);
+        $result = $data;
+        foreach ($keys as $key) {
+          if (array_key_exists($key, $result)) {
+            $result = $result[$key];
+          }
+        }
+
+        $recipient = $result;
+      }
+    }
+
     if ($notificationType === self::NOTIFICATION_ESCALATION) {
       $recipient = $settings[MaestroNotificationHandler::NOTIFICATION][$notificationType][MaestroNotificationHandler::NOTIFICATION_RECIPIENT] ?? NULL;
     }

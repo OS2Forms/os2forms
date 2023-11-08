@@ -240,6 +240,28 @@ final class MaestroNotificationHandler extends WebformHandlerBase {
       'cvr_value_element',
       'os2forms_person_lookup',
     ];
+
+    // Expand composite elements, NOT custom composite elements.
+    foreach ($elements as $key => $element) {
+      $orgElement = $this->getWebform()->getElement($key);
+
+      if (array_key_exists('#webform_composite_elements', $orgElement)) {
+        foreach ($orgElement['#webform_composite_elements'] as $compositeElement) {
+          // If composite element is not accessible ignore it.
+          if (array_key_exists('#access', $compositeElement) && !$compositeElement['#access']) {
+            continue;
+          }
+
+          if (in_array($compositeElement['#type'], $elementTypes, TRUE)) {
+            $elements[$compositeElement['#webform_composite_key']] = [
+              '#title' => (string) $compositeElement['#title'],
+              '#type' => $compositeElement['#type'],
+            ];
+          }
+        }
+      }
+    }
+
     $elements = array_filter(
       $elements,
       static function (array $element) use ($elementTypes) {
