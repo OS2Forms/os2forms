@@ -13,6 +13,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 - [#74](https://github.com/OS2Forms/os2forms/pull/74)
   Allow composite elements in Maestro notification recipient
+- [#73](https://github.com/OS2Forms/os2forms/pull/73a)
+  Fix issue with nested elements in webform inherit
 - [#72](https://github.com/OS2Forms/os2forms/pull/72)
   Fix certificate testing, also testing for RSA/PEM certs as well as PKCS12
 
