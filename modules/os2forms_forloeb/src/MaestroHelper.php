@@ -471,7 +471,7 @@ class MaestroHelper implements LoggerInterface {
     if ($recipient === NULL) {
       // Composite subelement keys consist of
       // the composite element key and the subelement key separated by '__',
-      // e.g. 'contact__name'
+      // e.g. 'contact__name'.
       if (str_contains($recipientElement, '__')) {
         $keys = explode('__', $recipientElement);
         $recipient = NestedArray::getValue($data, $keys);
