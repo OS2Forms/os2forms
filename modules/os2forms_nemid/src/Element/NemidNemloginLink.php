@@ -35,7 +35,12 @@ class NemidNemloginLink extends Link {
     /** @var \Drupal\webform\WebformInterface $webform */
     $webform = NULL;
 
-    if ($route_name === 'entity.webform.canonical') {
+    $webformShareRoutes = [
+      'entity.webform.share_page',
+      'entity.webform.share_page.javascript',
+    ];
+
+    if ($route_name === 'entity.webform.canonical' || in_array($route_name, $webformShareRoutes) ) {
       $webform = \Drupal::request()->attributes->get('webform');
     }
     elseif ($route_name == 'entity.node.canonical') {
@@ -60,7 +65,6 @@ class NemidNemloginLink extends Link {
 
     // Getting auth plugin ID override.
     $authPluginId = NULL;
-
     if ($webform) {
       $webformNemidSettings = $webform->getThirdPartySetting('os2forms', 'os2forms_nemid');
       if (isset($webformNemidSettings['session_type']) && !empty($webformNemidSettings['session_type'])) {
@@ -70,11 +74,6 @@ class NemidNemloginLink extends Link {
 
     // Checking if we have a share webform route, if yes open link in a new
     // tab.
-    $webformShareRoutes = [
-      'entity.webform.share_page',
-      'entity.webform.share_page.javascript',
-    ];
-
     $options = [];
     if (in_array($route_name, $webformShareRoutes)) {
       $element['#attributes']['target'] = '_blank';
