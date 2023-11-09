@@ -88,4 +88,3 @@ class SettingsForm extends FormBase {
   }
 
 }
-
