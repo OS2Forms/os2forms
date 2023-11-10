@@ -85,6 +85,7 @@ class SettingsForm extends FormBase {
     }
 
     $this->messenger()->addStatus($this->t('The configuration options have been saved.'));
+
   }
 
 }
