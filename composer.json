@@ -27,7 +27,7 @@
         "drupal/ckeditor_a11ychecker": "^2.0@alpha",
         "drupal/clientside_validation": "^3.0",
         "drupal/coc_forms_auto_export": "^2.0@alpha",
-        "drupal/config_entity_revisions": "^1.7.0",
+        "drupal/config_entity_revisions": "^2.0",
         "drupal/diff": "^1.0",
         "drupal/embed": "^1.4",
         "drupal/entity_print": "^2.1",
