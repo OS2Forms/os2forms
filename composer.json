@@ -70,7 +70,7 @@
         "drupal/webform_scheduled_tasks": "^2.0",
         "drupal/webform_validation": "^2.0",
         "drupal/webform_views": "^5.0@alpha",
-        "drupal/workflow_participants": "^2.4",
+        "drupal/workflow_participants": "^3.0@RC",
         "http-interop/http-factory-guzzle": "^1.0.0",
         "itk-dev/beskedfordeler-drupal": "^1.0",
         "itk-dev/serviceplatformen": "dev-feature/guzzle6-adapter as 1.5",
