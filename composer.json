@@ -40,7 +40,7 @@
         "drupal/ldap_auth": "^1.17",
         "drupal/leaflet": "^10.0",
         "drupal/leaflet_layers": "^1.1",
-        "drupal/libraries": "^3.0@beta",
+        "drupal/libraries": "^4.0",
         "drupal/linkit": "^5.0",
         "drupal/logging_alerts": "^2.0",
         "drupal/maestro": "^3.1",
