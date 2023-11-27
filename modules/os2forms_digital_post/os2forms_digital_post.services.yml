@@ -5,7 +5,7 @@ services:
 
   logger.channel.os2forms_digital_post_submission:
     parent: logger.channel_base
-    arguments: [ 'os2forms_digital_post_submission' ]
+    arguments: [ 'webform_submission' ]
 
   Drupal\os2forms_digital_post\Helper\Settings:
     arguments:

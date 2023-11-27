@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [#76](https://github.com/OS2Forms/os2forms/pull/76)
+  Fixed digital post logging on submissions.
 - [#73](https://github.com/OS2Forms/os2forms/pull/73a)
   Fix issue with nested elements in webform inherit
 
