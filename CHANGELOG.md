@@ -13,6 +13,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 - [#73](https://github.com/OS2Forms/os2forms/pull/73a)
   Fix issue with nested elements in webform inherit
+- [#77](https://github.com/OS2Forms/os2forms/pull/77)
+  Fix color picker fields in os2forms_webform_maps
 
 ## [3.13.2] 2023-10-19
 

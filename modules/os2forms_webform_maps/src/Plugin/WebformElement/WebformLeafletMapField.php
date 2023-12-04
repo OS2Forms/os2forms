@@ -190,7 +190,7 @@ class WebformLeafletMapField extends WebformElementBase {
             ],
           ],
           'polyline_color' => [
-            '#type' => 'input_color',
+            '#type' => 'textfield',
             '#title' => 'Color',
             '#description' => $this->t('Enter value as HEX or CSS color'),
           ],
@@ -199,7 +199,7 @@ class WebformLeafletMapField extends WebformElementBase {
             '#title' => 'Prevent Intersection',
           ],
           'polyline_error_color' => [
-            '#type' => 'input_color',
+            '#type' => 'textfield',
             '#title' => 'Error color',
             '#description' => $this->t('Enter value as HEX or CSS color'),
             '#states' => [
@@ -233,7 +233,7 @@ class WebformLeafletMapField extends WebformElementBase {
             ],
           ],
           'rectangle_color' => [
-            '#type' => 'input_color',
+            '#type' => 'textfield',
             '#title' => 'Color',
             '#description' => $this->t('Enter value as HEX or CSS color'),
           ],
@@ -253,7 +253,7 @@ class WebformLeafletMapField extends WebformElementBase {
             ],
           ],
           'polygon_color' => [
-            '#type' => 'input_color',
+            '#type' => 'textfield',
             '#title' => 'Color',
             '#description' => $this->t('Enter value as HEX or CSS color'),
           ],
@@ -262,7 +262,7 @@ class WebformLeafletMapField extends WebformElementBase {
             '#title' => 'Prevent Intersection',
           ],
           'polygon_error_color' => [
-            '#type' => 'input_color',
+            '#type' => 'textfield',
             '#title' => 'Error color',
             '#states' => [
               'invisible' => [
@@ -296,7 +296,7 @@ class WebformLeafletMapField extends WebformElementBase {
             ],
           ],
           'circle_color' => [
-            '#type' => 'input_color',
+            '#type' => 'textfield',
             '#title' => 'Color',
             '#description' => $this->t('Enter value as HEX or CSS color'),
           ],
