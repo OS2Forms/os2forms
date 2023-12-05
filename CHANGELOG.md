@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## [3.13.3] 2023-12-05
+
 - [#76](https://github.com/OS2Forms/os2forms/pull/76)
   Fixed digital post logging on submissions.
 - [#74](https://github.com/OS2Forms/os2forms/pull/74)
@@ -188,7 +190,28 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - Security in case of vulnerabilities.
 ```
 
-[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.5.0...HEAD
-[3.5.0]: https://github.com/OS2Forms/os2forms/compare/3.2.5...3.5.0
+[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.13.3...HEAD
+[3.13.3]: https://github.com/OS2Forms/os2forms/compare/3.13.2...3.13.3
+[3.13.2]: https://github.com/OS2Forms/os2forms/compare/3.13.1...3.13.2
+[3.13.1]: https://github.com/OS2Forms/os2forms/compare/3.13.0...3.13.1
+[3.13.0]: https://github.com/OS2Forms/os2forms/compare/3.12.2...3.13.0
+[3.12.2]: https://github.com/OS2Forms/os2forms/compare/3.12.1...3.12.2
+[3.12.1]: https://github.com/OS2Forms/os2forms/compare/3.12.0...3.12.1
+[3.12.0]: https://github.com/OS2Forms/os2forms/compare/3.11.0...3.12.0
+[3.11.0]: https://github.com/OS2Forms/os2forms/compare/3.10.0...3.11.0
+[3.10.0]: https://github.com/OS2Forms/os2forms/compare/3.9.0...3.10.0
+[3.9.0]: https://github.com/OS2Forms/os2forms/compare/3.8.3...3.9.0
+[3.8.3]: https://github.com/OS2Forms/os2forms/compare/3.8.2...3.8.3
+[3.8.2]: https://github.com/OS2Forms/os2forms/compare/3.8.1...3.8.2
+[3.8.1]: https://github.com/OS2Forms/os2forms/compare/3.8.0...3.8.1
+[3.8.0]: https://github.com/OS2Forms/os2forms/compare/3.7.0...3.8.0
+[3.7.0]: https://github.com/OS2Forms/os2forms/compare/3.6.0...3.7.0
+[3.6.0]: https://github.com/OS2Forms/os2forms/compare/3.5.0...3.6.0
+[3.5.0]: https://github.com/OS2Forms/os2forms/compare/3.4.0...3.5.0
+[3.4.0]: https://github.com/OS2Forms/os2forms/compare/3.3.0...3.4.0
+[3.3.0]: https://github.com/OS2Forms/os2forms/compare/3.2.9...3.3.0
+[3.2.9]: https://github.com/OS2Forms/os2forms/compare/3.2.8...3.2.9
+[3.2.8]: https://github.com/OS2Forms/os2forms/compare/3.2.7...3.2.8
+[3.2.7]: https://github.com/OS2Forms/os2forms/compare/3.2.6...3.2.7
 [3.2.6]: https://github.com/OS2Forms/os2forms/compare/3.2.5...3.2.6
 [3.2.5]: https://github.com/OS2Forms/os2forms/compare/3.2.4...3.2.5
