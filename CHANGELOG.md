@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [#74](https://github.com/OS2Forms/os2forms/pull/74)
+  Allow composite elements in Maestro notification recipient
 - [#73](https://github.com/OS2Forms/os2forms/pull/73a)
   Fix issue with nested elements in webform inherit
 - [#77](https://github.com/OS2Forms/os2forms/pull/77)
