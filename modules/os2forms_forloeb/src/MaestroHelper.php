@@ -8,6 +8,7 @@ use Drupal\advancedqueue\Entity\QueueInterface;
 use Drupal\advancedqueue\Job;
 use Drupal\advancedqueue\JobResult;
 use Drupal\Component\Render\MarkupInterface;
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Entity\EntityStorageInterface;
@@ -465,6 +466,17 @@ class MaestroHelper implements LoggerInterface {
       // Simple element.
       ?? $data[$recipientElement]
       ?? NULL;
+
+    // Handle composite elements.
+    if ($recipient === NULL) {
+      // Composite subelement keys consist of
+      // the composite element key and the subelement key separated by '__',
+      // e.g. 'contact__name'.
+      if (str_contains($recipientElement, '__')) {
+        $keys = explode('__', $recipientElement);
+        $recipient = NestedArray::getValue($data, $keys);
+      }
+    }
 
     if ($notificationType === self::NOTIFICATION_ESCALATION) {
       $recipient = $settings[MaestroNotificationHandler::NOTIFICATION][$notificationType][MaestroNotificationHandler::NOTIFICATION_RECIPIENT] ?? NULL;
