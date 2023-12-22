@@ -102,7 +102,7 @@ class FormsHelper {
    *
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
-  private function lookupPersonData(FormStateInterface $form_state) {
+  public function lookupPersonData(FormStateInterface $form_state) {
     $cprResult = new CprLookupResult();
     $cpr = NULL;
 

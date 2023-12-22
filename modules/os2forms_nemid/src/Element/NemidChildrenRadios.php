@@ -17,4 +17,19 @@ use Drupal\Core\Render\Element\Radios;
  */
 class NemidChildrenRadios extends Radios {
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getInfo() {
+    return parent::getInfo() + [
+        '#ajax' => [
+          'callback' => [MitidChildrenSelectAjaxBehaviour::class, 'mitidChildrenSelectAjax'],
+          'event' => 'change',
+          'progress' => [
+            'type' => 'throbber',
+            'message' => $this->t('Please wait...'),
+          ],
+        ],
+      ];
+  }
 }

@@ -12,8 +12,8 @@ use Drupal\webform\WebformSubmissionInterface;
  *
  * @WebformElement(
  *   id = "os2forms_nemid_children_select",
- *   label = @Translation("NemID Children Select"),
- *   description = @Translation("Provides a NemID Children select element."),
+ *   label = @Translation("MitID Children Select"),
+ *   description = @Translation("Provides a MitID Children select element."),
  *   category = @Translation("NemID"),
  * )
  *
@@ -27,7 +27,6 @@ class NemidChildrenSelect extends Select implements NemidElementPersonalInterfac
    */
   protected function defineDefaultProperties() {
     $properties = [
-      'cpr_output_type' => '',
       'options' => [],
     ] + parent::defineDefaultProperties();
     return $properties;
@@ -40,14 +39,6 @@ class NemidChildrenSelect extends Select implements NemidElementPersonalInterfac
     $form = parent::form($form, $form_state);
     $form['options']['options']['#required'] = FALSE;
     $form['options']['#access'] = FALSE;
-
-    $form['element']['cpr_output_type'] = [
-      '#type' => 'radios',
-      '#options' => ['cpr' => $this->t('CPR'), 'name' => $this->t('Name')],
-      '#title' => $this
-        ->t('CPR output type'),
-      '#required' => TRUE,
-    ];
 
     return $form;
   }
@@ -141,12 +132,7 @@ class NemidChildrenSelect extends Select implements NemidElementPersonalInterfac
       if ($children = $cprLookupResult->getFieldValue($prepopulateKey)) {
         if (is_array($children) && !empty($children)) {
           foreach ($children as $child) {
-            if ($element['#cpr_output_type'] == 'cpr') {
-              $options[$child['cpr']] = $child['name'];
-            }
-            else {
-              $options[$child['name']] = $child['name'];
-            }
+            $options[$child['cpr']] = $child['name'];
           }
         }
       }
