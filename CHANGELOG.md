@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [OS-64] Setting a standard value for Automatic purge
+
 ## [3.13.3] 2023-12-05
 
 - [#76](https://github.com/OS2Forms/os2forms/pull/76)
