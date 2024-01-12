@@ -3,6 +3,7 @@
 namespace Drupal\os2forms_nemid\Plugin\WebformElement;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\os2web_datalookup\LookupResult\CprLookupResult;
 
 /**
  * Provides a abstract ServicePlatformenCpr Element.
@@ -27,8 +28,26 @@ abstract class ServiceplatformenCprElementBase extends NemidElementBase {
       $prepopulateKey = $this->getPrepopulateFieldFieldKey($element);
       if ($value = $cprLookupResult->getFieldValue($prepopulateKey)) {
         $element['#value'] = $value;
+
+        // Appending name and address protection.
+        if (!empty($value)) {
+          $element['#value'] .= $this->appendNameAddressProtectedText($cprLookupResult);
+        }
       }
     }
+  }
+
+  /**
+   * Appends name and address protected text, if person has name/address protection.
+   *
+   * @param CprLookupResult $cprLookupResult
+   *   Initialized CprLooupResult.
+   *
+   * @return string
+   *   String " (Navne- og adressebeskyttelse)" or nothing.
+   */
+  public function appendNameAddressProtectedText(CprLookupResult $cprLookupResult) {
+    return $cprLookupResult->isNameAddressProtected() ? ' (Navne- og adressebeskyttelse)' : '';
   }
 
 }
