@@ -11,6 +11,10 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## [3.14.0]
+
+- [OS-64] Setting a standard value for Automatic purge [#80](https://github.com/OS2Forms/os2forms/pull/80)
+
 ## [3.13.3] 2023-12-05
 
 - [#76](https://github.com/OS2Forms/os2forms/pull/76)
