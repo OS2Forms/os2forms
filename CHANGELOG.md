@@ -11,9 +11,11 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## [3.14.0] 2024-01-16
+
 - CprFetchData adding ajax error fix
 
-## [3.14.0]
+## [3.14.0] 2024-01-14
 
 - [OS-64] Setting a standard value for Automatic purge [#80](https://github.com/OS2Forms/os2forms/pull/80)
 
