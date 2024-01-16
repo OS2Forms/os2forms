@@ -132,7 +132,7 @@ class NemidChildrenSelect extends Select implements NemidElementPersonalInterfac
       if ($children = $cprLookupResult->getFieldValue($prepopulateKey)) {
         if (is_array($children) && !empty($children)) {
           foreach ($children as $child) {
-            $options[$child['cpr']] = $child['name'];
+            $options[$child['cpr']] = $child['name'] . ($child['nameAddressProtected'] ? ' (Navne- og adressebeskyttelse)' : '') ;
           }
         }
       }
