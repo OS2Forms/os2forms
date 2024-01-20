@@ -6,6 +6,7 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\os2forms_nemid\Service\FormsHelper;
 
 /**
  * Provides a children select ajax behaviour for MitidChildrenSelect and MitidChildrenRadios.
@@ -13,9 +14,11 @@ use Drupal\Core\Form\FormStateInterface;
 class MitidChildrenSelectAjaxBehaviour {
 
   public static function mitidChildrenSelectAjax(array &$form, FormStateInterface $form_state) {
+    $response = new AjaxResponse();
+
+    // Getting child CPR.
     $trigger = $form_state->getTriggeringElement();
     $triggerName = $trigger['#name'];
-
     $childCpr = $form_state->getValue($triggerName);
 
     /** @var \Drupal\os2web_datalookup\Plugin\DataLookupManager $os2web_datalookup_plugins */
@@ -26,97 +29,86 @@ class MitidChildrenSelectAjaxBehaviour {
 
     if ($cprPlugin->isReady()) {
       $cprLookupResult = $cprPlugin->lookup($childCpr);
-    }
 
-    /** @var \Drupal\webform\WebformSubmissionForm $webformSubmissionForm */
-    $webformSubmissionForm = $form_state->getFormObject();
-    /** @var \Drupal\webform\WebformSubmissionInterface $webformSubmission */
-    $webformSubmission = $webformSubmissionForm->getEntity();
-    $webform = $webformSubmission->getWebform();
-    $elementsFlattened = $webform->getElementsInitializedAndFlattened();
+      /** @var \Drupal\webform\WebformSubmissionForm $webformSubmissionForm */
+      $webformSubmissionForm = $form_state->getFormObject();
+      /** @var \Drupal\webform\WebformSubmissionInterface $webformSubmission */
+      $webformSubmission = $webformSubmissionForm->getEntity();
+      $webform = $webformSubmission->getWebform();
+      $elementsFlattened = $webform->getElementsInitializedAndFlattened();
 
-    $response = new AjaxResponse();
+      foreach ($elementsFlattened as $flattenedElement) {
+        if (isset($flattenedElement['#type'])) {
+          $parents = $flattenedElement['#webform_parents'];
+          $element = NestedArray::getValue($form['elements'], $parents);
 
-    foreach ($elementsFlattened as $flattenedElement) {
-      if (isset($flattenedElement['#type'])) {
-        $parents = $flattenedElement['#webform_parents'];
-        $element = NestedArray::getValue($form['elements'], $parents);
+          switch ($element['#type']) {
+            case 'os2forms_mitid_child_name':
+              $element['#value'] = !$cprLookupResult->isNameAddressProtected() ? $cprLookupResult->getName() : 'Navne- og adressebeskyttet';
+              $response->addCommand(new ReplaceCommand('.js-form-type-os2forms-mitid-child-name', $element));
+              break;
+            case 'os2forms_mitid_child_cpr':
+              $element['#value'] = $cprLookupResult->getCpr();
+              $response->addCommand(new ReplaceCommand('.js-form-type-os2forms-mitid-child-cpr', $element));
+              break;
+            case 'os2forms_mitid_child_address':
+              $element['#value'] = !$cprLookupResult->isNameAddressProtected() ? $cprLookupResult->getAddress() : 'Navne- og adressebeskyttet';
+              $response->addCommand(new ReplaceCommand('.js-form-type-os2forms-mitid-child-address', $element));
+              break;
+            case 'os2forms_mitid_child_apartment_nr':
+              $element['#value'] = !$cprLookupResult->isNameAddressProtected() ? $cprLookupResult->getApartmentNr() : 'Navne- og adressebeskyttet';
+              $response->addCommand(new ReplaceCommand('.js-form-type-os2forms-mitid-child-apartment_nr', $element));
+              break;
+            case 'os2forms_mitid_child_city':
+              $element['#value'] = !$cprLookupResult->isNameAddressProtected() ? $cprLookupResult->getCity() : 'Navne- og adressebeskyttet';
+              $response->addCommand(new ReplaceCommand('.js-form-type-os2forms-mitid-child-city', $element));
+              break;
+            case 'os2forms_mitid_child_coaddress':
+              $element['#value'] = !$cprLookupResult->isNameAddressProtected() ? $cprLookupResult->getCoName() : 'Navne- og adressebeskyttet';
+              $response->addCommand(new ReplaceCommand('.js-form-type-os2forms-mitid-child-coaddress', $element));
+              break;
+            case 'os2forms_mitid_child_floor':
+              $element['#value'] = !$cprLookupResult->isNameAddressProtected() ? $cprLookupResult->getFloor() : 'Navne- og adressebeskyttet';
+              $response->addCommand(new ReplaceCommand('.js-form-type-os2forms-mitid-child-floor', $element));
+              break;
+            case 'os2forms_mitid_child_house_nr':
+              $element['#value'] = !$cprLookupResult->isNameAddressProtected() ? $cprLookupResult->getHouseNr() : 'Navne- og adressebeskyttet';
+              $response->addCommand(new ReplaceCommand('.js-form-type-os2forms-mitid-child-house-nr', $element));
+              break;
+            case 'os2forms_mitid_child_kommunekode':
+              $element['#value'] = !$cprLookupResult->isNameAddressProtected() ? $cprLookupResult->getMunicipalityCode() : 'Navne- og adressebeskyttet';
+              $response->addCommand(new ReplaceCommand('.js-form-type-os2forms-mitid-child-kommunekode', $element));
+              break;
+            case 'os2forms_mitid_child_postal_code':
+              $element['#value'] = !$cprLookupResult->isNameAddressProtected() ? $cprLookupResult->getPostalCode() : 'Navne- og adressebeskyttet';
+              $response->addCommand(new ReplaceCommand('.js-form-type-os2forms-mitid-child-postal-code', $element));
+              break;
+            case 'os2forms_mitid_child_street':
+              $element['#value'] = !$cprLookupResult->isNameAddressProtected() ? $cprLookupResult->getStreet() : 'Navne- og adressebeskyttet';
+              $response->addCommand(new ReplaceCommand('.js-form-type-os2forms-mitid-child-street', $element));
+              break;
+            case 'os2forms_mitid_child_other_guardian':
+              $otherGuardianCpr = NULL;
+              $allGuardians = $cprLookupResult->getGuardians();
 
-        switch ($element['#type']) {
-          case 'os2forms_mitid_child_name':
-            $element['#value'] = $cprLookupResult->getName();
-            if (!empty($element['#value'])) {
-              $element['#value'] .= $cprLookupResult->isNameAddressProtected() ? ' (Navne- og adressebeskyttelse)' : '';
-            }
-            $response->addCommand(new ReplaceCommand('.js-form-type-os2forms-mitid-child-name', $element));
-            break;
-          case 'os2forms_mitid_child_cpr':
-            $element['#value'] = $cprLookupResult->getCpr();
-            $response->addCommand(new ReplaceCommand('.js-form-type-os2forms-mitid-child-cpr', $element));
-            break;
-          case 'os2forms_mitid_child_address':
-            $element['#value'] = $cprLookupResult->getAddress();
-            if (!empty($element['#value'])) {
-              $element['#value'] .= $cprLookupResult->isNameAddressProtected() ? ' (Navne- og adressebeskyttelse)' : '';
-            }
-            $response->addCommand(new ReplaceCommand('.js-form-type-os2forms-mitid-child-address', $element));
-            break;
-          case 'os2forms_mitid_child_apartment_nr':
-            $element['#value'] = $cprLookupResult->getApartmentNr();
-            if (!empty($element['#value'])) {
-              $element['#value'] .= $cprLookupResult->isNameAddressProtected() ? ' (Navne- og adressebeskyttelse)' : '';
-            }
-            $response->addCommand(new ReplaceCommand('.js-form-type-os2forms-mitid-child-apartment_nr', $element));
-            break;
-          case 'os2forms_mitid_child_city':
-            $element['#value'] = $cprLookupResult->getCity();
-            if (!empty($element['#value'])) {
-              $element['#value'] .= $cprLookupResult->isNameAddressProtected() ? ' (Navne- og adressebeskyttelse)' : '';
-            }
-            $response->addCommand(new ReplaceCommand('.js-form-type-os2forms-mitid-child-city', $element));
-            break;
-          case 'os2forms_mitid_child_coaddress':
-            $element['#value'] = $cprLookupResult->getCoName();
-            if (!empty($element['#value'])) {
-              $element['#value'] .= $cprLookupResult->isNameAddressProtected() ? ' (Navne- og adressebeskyttelse)' : '';
-            }
-            $response->addCommand(new ReplaceCommand('.js-form-type-os2forms-mitid-child-coaddress', $element));
-            break;
-          case 'os2forms_mitid_child_floor':
-            $element['#value'] = $cprLookupResult->getFloor();
-            if (!empty($element['#value'])) {
-              $element['#value'] .= $cprLookupResult->isNameAddressProtected() ? ' (Navne- og adressebeskyttelse)' : '';
-            }
-            $response->addCommand(new ReplaceCommand('.js-form-type-os2forms-mitid-child-floor', $element));
-            break;
-          case 'os2forms_mitid_child_house_nr':
-            $element['#value'] = $cprLookupResult->getHouseNr();
-            if (!empty($element['#value'])) {
-              $element['#value'] .= $cprLookupResult->isNameAddressProtected() ? ' (Navne- og adressebeskyttelse)' : '';
-            }
-            $response->addCommand(new ReplaceCommand('.js-form-type-os2forms-mitid-child-house-nr', $element));
-            break;
-          case 'os2forms_mitid_child_kommunekode':
-            $element['#value'] = $cprLookupResult->getMunicipalityCode();
-            if (!empty($element['#value'])) {
-              $element['#value'] .= $cprLookupResult->isNameAddressProtected() ? ' (Navne- og adressebeskyttelse)' : '';
-            }
-            $response->addCommand(new ReplaceCommand('.js-form-type-os2forms-mitid-child-kommunekode', $element));
-            break;
-          case 'os2forms_mitid_child_postal_code':
-            $element['#value'] = $cprLookupResult->getPostalCode();
-            if (!empty($element['#value'])) {
-              $element['#value'] .= $cprLookupResult->isNameAddressProtected() ? ' (Navne- og adressebeskyttelse)' : '';
-            }
-            $response->addCommand(new ReplaceCommand('.js-form-type-os2forms-mitid-child-postal-code', $element));
-            break;
-          case 'os2forms_mitid_child_street':
-            $element['#value'] = $cprLookupResult->getStreet();
-            if (!empty($element['#value'])) {
-              $element['#value'] .= $cprLookupResult->isNameAddressProtected() ? ' (Navne- og adressebeskyttelse)' : '';
-            }
-            $response->addCommand(new ReplaceCommand('.js-form-type-os2forms-mitid-child-street', $element));
-            break;
+              if (!empty($allGuardians)) {
+                // Making a guess primary CPR is saved in the form state.
+                $primaryCprLookupResult = FormsHelper::retrieveCachedCprLookupResult($form_state);
+
+                if ($primaryCprLookupResult) {
+                  foreach ($allGuardians as $guardian) {
+                    // Find other CPR number.
+                    if ($guardian['cpr'] != $primaryCprLookupResult->getCpr()) {
+                      $otherGuardianCpr = $guardian['cpr'];
+                    }
+                  }
+                }
+              }
+
+              $element['#value'] = $otherGuardianCpr;
+              $response->addCommand(new ReplaceCommand('.js-form-type-os2forms-mitid-child-other-guardian', $element));
+              break;
+          }
         }
       }
     }
