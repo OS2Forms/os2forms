@@ -44,10 +44,10 @@ abstract class ServiceplatformenCprElementBase extends NemidElementBase {
    *   Initialized CprLooupResult.
    *
    * @return string
-   *   String " (Navne- og adressebeskyttelse)" or nothing.
+   *   String " (Navne- og adressebeskyttet)" or nothing.
    */
   public function appendNameAddressProtectedText(CprLookupResult $cprLookupResult) {
-    return $cprLookupResult->isNameAddressProtected() ? ' (Navne- og adressebeskyttelse)' : '';
+    return $cprLookupResult->isNameAddressProtected() ? ' (Navne- og adressebeskyttet)' : '';
   }
 
 }

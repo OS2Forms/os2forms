@@ -28,6 +28,7 @@ class NemidChildrenSelect extends Select implements NemidElementPersonalInterfac
   protected function defineDefaultProperties() {
     $properties = [
       'options' => [],
+      'address_protection_help_text' => '',
     ] + parent::defineDefaultProperties();
     return $properties;
   }
@@ -39,6 +40,12 @@ class NemidChildrenSelect extends Select implements NemidElementPersonalInterfac
     $form = parent::form($form, $form_state);
     $form['options']['options']['#required'] = FALSE;
     $form['options']['#access'] = FALSE;
+
+    $form['element_description']['address_protection_help_text'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('Address protection help text'),
+      '#description' => $this->t('Address protection help text is shown if any of the children has address and name protection active'),
+    ];
 
     return $form;
   }
@@ -127,18 +134,30 @@ class NemidChildrenSelect extends Select implements NemidElementPersonalInterfac
 
     $options = [];
 
+    $showAddressNameProtectionMessage = FALSE;
+
     if ($cprLookupResult) {
       $prepopulateKey = $this->getPrepopulateFieldFieldKey($element);
       if ($children = $cprLookupResult->getFieldValue($prepopulateKey)) {
         if (is_array($children) && !empty($children)) {
           foreach ($children as $child) {
-            $options[$child['cpr']] = $child['name'] . ($child['nameAddressProtected'] ? ' (Navne- og adressebeskyttelse)' : '') ;
+            if ($child['nameAddressProtected']) {
+              $options[$child['cpr']] = $child['cpr'] . ' (Navne- og adressebeskyttet)';
+              $showAddressNameProtectionMessage = TRUE;
+            }
+            else {
+              $options[$child['cpr']] = $child['name'];
+            }
           }
         }
       }
     }
 
     $element['#options'] = $options;
+
+    if ($showAddressNameProtectionMessage) {
+      $element['#suffix'] = $element['#address_protection_help_text'];
+    }
   }
 
 }

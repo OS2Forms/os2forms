@@ -8,13 +8,12 @@ use Drupal\Core\Render\Element\Hidden;
 /**
  * Provides a 'os2forms_mitid_child_other_guardian'.
  *
- * @FormElement("os2forms_mitid_child_ther_guardian")
+ * @FormElement("os2forms_mitid_child_other_guardian")
  *
  * @see \Drupal\Core\Render\Element\FormElement
  * @see https://api.drupal.org/api/drupal/core%21lib%21Drupal%21Core%21Render%21Element%21FormElement.php/class/FormElement
  * @see \Drupal\Core\Render\Element\RenderElement
  * @see https://api.drupal.org/api/drupal/namespace/Drupal%21Core%21Render%21Element
- * @see \Drupal\os2forms_nemid\Element\NemidCpr
  */
 class MitidChildOtherGuardian extends Hidden {
 
@@ -22,28 +21,20 @@ class MitidChildOtherGuardian extends Hidden {
    * {@inheritdoc}
    */
   public function getInfo() {
-    $class = get_class($this);
-    return parent::getInfo() + [
-      '#process' => [
-        [$class, 'processMitidChildOtherGuardian'],
-        [$class, 'processAjaxForm'],
-      ],
-      '#element_validate' => [
-        [$class, 'validateMitidChildOtherGuardian'],
-      ],
-      '#pre_render' => [
-        [$class, 'preRenderMitidChildOtherGuardian'],
-      ],
-      '#theme' => 'input__os2forms_mitid_child_other_guardian',
-    ];
-  }
+    $class = static::class;
 
-  /**
-   * Processes a 'os2forms_mitid_child_other_guardian' element.
-   */
-  public static function processMitidChildOtherGuardian(&$element, FormStateInterface $form_state, &$complete_form) {
-    // Here you can add and manipulate your element's properties and callbacks.
-    return $element;
+    $parentInfo = parent::getInfo() + [
+        '#element_validate' => [
+          [$class, 'validateMitidChildOtherGuardian'],
+        ],
+      ];
+
+    // Adding custom #pre_render.
+    $parentInfo['#pre_render'] = [
+      [$class, 'preRenderMitidChildOtherGuardian']
+    ];
+
+    return $parentInfo;
   }
 
   /**
@@ -56,9 +47,10 @@ class MitidChildOtherGuardian extends Hidden {
   /**
    * {@inheritdoc}
    */
-  public static function preRenderMitidChildOtherGuardian(array $element) {
+  public static function preRenderMitidChildOtherGuardian($element) {
     $element = parent::preRenderHidden($element);
-    static::setAttributes($element, ['os2forms-mitid-child-other-guardian']);
+    static::setAttributes($element, ['os2forms-mitid-child-other-guardian', 'js-form-type-os2forms-mitid-child-other-guardian']);
+
     return $element;
   }
 
