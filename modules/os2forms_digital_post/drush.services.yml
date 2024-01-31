@@ -1,0 +1,9 @@
+services:
+  Drupal\os2forms_digital_post\Drush\Commands\DigitalPostTestCommands:
+    arguments:
+      - '@Drupal\os2forms_digital_post\Helper\DigitalPostHelper'
+      - '@token'
+      - '@plugin.manager.entity_print.print_engine'
+      - '@Drupal\os2forms_digital_post\Helper\Settings'
+    tags:
+      - { name: drush.command }

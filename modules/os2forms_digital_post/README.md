@@ -58,7 +58,7 @@ graphical overview of jobs in the queue.
 
 ## Beskedfordeler
 
-Thie digital post module depends on [Beskedfordeler for
+The digital post module depends on [Beskedfordeler for
 Drupal](https://github.com/itk-dev/beskedfordeler-drupalon) to get get
 information on how or why not a digital post has been delivered (cf.
 [BeskedfordelerEventSubscriber](src/EventSubscriber/BeskedfordelerEventSubscriber.php)).
@@ -66,3 +66,12 @@ information on how or why not a digital post has been delivered (cf.
 See the [documentation for Beskedfordeler for
 Drupal](https://github.com/itk-dev/beskedfordeler-drupal#beskedfordeler) for
 details on how to set up the Beskedfordeler module.
+
+## Testing digital post
+
+This module contains a simple Drush command for sending digital post to a list
+of recipients:
+
+``` shell
+drush os2forms-digital-post:test:send --help
+```

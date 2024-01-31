@@ -12,6 +12,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 ## [Unreleased]
 
 - CprFetchData adding ajax error fix
+- [#84](https://github.com/OS2Forms/os2forms/pull/84)
+  Added digital post test command.
 
 ## [3.14.0]
 
