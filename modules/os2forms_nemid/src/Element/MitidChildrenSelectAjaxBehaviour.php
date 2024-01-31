@@ -57,7 +57,7 @@ class MitidChildrenSelectAjaxBehaviour {
               break;
             case 'os2forms_mitid_child_apartment_nr':
               $element['#value'] = !$cprLookupResult->isNameAddressProtected() ? $cprLookupResult->getApartmentNr() : 'Navne- og adressebeskyttet';
-              $response->addCommand(new ReplaceCommand('.js-form-type-os2forms-mitid-child-apartment_nr', $element));
+              $response->addCommand(new ReplaceCommand('.js-form-type-os2forms-mitid-child-apartment-nr', $element));
               break;
             case 'os2forms_mitid_child_city':
               $element['#value'] = !$cprLookupResult->isNameAddressProtected() ? $cprLookupResult->getCity() : 'Navne- og adressebeskyttet';
