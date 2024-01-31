@@ -2,7 +2,6 @@
 
 namespace Drupal\os2forms_nemid\Plugin\WebformElement;
 
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Plugin\WebformElement\Hidden;
 use Drupal\webform\WebformSubmissionInterface;
 
@@ -19,7 +18,7 @@ use Drupal\webform\WebformSubmissionInterface;
 class MitidChildOtherGuardian extends Hidden {
 
   public function getValue(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
-    if (isset($options['email'])) {
+    if (isset($options['email']) || isset($options['pdf'])) {
       return '';
     }
 
