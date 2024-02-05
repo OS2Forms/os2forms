@@ -1,0 +1,17 @@
+diff --git a/src/MaestroTaskTrait.php b/src/MaestroTaskTrait.php
+index 9aefd9e..0133e0d 100644
+--- a/src/MaestroTaskTrait.php
++++ b/src/MaestroTaskTrait.php
+@@ -312,10 +312,10 @@ trait MaestroTaskTrait {
+ 
+     $form['edit_task_notifications']['select_notification_role'] = [
+       '#id' => 'select_notification_role',
+-      '#type' => 'textfield',
++      '#type' => 'entity_autocomplete',
++      '#target_type' => 'user_role',
+       '#default_value' => '',
+       '#title' => $this->t('Role'),
+-      '#autocomplete_route_name' => 'maestro.autocomplete.roles',
+       '#required' => FALSE,
+       '#prefix' => '<div class="maestro-engine-notifications-hidden-role">',
+       '#suffix' => '</div></div>',
