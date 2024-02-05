@@ -12,6 +12,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 ## [Unreleased]
 
 - CprFetchData adding ajax error fix
+- [#85](https://github.com/OS2Forms/os2forms/pull/85)
+  Patched Maestro task notification role permission.
 
 ## [3.14.0]
 
