@@ -114,7 +114,7 @@
                 "entityQuery reference JOINs should specify target_type (https://www.drupal.org/project/dynamic_entity_reference/issues/3120952#comment-14141038)": "https://www.drupal.org/files/issues/2021-06-22/entityquery-reference-joins-should-specify-target_type-3120952-24.patch"
             },
             "drupal/maestro": {
-                "Maestro task notification permission patch": "patches/drupal/maestro/maestro_task_select_notification_role_permission.patch"
+                "Maestro task notification permission patch": "https://gist.githubusercontent.com/jekuaitk/5595756eb1aaf4da5e780761ac619877/raw/340e16d23a99c3f0bf1044d144de222883c2ae01/maestro_task_select_notification_role_permission.patch"
             }
         }
     },
