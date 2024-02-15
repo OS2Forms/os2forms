@@ -12,8 +12,10 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 ## [Unreleased]
 
 - Adding Lat and Long fetching to DataAddress
+- CprFetchData adding ajax error fix
 - [#84](https://github.com/OS2Forms/os2forms/pull/84)
   Added digital post test command.
+- Added FBS handler for supporting user creation in library systems
 
 ## [3.14.1] 2024-01-16
 
