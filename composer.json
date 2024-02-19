@@ -102,7 +102,8 @@
                 "2733781 - Add Export to Word Support": "https://www.drupal.org/files/issues/2019-11-22/2733781-47.patch"
             },
             "drupal/webform": {
-                "Unlock possibility of using Entity print module export to Word": "https://www.drupal.org/files/issues/2020-02-29/3096552-6.patch"
+                "Unlock possibility of using Entity print module export to Word": "https://www.drupal.org/files/issues/2020-02-29/3096552-6.patch",
+                "Ensure temporay files are removed when not needed by signatur element": "https://www.drupal.org/files/issues/2024-02-19/webform-6.2.x-3422388.diff"
             },
             "drupal/user_default_page": {
                 "Warning: in_array() expects parameter 2 to be array, null given in user_default_page_user_logout() (https://www.drupal.org/node/3246986)": "https://www.drupal.org/files/issues/2021-11-01/user_default_page-3246986-2.patch"
