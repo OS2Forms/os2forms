@@ -99,6 +99,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 ## [3.14.1] 2024-01-16
 
 - CprFetchData adding ajax error fix
+- Remove dependency on webform migration module
 
 ## [3.14.0] 2024-01-14
 

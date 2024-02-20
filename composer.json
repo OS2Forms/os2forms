@@ -58,7 +58,6 @@
         "drupal/webform": "^6.1",
         "drupal/webform_composite": "^1.0@RC",
         "drupal/webform_encrypt": "^2.0@alpha",
-        "drupal/webform_migrate": "^2.0@alpha",
         "drupal/webform_node_element": "^1.2",
         "drupal/webform_remote_handlers": "^3.0",
         "drupal/webform_remote_select": "^1.0.6",
