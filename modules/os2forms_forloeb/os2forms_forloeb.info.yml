@@ -38,7 +38,6 @@ dependencies:
   - 'drupal:webform_composite'
   - 'drupal:webform_entity_print'
   - 'drupal:webform_entity_print_attachment'
-  - 'drupal:webform_migrate'
   - 'drupal:webform_node_element'
   - 'drupal:webform_remote_handlers'
   - 'drupal:webform_rest'
