@@ -12,6 +12,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 ## [Unreleased]
 
 - CprFetchData adding ajax error fix
+- Removed `simplesamlphp_auth`
 
 ## [3.14.0]
 

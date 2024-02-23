@@ -53,7 +53,6 @@
         "drupal/r4032login": "^2.1",
         "drupal/redirect": "^1.4",
         "drupal/simple_ldap": "^1.0@alpha",
-        "drupal/simplesamlphp_auth": "^3.2",
         "drupal/smtp": "^1.0@beta",
         "drupal/switch_page_theme": "^4.0",
         "drupal/telephone_validation": "^2.2",
@@ -141,7 +140,6 @@
             "cweagans/composer-patches": true,
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "phpstan/extension-installer": true,
-            "simplesamlphp/composer-module-installer": true,
             "vaimo/composer-patches": true,
             "zaporylie/composer-drupal-optimizations": true
         }
