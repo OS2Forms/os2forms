@@ -134,23 +134,32 @@ function os2forms_nemid_webform_submission_form_alter(array &$form, FormStateInt
     // User is authenticated, check if the form type is corresponding to
     // authentication type.
     if ($authProviderPlugin->isAuthenticated()) {
-      // Users often login on behalf of company as themselves, i.e. values may contain both a cpr and cvr value,
-      // and they will therefore be considered authenticated as company AND person.
+      // Users often login on behalf of company as themselves
+      // i.e. values may contain both a cpr and cvr value,
+      // and they will be considered authenticated as company AND person.
       if ($webform_type === NemidElementBase::WEBFORM_TYPE_COMPANY) {
         if (!$authProviderPlugin->isAuthenticatedCompany()) {
-          addWarningAndDisableForm($form, $authProviderService->getLogoutUrl()->toString());
+          _os2forms_nemid_add_authentication_warning_and_disable_form($form, $authProviderService->getLogoutUrl()->toString());
         }
-      } elseif ($webform_type === NemidElementBase::WEBFORM_TYPE_PERSONAL) {
+      }
+      elseif ($webform_type === NemidElementBase::WEBFORM_TYPE_PERSONAL) {
         if (!$authProviderPlugin->isAuthenticatedPerson()) {
-          addWarningAndDisableForm($form, $authProviderService->getLogoutUrl()->toString());
+          _os2forms_nemid_add_authentication_warning_and_disable_form($form, $authProviderService->getLogoutUrl()->toString());
         }
       }
     }
   }
 }
 
-function addWarningAndDisableForm(array $form, string $logoutUrl): void
-{
+/**
+ * Adds authentication warning and disables actions on form.
+ *
+ * @param array $form
+ *   Form array.
+ * @param string $logoutUrl
+ *   Logout url.
+ */
+function _os2forms_nemid_add_authentication_warning_and_disable_form(array $form, string $logoutUrl) {
   \Drupal::messenger()
     ->addWarning(t('Your login type does match the login type required by the webform. Please <a href="@logout">log out</a> and sign in with a different account', [
       '@logout' => $logoutUrl,
