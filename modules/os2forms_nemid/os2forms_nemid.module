@@ -134,18 +134,29 @@ function os2forms_nemid_webform_submission_form_alter(array &$form, FormStateInt
     // User is authenticated, check if the form type is corresponding to
     // authentication type.
     if ($authProviderPlugin->isAuthenticated()) {
-      if ($authProviderPlugin->isAuthenticatedPerson() && $webform_type !== NemidElementBase::WEBFORM_TYPE_PERSONAL
-        || $authProviderPlugin->isAuthenticatedCompany() && $webform_type !== NemidElementBase::WEBFORM_TYPE_COMPANY) {
-        \Drupal::messenger()
-          ->addWarning(t('Your login type does match the login type required by the webform. Please <a href="@logout">log out</a> and sign in with a different account', [
-            '@logout' => $authProviderService->getLogoutUrl()
-              ->toString(),
-          ]));
-        foreach (Element::children($form['actions']) as $key) {
-          $form['actions'][$key]['#disabled'] = TRUE;
+      // Users often login on behalf of company as themselves, i.e. values may contain both a cpr and cvr value,
+      // and they will therefore be considered authenticated as company AND person.
+      if ($webform_type === NemidElementBase::WEBFORM_TYPE_COMPANY) {
+        if (!$authProviderPlugin->isAuthenticatedCompany()) {
+          addWarningAndDisableForm($form, $authProviderService->getLogoutUrl()->toString());
+        }
+      } elseif ($webform_type === NemidElementBase::WEBFORM_TYPE_PERSONAL) {
+        if (!$authProviderPlugin->isAuthenticatedPerson()) {
+          addWarningAndDisableForm($form, $authProviderService->getLogoutUrl()->toString());
         }
       }
     }
+  }
+}
+
+function addWarningAndDisableForm(array $form, string $logoutUrl): void
+{
+  \Drupal::messenger()
+    ->addWarning(t('Your login type does match the login type required by the webform. Please <a href="@logout">log out</a> and sign in with a different account', [
+      '@logout' => $logoutUrl,
+    ]));
+  foreach (Element::children($form['actions']) as $key) {
+    $form['actions'][$key]['#disabled'] = TRUE;
   }
 }
 
