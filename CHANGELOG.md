@@ -12,6 +12,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 ## [Unreleased]
 
 - CprFetchData adding ajax error fix
+- Updated `OS2Forms Nemid` authentication check [#90](https://github.com/OS2Forms/os2forms/pull/90)
 
 ## [3.14.0]
 
