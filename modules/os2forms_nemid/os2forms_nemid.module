@@ -137,15 +137,11 @@ function os2forms_nemid_webform_submission_form_alter(array &$form, FormStateInt
       // Users often login on behalf of company as themselves
       // i.e. values may contain both a cpr and cvr value,
       // and they will be considered authenticated as company AND person.
-      if ($webform_type === NemidElementBase::WEBFORM_TYPE_COMPANY) {
-        if (!$authProviderPlugin->isAuthenticatedCompany()) {
-          _os2forms_nemid_add_authentication_warning_and_disable_form($form, $authProviderService->getLogoutUrl()->toString());
-        }
+      if ($webform_type === NemidElementBase::WEBFORM_TYPE_COMPANY && !$authProviderPlugin->isAuthenticatedCompany()) {
+        _os2forms_nemid_add_authentication_warning_and_disable_form($form, $authProviderService->getLogoutUrl()->toString());
       }
-      elseif ($webform_type === NemidElementBase::WEBFORM_TYPE_PERSONAL) {
-        if (!$authProviderPlugin->isAuthenticatedPerson()) {
-          _os2forms_nemid_add_authentication_warning_and_disable_form($form, $authProviderService->getLogoutUrl()->toString());
-        }
+      elseif ($webform_type === NemidElementBase::WEBFORM_TYPE_PERSONAL && !$authProviderPlugin->isAuthenticatedPerson()) {
+        _os2forms_nemid_add_authentication_warning_and_disable_form($form, $authProviderService->getLogoutUrl()->toString());
       }
     }
   }
@@ -159,7 +155,7 @@ function os2forms_nemid_webform_submission_form_alter(array &$form, FormStateInt
  * @param string $logoutUrl
  *   Logout url.
  */
-function _os2forms_nemid_add_authentication_warning_and_disable_form(array $form, string $logoutUrl) {
+function _os2forms_nemid_add_authentication_warning_and_disable_form(array &$form, string $logoutUrl) {
   \Drupal::messenger()
     ->addWarning(t('Your login type does match the login type required by the webform. Please <a href="@logout">log out</a> and sign in with a different account', [
       '@logout' => $logoutUrl,
