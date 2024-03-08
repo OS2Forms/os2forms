@@ -59,7 +59,7 @@ graphical overview of jobs in the queue.
 ## Beskedfordeler
 
 The digital post module depends on [Beskedfordeler for
-Drupal](https://github.com/itk-dev/beskedfordeler-drupalon) to get get
+Drupal](https://github.com/itk-dev/beskedfordeler-drupal) to get get
 information on how or why not a digital post has been delivered (cf.
 [BeskedfordelerEventSubscriber](src/EventSubscriber/BeskedfordelerEventSubscriber.php)).
 
