@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- Adding Lat and Long fetching to DataAddress
+
 - CprFetchData adding ajax error fix
 
 ## [3.14.0]
