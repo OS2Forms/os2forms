@@ -47,15 +47,15 @@ final class DigitalPostHelper implements LoggerInterface {
    *   The MeMo message.
    * @param \Oio\Fjernprint\ForsendelseI|null $forsendelse
    *   The forsendelse if any.
-   * @param \Drupal\webform\WebformSubmissionInterface $submission
-   *   The submission.
+   * @param null|\Drupal\webform\WebformSubmissionInterface $submission
+   *   A submission used for hooking up with Beskedfordeler.
    *
    * @return array
    *   [The response, The kombi post message].
    *
    * @phpstan-return array<int, mixed>
    */
-  public function sendDigitalPost(string $type, Message $message, ?ForsendelseI $forsendelse, WebformSubmissionInterface $submission): array {
+  public function sendDigitalPost(string $type, Message $message, ?ForsendelseI $forsendelse, WebformSubmissionInterface $submission = NULL): array {
     $senderSettings = $this->settings->getSender();
     $options = [
       'test_mode' => (bool) $this->settings->getTestMode(),
@@ -66,7 +66,10 @@ final class DigitalPostHelper implements LoggerInterface {
     $transactionId = Serializer::createUuid();
     $response = $service->kombiPostAfsend($transactionId, $type, $message, $forsendelse);
 
-    $this->beskedfordelerHelper->createMessage($submission->id(), $message, (string) $response->getContent());
+    $content = (string) $response->getContent();
+    if (NULL !== $submission) {
+      $this->beskedfordelerHelper->createMessage($submission->id(), $message, $content);
+    }
 
     return [$response, $service->getLastKombiMeMoMessage()];
   }
@@ -92,7 +95,7 @@ final class DigitalPostHelper implements LoggerInterface {
     }
     $lookupResult = $instance->lookup($cpr);
     if (!$lookupResult->isSuccessful()) {
-      throw new RuntimeException('Cannot lookup CPR');
+      throw new RuntimeException('Cannot look up CPR');
     }
 
     return $lookupResult;
@@ -108,7 +111,7 @@ final class DigitalPostHelper implements LoggerInterface {
     }
     $lookupResult = $instance->lookup($cvr);
     if (!$lookupResult->isSuccessful()) {
-      throw new RuntimeException('Cannot lookup CVR');
+      throw new RuntimeException('Cannot look up CVR');
     }
 
     return $lookupResult;
