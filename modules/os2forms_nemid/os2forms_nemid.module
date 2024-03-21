@@ -84,7 +84,6 @@ function os2forms_nemid_webform_third_party_settings_form_alter(&$form, FormStat
     '#description' => t('Redirection will happen right after user has is accessing the form, if user is already authenticated via NemID, redirection will not happen.'),
   ];
 
-
   $nemloginProtectionSettings = $webform->getThirdPartySetting('os2forms', 'os2forms_nemid_address_protection');
 
   // OS2Forms NemID.
@@ -93,7 +92,6 @@ function os2forms_nemid_webform_third_party_settings_form_alter(&$form, FormStat
     '#title' => t('OS2Forms address protection settings'),
     '#open' => TRUE,
   ];
-
 
   // Nemlogin auto redirect.
   $form['third_party_settings']['os2forms']['os2forms_nemid_address_protection']['nemlogin_hide_form'] = [
@@ -119,7 +117,7 @@ function os2forms_nemid_webform_third_party_settings_form_alter(&$form, FormStat
       ],
       'required' => [
         [':input[name="third_party_settings[os2forms][os2forms_nemid_address_protection][nemlogin_hide_form]"]' => ['value' => FormsHelper::WEBFORM_NEM_LOGIN_ADDRESS_PROTECTION_DISPLAY_ERROR]],
-      ]
+      ],
     ],
   ];
 }
@@ -129,7 +127,7 @@ function os2forms_nemid_webform_third_party_settings_form_alter(&$form, FormStat
  */
 function os2forms_nemid_webform_submission_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
 
-  // Handle address protection
+  // Handle address protection.
   if ($tempValue = $form_state->getTemporaryValue(FormsHelper::TEMPORARY_KEY)) {
     if (FALSE === ($tempValue['access'] ?? TRUE)) {
       // Flattening the elements makes it much easier to access nested elements.

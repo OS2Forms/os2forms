@@ -46,7 +46,7 @@ class FormsHelper {
     'os2forms_nemid_postal_code',
     'os2forms_nemid_city',
     'os2forms_nemid_kommunekode',
-    'os2forms_nemid_coaddress'
+    'os2forms_nemid_coaddress',
   ];
 
   /**
@@ -77,6 +77,8 @@ class FormsHelper {
    *   Auth provider service.
    * @param \Drupal\os2web_datalookup\Plugin\DataLookupManager $dataLookPluginManager
    *   Datalookup plugin manager.
+   * @param \Drupal\Core\Routing\RouteMatchInterface $routeMatch
+   *   Route match service.
    */
   public function __construct(AuthProviderService $authProviderService, DataLookupManager $dataLookPluginManager, RouteMatchInterface $routeMatch) {
     $this->authProviderService = $authProviderService;
@@ -361,7 +363,7 @@ class FormsHelper {
       return;
     }
 
-    // Check if hide address protection is selected
+    // Check if hide address protection is selected.
     $hideForm = $webformSubmission->getWebform()->getThirdPartySettings('os2forms')['os2forms_nemid_address_protection']['nemlogin_hide_form'] ?? NULL;
 
     if ($hideForm === self::WEBFORM_NEM_LOGIN_ADDRESS_PROTECTION_DISPLAY_ERROR) {
@@ -369,19 +371,21 @@ class FormsHelper {
 
       if ($cprResult && $cprResult->isNameAddressProtected()) {
 
-        // Check if any element violating address protection is present in webform.
-        $elements  = $webformSubmission->getWebform()->getElementsDecodedAndFlattened();
+        // Check if any element violating address
+        // protection is present in webform.
+        $elements = $webformSubmission->getWebform()->getElementsDecodedAndFlattened();
 
         foreach ($elements as $element) {
 
-          if(in_array($element['#type'], self::WEBFORM_NEM_LOGIN_ADDRESS_PROTECTION_ELEMENT_TYPES)) {
+          if (in_array($element['#type'], self::WEBFORM_NEM_LOGIN_ADDRESS_PROTECTION_ELEMENT_TYPES)) {
 
-            // Violation detected, mark form state with temporary key and return.
+            // Violation detected,
+            // mark form state with temporary key and return.
             $message = $webformSubmission->getWebform()->getThirdPartySettings('os2forms')['os2forms_nemid_address_protection']['nemlogin_hide_message'];
 
             $formState->setTemporaryValue(self::TEMPORARY_KEY, [
               'access' => FALSE,
-              'message' => $message
+              'message' => $message,
             ]);
 
             return;
@@ -390,4 +394,5 @@ class FormsHelper {
       }
     }
   }
+
 }
