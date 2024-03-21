@@ -4,13 +4,13 @@ namespace Drupal\os2forms_fbs_handler\Client;
 
 use Drupal\os2forms_fbs_handler\Client\Model\Guardian;
 use Drupal\os2forms_fbs_handler\Client\Model\Patron;
-use Fig\Http\Message\RequestMethodInterface;
 use GuzzleHttp\Client;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Minimalistic client to create user with guardians at FBS.
  */
-final class FBS {
+class FBS {
 
   /**
    * FBS session key.
@@ -18,6 +18,8 @@ final class FBS {
    * @var string
    */
   private string $sessionKey;
+
+  private const AUTHENTICATE_STATUS_VALID = 'VALID';
 
   /**
    * Default constructor.
@@ -32,7 +34,7 @@ final class FBS {
   }
 
   /**
-   * Login to FBS and obtain session key.
+   * Login to FBS and obtain a session key.
    *
    * @return bool
    *   TRUE on success else FALSE.
@@ -80,14 +82,14 @@ final class FBS {
    * @throws \JsonException
    */
   public function doUserExists(string $cpr): ?Patron {
-    // Check if session have been created with FBS and if not create it.
+    // Check if session has been created with FBS and if not creates it.
     if (!$this->isLoggedIn()) {
       $this->login();
     }
 
     // Try pre-authenticate the user/parent.
     $json = $this->request('/external/{agency_id}/patrons/preauthenticated/v9', $cpr);
-    if ($json->authenticateStatus === 'VALID') {
+    if ($json->authenticateStatus === $this::AUTHENTICATE_STATUS_VALID) {
       return new Patron(
         $json->patron->patronId,
         (bool) $json->patron->receiveSms,
@@ -157,9 +159,9 @@ final class FBS {
       ],
     ];
 
-    $json = $this->request($uri, $payload, RequestMethodInterface::METHOD_PUT);
+    $json = $this->request($uri, $payload, Request::METHOD_PUT);
 
-    return $json->authenticateStatus === 'VALID';
+    return $json->authenticateStatus === $this::AUTHENTICATE_STATUS_VALID;
   }
 
   /**
@@ -183,7 +185,7 @@ final class FBS {
       'guardian' => $guardian->toArray(),
     ];
 
-    return $this->request($uri, $payload, RequestMethodInterface::METHOD_PUT);
+    return $this->request($uri, $payload, Request::METHOD_PUT);
   }
 
   /**
@@ -202,7 +204,7 @@ final class FBS {
    * @throws \GuzzleHttp\Exception\GuzzleException
    * @throws \JsonException
    */
-  private function request(string $uri, array|string $data, string $method = RequestMethodInterface::METHOD_POST): mixed {
+  private function request(string $uri, array|string $data, string $method = Request::METHOD_POST): mixed {
     $url = rtrim($this->endpoint, '/\\');
     $url = $url . str_replace('{agency_id}', $this->agencyId, $uri);
 
@@ -212,7 +214,7 @@ final class FBS {
       ],
     ];
 
-    // The API designer at FBS don't always use JSON. So in some cases only a
+    // The API designer at FBS doesn't always use JSON. So in some cases only a
     // string should be sent.
     if (is_array($data)) {
       $options['json'] = $data;
@@ -221,7 +223,7 @@ final class FBS {
       $options['body'] = $data;
     }
 
-    // If already logged in lets add the session key to the request headers.
+    // If already logged in, lets add the session key to the request headers.
     if ($this->isLoggedIn()) {
       $options['headers']['X-Session'] = $this->sessionKey;
     }

@@ -40,10 +40,8 @@ final class FbsWebformHandler extends WebformHandlerBase {
 
   /**
    * The queue id.
-   *
-   * @var string
    */
-  private string $queueId = 'os2forms_fbs_handler';
+  private const QUEUE_ID = 'os2forms_fbs_handler';
 
   /**
    * Constructs an FbsWebformHandler object.
@@ -95,7 +93,7 @@ final class FbsWebformHandler extends WebformHandlerBase {
       $form['queue_message'] = [
         '#theme' => 'status_messages',
         '#message_list' => [
-          'warning' => [$this->t('Cannot get queue @queue_id', ['@queue_id' => $this->queueId])],
+          'warning' => [$this->t('Cannot get queue @queue_id', ['@queue_id' => $this::QUEUE_ID])],
         ],
       ];
     }
@@ -204,7 +202,7 @@ final class FbsWebformHandler extends WebformHandlerBase {
   private function getQueue(): ?Queue {
     $queueStorage = $this->entityTypeManager->getStorage('advancedqueue_queue');
     /** @var ?\Drupal\advancedqueue\Entity\Queue $queue */
-    $queue = $queueStorage->load($this->queueId);
+    $queue = $queueStorage->load($this::QUEUE_ID);
 
     return $queue;
   }
