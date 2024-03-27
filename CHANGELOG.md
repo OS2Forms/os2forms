@@ -15,7 +15,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - [#84](https://github.com/OS2Forms/os2forms/pull/84)
   Added digital post test command.
 - [#95](https://github.com/OS2Forms/os2forms/pull/95)
-  Added `base_url` variable to Maestro notification twig.
+  Added `base_url` variable to twig templates.
 
 ## [3.14.1] 2024-01-16
 
