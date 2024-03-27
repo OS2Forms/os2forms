@@ -17,6 +17,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\Render\Markup;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Drupal\entity_print\Plugin\EntityPrintPluginManagerInterface;
 use Drupal\maestro\Engine\MaestroEngine;
@@ -615,6 +616,7 @@ class MaestroHelper implements LoggerInterface {
         'action_label' => $actionLabel,
         'webform_submission' => $submission,
         'handler' => $this,
+        'base_url' => Settings::get('base_url')
       ],
     ];
 
