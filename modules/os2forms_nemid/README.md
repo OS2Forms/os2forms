@@ -14,6 +14,7 @@ Besides this module adds a special settings to the Third Party Webform settings:
 
 - Webform type
 - Redirect to nemlogin automatically
+- Hide form if under address protection
 
 Settings: admin/structure/webform/manage/[webform]/settings
 
