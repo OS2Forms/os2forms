@@ -618,7 +618,6 @@ class MaestroHelper implements LoggerInterface {
       ],
     ];
 
-
     $html = trim((string) $this->webformThemeManager->renderPlain($build));
 
     $html = $this->tokenManager->replace(
