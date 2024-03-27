@@ -14,6 +14,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - Adding Lat and Long fetching to DataAddress
 - [#84](https://github.com/OS2Forms/os2forms/pull/84)
   Added digital post test command.
+- [#95](https://github.com/OS2Forms/os2forms/pull/95)
+  Added `base_url` variable to Maestro notification twig.
 
 ## [3.14.1] 2024-01-16
 
