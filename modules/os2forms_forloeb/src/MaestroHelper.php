@@ -616,7 +616,7 @@ class MaestroHelper implements LoggerInterface {
         'action_label' => $actionLabel,
         'webform_submission' => $submission,
         'handler' => $this,
-        'base_url' => Settings::get('base_url')
+        'base_url' => Settings::get('base_url'),
       ],
     ];
 
