@@ -16,7 +16,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
   Added digital post test command.
 - [#95](https://github.com/OS2Forms/os2forms/pull/95)
   - Added `base_url` variable to twig templates.
-  - Tokenized all Maestro notification html.
+  - Handled tokens in Maestro notification html.
 
 ## [3.14.1] 2024-01-16
 
