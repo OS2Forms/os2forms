@@ -14,7 +14,6 @@ To specify headers/footers that will override the default ones on a global level
 
 To specify headers/footers that will override the default ones on a form level (**Third party settings** -> **Entity print** section): ```/admin/structure/webform/manage/[webform]/settings```
 
-
 # Overwriting templates
 
 With some setups it might be necessary to overwrite templates
