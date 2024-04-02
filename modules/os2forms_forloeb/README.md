@@ -45,18 +45,21 @@ must be processed asynchronously. Specify the queue handling notification jobs.
 
 Define templates for emails and digital post (PDF).
 
-With some setups it might be necessary to import stylesheets with a full path.
 
-For this reason the `base_url` variable has been added for use in templates.
-Set it in `settings.local.php`
+To reference assets, e.g. stylesheet or images, in your templates,
+you can use the `base_url` Twig variable to get the base URL:
+
+```html
+<link rel="stylesheet" href="{{ base_url }}/sites/default/templates/notification.html.twig
+```
+
+The value of `base_url` is defined in settings.local.php:
 
 ```php
 /**
  * Base url.
  *
- * Used to specify full path to stylesheets in templates.
+ * Used to specify full URL to stylesheets in templates.
  */
 $settings['base_url'] = 'http://nginx:8080';
 ```
-
-and use it in templates with `{{ base_url }}`.

@@ -17,18 +17,7 @@ To specify headers/footers that will override the default ones on a form level (
 # Overwriting templates
 
 With some setups it might be necessary to overwrite templates
-in order to access stylesheets.
+in order to access stylesheets or images.
 
-For this reason the `base_url` variable has been added for use in templates.
-Set it in `settings.local.php`
-
-```php
-/**
- * Base url.
- *
- * Used to specify full path to stylesheets in templates.
- */
-$settings['base_url'] = 'http://nginx:8080';
-```
-
-and use it in templates with `{{ base_url }}`.
+See [templates](modules/os2forms_forloeb/README.md#templates)
+for more details on how to do this.
