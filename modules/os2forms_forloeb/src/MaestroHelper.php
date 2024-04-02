@@ -620,13 +620,11 @@ class MaestroHelper implements LoggerInterface {
 
     $html = trim((string) $this->webformThemeManager->renderPlain($build));
 
-    $html = $this->tokenManager->replace(
+    return Markup::create($this->tokenManager->replace(
       $html,
       $submission,
       $maestroTokenData
-    );
-
-    return Markup::create($html);
+    ));
   }
 
   /**
