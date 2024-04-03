@@ -62,6 +62,7 @@
         "drupal/user_default_page": "^2.1",
         "drupal/webform": "^6.1",
         "drupal/webform_composite": "^1.0@RC",
+        "drupal/webform_encrypt": "^1.0@beta",
         "drupal/webform_migrate": "^1.1",
         "drupal/webform_node_element": "^1.2",
         "drupal/webform_remote_handlers": "^1.6.0",
@@ -112,6 +113,9 @@
             },
             "drupal/dynamic_entity_reference": {
                 "entityQuery reference JOINs should specify target_type (https://www.drupal.org/project/dynamic_entity_reference/issues/3120952#comment-14141038)": "https://www.drupal.org/files/issues/2021-06-22/entityquery-reference-joins-should-specify-target_type-3120952-24.patch"
+            },
+            "drupal/webform_encrypt": {
+                "Ensure data is base64 encoded (https://www.drupal.org/project/webform_encrypt/issues/3399414)": "https://git.drupalcode.org/project/webform_encrypt/-/merge_requests/4.patch"
             }
         }
     },
