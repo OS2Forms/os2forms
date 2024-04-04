@@ -1,3 +1,13 @@
-.ui-dialog:not(.ui-dialog-off-canvas) {
+.ui-dialog:not(.ui-dialog-off-canvas, .os2web-nemlogin-autologout-dialog) {
   width: 70vw!important;
+}
+
+
+.ui-dialog-titlebar-close:before {
+  content: '\2716';
+  position: absolute;
+  transform: translateX(-50%) translateY(-45%);
+  font-size: 12px;
+  left: 50%;
+  top: 50%;
 }
