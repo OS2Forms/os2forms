@@ -1,0 +1,13 @@
+uuid: 98e9a380-a5d6-4d2a-9176-7c50a9ec7c47
+langcode: en
+status: true
+dependencies:
+  config:
+    - key.key.webform
+  module:
+    - sodium
+id: webform
+label: Webform
+encryption_method: sodium
+encryption_method_configuration: {  }
+encryption_key: webform

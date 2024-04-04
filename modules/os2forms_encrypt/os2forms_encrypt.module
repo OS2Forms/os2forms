@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ */
+
+/**
+ * Implements hook_webform_element_info_alter().
+ *
+ * Add extra processing function to "force" enabled encryption on webform
+ * elements when they are being saved in the UI.
+ */
+function os2forms_encrypt_element_info_alter(array &$definitions): void {
+  foreach ($definitions as $element_id => &$definition) {
+    if ($element_id === 'webform_element_encrypt') {
+      $definition['#process'][] = [
+        'Drupal\os2forms_encrypt\Element\WebformElementEncrypt',
+        'processWebformElementEncrypt',
+      ];
+    }
+  }
+}

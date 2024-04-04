@@ -11,6 +11,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- Added webform encryption modules
 - Adding Lat and Long fetching to DataAddress
 - [#84](https://github.com/OS2Forms/os2forms/pull/84)
   Added digital post test command.
