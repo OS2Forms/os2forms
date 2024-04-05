@@ -4,6 +4,7 @@ namespace Drupal\os2forms_encrypt\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
 
 /**
  * Class Os2FormsEncryptAdminForm.
@@ -36,6 +37,17 @@ class SettingsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
     $config = $this->config('os2forms_encrypt.settings');
+
+    $link = Link::createFromRoute($this->t('administration'), 'entity.key.collection');
+    $form['notice'] = [
+      '#type' => 'inline_template',
+      '#template' => '<h3>{{ title }}</h3><p>{{ message|t }}</p><p>{{ adminMessage|t }}</p>',
+      '#context' => [
+        'title' => 'Please note',
+        'message' => 'The encryption key that comes with this module should <strong>not</strong> be used and should be changed before encrypting anything.',
+        'adminMessage' => 'You can modify the key (named "webform") in the keys ' . $link->toString() . ' panel. Additionally, the execution of this command can generate a new 256-bit key for you: <pre>dd if=/dev/urandom bs=32 count=1 | base64 -i -</pre>',
+      ],
+    ];
 
     $form['enabled'] = [
       '#type' => 'checkbox',
