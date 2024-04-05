@@ -11,7 +11,9 @@ use Drupal\Core\Form\FormStateInterface;
 class SettingsForm extends ConfigFormBase {
 
   /**
-   * @var string $configName
+   * The name of the configuration setting.
+   *
+   * @var string
    */
   public static string $configName = 'os2forms_encrypt.settings';
 

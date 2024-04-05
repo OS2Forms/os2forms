@@ -2,9 +2,9 @@
 
 namespace Drupal\os2forms_encrypt\Commands;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\os2forms_encrypt\Form\SettingsForm;
-use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Drush\Commands\DrushCommands;
 
 /**
@@ -19,22 +19,28 @@ class Os2FormsEncryptCommands extends DrushCommands {
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityTypeManager;
+  protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
-   * @var \Drupal\webform\Plugin\WebformElementManagerInterface
+   * Factory to get module configuration.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
-  private WebformElementManagerInterface $webformElementManager;
+  protected ConfigFactoryInterface $configFactory;
 
   /**
-   * Constructs a new Os2FormsEncryptCommands object.
+   * Class constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
+   *   An instance of the entity type manager.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   *   An instance of the config factory.
+   *
+   * @return void
    */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, WebformElementManagerInterface $webformElementManager) {
+  public function __construct(EntityTypeManagerInterface $entityTypeManager, ConfigFactoryInterface $configFactory) {
     $this->entityTypeManager = $entityTypeManager;
-    $this->webformElementManager = $webformElementManager;
+    $this->configFactory = $configFactory;
     parent::__construct();
   }
 
@@ -46,7 +52,7 @@ class Os2FormsEncryptCommands extends DrushCommands {
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function enabledEncrypt(): void {
-    $config = \Drupal::config(SettingsForm::$configName);
+    $config = $this->configFactory->get(SettingsForm::$configName);
     if (!$config->get('enabled')) {
       $this->output()->writeln('Encrypt has not been enabled.');
       return;
@@ -60,24 +66,27 @@ class Os2FormsEncryptCommands extends DrushCommands {
 
     /** @var \Drupal\webform\Entity\Webform $webform */
     foreach ($webforms as $webform) {
-      // This will give you an associative array of all elements in the current webform.
       $elements = $webform->getElementsDecoded();
       $config = $webform->getThirdPartySettings('webform_encrypt');
 
+      $changed = FALSE;
       foreach ($elements as $key => $element) {
         if (!isset($config['element'][$key])) {
           $config['element'][$key] = [
             'encrypt' => TRUE,
             'encrypt_profile' => 'webform',
           ];
+          $changed = TRUE;
         }
       }
 
-      // After modifying the element array, encode it back into a string and set it back on the webform entity.
-      $webform->setThirdPartySetting('webform_encrypt', 'element', $config['element']);
-
-      // Save the webform entity so the changes persist.
-      $webform->save();
+      // Save the webform entity so the changes persist, if any changes where
+      // made.
+      if ($changed) {
+        $webform->setThirdPartySetting('webform_encrypt', 'element', $config['element']);
+        $webform->save();
+      }
     }
   }
+
 }

@@ -2,6 +2,7 @@
 
 /**
  * @file
+ * This module enabled webform submission encryption as a default option.
  */
 
 /**
