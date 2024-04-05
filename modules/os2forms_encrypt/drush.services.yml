@@ -1,0 +1,6 @@
+services:
+  os2forms_encrypt.commands:
+    class: Drupal\os2forms_encrypt\Commands\Os2FormsEncryptCommands
+    arguments: ['@entity_type.manager', '@plugin.manager.webform.element']
+    tags:
+      - { name: drush.command }
