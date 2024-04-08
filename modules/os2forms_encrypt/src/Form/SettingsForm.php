@@ -43,7 +43,7 @@ class SettingsForm extends ConfigFormBase {
     $link = Link::createFromRoute($this->t('administration'), 'entity.key.collection');
     $form['notice'] = [
       '#type' => 'inline_template',
-      '#template' => '<h3>{{ title }}</h3><p>{{ message|t }}</p><p>{{ adminMessage|t }}</p>',
+      '#template' => '<h3>{{ title|t }}</h3><p>{{ message|t }}</p><p>{{ adminMessage|t }}</p>',
       '#context' => [
         'title' => 'Please note',
         'message' => 'The encryption key that comes with this module should <strong>not</strong> be used and should be changed before encrypting anything.',
