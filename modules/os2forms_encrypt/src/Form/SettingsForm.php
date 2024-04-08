@@ -7,7 +7,9 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 
 /**
- * Class Os2FormsEncryptAdminForm.
+ * Class SettingsForm.
+ *
+ * This is the settings for the module.
  */
 class SettingsForm extends ConfigFormBase {
 
