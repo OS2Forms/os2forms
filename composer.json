@@ -17,6 +17,7 @@
     },
     "require": {
         "php": "^8.1",
+        "ext-curl": "*",
         "ext-dom": "*",
         "ext-soap": "*",
         "cweagans/composer-patches": "^1.6.5",
