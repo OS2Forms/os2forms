@@ -1,6 +1,4 @@
 name: OS2Forms Audit
 type: module
 description: 'OS2Forms Audit Module (log all events to external service)'
-core_version_requirement: ^8 || ^9
-dependencies:
-  - 'drupal:admin_audit_trail'
+core_version_requirement: ^8 || ^9 || ^10

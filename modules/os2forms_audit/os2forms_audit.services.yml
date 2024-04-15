@@ -1,0 +1,4 @@
+services:
+  plugin.manager.os2forms_audit_logger:
+    class: Drupal\os2forms_audit\Plugin\LoggerManager
+    parent: default_plugin_manager
