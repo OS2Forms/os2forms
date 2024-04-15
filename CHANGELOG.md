@@ -12,9 +12,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 ## [Unreleased]
 
 - Adding Lat and Long fetching to DataAddress
-- [#84](https://github.com/OS2Forms/os2forms/pull/84)
-  Added digital post test command.
-- [#96](https://github.com/OS2Forms/os2forms/pull/96)
+- Added digital post test command.
+- Added new audit logging module (os2form_audit).
 
 ## [3.14.1] 2024-01-16
 

@@ -1,30 +1,29 @@
 <?php
 
-namespace Drupal\os2forms_audit\Plugin;
+namespace Drupal\os2forms_audit\Plugin\AuditLogger;
 
-use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Entity\EntityInterface;
-use Psr\Log\LogLevel;
+use Drupal\Core\Plugin\PluginBase;
 
 /**
  * Stores entities in the database.
  *
- * @AuditLogger(
+ * @AuditLoggerProvider(
  *   id = "database",
  *   title = @Translation("Database logger"),
  *   description = @Translation("Store entity data in the database.")
  * )
  */
-class DatabaseEntityWriter extends PluginBase implements AuditLoggerInterface {
+class Database extends PluginBase implements AuditLoggerInterface {
 
   /**
    * {@inheritdoc}
    */
-  public function write(EntityInterface $entity) {
+  public function write(EntityInterface $entity): void {
     // Code to write the $entity data to a file as an audit entry.
 
     // Then log the action like this:
-    \Drupal::logger('os2form_audit')->notice('Entity with ID @id is written.', ['@id' => $entity->id()]);
+    \Drupal::logger('os2forms_audit')->notice('Entity with ID @id is written.', ['@id' => $entity->id()]);
   }
 
 }

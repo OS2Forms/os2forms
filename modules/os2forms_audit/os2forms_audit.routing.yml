@@ -1,0 +1,7 @@
+os2forms_audit.admin_settings:
+  path: '/admin/config/os2forms_audit/settings'
+  defaults:
+    _form: '\Drupal\os2forms_audit\Form\SettingsForm'
+    _title: 'OS2Forms Audit settings'
+  requirements:
+    _permission: 'administer site'

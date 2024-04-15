@@ -3,16 +3,36 @@
 namespace Drupal\os2forms_audit\Service;
 
 /**
- * Class LokiClient
+ * Class LokiClient.
  *
- * This is based/inspired by https://github.com/itspire/monolog-loki
+ * This is based/inspired by https://github.com/itspire/monolog-loki.
  */
 class LokiClient {
 
+  /**
+   * @var string|null
+   */
   protected ?string $entrypoint;
+
+  /**
+   * Basic authentication username and password.
+   *
+   * @var array<string>
+   */
   protected array $basicAuth = [];
+
+  /**
+   * Custom options for CURL command.
+   *
+   * @var array<string, string>
+   */
   protected array $customCurlOptions = [];
 
+  /**
+   * Curl handler.
+   *
+   * @var \CurlHandle|null
+   */
   private ?\CurlHandle $connection = NULL;
 
   public function __construct(
@@ -60,8 +80,8 @@ class LokiClient {
           'label' => $label,
         ],
         'values' => [
-          [ $epoch, $line, $metadata],
-        ]
+          [$epoch, $line, $metadata],
+        ],
       ],
     ]);
   }
