@@ -10,6 +10,8 @@ namespace Drupal\os2forms_audit\Service;
 class LokiClient {
 
   /**
+   * Location of the loki entry point.
+   *
    * @var string|null
    */
   protected ?string $entrypoint;
@@ -36,8 +38,8 @@ class LokiClient {
   private ?\CurlHandle $connection = NULL;
 
   /**
-   * Default constructor
-   * .
+   * Default constructor.
+   *
    * @param array $apiConfig
    *   Configuration for the loki connection.
    */
@@ -55,31 +57,30 @@ class LokiClient {
   /**
    * Send a log message to Loki ingestion endpoint.
    *
-   * Message format sendt to loki (https://grafana.com/docs/loki/latest/reference/api/#ingest-logs)
-   * in the following json format.
+   * Message format sendt to loki in the following json format.
    * {
-   *   "Streams": [
-   *     {
-   *       "stream": {
-   *         "label": "value"
-   *       },
-   *       "values": [
-   *           [ "<unix epoch in nanoseconds>", "<log line>", <structured metadata> ]
-   *       ]
-   *     }
-   *   ]
+   *  "Streams": [
+   *    {
+   *      "stream": {
+   *        "label": "value"
+   *      },
+   *      "values": [
+   *      [ "<unix epoch in nanoseconds>", "<log line>", <structured metadata> ]
+   *      ]
+   *    }
+   *  ]
    * }
    *
    * @param string $label
    *   Loki global label to use.
    * @param int $epoch
-   *   Unix epoch in nanoseconds
+   *   Unix epoch in nanoseconds.
    * @param string $line
    *   The log line to send.
    * @param array $metadata
    *   Structured metadata.
    *
-   * @return void
+   * @see https://grafana.com/docs/loki/latest/reference/api/#ingest-logs
    *
    * @throws \JsonException
    */
@@ -97,7 +98,7 @@ class LokiClient {
   }
 
   /**
-   * Ensure the URL to entry point is correct
+   * Ensure the URL to entry point is correct.
    *
    * @param string $entrypoint
    *   Entry point URL.
@@ -118,8 +119,6 @@ class LokiClient {
    *
    * @param array $packet
    *   The packet to send.
-   *
-   * @return void
    *
    * @throws \JsonException
    *    If unable to encode the packet to JSON.
