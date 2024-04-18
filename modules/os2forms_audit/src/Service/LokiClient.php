@@ -35,11 +35,17 @@ class LokiClient {
    */
   private ?\CurlHandle $connection = NULL;
 
+  /**
+   * Default constructor
+   * .
+   * @param array $apiConfig
+   *   Configuration for the loki connection.
+   */
   public function __construct(
     array $apiConfig,
   ) {
     $this->entrypoint = $this->getEntrypoint($apiConfig['entrypoint']);
-    $this->customCurlOptions = 'curl_options' ?? [];
+    $this->customCurlOptions = $apiConfig['curl_options'] ?? [];
 
     if (isset($apiConfig['auth']['basic'])) {
       $this->basicAuth = (2 === count($apiConfig['auth']['basic'])) ? $apiConfig['auth']['basic'] : [];
@@ -65,9 +71,13 @@ class LokiClient {
    * }
    *
    * @param string $label
+   *   Loki global label to use.
    * @param int $epoch
+   *   Unix epoch in nanoseconds
    * @param string $line
+   *   The log line to send.
    * @param array $metadata
+   *   Structured metadata.
    *
    * @return void
    *

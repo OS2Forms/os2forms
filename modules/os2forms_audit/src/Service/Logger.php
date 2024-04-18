@@ -2,7 +2,7 @@
 
 namespace Drupal\os2forms_audit\Service;
 
-use Drupal\os2forms_audit\LoggerManager;
+use Drupal\os2forms_audit\Plugin\LoggerManager;
 
 /**
  * Class Logger
@@ -16,7 +16,7 @@ class Logger {
   ) {
   }
 
-  public function log() {
+  public function log(): void {
     $this->loggerManager->getDefinitions();
 
   }

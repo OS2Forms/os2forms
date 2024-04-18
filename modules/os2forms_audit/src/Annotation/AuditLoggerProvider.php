@@ -3,6 +3,7 @@
 namespace Drupal\os2forms_audit\Annotation;
 
 use Drupal\Component\Annotation\Plugin;
+use Drupal\Core\Annotation\Translation;
 
 /**
  * Defines a AuditLoggerProvider annotation object.
@@ -27,7 +28,7 @@ class AuditLoggerProvider extends Plugin {
    *
    * @ingroup plugin_translatable
    */
-  public \Drupal\Core\Annotation\Translation $title;
+  public Translation $title;
 
   /**
    * A brief description of the consent storage.
@@ -38,6 +39,6 @@ class AuditLoggerProvider extends Plugin {
    *
    * @ingroup plugin_translatable
    */
-  public \Drupal\Core\Annotation\Translation|string $description = '';
+  public Translation|string $description = '';
 
 }
