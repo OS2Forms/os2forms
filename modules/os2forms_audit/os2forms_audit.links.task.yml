@@ -1,0 +1,5 @@
+os2forms_audit.plugin_settings_tasks:
+  title: 'Dynamic tasks'
+  route_name: os2forms_audit.plugin_settings_local_tasks
+  base_route: os2forms_audit.plugin_settings_local_tasks
+  deriver: Drupal\os2forms_audit\Plugin\Derivative\LocalTask

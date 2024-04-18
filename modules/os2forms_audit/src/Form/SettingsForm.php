@@ -63,12 +63,27 @@ class SettingsForm extends ConfigFormBase {
     $config = $this->config(self::$configName);
 
     $plugins = $this->loggerManager->getDefinitions();
+    ksort($plugins);
+    $options = array_map(function ($plugin) {
+      /** @var \Drupal\Core\StringTranslation\TranslatableMarkup $title */
+      $title = $plugin['title'];
+      return $title->render();
+    }, $plugins);
 
-    $form['enabled'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Enabled'),
-      '#description' => $this->t('E'),
-      '#default_value' => $config->get('enabled'),
+    $form['provider'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Log provider'),
+      '#description' => $this->t('Select the logger provider you which to use'),
+      '#options' => $options,
+      '#default_value' => $config->get('provider'),
+    ];
+
+    $form['fallback'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Fallback Log provider'),
+      '#description' => $this->t('Select the logger provider you which to use, if the main provider fails'),
+      '#options' => $options,
+      '#default_value' => $config->get('fallback'),
     ];
 
     return parent::buildForm($form, $form_state);
@@ -81,7 +96,8 @@ class SettingsForm extends ConfigFormBase {
     parent::submitForm($form, $form_state);
 
     $this->config(self::$configName)
-      ->set('enabled', $form_state->getValue('enabled'))
+      ->set('provider', $form_state->getValue('provider'))
+      ->set('fallback', $form_state->getValue('fallback'))
       ->save();
   }
 

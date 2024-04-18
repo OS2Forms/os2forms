@@ -1,7 +1,8 @@
-os2forms_audit.admin_settings:
-  path: '/admin/config/os2forms_audit/settings'
+os2forms_audit.plugin_settings_local_tasks:
+  path: '/admin/config/os2forms_audit/settings/{type}'
   defaults:
-    _form: '\Drupal\os2forms_audit\Form\SettingsForm'
-    _title: 'OS2Forms Audit settings'
+    _controller: '\Drupal\os2forms_audit\Controller\LocalTasksController::dynamicTasks'
+    _title: 'Dynamic tasks'
+    type: ''
   requirements:
     _permission: 'administer site'
