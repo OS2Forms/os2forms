@@ -3,7 +3,6 @@
 namespace Drupal\os2forms_audit\Plugin\AuditLogger;
 
 use Drupal\Component\Plugin\ConfigurableInterface;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Plugin\PluginFormInterface;
@@ -17,7 +16,7 @@ use Drupal\Core\Plugin\PluginFormInterface;
  *   description = @Translation("Writes entities to a file.")
  * )
  */
-class File extends PluginBase implements AuditLoggerInterface, PluginFormInterface, ConfigurableInterface{
+class File extends PluginBase implements AuditLoggerInterface, PluginFormInterface, ConfigurableInterface {
 
   public function __construct(array $configuration, $plugin_id, $plugin_definition) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
@@ -27,49 +26,75 @@ class File extends PluginBase implements AuditLoggerInterface, PluginFormInterfa
   /**
    * {@inheritdoc}
    */
-  public function write(EntityInterface $entity): void {
+  public function log(int $timestamp, string $line, array $metadata = []): void {
     // Code to write the entity to a file.
     // This is just a placeholder and won't write the data.
-    file_put_contents('path_to_your_file.txt', serialize($entity));
+    file_put_contents(
+      $this->configuration['file'],
+      json_encode([
+        'epoc' => $timestamp,
+        'line' => $line,
+        'metadata' => $metadata,
+      ]) . PHP_EOL,
+      FILE_APPEND | LOCK_EX);
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getConfiguration(): array {
     return $this->configuration;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function setConfiguration(array $configuration): static {
     $this->configuration = $configuration + $this->defaultConfiguration();
     return $this;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function defaultConfiguration(): array {
     return [
-      'path' => '/tmp/os2forms_audit.log',
+      'file' => '/tmp/os2forms_audit.log',
     ];
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state): array {
 
-    $form['path'] = [
+    $form['file'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Full path to the audit log file to store entries in'),
-      '#default_value' => $this->configuration['path'],
+      '#title' => $this->t('The complete path and name of the file where log entries are stored.'),
+      '#default_value' => $this->configuration['file'],
     ];
 
     return $form;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
     // @todo Implement validateConfigurationForm() method.
   }
 
-  public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
+  /**
+   * {@inheritdoc}
+   */
+  public function submitConfigurationForm(array &$form, FormStateInterface $form_state): void {
     if (!$form_state->getErrors()) {
       $values = $form_state->getValues();
       $configuration = [
-        'path' => $values['path'],
+        'file' => $values['file'],
       ];
       $this->setConfiguration($configuration);
     }
   }
+
 }

@@ -2,9 +2,7 @@
 
 namespace Drupal\os2forms_audit\Plugin\Derivative;
 
-use Drupal\Component\Plugin\ConfigurableInterface;
 use Drupal\Component\Plugin\Derivative\DeriverBase;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
 use Drupal\os2forms_audit\Plugin\LoggerManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -19,6 +17,9 @@ class LocalTask extends DeriverBase implements ContainerDeriverInterface {
   ) {
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public static function create(ContainerInterface $container, $base_plugin_id): LocalTask|static {
     return new static(
       $container->get('plugin.manager.os2forms_audit_logger')

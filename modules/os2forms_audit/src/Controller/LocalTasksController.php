@@ -7,6 +7,9 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Form\FormBuilderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Class to handle local taks tabs callbacks.
+ */
 class LocalTasksController extends ControllerBase {
 
   /**
@@ -38,7 +41,7 @@ class LocalTasksController extends ControllerBase {
   /**
    * Get dynamic tasks.
    *
-   * @param string|null $type (optional)
+   * @param string|null $type
    *   The type of form to retrieve. Defaults to NULL.
    *
    * @return array

@@ -2,3 +2,13 @@ services:
   plugin.manager.os2forms_audit_logger:
     class: Drupal\os2forms_audit\Plugin\LoggerManager
     parent: default_plugin_manager
+
+  os2forms_audit.logger:
+    class: Drupal\os2forms_audit\Service\Logger
+    arguments: ['@plugin.manager.os2forms_audit_logger', '@config.factory']
+
+  os2forms_audit.commands:
+    class: Drupal\os2forms_audit\Commands\Os2FormsAuditDrushCommands
+    arguments: ['@os2forms_audit.logger']
+    tags:
+      - { name: drush.command }

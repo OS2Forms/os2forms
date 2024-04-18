@@ -3,7 +3,6 @@
 namespace Drupal\os2forms_audit\Plugin\AuditLogger;
 
 use Drupal\Component\Plugin\ConfigurableInterface;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Plugin\PluginFormInterface;
@@ -27,27 +26,37 @@ class Loki extends PluginBase implements AuditLoggerInterface, PluginFormInterfa
   /**
    * {@inheritdoc}
    */
-  public function write(EntityInterface $entity): void {
-
-    // Then log the action like this:
-    \Drupal::logger('os2forms_audit')->notice('Entity with ID @id is written.', ['@id' => $entity->id()]);
+  public function log(int $timestamp, string $line, array $metadata = []): void {
+    // @todo use loki client to send message to loki
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getConfiguration(): array {
     return $this->configuration;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function setConfiguration(array $configuration): static {
     $this->configuration = $configuration + $this->defaultConfiguration();
     return $this;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function defaultConfiguration(): array {
     return [
-      'entrypoint' => 'http://loki:3100'
+      'entrypoint' => 'http://loki:3100',
     ];
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state): array {
     $form['entrypoint'] = [
       '#type' => 'url',
@@ -81,6 +90,9 @@ class Loki extends PluginBase implements AuditLoggerInterface, PluginFormInterfa
     return $form;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function validateConfigurationForm(array &$form, FormStateInterface $form_state): void {
     $values = $form_state->getValues();
 
@@ -101,7 +113,7 @@ class Loki extends PluginBase implements AuditLoggerInterface, PluginFormInterfa
 
     $curlOptions = array_filter(explode(',', $values['curl_options']));
     foreach ($curlOptions as $option) {
-      [$key,] = explode(' =>', $option);
+      [$key] = explode(' =>', $option);
       $key = trim($key);
       if (!defined($key)) {
         $form_state->setErrorByName('curl_options', $this->t('%option is not a valid cURL option.', ['%option' => $key]));
@@ -110,6 +122,9 @@ class Loki extends PluginBase implements AuditLoggerInterface, PluginFormInterfa
     }
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state): void {
     if (!$form_state->getErrors()) {
       $values = $form_state->getValues();
@@ -117,7 +132,7 @@ class Loki extends PluginBase implements AuditLoggerInterface, PluginFormInterfa
         'entrypoint' => $values['entrypoint'],
         'auth' => [
           'username' => $values['auth']['username'],
-          'password' => $values['auth']['password']
+          'password' => $values['auth']['password'],
         ],
         'curl_options' => $values['curl_options'],
       ];

@@ -2,8 +2,6 @@
 
 namespace Drupal\os2forms_audit\Plugin\AuditLogger;
 
-use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\PluginBase;
 
 /**
@@ -20,10 +18,13 @@ class Watchdog extends PluginBase implements AuditLoggerInterface {
   /**
    * {@inheritdoc}
    */
-  public function write(EntityInterface $entity): void {
-    // Code to write the $entity data to a file as an audit entry.
+  public function log(int $timestamp, string $line, array $metadata = []): void {
+    $data = '';
+    array_walk($metadata, function ($val, $key) use (&$data) {
+      $data .= " $key=\"$val\"";
+    });
 
-    // Then log the action like this:
-    \Drupal::logger('os2forms_audit')->info('Entity with ID @id is written.', ['@id' => $entity->id()]);
+    \Drupal::logger('os2forms_audit')->info($line . ' (%data)', ['data' => $data]);
   }
+
 }

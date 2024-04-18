@@ -2,10 +2,7 @@
 
 namespace Drupal\os2forms_audit\Plugin\AuditLogger;
 
-use Drupal\Component\Plugin\ConfigurableInterface;
 use Drupal\Component\Plugin\PluginInspectionInterface;
-use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Plugin\PluginFormInterface;
 
 /**
  * Interface for AuditLogger plugins.
@@ -13,11 +10,16 @@ use Drupal\Core\Plugin\PluginFormInterface;
 interface AuditLoggerInterface extends PluginInspectionInterface {
 
   /**
-   * Write the entity data.
+   * Logs a message with optional metadata.
    *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
-   *   The entity to be audited.
+   * @param int $timestamp
+   *   The timestamp of the log entry.
+   * @param string $line
+   *   The log message.
+   * @param array $metadata
+   *   Additional metadata associated with the log entry. Defaults to an empty
+   *   array.
    */
-  public function write(EntityInterface $entity);
+  public function log(int $timestamp, string $line, array $metadata = []): void;
 
 }
