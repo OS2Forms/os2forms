@@ -30,8 +30,8 @@ class PluginSettingsForm extends ConfigFormBase implements PluginSettingsFormInt
    * {@inheritdoc}
    */
   public function __construct(
-     ConfigFactoryInterface $config_factory,
-     PluginManagerInterface $manager
+    ConfigFactoryInterface $config_factory,
+    PluginManagerInterface $manager,
   ) {
     parent::__construct($config_factory);
     $this->manager = $manager;
