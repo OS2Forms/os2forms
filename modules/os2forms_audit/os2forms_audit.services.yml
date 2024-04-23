@@ -8,7 +8,7 @@ services:
     arguments: ['@plugin.manager.os2forms_audit_logger', '@config.factory']
 
   os2forms_audit.commands:
-    class: Drupal\os2forms_audit\Commands\Os2FormsAuditDrushCommands
+    class: Drupal\os2forms_audit\Commands\AuditLogDrushCommands
     arguments: ['@os2forms_audit.logger']
     tags:
       - { name: drush.command }

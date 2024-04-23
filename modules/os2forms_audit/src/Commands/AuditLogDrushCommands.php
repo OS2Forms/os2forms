@@ -17,7 +17,7 @@ class AuditLogDrushCommands extends DrushCommands {
    *   Audit logger service.
    */
   public function __construct(
-    protected readonly Logger $auditLogger
+    protected readonly Logger $auditLogger,
   ) {
     parent::__construct();
   }
@@ -35,7 +35,7 @@ class AuditLogDrushCommands extends DrushCommands {
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
   public function logMessage(string $log_message = ''): void {
-    $this->auditLogger->log(time(), $log_message, []);
+    $this->auditLogger->log('test', time(), $log_message, ['from' => 'drush']);
   }
 
 }

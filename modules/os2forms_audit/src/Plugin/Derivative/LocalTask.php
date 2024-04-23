@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class LocalTask extends DeriverBase implements ContainerDeriverInterface {
 
   public function __construct(
-    private readonly LoggerManager $loggerManager
+    private readonly LoggerManager $loggerManager,
   ) {
   }
 

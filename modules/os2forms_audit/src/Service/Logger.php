@@ -16,13 +16,15 @@ class Logger {
 
   public function __construct(
     private readonly LoggerManager $loggerManager,
-    private readonly ConfigFactoryInterface $configFactory
+    private readonly ConfigFactoryInterface $configFactory,
   ) {
   }
 
   /**
    * Logs a message using a plugin-specific logger.
    *
+   * @param string $type
+   *   The type of event to log (auth, lookup etc.)
    * @param int $timestamp
    *   The timestamp for the log message.
    * @param string $line
@@ -32,14 +34,14 @@ class Logger {
    *
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
-  public function log(int $timestamp, string $line, array $metadata = []): void {
+  public function log(string $type, int $timestamp, string $line, array $metadata = []): void {
     $config = $this->configFactory->get(SettingsForm::$configName);
     $plugin_id = $config->get('provider');
 
     $configuration = $this->configFactory->get(PluginSettingsForm::getConfigName())->get($plugin_id);
     $logger = $this->loggerManager->createInstance($plugin_id, $configuration ?? []);
 
-    $logger->log($timestamp, $line, $metadata);
+    $logger->log($type, $timestamp, $line, $metadata);
   }
 
 }

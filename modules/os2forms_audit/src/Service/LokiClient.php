@@ -7,7 +7,7 @@ namespace Drupal\os2forms_audit\Service;
  *
  * This is based/inspired by https://github.com/itspire/monolog-loki.
  */
-class LokiClient {
+class LokiClient implements LokiClientInterface {
 
   /**
    * Location of the loki entry point.
@@ -49,52 +49,36 @@ class LokiClient {
     $this->entrypoint = $this->getEntrypoint($apiConfig['entrypoint']);
     $this->customCurlOptions = $apiConfig['curl_options'] ?? [];
 
-    if (isset($apiConfig['auth']['basic'])) {
-      $this->basicAuth = (2 === count($apiConfig['auth']['basic'])) ? $apiConfig['auth']['basic'] : [];
+    if (isset($apiConfig['auth']) && !empty($apiConfig['auth']['username']) && !empty($apiConfig['auth']['password'])) {
+      $this->basicAuth = $apiConfig['auth'];
     }
   }
 
   /**
-   * Send a log message to Loki ingestion endpoint.
-   *
-   * Message format sendt to loki in the following json format.
-   * {
-   *  "Streams": [
-   *    {
-   *      "stream": {
-   *        "label": "value"
-   *      },
-   *      "values": [
-   *      [ "<unix epoch in nanoseconds>", "<log line>", <structured metadata> ]
-   *      ]
-   *    }
-   *  ]
-   * }
-   *
-   * @param string $label
-   *   Loki global label to use.
-   * @param int $epoch
-   *   Unix epoch in nanoseconds.
-   * @param string $line
-   *   The log line to send.
-   * @param array $metadata
-   *   Structured metadata.
-   *
-   * @see https://grafana.com/docs/loki/latest/reference/api/#ingest-logs
+   * {@inheritdoc}
    *
    * @throws \JsonException
    */
   public function send(string $label, int $epoch, string $line, array $metadata = []): void {
-    $this->sendPacket([
+    $packet = [
       'streams' => [
-        'stream' => [
-          'label' => $label,
-        ],
-        'values' => [
-          [$epoch, $line, $metadata],
+        [
+          'stream' => [
+            'app' => 'os2forms',
+            'type' => $label,
+          ],
+          'values' => [
+            [(string) $epoch, $line],
+          ],
         ],
       ],
-    ]);
+    ];
+
+    if (!empty($metadata)) {
+      $packet['streams'][0]['stream'] += $metadata;
+    }
+
+    $this->sendPacket($packet);
   }
 
   /**
@@ -159,7 +143,18 @@ class LokiClient {
       }
 
       curl_setopt_array($this->connection, $curlOptions);
-      curl_exec($this->connection);
+      $result = curl_exec($this->connection);
+
+      if (FALSE === $result) {
+        throw new \RuntimeException('Error sending packet to Loki');
+      }
+
+      if (curl_errno($this->connection)) {
+        echo 'Curl error: ' . curl_error($this->connection);
+      }
+      else {
+        echo 'Curl result: ' . $result;
+      }
     }
   }
 

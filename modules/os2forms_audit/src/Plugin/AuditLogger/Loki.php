@@ -6,6 +6,7 @@ use Drupal\Component\Plugin\ConfigurableInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Plugin\PluginFormInterface;
+use Drupal\os2forms_audit\Service\LokiClient;
 
 /**
  * Stores entities in the database.
@@ -18,6 +19,9 @@ use Drupal\Core\Plugin\PluginFormInterface;
  */
 class Loki extends PluginBase implements AuditLoggerInterface, PluginFormInterface, ConfigurableInterface {
 
+  /**
+   * {@inheritdoc}
+   */
   public function __construct(array $configuration, $plugin_id, $plugin_definition) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->setConfiguration($configuration);
@@ -25,9 +29,16 @@ class Loki extends PluginBase implements AuditLoggerInterface, PluginFormInterfa
 
   /**
    * {@inheritdoc}
+   *
+   * @throws \JsonException
    */
-  public function log(int $timestamp, string $line, array $metadata = []): void {
-    // @todo use loki client to send message to loki
+  public function log(string $type, int $timestamp, string $line, array $metadata = []): void {
+    $client = new LokiClient([
+      'entrypoint' => $this->configuration['entrypoint'],
+      'auth' => $this->configuration['auth'],
+    ]);
+    // Convert timestamp to nanoseconds.
+    $client->send($type, $timestamp * 1000000000, $line, $metadata);
   }
 
   /**
@@ -70,13 +81,11 @@ class Loki extends PluginBase implements AuditLoggerInterface, PluginFormInterfa
       'username' => [
         '#type' => 'textfield',
         '#title' => $this->t('Username'),
-        '#required' => TRUE,
         '#default_value' => $this->configuration['auth']['username'],
       ],
       'password' => [
         '#type' => 'password',
         '#title' => $this->t('Password'),
-        '#required' => TRUE,
         '#default_value' => $this->configuration['auth']['password'],
       ],
     ];
@@ -99,16 +108,6 @@ class Loki extends PluginBase implements AuditLoggerInterface, PluginFormInterfa
     // Validate entrypoint.
     if (filter_var($values['entrypoint'], FILTER_VALIDATE_URL) === FALSE) {
       $form_state->setErrorByName('entrypoint', $this->t('Invalid URL.'));
-    }
-
-    // Validate auth username.
-    if (empty($values['auth']['username'])) {
-      $form_state->setErrorByName('auth][username', $this->t('Username is required.'));
-    }
-
-    // Validate auth password.
-    if (empty($values['auth']['password'])) {
-      $form_state->setErrorByName('auth][password', $this->t('Password is required.'));
     }
 
     $curlOptions = array_filter(explode(',', $values['curl_options']));
