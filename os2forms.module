@@ -370,15 +370,27 @@ function os2forms_module_implements_alter(&$implementations, $hook) {
  *   The timestamp of the log entry.
  * @param string $line
  *   The log message.
+ * @param bool $logUser
+ *    Log information about the current logged-in user (need to track who has
+ *    lookup information in external services). Default: false.
  * @param array $metadata
  *   Additional metadata for the log entry.
- *
- * @throws \Drupal\Component\Plugin\Exception\PluginException
  */
-function os2forms_audit_log(string $type, int $timestamp, string $line, array $metadata = []): void {
+function os2forms_audit_log(string $type, int $timestamp, string $line, bool $logUser = false, array $metadata = []): void {
   if ( \Drupal::service('module_handler')->moduleExists('os2form_audit')) {
+    if ($logUser) {
+      // Add user id to the log message.
+      $user = \Drupal::currentUser();
+      $metadata['userId'] = $user->id();
+    }
+
     /** @var \Drupal\os2forms_audit\Service\Logger $logger */
     $logger = \Drupal::service('os2form_audit.logger');
-    $logger->log($type, $timestamp, $line, $metadata);
+    try {
+      $logger->log($type, $timestamp, $line, $metadata);
+    }
+    catch (\Drupal\Component\Plugin\Exception\PluginException $e) {
+      // @todo: what should we do when plugins fails.
+    }
   }
 }
