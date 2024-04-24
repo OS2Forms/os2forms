@@ -15,7 +15,9 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - [#84](https://github.com/OS2Forms/os2forms/pull/84)
   Added digital post test command.
 - [#96](https://github.com/OS2Forms/os2forms/pull/96)
-- Fix 
+  NemLogin autologout pop-up styling.
+- [#99](https://github.com/OS2Forms/os2forms/pull/99)
+  Fix coding standards.
 
 ## [3.14.1] 2024-01-16
 
