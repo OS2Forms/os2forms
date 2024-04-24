@@ -29,7 +29,10 @@ abstract class AbstractMessageHelper {
   }
 
   /**
-   * Get main document.
+   * Get the main document.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\PluginException
+   * @throws \Drupal\os2forms_digital_post\Exception\InvalidAttachmentElementException
    *
    * @see WebformAttachmentController::download()
    *

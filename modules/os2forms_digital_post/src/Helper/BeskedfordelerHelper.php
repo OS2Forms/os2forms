@@ -29,7 +29,9 @@ class BeskedfordelerHelper {
   }
 
   /**
-   * Save MeMo message in database.
+   * Save MeMo message to the database.
+   *
+   * @throws \Exception
    */
   public function createMessage(int $submissionId, MeMoMessage $message, string $receipt): int {
     $messageUUID = $message->getMessageHeader()->getMessageUUID();
@@ -50,10 +52,12 @@ class BeskedfordelerHelper {
    * Load message.
    *
    * @param string $messageUUID
-   *   The message UUID.
+   *   The message's UUID.
    *
    * @return \Drupal\os2forms_digital_post\Model\Message|null
    *   The message.
+   *
+   * @throws \Exception
    *
    * @see Message::__set()
    */
@@ -69,6 +73,8 @@ class BeskedfordelerHelper {
 
   /**
    * Add Beskedfordeler message to message.
+   *
+   * @throws \Exception
    */
   public function addBeskedfordelerMessage(string $messageUUID, string $beskedfordelerMessage): bool {
     $message = $this->loadMessage($messageUUID);
@@ -91,6 +97,8 @@ class BeskedfordelerHelper {
    *
    * @param array|WebformSubmissionInterface[] $submissions
    *   The submissions.
+   *
+   * @throws \Exception
    */
   public function deleteMessages(array $submissions): void {
     $submissionIds = array_map(static function (WebformSubmissionInterface $submission) {

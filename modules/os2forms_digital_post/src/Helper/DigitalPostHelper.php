@@ -53,6 +53,13 @@ final class DigitalPostHelper implements LoggerInterface {
    * @return array
    *   [The response, The kombi post message].
    *
+   * @throws \Drupal\os2forms_digital_post\Exception\CertificateLocatorException
+   * @throws \ItkDev\AzureKeyVault\Exception\TokenException
+   * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
+   * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
+   * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
+   * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+   *
    * @phpstan-return array<int, mixed>
    */
   public function sendDigitalPost(string $type, Message $message, ?ForsendelseI $forsendelse, WebformSubmissionInterface $submission = NULL): array {
@@ -87,6 +94,9 @@ final class DigitalPostHelper implements LoggerInterface {
 
   /**
    * Look up CPR.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\PluginException
+   * @throws \Drupal\os2forms_digital_post\Exception\RuntimeException
    */
   public function lookupCpr(string $cpr): CprLookupResult {
     $instance = $this->dataLookupManager->createDefaultInstanceByGroup('cpr_lookup');
@@ -103,6 +113,9 @@ final class DigitalPostHelper implements LoggerInterface {
 
   /**
    * Look up CVR.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\PluginException
+   * @throws \Drupal\os2forms_digital_post\Exception\RuntimeException
    */
   public function lookupCvr(string $cvr): CompanyLookupResult {
     $instance = $this->dataLookupManager->createDefaultInstanceByGroup('cvr_lookup');
@@ -119,6 +132,8 @@ final class DigitalPostHelper implements LoggerInterface {
 
   /**
    * Look up recipient.
+   *
+   * @throws \Drupal\os2forms_digital_post\Exception\RuntimeException
    */
   public function lookupRecipient(string $recipient): CprLookupResult|CompanyLookupResult {
     try {

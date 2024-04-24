@@ -26,6 +26,8 @@ class ForsendelseHelper extends AbstractMessageHelper {
 
   /**
    * Build forsendelse.
+   *
+   * @throws \Drupal\os2forms_digital_post\Exception\InvalidForsendelseException
    */
   public function buildForsendelse(CprLookupResult|CompanyLookupResult $recipientData, string $messageLabel, Document $document): ForsendelseI {
     $forsendelse = new ForsendelseI();
@@ -56,8 +58,15 @@ class ForsendelseHelper extends AbstractMessageHelper {
   /**
    * Build forsendelse form a webform submission.
    *
-   * @phpstan-param array<string, mixed> $options
-   * @phpstan-param array<string, mixed> $handlerSettings
+   * @param WebformSubmissionInterface $submission
+   * @param array<string, mixed> $options
+   * @param array<string, mixed> $handlerSettings
+   * @param CprLookupResult|CompanyLookupResult $recipientData
+   *
+   * @return \Oio\Fjernprint\ForsendelseI
+   * @throws \Drupal\Component\Plugin\Exception\PluginException
+   * @throws \Drupal\os2forms_digital_post\Exception\InvalidAttachmentElementException
+   * @throws \Drupal\os2forms_digital_post\Exception\InvalidForsendelseException
    */
   public function buildSubmissionForsendelse(WebformSubmissionInterface $submission, array $options, array $handlerSettings, CprLookupResult|CompanyLookupResult $recipientData): ForsendelseI {
     $label = $this->replaceTokens($options[WebformHandlerSF1601::MESSAGE_HEADER_LABEL], $submission);

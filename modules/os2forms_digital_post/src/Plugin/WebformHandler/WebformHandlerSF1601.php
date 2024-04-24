@@ -74,7 +74,7 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
    *
    * @phpstan-return array<string, mixed>
    */
-  public function defaultConfiguration() {
+  public function defaultConfiguration(): array {
     return [
       'debug' => FALSE,
     ];
@@ -86,7 +86,7 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
    * @phpstan-param array<string, mixed> $form
    * @phpstan-return array<string, mixed>
    */
-  public function buildConfigurationForm(array $form, FormStateInterface $formState) {
+  public function buildConfigurationForm(array $form, FormStateInterface $form_state): array {
     $form[self::MEMO_MESSAGE] = [
       '#type' => 'fieldset',
       '#title' => $this->t('Message'),
@@ -158,6 +158,7 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
       SF1601::ACTION_TILMELDING => $this->getTranslatedActionName(SF1601::ACTION_TILMELDING),
       SF1601::ACTION_UNDERSKRIV => $this->getTranslatedActionName(SF1601::ACTION_UNDERSKRIV),
     ];
+
     $actions = $this->configuration[self::MEMO_ACTIONS]['actions'] ?? [];
     for ($i = 0; $i <= count($actions); $i++) {
       $action = $actions[$i];
@@ -265,14 +266,14 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
    * @phpstan-param array<string, mixed> $form
    * @phpstan-return void
    */
-  public function validateConfigurationForm(array &$form, FormStateInterface $formState) {
-    $actions = $formState->getValue(self::MEMO_ACTIONS)['actions'] ?? [];
+  public function validateConfigurationForm(array &$form, FormStateInterface $form_state): void {
+    $actions = $form_state->getValue(self::MEMO_ACTIONS)['actions'] ?? [];
 
     $definedActions = [];
     foreach ($actions as $index => $action) {
       if (!empty($action['action'])) {
         if (empty($action['url'])) {
-          $formState->setErrorByName(
+          $form_state->setErrorByName(
             self::MEMO_ACTIONS . '][actions][' . $index . '][url',
             $this->t('Url for action %action is required.', [
               '%action' => $this->getTranslatedActionName($action['action']),
@@ -281,7 +282,7 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
           );
         }
         if (isset($definedActions[$action['action']])) {
-          $formState->setErrorByName(
+          $form_state->setErrorByName(
             self::MEMO_ACTIONS . '][actions][' . $index . '][action',
             $this->t('Action %action already defined.', [
               '%action' => $this->getTranslatedActionName($action['action']),
@@ -299,12 +300,12 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
    * @phpstan-param array<string, mixed> $form
    * @phpstan-return void
    */
-  public function submitConfigurationForm(array &$form, FormStateInterface $formState) {
-    parent::submitConfigurationForm($form, $formState);
+  public function submitConfigurationForm(array &$form, FormStateInterface $form_state): void {
+    parent::submitConfigurationForm($form, $form_state);
 
-    $this->configuration[self::MEMO_MESSAGE] = $formState->getValue(self::MEMO_MESSAGE);
+    $this->configuration[self::MEMO_MESSAGE] = $form_state->getValue(self::MEMO_MESSAGE);
     // Filter out actions with no action set.
-    $actions = $formState->getValue(self::MEMO_ACTIONS);
+    $actions = $form_state->getValue(self::MEMO_ACTIONS);
     $actions['actions'] = array_values(array_filter(
       $actions['actions'],
       static function (array $action) {
@@ -313,7 +314,7 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
     ));
     $this->configuration[self::MEMO_ACTIONS] = $actions;
 
-    $this->configuration['debug'] = (bool) $formState->getValue('debug');
+    $this->configuration['debug'] = (bool) $form_state->getValue('debug');
   }
 
   /**
@@ -321,8 +322,8 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
    *
    * @phpstan-return void
    */
-  public function postSave(WebformSubmissionInterface $webformSubmission, $update = TRUE) {
-    $this->helper->createJob($webformSubmission, $this->configuration);
+  public function postSave(WebformSubmissionInterface $webform_submission, $update = TRUE): void {
+    $this->helper->createJob($webform_submission, $this->configuration);
   }
 
   /**
@@ -330,8 +331,8 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
    *
    * @phpstan-return void
    */
-  public function postDelete(WebformSubmissionInterface $webformSubmission) {
-    $this->helper->deleteMessages([$webformSubmission]);
+  public function postDelete(WebformSubmissionInterface $webform_submission): void {
+    $this->helper->deleteMessages([$webform_submission]);
   }
 
   /**
@@ -339,8 +340,8 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
    *
    * @phpstan-return void
    */
-  public function postPurge(array $webformSubmissions) {
-    $this->helper->deleteMessages($webformSubmissions);
+  public function postPurge(array $webform_submissions): void {
+    $this->helper->deleteMessages($webform_submissions);
   }
 
   /**

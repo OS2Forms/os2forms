@@ -40,9 +40,9 @@ final class SettingsForm extends FormBase {
   /**
    * {@inheritdoc}
    *
-   * @phpstan-return self
+   * @phpstan-return static
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): SettingsForm {
     return new static(
       $container->get(Settings::class),
       $container->get(CertificateLocatorHelper::class),
@@ -53,7 +53,7 @@ final class SettingsForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function getFormId() {
+  public function getFormId(): string {
     return 'os2forms_digital_post_settings';
   }
 
@@ -62,8 +62,10 @@ final class SettingsForm extends FormBase {
    *
    * @phpstan-param array<string, mixed> $form
    * @phpstan-return array<string, mixed>
+   *
+   * @throws \Drupal\os2forms_digital_post\Exception\InvalidSettingException
    */
-  public function buildForm(array $form, FormStateInterface $form_state) {
+  public function buildForm(array $form, FormStateInterface $form_state): array {
     $form['test_mode'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Test mode'),
@@ -212,17 +214,17 @@ final class SettingsForm extends FormBase {
    *
    * @phpstan-param array<string, mixed> $form
    */
-  public function validateForm(array &$form, FormStateInterface $formState): void {
-    $triggeringElement = $formState->getTriggeringElement();
+  public function validateForm(array &$form, FormStateInterface $form_state): void {
+    $triggeringElement = $form_state->getTriggeringElement();
     if ('testCertificate' === ($triggeringElement['#name'] ?? NULL)) {
       return;
     }
 
-    $values = $formState->getValues();
+    $values = $form_state->getValues();
     if (CertificateLocatorHelper::LOCATOR_TYPE_FILE_SYSTEM === $values['certificate']['locator_type']) {
       $path = $values['certificate'][CertificateLocatorHelper::LOCATOR_TYPE_FILE_SYSTEM]['path'] ?? NULL;
       if (!file_exists($path)) {
-        $formState->setErrorByName('certificate][file_system][path', $this->t('Invalid certificate path: %path', ['%path' => $path]));
+        $form_state->setErrorByName('certificate][file_system][path', $this->t('Invalid certificate path: %path', ['%path' => $path]));
       }
     }
   }
@@ -232,18 +234,18 @@ final class SettingsForm extends FormBase {
    *
    * @phpstan-param array<string, mixed> $form
    */
-  public function submitForm(array &$form, FormStateInterface $formState): void {
-    $triggeringElement = $formState->getTriggeringElement();
+  public function submitForm(array &$form, FormStateInterface $form_state): void {
+    $triggeringElement = $form_state->getTriggeringElement();
     if ('testCertificate' === ($triggeringElement['#name'] ?? NULL)) {
       $this->testCertificate();
       return;
     }
 
     try {
-      $settings['test_mode'] = (bool) $formState->getValue('test_mode');
-      $settings['sender'] = $formState->getValue('sender');
-      $settings['certificate'] = $formState->getValue('certificate');
-      $settings['processing'] = $formState->getValue('processing');
+      $settings['test_mode'] = (bool) $form_state->getValue('test_mode');
+      $settings['sender'] = $form_state->getValue('sender');
+      $settings['certificate'] = $form_state->getValue('certificate');
+      $settings['processing'] = $form_state->getValue('processing');
       $this->settings->setSettings($settings);
       $this->messenger()->addStatus($this->t('Settings saved'));
     }
@@ -259,7 +261,7 @@ final class SettingsForm extends FormBase {
     try {
       $certificateLocator = $this->certificateLocatorHelper->getCertificateLocator();
       $certificateLocator->getCertificates();
-      $this->messenger()->addStatus($this->t('Certificate succesfully tested'));
+      $this->messenger()->addStatus($this->t('Certificate successfully tested'));
     }
     catch (\Throwable $throwable) {
       $message = $this->t('Error testing certificate: %message', ['%message' => $throwable->getMessage()]);
