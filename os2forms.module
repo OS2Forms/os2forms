@@ -357,3 +357,28 @@ function os2forms_module_implements_alter(&$implementations, $hook) {
       break;
   }
 }
+
+/**
+ * Logging function for audit logs.
+ *
+ * Wrapper to make logging easier and simplify the usage of the audit logger, if
+ * enabled.
+ *
+ * @param string $type
+ *   The type of log entry.
+ * @param int $timestamp
+ *   The timestamp of the log entry.
+ * @param string $line
+ *   The log message.
+ * @param array $metadata
+ *   Additional metadata for the log entry.
+ *
+ * @throws \Drupal\Component\Plugin\Exception\PluginException
+ */
+function os2forms_audit_log(string $type, int $timestamp, string $line, array $metadata = []): void {
+  if ( \Drupal::service('module_handler')->moduleExists('os2form_audit')) {
+    /** @var \Drupal\os2forms_audit\Service\Logger $logger */
+    $logger = \Drupal::service('os2form_audit.logger');
+    $logger->log($type, $timestamp, $line, $metadata);
+  }
+}

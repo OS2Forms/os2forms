@@ -40,7 +40,7 @@ class PluginSettingsForm extends ConfigFormBase implements PluginSettingsFormInt
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container): PluginSettingsForm|ConfigFormBase|static {
+  public static function create(ContainerInterface $container): static {
     return new static(
       $container->get('config.factory'),
       $container->get('plugin.manager.os2forms_audit_logger')

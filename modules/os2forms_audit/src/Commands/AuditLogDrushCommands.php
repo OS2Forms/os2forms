@@ -35,6 +35,9 @@ class AuditLogDrushCommands extends DrushCommands {
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
   public function logMessage(string $log_message = ''): void {
+    if (empty($log_message)) {
+      throw new \Exception('Log message cannot be empty.');
+    }
     $this->auditLogger->log('test', time(), $log_message, ['from' => 'drush']);
   }
 
