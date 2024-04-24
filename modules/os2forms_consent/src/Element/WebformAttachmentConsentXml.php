@@ -45,7 +45,7 @@ class WebformAttachmentConsentXml extends WebformAttachmentXml {
     /** @var \Drupal\os2web_datalookup\Plugin\DataLookupManager $os2web_datalookup_plugins */
     $os2web_datalookup_plugins = \Drupal::service('plugin.manager.os2web_datalookup');
 
-    /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupCPRInterface $cprPlugin */
+    /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupInterfaceCpr $cprPlugin */
     $cprPlugin = $os2web_datalookup_plugins->createDefaultInstanceByGroup('cpr_lookup');
 
     if (!empty($nemid_cpr) && $cprPlugin->isReady()) {
