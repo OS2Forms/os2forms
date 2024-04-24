@@ -110,7 +110,7 @@ class MeMoHelper extends AbstractMessageHelper {
   }
 
   /**
-   * Enrich recipient with additional data from a lookup.
+   * Enrich the recipient with additional data from a lookup.
    */
   private function enrichRecipient(Recipient $recipient, CprLookupResult|CompanyLookupResult|null $recipientData): Recipient {
     if ($recipientData instanceof CprLookupResult) {

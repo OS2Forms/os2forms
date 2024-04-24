@@ -27,7 +27,7 @@ final class Settings {
    *
    * @var string
    */
-  private $collection = 'os2forms_digital_post.';
+  private string $collection = 'os2forms_digital_post.';
 
   /**
    * Constructor.
@@ -38,6 +38,8 @@ final class Settings {
 
   /**
    * Get test mode.
+   *
+   * @throws \Drupal\os2forms_digital_post\Exception\InvalidSettingException
    */
   public function getTestMode(): bool {
     return (bool) $this->get('test_mode', TRUE);
@@ -47,6 +49,8 @@ final class Settings {
    * Get sender.
    *
    * @phpstan-return array<string, mixed>
+   *
+   * @throws \Drupal\os2forms_digital_post\Exception\InvalidSettingException
    */
   public function getSender(): array {
     $value = $this->get('sender');
@@ -57,6 +61,8 @@ final class Settings {
    * Get certificate.
    *
    * @phpstan-return array<string, mixed>
+   *
+   * @throws \Drupal\os2forms_digital_post\Exception\InvalidSettingException
    */
   public function getCertificate(): array {
     $value = $this->get('certificate');
@@ -83,8 +89,10 @@ final class Settings {
    *
    * @return mixed
    *   The setting value.
+   *
+   * @throws \Drupal\os2forms_digital_post\Exception\InvalidSettingException
    */
-  private function get(string $key, $default = NULL) {
+  private function get(string $key, mixed $default = NULL) {
     $resolver = $this->getSettingsResolver();
     if (!$resolver->isDefined($key)) {
       throw new InvalidSettingException(sprintf('Setting %s is not defined', $key));

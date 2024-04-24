@@ -20,7 +20,10 @@ class CertificateLocatorHelper {
   public const LOCATOR_TYPE_FILE_SYSTEM = 'file_system';
 
   /**
-   * {@inheritdoc}
+   * Default constructor.
+   *
+   * @param Settings $settings
+   *   Modul configuration.
    */
   public function __construct(
     private readonly Settings $settings,
@@ -29,6 +32,9 @@ class CertificateLocatorHelper {
 
   /**
    * Get certificate locator.
+   *
+   * @throws \ItkDev\AzureKeyVault\Exception\TokenException
+   * @throws \Drupal\os2forms_digital_post\Exception\CertificateLocatorException
    */
   public function getCertificateLocator(): CertificateLocatorInterface {
     $certificateSettings = $this->settings->getCertificate();

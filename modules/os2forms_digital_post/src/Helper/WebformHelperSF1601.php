@@ -79,6 +79,10 @@ final class WebformHelperSF1601 implements LoggerInterface {
    * @phpstan-param array<string, mixed> $handlerSettings
    * @phpstan-param array<string, mixed> $submissionData
    * @phpstan-return array<int, mixed>
+   *
+   * @throws \Drupal\os2forms_digital_post\Exception\InvalidRecipientIdentifierElementException
+   * @throws \Drupal\Component\Plugin\Exception\PluginException
+   * @throws \Drupal\os2forms_digital_post\Exception\RuntimeException
    */
   public function sendDigitalPost(WebformSubmissionInterface $submission, array $handlerSettings, array $submissionData = []): array {
     $submissionData = $submissionData + $submission->getData();

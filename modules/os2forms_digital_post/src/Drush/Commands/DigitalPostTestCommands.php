@@ -52,6 +52,12 @@ class DigitalPostTestCommands extends DrushCommands {
    *
    * @command os2forms-digital-post:test:send
    * @usage os2forms-digital-post:test:send --help
+   *
+   * @throws \Drupal\Component\Plugin\Exception\PluginException
+   * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
+   * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
+   * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
+   * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
    */
   public function send(
     array $recipients,
@@ -138,6 +144,8 @@ class DigitalPostTestCommands extends DrushCommands {
 
   /**
    * Dump digital post settings.
+   *
+   * @throws \Drupal\os2forms_digital_post\Exception\InvalidSettingException
    */
   private function dumpDigitalPostSettings(SymfonyStyle $io): void {
     $io->section('Digital post settings');
