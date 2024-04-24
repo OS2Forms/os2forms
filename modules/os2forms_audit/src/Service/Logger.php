@@ -38,6 +38,8 @@ class Logger {
     $config = $this->configFactory->get(SettingsForm::$configName);
     $plugin_id = $config->get('provider');
 
+    // @todo: default logger (file)
+    // @todo: Fallback logger on error.
     $configuration = $this->configFactory->get(PluginSettingsForm::getConfigName())->get($plugin_id);
     $logger = $this->loggerManager->createInstance($plugin_id, $configuration ?? []);
 
