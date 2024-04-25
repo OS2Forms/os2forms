@@ -24,7 +24,8 @@ class BeskedfordelerHelper {
   public function __construct(
     private readonly Connection $database,
     private readonly MeMoHelper $meMoHelper,
-    LoggerInterface $logger) {
+    LoggerInterface $logger,
+  ) {
     $this->setLogger($logger);
   }
 

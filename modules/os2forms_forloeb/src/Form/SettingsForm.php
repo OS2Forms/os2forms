@@ -30,7 +30,7 @@ class SettingsForm extends ConfigFormBase {
     ConfigFactoryInterface $configFactory,
     private readonly RoleStorageInterface $roleStorage,
     private readonly EntityStorageInterface $queueStorage,
-    private readonly ModuleExtensionList $moduleHandler
+    private readonly ModuleExtensionList $moduleHandler,
   ) {
     parent::__construct($configFactory);
   }

@@ -57,7 +57,7 @@ final class WebformHelperSF1601 implements LoggerInterface {
     private readonly BeskedfordelerHelper $beskedfordelerHelper,
     private readonly LoggerChannelInterface $logger,
     private readonly LoggerChannelInterface $submissionLogger,
-    private readonly DigitalPostHelper $digitalPostHelper
+    private readonly DigitalPostHelper $digitalPostHelper,
   ) {
     $this->webformSubmissionStorage = $entityTypeManager->getStorage('webform_submission');
     $this->queueStorage = $entityTypeManager->getStorage('advancedqueue_queue');

@@ -80,7 +80,7 @@ class MaestroHelper implements LoggerInterface {
     private readonly EntityPrintPluginManagerInterface $entityPrintPluginManager,
     private readonly DigitalPostHelper $digitalPostHelper,
     private readonly LoggerChannelInterface $logger,
-    private readonly LoggerChannelInterface $submissionLogger
+    private readonly LoggerChannelInterface $submissionLogger,
   ) {
     $this->config = $configFactory->get(SettingsForm::SETTINGS);
     $this->webformSubmissionStorage = $entityTypeManager->getStorage('webform_submission');
@@ -148,7 +148,7 @@ class MaestroHelper implements LoggerInterface {
     string $notificationType,
     WebformSubmissionInterface $submission,
     array $templateTask,
-    int $maestroQueueID
+    int $maestroQueueID,
   ): ?Job {
     $context = [
       'webform_submission' => $submission,
@@ -225,7 +225,7 @@ class MaestroHelper implements LoggerInterface {
     string $notificationType,
     WebformSubmissionInterface $submission,
     array $templateTask,
-    int $maestroQueueID
+    int $maestroQueueID,
   ) {
     $context = [
       'webform_submission' => $submission,
@@ -309,7 +309,7 @@ class MaestroHelper implements LoggerInterface {
     string $subject,
     string $body,
     WebformSubmissionInterface $submission,
-    string $notificationType
+    string $notificationType,
   ): void {
     try {
       $message = [
@@ -376,7 +376,7 @@ class MaestroHelper implements LoggerInterface {
     string $taskUrl,
     string $actionLabel,
     WebformSubmissionInterface $submission,
-    string $notificationType
+    string $notificationType,
   ): void {
     try {
       $document = new Document(
@@ -593,7 +593,7 @@ class MaestroHelper implements LoggerInterface {
     array $content,
     string $taskUrl,
     string $actionLabel,
-    WebformSubmissionInterface $submission
+    WebformSubmissionInterface $submission,
   ): string|MarkupInterface {
     $template = $this->config->get('templates')['notification_' . $type] ?? NULL;
     if (file_exists($template)) {

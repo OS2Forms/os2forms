@@ -17,7 +17,7 @@ class Document {
     readonly public string $content,
     readonly public string $mimeType,
     readonly public string $filename,
-    readonly public string $language = self::LANGUAGE_DEFAULT
+    readonly public string $language = self::LANGUAGE_DEFAULT,
   ) {
   }
 

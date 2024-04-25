@@ -88,7 +88,8 @@ class NemloginRedirectSubscriber implements EventSubscriberInterface {
     EntityFieldManagerInterface $entity_field_manager,
     ConfigFactoryInterface $config_factory,
     MessengerInterface $messenger,
-    KillSwitch $page_cache_kill_switch) {
+    KillSwitch $page_cache_kill_switch,
+  ) {
     $this->nemloginAuthProvider = $nemloginAuthProvider;
     $this->account = $account;
     $this->entityFieldManager = $entity_field_manager;

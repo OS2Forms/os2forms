@@ -34,7 +34,7 @@ final class DigitalPostHelper implements LoggerInterface {
     private readonly ForsendelseHelper $forsendelseHelper,
     private readonly BeskedfordelerHelper $beskedfordelerHelper,
     private readonly LoggerChannelInterface $logger,
-    private readonly LoggerChannelInterface $submissionLogger
+    private readonly LoggerChannelInterface $submissionLogger,
   ) {
   }
 

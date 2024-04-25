@@ -24,7 +24,7 @@ abstract class AbstractMessageHelper {
   public function __construct(
     readonly protected Settings $settings,
     readonly protected ElementInfoManager $elementInfoManager,
-    readonly protected WebformTokenManagerInterface $webformTokenManager
+    readonly protected WebformTokenManagerInterface $webformTokenManager,
   ) {
   }
 
