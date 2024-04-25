@@ -19,7 +19,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - [#99](https://github.com/OS2Forms/os2forms/pull/99)
   Fix coding standards.
 - [#100](https://github.com/OS2Forms/os2forms/pull/100)
-  Removed unused `tecnickcom/tcpdf` package. 
+  Removed unused `tecnickcom/tcpdf` package.
 
 ## [3.14.1] 2024-01-16
 
