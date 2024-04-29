@@ -18,6 +18,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
   NemLogin autologout pop-up styling.
 - [#99](https://github.com/OS2Forms/os2forms/pull/99)
   Fix coding standards.
+- [#102](https://github.com/OS2Forms/os2forms/pull/102)
+  Fix array access with `purge_days` configuration.
 
 ## [3.14.1] 2024-01-16
 
