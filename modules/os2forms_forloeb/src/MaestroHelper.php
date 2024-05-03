@@ -17,6 +17,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\Render\Markup;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Drupal\entity_print\Plugin\EntityPrintPluginManagerInterface;
 use Drupal\maestro\Engine\MaestroEngine;
@@ -505,7 +506,7 @@ class MaestroHelper implements LoggerInterface {
         $processValue = static function (string $value) use ($taskUrl) {
           // Replace href="[maestro:task-url]" with href="«$taskUrl»".
           $value = preg_replace('/href\s*=\s*["\']\[maestro:task-url\]["\']/', sprintf('href="%s"', htmlspecialchars($taskUrl)), $value);
-          $value = preg_replace('/\[(maestro:[^]]+)\]/', '&#91;\1&#93;', $value);
+          $value = preg_replace('/\[(maestro:[^]]+)\]/', '(\1)', $value);
 
           return $value;
         };
@@ -522,12 +523,7 @@ class MaestroHelper implements LoggerInterface {
 
       $content = $notificationSetting[MaestroNotificationHandler::NOTIFICATION_CONTENT];
       if (isset($content['value'])) {
-        // Process tokens in content.
-        $content['value'] = $this->tokenManager->replace(
-          $processValue($content['value']),
-          $submission,
-          $maestroTokenData
-        );
+        $content['value'] = $processValue($content['value']);
       }
 
       $actionLabel = $this->tokenManager->replace($notificationSetting[MaestroNotificationHandler::NOTIFICATION_ACTION_LABEL], $submission);
@@ -538,11 +534,11 @@ class MaestroHelper implements LoggerInterface {
 
       switch ($contentType) {
         case 'email':
-          $content = $this->renderHtml($contentType, $subject, $content, $taskUrl, $actionLabel, $submission);
+          $content = $this->renderHtml($contentType, $subject, $content, $taskUrl, $actionLabel, $submission, $maestroTokenData);
           break;
 
         case 'pdf':
-          $pdfContent = $this->renderHtml($contentType, $subject, $content, $taskUrl, $actionLabel, $submission);
+          $pdfContent = $this->renderHtml($contentType, $subject, $content, $taskUrl, $actionLabel, $submission, $maestroTokenData);
 
           // Get dompdf plugin from entity_print module.
           /** @var \Drupal\entity_print\Plugin\EntityPrint\PrintEngine\PdfEngineBase $printer */
@@ -583,6 +579,8 @@ class MaestroHelper implements LoggerInterface {
    *   The action label.
    * @param \Drupal\webform\WebformSubmissionInterface $submission
    *   The webform submission.
+   * @param array $maestroTokenData
+   *   The Maestro token data.
    *
    * @return string|MarkupInterface
    *   The rendered content.
@@ -594,6 +592,7 @@ class MaestroHelper implements LoggerInterface {
     string $taskUrl,
     string $actionLabel,
     WebformSubmissionInterface $submission,
+    array $maestroTokenData,
   ): string|MarkupInterface {
     $template = $this->config->get('templates')['notification_' . $type] ?? NULL;
     if (file_exists($template)) {
@@ -615,10 +614,17 @@ class MaestroHelper implements LoggerInterface {
         'action_label' => $actionLabel,
         'webform_submission' => $submission,
         'handler' => $this,
+        'base_url' => Settings::get('base_url'),
       ],
     ];
 
-    return Markup::create(trim((string) $this->webformThemeManager->renderPlain($build)));
+    $html = trim((string) $this->webformThemeManager->renderPlain($build));
+
+    return Markup::create($this->tokenManager->replace(
+      $html,
+      $submission,
+      $maestroTokenData
+    ));
   }
 
   /**

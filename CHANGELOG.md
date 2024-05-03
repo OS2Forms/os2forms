@@ -14,6 +14,9 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - Adding Lat and Long fetching to DataAddress
 - [#84](https://github.com/OS2Forms/os2forms/pull/84)
   Added digital post test command.
+- [#95](https://github.com/OS2Forms/os2forms/pull/95)
+  - Added `base_url` variable to twig templates.
+  - Handled tokens in Maestro notification html.
 - [#92](https://github.com/OS2Forms/os2forms/pull/92)
   Allow denying address protected citizen from webform.
 - [#96](https://github.com/OS2Forms/os2forms/pull/96)
