@@ -50,7 +50,7 @@ final class SendDigitalPostSF1601 extends JobTypeBase implements ContainerFactor
     array $configuration,
     $plugin_id,
     $plugin_definition,
-    WebformHelperSF1601 $helper
+    WebformHelperSF1601 $helper,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->helper = $helper;
