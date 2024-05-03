@@ -100,14 +100,14 @@ function os2forms_nemid_webform_third_party_settings_form_alter(&$form, FormStat
       FormsHelper::WEBFORM_NEM_LOGIN_ADDRESS_PROTECTION_DEFAULT_BEHAVIOUR => t('No'),
       FormsHelper::WEBFORM_NEM_LOGIN_ADDRESS_PROTECTION_DISPLAY_ERROR => t('Yes'),
     ],
-    '#title' => t('Hide form if user is under protection'),
+    '#title' => t('Hide form if user is under address protection'),
     '#default_value' => !(empty($nemloginProtectionSettings)) ? $nemloginProtectionSettings['nemlogin_hide_form'] : FormsHelper::WEBFORM_NEM_LOGIN_ADDRESS_PROTECTION_DEFAULT_BEHAVIOUR,
     '#description' => t('Hides elements and displays error if nemlogin reveals that citizen is under address protection and an address element is found on the webform'),
   ];
 
   // Nemlogin address protection.
   $form['third_party_settings']['os2forms']['os2forms_nemid_address_protection']['nemlogin_hide_message'] = [
-    '#title' => t('Hide message'),
+    '#title' => t('Access denied message'),
     '#type' => 'textarea',
     '#default_value' => !(empty($nemloginProtectionSettings)) ? $nemloginProtectionSettings['nemlogin_hide_message'] : '',
     '#description' => t('Message shown to user when visiting form'),
@@ -128,21 +128,19 @@ function os2forms_nemid_webform_third_party_settings_form_alter(&$form, FormStat
 function os2forms_nemid_webform_submission_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
 
   // Handle address protection.
-  if ($tempValue = $form_state->getTemporaryValue(FormsHelper::TEMPORARY_KEY)) {
+  if ($tempValue = $form_state->getTemporaryValue(FormsHelper::ADDRESS_PROTECTION_STATE)) {
     if (FALSE === ($tempValue['access'] ?? TRUE)) {
       // Flattening the elements makes it much easier to access nested elements.
       $elements = &WebformFormHelper::flattenElements($form['elements']);
 
-      \Drupal::messenger()->addError(t('Access to form denied'));
+      $message = $tempValue['message'] ?? t('This form cannot be shown because you have address protection');
 
-      if (isset($tempValue['message'])) {
-        $form['os2forms_nemlogin_message'] = [
-          '#theme' => 'status_messages',
-          '#message_list' => [
-            'error' => [$tempValue['message']],
-          ],
-        ];
-      }
+      $form['os2forms_nemlogin_message'] = [
+        '#theme' => 'status_messages',
+        '#message_list' => [
+          'error' => [$message],
+        ],
+      ];
 
       // Hide all actions ….
       $form['actions']['#access'] = FALSE;

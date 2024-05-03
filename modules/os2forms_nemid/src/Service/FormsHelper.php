@@ -22,7 +22,7 @@ use Drupal\webform\WebformSubmissionInterface;
  * @package Drupal\os2forms_nemid\Service
  */
 class FormsHelper {
-  const TEMPORARY_KEY = 'os2forms_nemlogin_address_protection';
+  const ADDRESS_PROTECTION_STATE = 'os2forms_nemlogin_address_protection';
 
   /**
    * Defines NemID login address protection display error option.
@@ -383,7 +383,7 @@ class FormsHelper {
             // mark form state with temporary key and return.
             $message = $webformSubmission->getWebform()->getThirdPartySettings('os2forms')['os2forms_nemid_address_protection']['nemlogin_hide_message'];
 
-            $formState->setTemporaryValue(self::TEMPORARY_KEY, [
+            $formState->setTemporaryValue(self::ADDRESS_PROTECTION_STATE, [
               'access' => FALSE,
               'message' => $message,
             ]);
