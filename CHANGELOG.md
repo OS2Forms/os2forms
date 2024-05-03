@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## [3.15.0] 2024-05-03
+
 - Added webform encryption modules
 - Adding Lat and Long fetching to DataAddress
 - CprFetchData adding ajax error fix
@@ -216,7 +218,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - Security in case of vulnerabilities.
 ```
 
-[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.14.1...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.15.0...HEAD
+[3.15.0]: https://github.com/OS2Forms/os2forms/compare/3.14.1...3.15.0
 [3.14.1]: https://github.com/OS2Forms/os2forms/compare/3.14.0...3.14.1
 [3.14.0]: https://github.com/OS2Forms/os2forms/compare/3.13.3...3.14.0
 [3.13.3]: https://github.com/OS2Forms/os2forms/compare/3.13.2...3.13.3
