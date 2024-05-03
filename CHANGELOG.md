@@ -11,11 +11,23 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- Added webform encryption modules
 - Adding Lat and Long fetching to DataAddress
 - CprFetchData adding ajax error fix
 - [#84](https://github.com/OS2Forms/os2forms/pull/84)
   Added digital post test command.
 - Added FBS handler for supporting user creation in library systems
+- [#95](https://github.com/OS2Forms/os2forms/pull/95)
+  - Added `base_url` variable to twig templates.
+  - Handled tokens in Maestro notification html.
+- [#92](https://github.com/OS2Forms/os2forms/pull/92)
+  Allow denying address protected citizen from webform.
+- [#96](https://github.com/OS2Forms/os2forms/pull/96)
+  NemLogin autologout pop-up styling.
+- [#99](https://github.com/OS2Forms/os2forms/pull/99)
+  Fix coding standards.
+- [#102](https://github.com/OS2Forms/os2forms/pull/102)
+  Fix array access with `purge_days` configuration.
 
 ## [3.14.1] 2024-01-16
 
