@@ -35,8 +35,6 @@ class Os2FormsEncryptCommands extends DrushCommands {
    *   An instance of the entity type manager.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   An instance of the config factory.
-   *
-   * @return void
    */
   public function __construct(EntityTypeManagerInterface $entityTypeManager, ConfigFactoryInterface $configFactory) {
     $this->entityTypeManager = $entityTypeManager;
