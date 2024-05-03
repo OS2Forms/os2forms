@@ -26,7 +26,7 @@ class DigitalPostTestCommands extends DrushCommands {
     private readonly DigitalPostHelper $digitalPostHelper,
     private readonly Token $token,
     private readonly EntityPrintPluginManagerInterface $entityPrintPluginManager,
-    private readonly Settings $digitalPostSettings
+    private readonly Settings $digitalPostSettings,
   ) {
   }
 
@@ -53,12 +53,15 @@ class DigitalPostTestCommands extends DrushCommands {
    * @command os2forms-digital-post:test:send
    * @usage os2forms-digital-post:test:send --help
    */
-  public function send(array $recipients, array $options = [
-    'subject' => 'os2forms_digital_post',
-    'message' => 'This is a test message from os2forms_digital_post sent on [current-date:html_datetime].',
-    'digital-post-type' => SF1601::TYPE_AUTOMATISK_VALG,
-    'dump-digital-post-settings' => FALSE,
-  ]): void {
+  public function send(
+    array $recipients,
+    array $options = [
+      'subject' => 'os2forms_digital_post',
+      'message' => 'This is a test message from os2forms_digital_post sent on [current-date:html_datetime].',
+      'digital-post-type' => SF1601::TYPE_AUTOMATISK_VALG,
+      'dump-digital-post-settings' => FALSE,
+    ],
+  ): void {
     $io = new SymfonyStyle($this->input(), $this->output());
 
     if ($options['dump-digital-post-settings']) {

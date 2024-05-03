@@ -32,7 +32,7 @@ final class SettingsForm extends FormBase {
   public function __construct(
     private readonly Settings $settings,
     private readonly CertificateLocatorHelper $certificateLocatorHelper,
-    EntityTypeManagerInterface $entityTypeManager
+    EntityTypeManagerInterface $entityTypeManager,
   ) {
     $this->queueStorage = $entityTypeManager->getStorage('advancedqueue_queue');
   }
