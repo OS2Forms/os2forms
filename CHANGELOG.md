@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- Added missing return type.
+
 ## [3.15.0] 2024-05-03
 
 - Added webform encryption modules
