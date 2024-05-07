@@ -1,10 +1,10 @@
 # OS2Forms Nemid Drupal module
 
-# Module purpose
+## Module purpose
 
 The aim of this module is to provide custom NemId field and integration with OS2Web Nemlogin module.
 
-# How does it work
+## How does it work
 
 Module exposes dozen of new NemID components that are available in the webform build process.
 
@@ -17,4 +17,3 @@ Besides this module adds a special settings to the Third Party Webform settings:
 - Hide form if under address protection
 
 Settings: admin/structure/webform/manage/[webform]/settings
-
