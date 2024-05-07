@@ -16,9 +16,21 @@ if [ ! -f "$drupal_dir/composer.json" ]; then
   composer --no-interaction create-project drupal/recommended-project:^10 "$drupal_dir"
 fi
 # Copy our code into the modules folder
-mkdir -p "$drupal_dir/$module_path"
+
+# Clean up
+rm -fr "${drupal_dir:?}/$module_path"
+
 # https://stackoverflow.com/a/15373763
-rsync --archive --compress . --filter=':- .gitignore' --exclude "$drupal_dir" --exclude .git "$drupal_dir/$module_path"
+# rsync --archive --compress . --filter=':- .gitignore' --exclude "$drupal_dir" --exclude .git "$drupal_dir/$module_path"
+
+# The rsync command in not available in itkdev/php8.1-fpm
+
+git config --global --add safe.directory /app
+# Copy module files into module path
+for f in $(git ls-files); do
+  mkdir -p "$drupal_dir/$module_path/$(dirname "$f")"
+  cp "$f" "$drupal_dir/$module_path/$f"
+done
 
 drupal_composer config minimum-stability dev
 
@@ -37,4 +49,4 @@ drupal_composer config extra.merge-plugin.include "$module_path/composer.json"
 drupal_composer require --dev symfony/phpunit-bridge
 
 # Run PHPStan
-(cd "$drupal_dir" && vendor/bin/phpstan --configuration="$module_path/phpstan.neon")
+(cd "$drupal_dir/$module_path" && ../../../../vendor/bin/phpstan)

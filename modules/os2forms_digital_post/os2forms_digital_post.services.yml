@@ -9,11 +9,13 @@ services:
 
   Drupal\os2forms_digital_post\Helper\Settings:
     arguments:
-      - "@keyvalue"
+      - "@config.factory"
+      - "@key.repository"
 
   Drupal\os2forms_digital_post\Helper\CertificateLocatorHelper:
     arguments:
       - "@Drupal\\os2forms_digital_post\\Helper\\Settings"
+      - "@key.repository"
 
   Drupal\os2forms_digital_post\Helper\MeMoHelper:
     arguments:
@@ -30,7 +32,7 @@ services:
   Drupal\os2forms_digital_post\Helper\DigitalPostHelper:
     arguments:
       - "@Drupal\\os2forms_digital_post\\Helper\\Settings"
-      - "@Drupal\\os2forms_digital_post\\Helper\\CertificateLocatorHelper"
+      - "@Drupal\\os2web_key\\CertificateHelper"
       - "@plugin.manager.os2web_datalookup"
       - "@Drupal\\os2forms_digital_post\\Helper\\MeMoHelper"
       - "@Drupal\\os2forms_digital_post\\Helper\\ForsendelseHelper"
