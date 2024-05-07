@@ -3,7 +3,7 @@
 namespace Drupal\os2forms_digital_post\Helper;
 
 use Drupal\key\KeyInterface;
-use Drupal\os2web_key\CertificateHelper;
+use Drupal\os2web_key\KeyHelper;
 use ItkDev\Serviceplatformen\Certificate\AbstractCertificateLocator;
 use ItkDev\Serviceplatformen\Certificate\Exception\CertificateLocatorException;
 
@@ -15,16 +15,16 @@ class KeyCertificateLocator extends AbstractCertificateLocator {
   /**
    * The parsed certificates.
    *
-   * @var array
+   * @var array<string, string>
    */
-  private readonly array $certificates;
+  private array $certificates;
 
   /**
    * Constructor.
    */
   public function __construct(
     private readonly KeyInterface $key,
-    private readonly CertificateHelper $certificateHelper,
+    private readonly KeyHelper $keyHelper,
   ) {
     parent::__construct();
   }
@@ -36,7 +36,7 @@ class KeyCertificateLocator extends AbstractCertificateLocator {
    */
   public function getCertificates(): array {
     if (!isset($this->certificates)) {
-      $this->certificates = $this->certificateHelper->getCertificates($this->key);
+      $this->certificates = $this->keyHelper->getCertificates($this->key);
     }
 
     return $this->certificates;

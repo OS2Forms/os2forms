@@ -55,7 +55,7 @@ final class SettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    *
-   * @phpstan-return array<string>
+   * @phpstan-return string[]
    */
   protected function getEditableConfigNames() {
     return [
@@ -202,13 +202,15 @@ final class SettingsForm extends ConfigFormBase {
   /**
    * Create form field description with information on any runtime override.
    *
-   * @param string|array<string> $key
+   * @param string|array $key
    *   The key.
    * @param \Drupal\Core\StringTranslation\TranslatableMarkup|null $description
    *   The actual field description.
    *
    * @return string
    *   The full description.
+   *
+   * @phpstan-param string|string[] $key
    */
   private function createDescription(string|array $key, ?TranslatableMarkup $description = NULL): string {
     if ($value = $this->settings->getOverride($key)) {

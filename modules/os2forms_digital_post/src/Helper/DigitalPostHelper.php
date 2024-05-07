@@ -11,7 +11,7 @@ use Drupal\os2web_datalookup\LookupResult\CprLookupResult;
 use Drupal\os2web_datalookup\Plugin\DataLookupManager;
 use Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupCompanyInterface;
 use Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupCprInterface;
-use Drupal\os2web_key\CertificateHelper;
+use Drupal\os2web_key\KeyHelper;
 use Drupal\webform\WebformSubmissionInterface;
 use ItkDev\Serviceplatformen\Service\SF1601\SF1601;
 use ItkDev\Serviceplatformen\Service\SF1601\Serializer;
@@ -30,7 +30,7 @@ final class DigitalPostHelper implements LoggerInterface {
    */
   public function __construct(
     private readonly Settings $settings,
-    private readonly CertificateHelper $certificateHelper,
+    private readonly KeyHelper $keyHelper,
     private readonly DataLookupManager $dataLookupManager,
     private readonly MeMoHelper $meMoHelper,
     private readonly ForsendelseHelper $forsendelseHelper,
@@ -65,7 +65,7 @@ final class DigitalPostHelper implements LoggerInterface {
       'authority_cvr' => $senderSettings[Settings::SENDER_IDENTIFIER],
       'certificate_locator' => new KeyCertificateLocator(
         $this->settings->getCertificateKey(),
-        $this->certificateHelper
+        $this->keyHelper
       ),
     ];
     $service = new SF1601($options);
