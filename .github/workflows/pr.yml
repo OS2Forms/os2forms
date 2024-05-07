@@ -50,6 +50,9 @@ jobs:
           composer validate --strict composer.json
           # Check that dependencies resolve.
           composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction
+      - name: Check that composer file is normalized
+        run: |
+          composer normalize --dry-run
 
   php-coding-standards:
     name: PHP coding standards
@@ -113,27 +116,13 @@ jobs:
         run: |
           ./scripts/code-analysis
 
-  markdownlint:
+  coding-standards-markdown:
+    name: Markdown coding standards
     runs-on: ubuntu-latest
-    name: markdownlint
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache yarn packages
-        uses: actions/cache@v2
-        id: yarn-cache
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Yarn install
-        uses: actions/setup-node@v2
-        with:
-          node-version: '20'
-      - run: yarn install
-      - name: markdownlint
-        run: yarn coding-standards-check/markdownlint
+        uses: actions/checkout@master
+
+      - name: Coding standards
+        run: |
+          docker run --rm --volume $PWD:/md peterdavehello/markdownlint markdownlint --ignore vendor --ignore LICENSE.md '**/*.md'
