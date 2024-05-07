@@ -145,7 +145,9 @@ class DigitalPostTestCommands extends DrushCommands {
       Yaml::encode([
         'testMode' => $this->digitalPostSettings->getTestMode(),
         'sender' => $this->digitalPostSettings->getSender(),
-        'certificate' => $this->digitalPostSettings->getCertificate(),
+        'certificate' => [
+          'key' => $this->digitalPostSettings->getKey(),
+        ],
         'processing' => $this->digitalPostSettings->getProcessing(),
       ]),
       '',
