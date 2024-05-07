@@ -17,3 +17,12 @@ use Drupal\os2forms_digital_post\Helper\BeskedfordelerHelper;
 function os2forms_digital_post_schema() {
   return Drupal::service(BeskedfordelerHelper::class)->schema();
 }
+
+/**
+ * Implements hook_update_N().
+ */
+function os2forms_digital_post_update_9001() {
+  \Drupal::service('module_installer')->install([
+    'os2web_key',
+  ], TRUE);
+}
