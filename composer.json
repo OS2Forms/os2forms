@@ -101,6 +101,9 @@
                 "3240592 - Problem with phpseclib requirement in 2.x (https://www.drupal.org/project/coc_forms_auto_export/issues/3240592)": "https://www.drupal.org/files/issues/2021-10-04/requirement-namespace-3240592-1.patch",
                 "3286562 - Automated Drupal 10 compatibility fixes" : "https://www.drupal.org/files/issues/2022-06-15/coc_forms_auto_export.2.0.x-dev.rector.patch",
                 "3259009 - PHP Warnings/Notices on Download Page" : "https://git.drupalcode.org/project/coc_forms_auto_export/-/merge_requests/1.diff"
+            },
+            "drupal/webform_node_element": {
+                "3290637 - Automated Drupal 10 compatibility fixes": "https://www.drupal.org/files/issues/2023-05-12/webform_node_element_d10-3290637-11.patch"
             }
         }
     },
