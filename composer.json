@@ -23,7 +23,6 @@
         "dompdf/dompdf": "^2.0",
         "drupal/admin_toolbar": "^3.0",
         "drupal/advancedqueue": "^1.0",
-        "drupal/ckeditor_a11ychecker": "^2.0@alpha",
         "drupal/clientside_validation": "^3.0",
         "drupal/coc_forms_auto_export": "^2.0@alpha",
         "drupal/config_entity_revisions": "^2.0",
