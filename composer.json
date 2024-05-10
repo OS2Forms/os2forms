@@ -41,7 +41,7 @@
         "drupal/leaflet": "^10.0",
         "drupal/leaflet_layers": "^1.1",
         "drupal/libraries": "^4.0",
-        "drupal/linkit": "^5.0",
+        "drupal/linkit": "^6.0",
         "drupal/logging_alerts": "^2.0",
         "drupal/maestro": "^3.1",
         "drupal/mailsystem": "^4.1",
