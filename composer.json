@@ -63,8 +63,8 @@
         "drupal/workflow_participants": "^2.4",
         "http-interop/http-factory-guzzle": "^1.0.0",
         "itk-dev/beskedfordeler-drupal": "^1.0",
-        "itk-dev/serviceplatformen": "dev-feature/guzzle6-adapter as 1.5",
-        "os2web/os2web_datalookup": "^1.5",
+        "itk-dev/serviceplatformen": "dev-feature/guzzle6-adapter as 1.5.0",
+        "os2web/os2web_datalookup": "dev-feature/os2web_key as 1.12.0",
         "os2web/os2web_key": "^1.0",
         "os2web/os2web_nemlogin": "^1.0",
         "php-http/guzzle6-adapter": "^2.0",
@@ -87,6 +87,10 @@
         "wsdltophp/packagegenerator": "^4.0"
     },
     "repositories": {
+        "os2web/os2web_datalookup": {
+            "type": "vcs",
+            "url": "https://github.com/itk-dev/os2web_datalookup"
+        },
         "drupal": {
             "type": "composer",
             "url": "https://packages.drupal.org/8"

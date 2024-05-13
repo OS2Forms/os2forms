@@ -33,7 +33,8 @@ digital post.
 
 ### Key
 
-We use [os2web_key](https://github.com/OS2web/os2web_key) to provide the certificate for sending digital post.
+We use [os2web_key](https://github.com/OS2web/os2web_key) to provide the certificate for sending digital post, and the
+key must be of type "[Certificate](https://github.com/os2web/os2web_key?tab=readme-ov-file#certificate)".
 
 ### Queue
 
