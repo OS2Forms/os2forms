@@ -65,7 +65,7 @@
         "itk-dev/beskedfordeler-drupal": "^1.0",
         "itk-dev/serviceplatformen": "dev-feature/guzzle6-adapter as 1.5",
         "os2web/os2web_datalookup": "^1.5",
-        "os2web/os2web_key": "dev-os2web_key",
+        "os2web/os2web_key": "^1.0",
         "os2web/os2web_nemlogin": "^1.0",
         "php-http/guzzle6-adapter": "^2.0",
         "phpoffice/phpword": "^0.18.2",
@@ -87,10 +87,6 @@
         "wsdltophp/packagegenerator": "^4.0"
     },
     "repositories": {
-        "os2web/os2web_key": {
-            "type": "vcs",
-            "url": "https://github.com/itk-dev/os2web_key"
-        },
         "drupal": {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
