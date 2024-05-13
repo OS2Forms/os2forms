@@ -58,7 +58,7 @@
         "itk-dev/serviceplatformen": "^1.5",
         "os2web/os2web_audit": "^0.1.6",
         "os2web/os2web_datalookup": "^2.0",
-        "os2web/os2web_key": "dev-os2web_key",
+        "os2web/os2web_key": "^1.0",
         "os2web/os2web_nemlogin": "^1.0",
         "php-http/guzzle7-adapter": "^1.0",
         "phpoffice/phpword": "^0.18.2",
@@ -80,10 +80,6 @@
         "wsdltophp/packagegenerator": "^4.0"
     },
     "repositories": {
-        "os2web/os2web_key": {
-            "type": "vcs",
-            "url": "https://github.com/itk-dev/os2web_key"
-        },
         "drupal": {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
