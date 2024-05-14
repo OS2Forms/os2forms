@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * This module enabled webform submission encryption as a default option.
+ */
+
+/**
+ * Implements hook_install().
+ *
+ * We need to change the modules weight to ensure that our webform_submission
+ * class is used and thereby overriding the webform_encrypt and webform_revision
+ * classes.
+ *
+ * The class is set in os2forms_encrypt_entity_type_alter().
+ */
+function os2forms_encrypt_install() {
+  module_set_weight('os2forms_encrypt', 9999);
+}
