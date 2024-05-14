@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## [3.15.1] 2024-05-14
+
 - Added missing return type.
 - Added new webform submission storage class to handle enable both encryption
   and revision at the same time.
@@ -222,7 +224,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - Security in case of vulnerabilities.
 ```
 
-[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.15.0...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.15.1...HEAD
+[3.15.1]: https://github.com/OS2Forms/os2forms/compare/3.15.0...3.15.1
 [3.15.0]: https://github.com/OS2Forms/os2forms/compare/3.14.1...3.15.0
 [3.14.1]: https://github.com/OS2Forms/os2forms/compare/3.14.0...3.14.1
 [3.14.0]: https://github.com/OS2Forms/os2forms/compare/3.13.3...3.14.0
