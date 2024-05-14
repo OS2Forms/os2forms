@@ -12,6 +12,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 ## [Unreleased]
 
 - Added missing return type.
+- Added new webform submission storage class to handle enable both encryption
+  and revision at the same time.
 
 ## [3.15.0] 2024-05-03
 
