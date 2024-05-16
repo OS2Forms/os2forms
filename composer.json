@@ -1,20 +1,8 @@
 {
     "name": "os2forms/os2forms",
-    "type": "drupal-module",
     "description": "Drupal 8 OS2Form module provides advanced webform functionality for Danish Municipalities",
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "license": "EUPL-1.2",
-    "repositories": {
-        "drupal": {
-            "type": "composer",
-            "url": "https://packages.drupal.org/8"
-        },
-        "assets": {
-            "type": "composer",
-            "url": "https://asset-packagist.org"
-        }
-    },
+    "type": "drupal-module",
     "require": {
         "php": "^8.1",
         "ext-dom": "*",
@@ -47,7 +35,7 @@
         "drupal/mailsystem": "^4.1",
         "drupal/masquerade": "^2.0@RC",
         "drupal/pathauto": "^1.5",
-        "drupal/permissions_by_term": "^3.1 || ^2.25",
+        "drupal/permissions_by_term": "^2.25 || ^3.1",
         "drupal/queue_mail": "^1.4",
         "drupal/queue_ui": "^2.1",
         "drupal/r4032login": "^2.1",
@@ -75,13 +63,14 @@
         "drupal/workflow_participants": "^2.4",
         "http-interop/http-factory-guzzle": "^1.0.0",
         "itk-dev/beskedfordeler-drupal": "^1.0",
-        "itk-dev/serviceplatformen": "dev-feature/guzzle6-adapter as 1.5",
-        "os2web/os2web_datalookup": "^1.5",
+        "itk-dev/serviceplatformen": "dev-feature/guzzle6-adapter as 1.5.0",
+        "os2web/os2web_datalookup": "dev-feature/os2web_key as 1.12.0",
+        "os2web/os2web_key": "^1.0",
         "os2web/os2web_nemlogin": "^1.0",
         "php-http/guzzle6-adapter": "^2.0",
         "phpoffice/phpword": "^0.18.2",
         "symfony/options-resolver": "^5.4 || ^6.0",
-        "tecnickcom/tcpdf": "~6",
+        "tecnickcom/tcpdf": "^6",
         "webmozart/path-util": "^2.3",
         "wsdltophp/packagebase": "^5.0",
         "zaporylie/composer-drupal-optimizations": "^1.2"
@@ -90,25 +79,45 @@
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
         "drupal/coder": "^8.3",
         "drupal/maillog": "^1.0",
+        "ergebnis/composer-normalize": "^2.42",
         "mglaman/phpstan-drupal": "^1.1",
         "phpstan/extension-installer": "^1.3",
         "phpstan/phpstan-deprecation-rules": "^1.1",
         "phpunit/phpunit": "^9.5",
         "wsdltophp/packagegenerator": "^4.0"
     },
-    "extra" : {
+    "repositories": {
+        "os2web/os2web_datalookup": {
+            "type": "vcs",
+            "url": "https://github.com/itk-dev/os2web_datalookup"
+        },
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        },
+        "assets": {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "cweagans/composer-patches": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "ergebnis/composer-normalize": true,
+            "phpstan/extension-installer": true,
+            "simplesamlphp/composer-module-installer": true,
+            "vaimo/composer-patches": true,
+            "zaporylie/composer-drupal-optimizations": true
+        },
+        "sort-packages": true
+    },
+    "extra": {
         "composer-exit-on-patch-failure": false,
-        "enable-patching" : true,
+        "enable-patching": true,
         "patches": {
-            "drupal/entity_print": {
-                "2733781 - Add Export to Word Support": "https://www.drupal.org/files/issues/2019-11-22/2733781-47.patch"
-            },
-            "drupal/webform": {
-                "Unlock possibility of using Entity print module export to Word": "https://www.drupal.org/files/issues/2020-02-29/3096552-6.patch"
-            },
-            "drupal/user_default_page": {
-                "Warning: in_array() expects parameter 2 to be array, null given in user_default_page_user_logout() (https://www.drupal.org/node/3246986)": "https://www.drupal.org/files/issues/2021-11-01/user_default_page-3246986-2.patch"
-            },
             "drupal/coc_forms_auto_export": {
                 "3240592 - Problem with phpseclib requirement in 2.x (https://www.drupal.org/project/coc_forms_auto_export/issues/3240592)": "https://www.drupal.org/files/issues/2021-10-04/requirement-namespace-3240592-1.patch"
             },
@@ -121,34 +130,23 @@
         }
     },
     "scripts": {
-        "code-analysis/phpstan": [
-            "phpstan analyse"
-        ],
         "code-analysis": [
             "@code-analysis/phpstan"
         ],
-        "coding-standards-check/phpcs": [
-            "phpcs --standard=phpcs.xml.dist"
+        "code-analysis/phpstan": [
+            "phpstan analyse"
         ],
-        "coding-standards-check": [
-            "@coding-standards-check/phpcs"
+        "coding-standards-apply": [
+            "@coding-standards-apply/phpcs"
         ],
         "coding-standards-apply/phpcs": [
             "phpcbf --standard=phpcs.xml.dist"
         ],
-        "coding-standards-apply": [
-            "@coding-standards-apply/phpcs"
+        "coding-standards-check": [
+            "@coding-standards-check/phpcs"
+        ],
+        "coding-standards-check/phpcs": [
+            "phpcs --standard=phpcs.xml.dist"
         ]
-    },
-    "config": {
-        "sort-packages": true,
-        "allow-plugins": {
-            "cweagans/composer-patches": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true,
-            "phpstan/extension-installer": true,
-            "simplesamlphp/composer-module-installer": true,
-            "vaimo/composer-patches": true,
-            "zaporylie/composer-drupal-optimizations": true
-        }
     }
 }
