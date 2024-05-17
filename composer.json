@@ -49,6 +49,7 @@
         "drupal/redirect": "^1.4",
         "drupal/simplesamlphp_auth": "^4.0",
         "drupal/smtp": "^1.0@beta",
+        "drupal/sodium": "^2.4",
         "drupal/switch_page_theme": "^4.0",
         "drupal/telephone_validation": "^2.2",
         "drupal/token": "^1.5",
@@ -56,6 +57,7 @@
         "drupal/user_default_page": "^9.0",
         "drupal/webform": "^6.1",
         "drupal/webform_composite": "^1.0@RC",
+        "drupal/webform_encrypt": "^2.0@alpha",
         "drupal/webform_migrate": "^2.0@alpha",
         "drupal/webform_node_element": "^1.2",
         "drupal/webform_remote_handlers": "^3.0",
@@ -104,6 +106,12 @@
             },
             "drupal/webform_node_element": {
                 "3290637 - Automated Drupal 10 compatibility fixes": "https://www.drupal.org/files/issues/2023-05-12/webform_node_element_d10-3290637-11.patch"
+            },
+            "drupal/dynamic_entity_reference": {
+                "entityQuery reference JOINs should specify target_type (https://www.drupal.org/project/dynamic_entity_reference/issues/3120952#comment-14141038)": "https://www.drupal.org/files/issues/2021-06-22/entityquery-reference-joins-should-specify-target_type-3120952-24.patch"
+            },
+            "drupal/webform_encrypt": {
+                "Ensure data is base64 encoded (https://www.drupal.org/project/webform_encrypt/issues/3399414)": "https://git.drupalcode.org/project/webform_encrypt/-/merge_requests/4.patch"
             }
         }
     },

@@ -23,7 +23,8 @@ final class BeskedfordelerEventSubscriber extends AbstractBeskedfordelerEventSub
     private readonly BeskedfordelerHelper $beskedfordelerHelper,
     private readonly MessageHelper $messageHelper,
     private readonly WebformHelperSF1601 $webformHelper,
-    LoggerInterface $logger) {
+    LoggerInterface $logger,
+  ) {
     parent::__construct($logger);
   }
 

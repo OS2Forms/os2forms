@@ -1,0 +1,8 @@
+name: 'FBS Handler'
+type: module
+description: 'Provides integration to FBS.'
+package: 'OS2Forms'
+core_version_requirement: ^8.8 || ^9
+dependencies:
+  - 'webform:webform'
+  - 'advancedqueue:advancedqueue'

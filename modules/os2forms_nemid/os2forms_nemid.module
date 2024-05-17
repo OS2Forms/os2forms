@@ -11,6 +11,9 @@ use Drupal\migrate\Plugin\MigrateSourceInterface;
 use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\migrate\Row;
 use Drupal\os2forms_nemid\Plugin\WebformElement\NemidElementBase;
+use Drupal\os2forms_nemid\Service\FormsHelper;
+use Drupal\webform\Utility\WebformFormHelper;
+use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -19,6 +22,15 @@ use Drupal\os2forms_nemid\Plugin\WebformElement\NemidElementBase;
  */
 function os2forms_nemid_form_webform_os2forms_settings_form_alter(&$form, FormStateInterface $form_state) {
   os2forms_nemid_webform_third_party_settings_form_alter($form, $form_state);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_prepare_form().
+ *
+ * Prepare webform.
+ */
+function os2forms_nemid_webform_submission_prepare_form(WebformSubmissionInterface $webform_submission, string $operation, FormStateInterface $form_state): void {
+  Drupal::service('os2forms_nemid.forms_helper')->webformSubmissionPrepareForm($webform_submission, $operation, $form_state);
 }
 
 /**
@@ -71,12 +83,76 @@ function os2forms_nemid_webform_third_party_settings_form_alter(&$form, FormStat
     '#default_value' => !(empty($settings)) ? $settings['nemlogin_auto_redirect'] : FALSE,
     '#description' => t('Redirection will happen right after user has is accessing the form, if user is already authenticated via NemID, redirection will not happen.'),
   ];
+
+  $nemloginProtectionSettings = $webform->getThirdPartySetting('os2forms', 'os2forms_nemid_address_protection');
+
+  // OS2Forms NemID.
+  $form['third_party_settings']['os2forms']['os2forms_nemid_address_protection'] = [
+    '#type' => 'details',
+    '#title' => t('OS2Forms address protection settings'),
+    '#open' => TRUE,
+  ];
+
+  // Nemlogin auto redirect.
+  $form['third_party_settings']['os2forms']['os2forms_nemid_address_protection']['nemlogin_hide_form'] = [
+    '#type' => 'select',
+    '#options' => [
+      FormsHelper::WEBFORM_NEM_LOGIN_ADDRESS_PROTECTION_DEFAULT_BEHAVIOUR => t('No'),
+      FormsHelper::WEBFORM_NEM_LOGIN_ADDRESS_PROTECTION_DISPLAY_ERROR => t('Yes'),
+    ],
+    '#title' => t('Hide form if user is under address protection'),
+    '#default_value' => !(empty($nemloginProtectionSettings)) ? $nemloginProtectionSettings['nemlogin_hide_form'] : FormsHelper::WEBFORM_NEM_LOGIN_ADDRESS_PROTECTION_DEFAULT_BEHAVIOUR,
+    '#description' => t('Hides elements and displays error if nemlogin reveals that citizen is under address protection and an address element is found on the webform'),
+  ];
+
+  // Nemlogin address protection.
+  $form['third_party_settings']['os2forms']['os2forms_nemid_address_protection']['nemlogin_hide_message'] = [
+    '#title' => t('Access denied message'),
+    '#type' => 'textarea',
+    '#default_value' => !(empty($nemloginProtectionSettings)) ? $nemloginProtectionSettings['nemlogin_hide_message'] : '',
+    '#description' => t('Message shown to user when visiting form'),
+    '#states' => [
+      'visible' => [
+        [':input[name="third_party_settings[os2forms][os2forms_nemid_address_protection][nemlogin_hide_form]"]' => ['value' => FormsHelper::WEBFORM_NEM_LOGIN_ADDRESS_PROTECTION_DISPLAY_ERROR]],
+      ],
+      'required' => [
+        [':input[name="third_party_settings[os2forms][os2forms_nemid_address_protection][nemlogin_hide_form]"]' => ['value' => FormsHelper::WEBFORM_NEM_LOGIN_ADDRESS_PROTECTION_DISPLAY_ERROR]],
+      ],
+    ],
+  ];
 }
 
 /**
  * Implements hook_webform_submission_form_alter().
  */
 function os2forms_nemid_webform_submission_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+
+  // Handle address protection.
+  if ($tempValue = $form_state->getTemporaryValue(FormsHelper::ADDRESS_PROTECTION_STATE)) {
+    if (FALSE === ($tempValue['access'] ?? TRUE)) {
+      // Flattening the elements makes it much easier to access nested elements.
+      $elements = &WebformFormHelper::flattenElements($form['elements']);
+
+      $message = $tempValue['message'] ?? t('This form cannot be shown because you have address protection');
+
+      $form['os2forms_nemlogin_message'] = [
+        '#theme' => 'status_messages',
+        '#message_list' => [
+          'error' => [$message],
+        ],
+      ];
+
+      // Hide all actions ….
+      $form['actions']['#access'] = FALSE;
+      // … and elements.
+      foreach ($elements as &$element) {
+        $element['#access'] = FALSE;
+      }
+    }
+
+    return;
+  }
+
   // Getting webform Nemid settings.
   /** @var \Drupal\webform\WebformSubmissionInterface Interface $webformSubmission */
   $webformSubmission = $form_state->getFormObject()->getEntity();

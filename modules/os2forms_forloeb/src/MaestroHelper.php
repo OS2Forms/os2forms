@@ -8,6 +8,7 @@ use Drupal\advancedqueue\Entity\QueueInterface;
 use Drupal\advancedqueue\Job;
 use Drupal\advancedqueue\JobResult;
 use Drupal\Component\Render\MarkupInterface;
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Entity\EntityStorageInterface;
@@ -16,6 +17,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\Render\Markup;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Drupal\entity_print\Plugin\EntityPrintPluginManagerInterface;
 use Drupal\maestro\Engine\MaestroEngine;
@@ -79,7 +81,7 @@ class MaestroHelper implements LoggerInterface {
     private readonly EntityPrintPluginManagerInterface $entityPrintPluginManager,
     private readonly DigitalPostHelper $digitalPostHelper,
     private readonly LoggerChannelInterface $logger,
-    private readonly LoggerChannelInterface $submissionLogger
+    private readonly LoggerChannelInterface $submissionLogger,
   ) {
     $this->config = $configFactory->get(SettingsForm::SETTINGS);
     $this->webformSubmissionStorage = $entityTypeManager->getStorage('webform_submission');
@@ -147,7 +149,7 @@ class MaestroHelper implements LoggerInterface {
     string $notificationType,
     WebformSubmissionInterface $submission,
     array $templateTask,
-    int $maestroQueueID
+    int $maestroQueueID,
   ): ?Job {
     $context = [
       'webform_submission' => $submission,
@@ -224,7 +226,7 @@ class MaestroHelper implements LoggerInterface {
     string $notificationType,
     WebformSubmissionInterface $submission,
     array $templateTask,
-    int $maestroQueueID
+    int $maestroQueueID,
   ) {
     $context = [
       'webform_submission' => $submission,
@@ -308,7 +310,7 @@ class MaestroHelper implements LoggerInterface {
     string $subject,
     string $body,
     WebformSubmissionInterface $submission,
-    string $notificationType
+    string $notificationType,
   ): void {
     try {
       $message = [
@@ -375,7 +377,7 @@ class MaestroHelper implements LoggerInterface {
     string $taskUrl,
     string $actionLabel,
     WebformSubmissionInterface $submission,
-    string $notificationType
+    string $notificationType,
   ): void {
     try {
       $document = new Document(
@@ -466,6 +468,17 @@ class MaestroHelper implements LoggerInterface {
       ?? $data[$recipientElement]
       ?? NULL;
 
+    // Handle composite elements.
+    if ($recipient === NULL) {
+      // Composite subelement keys consist of
+      // the composite element key and the subelement key separated by '__',
+      // e.g. 'contact__name'.
+      if (str_contains($recipientElement, '__')) {
+        $keys = explode('__', $recipientElement);
+        $recipient = NestedArray::getValue($data, $keys);
+      }
+    }
+
     if ($notificationType === self::NOTIFICATION_ESCALATION) {
       $recipient = $settings[MaestroNotificationHandler::NOTIFICATION][$notificationType][MaestroNotificationHandler::NOTIFICATION_RECIPIENT] ?? NULL;
     }
@@ -493,7 +506,7 @@ class MaestroHelper implements LoggerInterface {
         $processValue = static function (string $value) use ($taskUrl) {
           // Replace href="[maestro:task-url]" with href="«$taskUrl»".
           $value = preg_replace('/href\s*=\s*["\']\[maestro:task-url\]["\']/', sprintf('href="%s"', htmlspecialchars($taskUrl)), $value);
-          $value = preg_replace('/\[(maestro:[^]]+)\]/', '&#91;\1&#93;', $value);
+          $value = preg_replace('/\[(maestro:[^]]+)\]/', '(\1)', $value);
 
           return $value;
         };
@@ -510,12 +523,7 @@ class MaestroHelper implements LoggerInterface {
 
       $content = $notificationSetting[MaestroNotificationHandler::NOTIFICATION_CONTENT];
       if (isset($content['value'])) {
-        // Process tokens in content.
-        $content['value'] = $this->tokenManager->replace(
-          $processValue($content['value']),
-          $submission,
-          $maestroTokenData
-        );
+        $content['value'] = $processValue($content['value']);
       }
 
       $actionLabel = $this->tokenManager->replace($notificationSetting[MaestroNotificationHandler::NOTIFICATION_ACTION_LABEL], $submission);
@@ -526,11 +534,11 @@ class MaestroHelper implements LoggerInterface {
 
       switch ($contentType) {
         case 'email':
-          $content = $this->renderHtml($contentType, $subject, $content, $taskUrl, $actionLabel, $submission);
+          $content = $this->renderHtml($contentType, $subject, $content, $taskUrl, $actionLabel, $submission, $maestroTokenData);
           break;
 
         case 'pdf':
-          $pdfContent = $this->renderHtml($contentType, $subject, $content, $taskUrl, $actionLabel, $submission);
+          $pdfContent = $this->renderHtml($contentType, $subject, $content, $taskUrl, $actionLabel, $submission, $maestroTokenData);
 
           // Get dompdf plugin from entity_print module.
           /** @var \Drupal\entity_print\Plugin\EntityPrint\PrintEngine\PdfEngineBase $printer */
@@ -571,6 +579,8 @@ class MaestroHelper implements LoggerInterface {
    *   The action label.
    * @param \Drupal\webform\WebformSubmissionInterface $submission
    *   The webform submission.
+   * @param array $maestroTokenData
+   *   The Maestro token data.
    *
    * @return string|MarkupInterface
    *   The rendered content.
@@ -581,7 +591,8 @@ class MaestroHelper implements LoggerInterface {
     array $content,
     string $taskUrl,
     string $actionLabel,
-    WebformSubmissionInterface $submission
+    WebformSubmissionInterface $submission,
+    array $maestroTokenData,
   ): string|MarkupInterface {
     $template = $this->config->get('templates')['notification_' . $type] ?? NULL;
     if (file_exists($template)) {
@@ -603,10 +614,17 @@ class MaestroHelper implements LoggerInterface {
         'action_label' => $actionLabel,
         'webform_submission' => $submission,
         'handler' => $this,
+        'base_url' => Settings::get('base_url'),
       ],
     ];
 
-    return Markup::create(trim((string) $this->webformThemeManager->renderPlain($build)));
+    $html = trim((string) $this->webformThemeManager->renderPlain($build));
+
+    return Markup::create($this->tokenManager->replace(
+      $html,
+      $submission,
+      $maestroTokenData
+    ));
   }
 
   /**

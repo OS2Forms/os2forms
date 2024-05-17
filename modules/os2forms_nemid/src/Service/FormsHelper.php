@@ -4,6 +4,7 @@ namespace Drupal\os2forms_nemid\Service;
 
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\os2forms_nemid\Element\NemidCompanyCvrFetchData;
 use Drupal\os2forms_nemid\Element\NemidCompanyPNumber;
 use Drupal\os2forms_nemid\Element\NemidCprFetchData;
@@ -11,6 +12,7 @@ use Drupal\os2web_datalookup\LookupResult\CompanyLookupResult;
 use Drupal\os2web_datalookup\LookupResult\CprLookupResult;
 use Drupal\os2web_datalookup\Plugin\DataLookupManager;
 use Drupal\os2web_nemlogin\Service\AuthProviderService;
+use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * FormsHelper.
@@ -20,6 +22,32 @@ use Drupal\os2web_nemlogin\Service\AuthProviderService;
  * @package Drupal\os2forms_nemid\Service
  */
 class FormsHelper {
+  const ADDRESS_PROTECTION_STATE = 'os2forms_nemlogin_address_protection';
+
+  /**
+   * Defines NemID login address protection display error option.
+   */
+  const WEBFORM_NEM_LOGIN_ADDRESS_PROTECTION_DISPLAY_ERROR = 'os2forms_nemlogin_address_protection_display_error';
+
+  /**
+   * Defines NemID login address protection display default behaviour.
+   */
+  const WEBFORM_NEM_LOGIN_ADDRESS_PROTECTION_DEFAULT_BEHAVIOUR = 'os2forms_nemlogin_address_protection_default_behaviour';
+
+  /**
+   * Defines NemID login address related elements.
+   */
+  private const WEBFORM_NEM_LOGIN_ADDRESS_PROTECTION_ELEMENT_TYPES = [
+    'os2forms_nemid_address',
+    'os2forms_nemid_street',
+    'os2forms_nemid_house_nr',
+    'os2forms_nemid_floor',
+    'os2forms_nemid_apartment_nr',
+    'os2forms_nemid_postal_code',
+    'os2forms_nemid_city',
+    'os2forms_nemid_kommunekode',
+    'os2forms_nemid_coaddress',
+  ];
 
   /**
    * Auth provider service.
@@ -36,16 +64,26 @@ class FormsHelper {
   private $dataLookManager;
 
   /**
+   * The route match.
+   *
+   * @var \Drupal\Core\Routing\RouteMatchInterface
+   */
+  private RouteMatchInterface $routeMatch;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\os2web_nemlogin\Service\AuthProviderService $authProviderService
    *   Auth provider service.
    * @param \Drupal\os2web_datalookup\Plugin\DataLookupManager $dataLookPluginManager
    *   Datalookup plugin manager.
+   * @param \Drupal\Core\Routing\RouteMatchInterface $routeMatch
+   *   Route match service.
    */
-  public function __construct(AuthProviderService $authProviderService, DataLookupManager $dataLookPluginManager) {
+  public function __construct(AuthProviderService $authProviderService, DataLookupManager $dataLookPluginManager, RouteMatchInterface $routeMatch) {
     $this->authProviderService = $authProviderService;
     $this->dataLookManager = $dataLookPluginManager;
+    $this->routeMatch = $routeMatch;
   }
 
   /**
@@ -305,6 +343,56 @@ class FormsHelper {
     $value = $form_state->getValue($elementParents);
 
     return $value;
+  }
+
+  /**
+   * Implements hook_ENTITY_TYPE_prepare_form().
+   */
+  public function webformSubmissionPrepareForm(WebformSubmissionInterface $webformSubmission, string $operation, FormStateInterface $formState): void {
+    // Only perform address protection check when displaying submission form.
+    $accessCheckRouteNames = [
+      // Webform attached to a node.
+      'entity.node.canonical',
+      // Creating a new submission.
+      'entity.webform.canonical',
+      // Editing a submission.
+      'entity.webform_submission.edit_form',
+    ];
+
+    if (!in_array($this->routeMatch->getRouteName(), $accessCheckRouteNames, TRUE)) {
+      return;
+    }
+
+    // Check if hide address protection is selected.
+    $hideForm = $webformSubmission->getWebform()->getThirdPartySettings('os2forms')['os2forms_nemid_address_protection']['nemlogin_hide_form'] ?? NULL;
+
+    if ($hideForm === self::WEBFORM_NEM_LOGIN_ADDRESS_PROTECTION_DISPLAY_ERROR) {
+      $cprResult = $this->retrieveCprLookupResult($formState);
+
+      if ($cprResult && $cprResult->isNameAddressProtected()) {
+
+        // Check if any element violating address
+        // protection is present in webform.
+        $elements = $webformSubmission->getWebform()->getElementsDecodedAndFlattened();
+
+        foreach ($elements as $element) {
+
+          if (in_array($element['#type'], self::WEBFORM_NEM_LOGIN_ADDRESS_PROTECTION_ELEMENT_TYPES)) {
+
+            // Violation detected,
+            // mark form state with temporary key and return.
+            $message = $webformSubmission->getWebform()->getThirdPartySettings('os2forms')['os2forms_nemid_address_protection']['nemlogin_hide_message'];
+
+            $formState->setTemporaryValue(self::ADDRESS_PROTECTION_STATE, [
+              'access' => FALSE,
+              'message' => $message,
+            ]);
+
+            return;
+          }
+        }
+      }
+    }
   }
 
 }

@@ -32,6 +32,20 @@ class DawaAddress {
   protected $propertyNumber;
 
   /**
+   * Latitude of the address.
+   *
+   * @var float
+   */
+  protected $latitude;
+
+  /**
+   * Longitude of the address.
+   *
+   * @var float
+   */
+  protected $longitude;
+
+  /**
    * DawaAddress constructor.
    *
    * Fills the property from the provided JSON metadata.
@@ -45,6 +59,8 @@ class DawaAddress {
     if (isset($json['adgangsadresse']) && is_array($json['adgangsadresse'])) {
       $this->municipalityCode = $json['adgangsadresse']['kommune']['kode'];
       $this->propertyNumber = $json['adgangsadresse']['esrejendomsnr'];
+      $this->longitude = $json['adgangsadresse']['adgangspunkt']['koordinater'][0];
+      $this->latitude = $json['adgangsadresse']['adgangspunkt']['koordinater'][1];
     }
   }
 
@@ -76,6 +92,26 @@ class DawaAddress {
    */
   public function getPropertyNumber() {
     return $this->propertyNumber;
+  }
+
+  /**
+   * Gets latitude.
+   *
+   * @return float
+   *   property latitude.
+   */
+  public function getLatitude() {
+    return $this->latitude;
+  }
+
+  /**
+   * Gets longitude.
+   *
+   * @return float
+   *   property longitude.
+   */
+  public function getLongitude() {
+    return $this->longitude;
   }
 
 }

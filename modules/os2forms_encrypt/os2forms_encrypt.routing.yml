@@ -1,0 +1,7 @@
+os2forms_encrypt.admin_settings:
+  path: '/admin/config/os2forms_encrypt/settings'
+  defaults:
+    _form: '\Drupal\os2forms_encrypt\Form\SettingsForm'
+    _title: 'OS2Forms Encrypt settings'
+  requirements:
+    _permission: 'administer encrypt'

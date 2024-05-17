@@ -11,8 +11,50 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## [3.15.1] 2024-05-14
+
+- Added missing return type.
+- Added new webform submission storage class to handle enable both encryption
+  and revision at the same time.
+
+## [3.15.0] 2024-05-03
+
+- Added webform encryption modules
+- Adding Lat and Long fetching to DataAddress
+- CprFetchData adding ajax error fix
+- [#84](https://github.com/OS2Forms/os2forms/pull/84)
+  Added digital post test command.
+- Added FBS handler for supporting user creation in library systems
+- [#95](https://github.com/OS2Forms/os2forms/pull/95)
+  - Added `base_url` variable to twig templates.
+  - Handled tokens in Maestro notification html.
+- [#92](https://github.com/OS2Forms/os2forms/pull/92)
+  Allow denying address protected citizen from webform.
+- [#96](https://github.com/OS2Forms/os2forms/pull/96)
+  NemLogin autologout pop-up styling.
+- [#99](https://github.com/OS2Forms/os2forms/pull/99)
+  Fix coding standards.
+- [#102](https://github.com/OS2Forms/os2forms/pull/102)
+  Fix array access with `purge_days` configuration.
+
+## [3.14.1] 2024-01-16
+
+- CprFetchData adding ajax error fix
+
+## [3.14.0] 2024-01-14
+
+- [OS-64] Setting a standard value for Automatic purge [#80](https://github.com/OS2Forms/os2forms/pull/80)
+
+## [3.13.3] 2023-12-05
+
+- [#76](https://github.com/OS2Forms/os2forms/pull/76)
+  Fixed digital post logging on submissions.
+- [#74](https://github.com/OS2Forms/os2forms/pull/74)
+  Allow composite elements in Maestro notification recipient
 - [#73](https://github.com/OS2Forms/os2forms/pull/73a)
   Fix issue with nested elements in webform inherit
+- [#77](https://github.com/OS2Forms/os2forms/pull/77)
+  Fix color picker fields in os2forms_webform_maps
 
 ## [3.13.2] 2023-10-19
 
@@ -182,7 +224,32 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - Security in case of vulnerabilities.
 ```
 
-[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.5.0...HEAD
-[3.5.0]: https://github.com/OS2Forms/os2forms/compare/3.2.5...3.5.0
+[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.15.1...HEAD
+[3.15.1]: https://github.com/OS2Forms/os2forms/compare/3.15.0...3.15.1
+[3.15.0]: https://github.com/OS2Forms/os2forms/compare/3.14.1...3.15.0
+[3.14.1]: https://github.com/OS2Forms/os2forms/compare/3.14.0...3.14.1
+[3.14.0]: https://github.com/OS2Forms/os2forms/compare/3.13.3...3.14.0
+[3.13.3]: https://github.com/OS2Forms/os2forms/compare/3.13.2...3.13.3
+[3.13.2]: https://github.com/OS2Forms/os2forms/compare/3.13.1...3.13.2
+[3.13.1]: https://github.com/OS2Forms/os2forms/compare/3.13.0...3.13.1
+[3.13.0]: https://github.com/OS2Forms/os2forms/compare/3.12.2...3.13.0
+[3.12.2]: https://github.com/OS2Forms/os2forms/compare/3.12.1...3.12.2
+[3.12.1]: https://github.com/OS2Forms/os2forms/compare/3.12.0...3.12.1
+[3.12.0]: https://github.com/OS2Forms/os2forms/compare/3.11.0...3.12.0
+[3.11.0]: https://github.com/OS2Forms/os2forms/compare/3.10.0...3.11.0
+[3.10.0]: https://github.com/OS2Forms/os2forms/compare/3.9.0...3.10.0
+[3.9.0]: https://github.com/OS2Forms/os2forms/compare/3.8.3...3.9.0
+[3.8.3]: https://github.com/OS2Forms/os2forms/compare/3.8.2...3.8.3
+[3.8.2]: https://github.com/OS2Forms/os2forms/compare/3.8.1...3.8.2
+[3.8.1]: https://github.com/OS2Forms/os2forms/compare/3.8.0...3.8.1
+[3.8.0]: https://github.com/OS2Forms/os2forms/compare/3.7.0...3.8.0
+[3.7.0]: https://github.com/OS2Forms/os2forms/compare/3.6.0...3.7.0
+[3.6.0]: https://github.com/OS2Forms/os2forms/compare/3.5.0...3.6.0
+[3.5.0]: https://github.com/OS2Forms/os2forms/compare/3.4.0...3.5.0
+[3.4.0]: https://github.com/OS2Forms/os2forms/compare/3.3.0...3.4.0
+[3.3.0]: https://github.com/OS2Forms/os2forms/compare/3.2.9...3.3.0
+[3.2.9]: https://github.com/OS2Forms/os2forms/compare/3.2.8...3.2.9
+[3.2.8]: https://github.com/OS2Forms/os2forms/compare/3.2.7...3.2.8
+[3.2.7]: https://github.com/OS2Forms/os2forms/compare/3.2.6...3.2.7
 [3.2.6]: https://github.com/OS2Forms/os2forms/compare/3.2.5...3.2.6
 [3.2.5]: https://github.com/OS2Forms/os2forms/compare/3.2.4...3.2.5

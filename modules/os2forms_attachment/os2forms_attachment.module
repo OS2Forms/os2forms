@@ -8,6 +8,7 @@
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\os2forms_attachment\Entity\AttachmentComponent;
 
 /**
@@ -316,4 +317,13 @@ function os2forms_attachment_module_implements_alter(&$implementations, $hook) {
       break;
   }
 
+}
+
+/**
+ * Implements hook_preprocess().
+ *
+ * Add 'base_url' variable to be used by templates.
+ */
+function os2forms_attachment_preprocess(&$vars) {
+  $vars['base_url'] = Settings::get('base_url');
 }

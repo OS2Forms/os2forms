@@ -74,6 +74,10 @@ class SettingsForm extends FormBase {
       foreach ($settings as $settingKey => $settingValues) {
         $savedSettings = $this->thirdPartySettingsManager->getThirdPartySetting($module_key, $settingKey);
         if (is_array($settingValues)) {
+          if (!$savedSettings) {
+            $savedSettings = [];
+          }
+
           $savedSettings = array_replace($savedSettings, $settingValues);
         }
         else {
