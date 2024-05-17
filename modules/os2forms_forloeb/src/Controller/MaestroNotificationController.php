@@ -57,6 +57,7 @@ class MaestroNotificationController extends ControllerBase {
   public function preview(Request $request, WebformInterface $webform, string $handler, string $notification_type, string $content_type): array {
     $handler = $webform->getHandler($handler);
     $submissionIds = array_keys($this->webformSubmissionStorage->getQuery()
+      ->accessCheck()
       ->condition('webform_id', $webform->id())
       ->sort('created', 'DESC')
       ->execute());

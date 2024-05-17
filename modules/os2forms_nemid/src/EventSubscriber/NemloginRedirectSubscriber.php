@@ -14,7 +14,7 @@ use Drupal\os2web_nemlogin\Service\AuthProviderService;
 use Drupal\webform\Entity\Webform;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
@@ -103,10 +103,10 @@ class NemloginRedirectSubscriber implements EventSubscriberInterface {
    *
    * Only if current webform has nemlogin_auto_redirect on.
    *
-   * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
+   * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
    *   The subscribed event.
    */
-  public function redirectToNemlogin(GetResponseEvent $event) {
+  public function redirectToNemlogin(RequestEvent $event) {
     $request = $event->getRequest();
 
     // This is necessary because this also gets called on
@@ -172,8 +172,6 @@ class NemloginRedirectSubscriber implements EventSubscriberInterface {
       if (!$authProviderPlugin->isAuthenticated()) {
         // Redirect directly to the external IdP.
         $response = new RedirectResponse($this->nemloginAuthProvider->getLoginUrl([], $authProviderPlugin->getPluginId())->toString());
-        $event->setResponse($response);
-        $event->stopPropagation();
       }
       else {
         $settingFormConfig = $this->configFactory->get(SettingsForm::$configName);

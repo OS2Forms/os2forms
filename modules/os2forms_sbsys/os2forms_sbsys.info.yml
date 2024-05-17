@@ -2,8 +2,7 @@ name: 'OS2forms SBSYS integration'
 type: module
 description: 'Provides integration with SBSYS ESDH provider.'
 package: OS2Forms
-core: 8.x
-core_version_requirement: ^8 || ^9
+core_version_requirement: ^9 || ^10
 
 dependencies:
   - 'drupal:os2forms'

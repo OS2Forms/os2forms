@@ -17,7 +17,7 @@ use Symfony\Component\Yaml\Yaml;
  *   Configuration name.
  */
 function os2forms_read_in_new_config($config_name, $moduleName = '') {
-  $path = drupal_get_path('module', $moduleName ?: 'os2forms');
+  $path = \Drupal::service('extension.list.module')->getPath($moduleName ?: 'os2forms');
   /** @var \Drupal\Core\Config\StorageInterface $active_storage */
   $active_storage = \Drupal::service('config.storage');
   $active_storage->write($config_name, Yaml::parse(file_get_contents($path . '/config/optional/' . $config_name . '.yml')));
@@ -140,24 +140,25 @@ function os2forms_update_8904() {
 
   // Add field field.field.node.webform.field_os2forms_wff_area.
   // Field storage.
-  $field_storage_yml = Yaml::parse(file_get_contents(drupal_get_path('module', 'os2forms') . "/config/optional/field.storage.node.field_os2forms_wff_area.yml"));
+  $path = \Drupal::service('extension.list.module')->getPath('os2forms');
+  $field_storage_yml = Yaml::parse(file_get_contents( "$path/config/optional/field.storage.node.field_os2forms_wff_area.yml"));
   if (!FieldStorageConfig::loadByName('node', 'field_os2forms_wff_area')) {
     FieldStorageConfig::create($field_storage_yml)->save();
   }
   // Field instance.
-  $field_yml = Yaml::parse(file_get_contents(drupal_get_path('module', 'os2forms') . "/config/optional/field.field.node.webform.field_os2forms_wff_area.yml"));
+  $field_yml = Yaml::parse(file_get_contents("$path/config/optional/field.field.node.webform.field_os2forms_wff_area.yml"));
   if (!FieldConfig::loadByName('node', 'webform', 'field_os2forms_wff_area')) {
     FieldConfig::create($field_yml)->save();
   }
 
   // Add field field.field.node.webform.field_os2forms_wff_application.
   // Field storage.
-  $field_storage_yml = Yaml::parse(file_get_contents(drupal_get_path('module', 'os2forms') . "/config/optional/field.storage.node.field_os2forms_wff_application.yml"));
+  $field_storage_yml = Yaml::parse(file_get_contents("$path/config/optional/field.storage.node.field_os2forms_wff_application.yml"));
   if (!FieldStorageConfig::loadByName('node', 'field_os2forms_wff_application')) {
     FieldStorageConfig::create($field_storage_yml)->save();
   }
   // Field instance.
-  $field_yml = Yaml::parse(file_get_contents(drupal_get_path('module', 'os2forms') . "/config/optional/field.field.node.webform.field_os2forms_wff_application.yml"));
+  $field_yml = Yaml::parse(file_get_contents("$path/config/optional/field.field.node.webform.field_os2forms_wff_application.yml"));
   if (!FieldConfig::loadByName('node', 'webform', 'field_os2forms_wff_application')) {
     FieldConfig::create($field_yml)->save();
   }
