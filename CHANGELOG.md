@@ -10,6 +10,18 @@ See ["how do I make a good changelog record?"](https://keepachangelog.com/en/1.0
 before starting to add changes. Use example [placed in the end of the page](#example-of-change-log-record)
 
 ## [Unreleased]
+- Obsolete module removing - os2forms_consent
+- Obsolete module removing - webform_embed
+- Obsolete module removing - os2forms_webform_list
+- Obsolete module removing - field_color
+- Obsolete patch removing - dynamic_entity_reference
+- Obsolete patch removing - user_default_page
+- Reduntand dependency removing - linkit
+- Reduntand dependency removing - chosen
+- Reduntand dependency removing - queue_ui
+- Reduntand dependency removing - simple_ldap
+- Reduntand dependency removing - webform_scheduled_tasks
+- Drupal 10 compability fixes
 
 ## [3.15.1] 2024-05-14
 
