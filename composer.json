@@ -71,7 +71,7 @@
         "itk-dev/serviceplatformen": "dev-feature/guzzle6-adapter as 1.5",
         "os2web/os2web_datalookup": "^1.5",
         "os2web/os2web_nemlogin": "^1.0",
-        "php-http/guzzle6-adapter": "^2.0",
+        "php-http/guzzle7-adapter": "^1.0",
         "phpoffice/phpword": "^0.18.2",
         "symfony/options-resolver": "^5.4 || ^6.0",
         "tecnickcom/tcpdf": "~6",
