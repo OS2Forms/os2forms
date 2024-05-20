@@ -114,7 +114,8 @@
         },
         "drupal-lenient": {
             "allowed-list": [
-                "drupal/coc_forms_auto_export"
+                "drupal/coc_forms_auto_export",
+                "drupal/webform_node_element"
             ]
         }
     },
