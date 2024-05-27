@@ -11,6 +11,12 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## [3.15.2] 2024-05-27
+
+- [#108](https://github.com/OS2Forms/os2forms/pull/108)
+  Patched webform encrypt to suppress warning when data is mixed between
+  encrypted and not encrypted fields.
+
 ## [3.15.1] 2024-05-14
 
 - Added missing return type.
@@ -224,7 +230,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - Security in case of vulnerabilities.
 ```
 
-[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.15.1...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.15.2...HEAD
+[3.15.2]: https://github.com/OS2Forms/os2forms/compare/3.15.1...3.15.2
 [3.15.1]: https://github.com/OS2Forms/os2forms/compare/3.15.0...3.15.1
 [3.15.0]: https://github.com/OS2Forms/os2forms/compare/3.14.1...3.15.0
 [3.14.1]: https://github.com/OS2Forms/os2forms/compare/3.14.0...3.14.1
