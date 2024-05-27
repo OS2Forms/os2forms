@@ -11,6 +11,10 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [#108](https://github.com/OS2Forms/os2forms/pull/108)
+  Patched webform encrypt to suppress warning when data is mixed between
+  encrypted and not encrypted fields.
+
 ## [3.15.1] 2024-05-14
 
 - Added missing return type.
