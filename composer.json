@@ -25,7 +25,7 @@
         "drupal/advancedqueue": "^1.0",
         "drupal/clientside_validation": "^4.0",
         "drupal/coc_forms_auto_export": "^2.0@alpha",
-        "drupal/config_entity_revisions": "^2.0",
+        "drupal/config_entity_revisions": "dev-2.0.x",
         "drupal/diff": "^1.0",
         "drupal/embed": "^1.4",
         "drupal/entity_print": "^2.1",
@@ -110,9 +110,6 @@
             },
             "drupal/webform_encrypt": {
                 "Ensure data is base64 encoded (https://www.drupal.org/project/webform_encrypt/issues/3399414)": "https://git.drupalcode.org/project/webform_encrypt/-/merge_requests/4.patch"
-            },
-            "drupal/config_entity_revisions": {
-                "Entity queries must explicitly set whether the query should be access checked or not": "https://www.drupal.org/files/issues/2024-06-03/accessCheck.patch"
             }
         },
         "drupal-lenient": {
