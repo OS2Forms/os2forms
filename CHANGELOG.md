@@ -13,7 +13,40 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 - [S2FRMS-40] Adding child select autopopulate fields
 
-## [3.14.0] 2024-01-16
+## [3.15.2] 2024-05-27
+
+- [#108](https://github.com/OS2Forms/os2forms/pull/108)
+  Patched webform encrypt to suppress warning when data is mixed between
+  encrypted and not encrypted fields.
+
+## [3.15.1] 2024-05-14
+
+- Added missing return type.
+- Added new webform submission storage class to handle enable both encryption
+  and revision at the same time.
+
+## [3.15.0] 2024-05-03
+
+- Added webform encryption modules
+- Adding Lat and Long fetching to DataAddress
+- CprFetchData adding ajax error fix
+- [#84](https://github.com/OS2Forms/os2forms/pull/84)
+  Added digital post test command.
+- Added FBS handler for supporting user creation in library systems
+- [#95](https://github.com/OS2Forms/os2forms/pull/95)
+  - Added `base_url` variable to twig templates.
+  - Handled tokens in Maestro notification html.
+- [#92](https://github.com/OS2Forms/os2forms/pull/92)
+  Allow denying address protected citizen from webform.
+- [#96](https://github.com/OS2Forms/os2forms/pull/96)
+  NemLogin autologout pop-up styling.
+- [#99](https://github.com/OS2Forms/os2forms/pull/99)
+  Fix coding standards.
+- [#102](https://github.com/OS2Forms/os2forms/pull/102)
+  Fix array access with `purge_days` configuration.
+
+## [3.14.1] 2024-01-16
+>>>>>>> develop
 
 - CprFetchData adding ajax error fix
 
@@ -200,7 +233,12 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - Security in case of vulnerabilities.
 ```
 
-[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.13.3...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.15.2...HEAD
+[3.15.2]: https://github.com/OS2Forms/os2forms/compare/3.15.1...3.15.2
+[3.15.1]: https://github.com/OS2Forms/os2forms/compare/3.15.0...3.15.1
+[3.15.0]: https://github.com/OS2Forms/os2forms/compare/3.14.1...3.15.0
+[3.14.1]: https://github.com/OS2Forms/os2forms/compare/3.14.0...3.14.1
+[3.14.0]: https://github.com/OS2Forms/os2forms/compare/3.13.3...3.14.0
 [3.13.3]: https://github.com/OS2Forms/os2forms/compare/3.13.2...3.13.3
 [3.13.2]: https://github.com/OS2Forms/os2forms/compare/3.13.1...3.13.2
 [3.13.1]: https://github.com/OS2Forms/os2forms/compare/3.13.0...3.13.1

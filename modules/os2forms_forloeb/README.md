@@ -19,7 +19,7 @@ You can also install the module by using Drush:
 Maestro 3.1 adds a `hook_webform_submission_form_alter` hook which we utilize to
 send assignment, reminder and escalation notifications by adding a *Maestro
 notification* handler to a form that spawns a Maestro workflow or assigns a
-task. If the notification recipient is identified by an an email address, the
+task. If the notification recipient is identified by an email address, the
 notification is sent as an email, and if the identifier is a Danish CPR number,
 the notifications is sent as digital post.
 
@@ -44,3 +44,22 @@ must be processed asynchronously. Specify the queue handling notification jobs.
 #### Templates
 
 Define templates for emails and digital post (PDF).
+
+
+To reference assets, e.g. stylesheet or images, in your templates,
+you can use the `base_url` Twig variable to get the base URL:
+
+```html
+<link rel="stylesheet" href="{{ base_url }}/sites/default/templates/notification.html.twig
+```
+
+The value of `base_url` is defined in settings.local.php:
+
+```php
+/**
+ * Base url.
+ *
+ * Used to specify full URL to stylesheets in templates.
+ */
+$settings['base_url'] = 'http://nginx:8080';
+```

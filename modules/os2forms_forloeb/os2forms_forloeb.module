@@ -149,9 +149,9 @@ function os2forms_forloeb_webform_create(WebformInterface $webform) {
   if (empty($webform->getSetting('purge_days'))) {
     /** @var \Drupal\webform\WebformThirdPartySettingsManagerInterface $third_party_settings_manager */
     $third_party_settings_manager = \Drupal::service('webform.third_party_settings_manager');
-    $os2forms_forloeb_settings = $third_party_settings_manager->getThirdPartySetting('os2forms', 'os2forms_forloeb') ?: 30;
+    $os2forms_forloeb_settings = $third_party_settings_manager->getThirdPartySetting('os2forms', 'os2forms_forloeb');
 
-    $webform->setSetting('purge_days', $os2forms_forloeb_settings['purge_days']);
+    $webform->setSetting('purge_days', $os2forms_forloeb_settings['purge_days'] ?? 30);
   }
 }
 
@@ -165,9 +165,9 @@ function os2forms_forloeb_webform_presave(WebformInterface $webform) {
   if (empty($webform->getSetting('purge_days'))) {
     /** @var \Drupal\webform\WebformThirdPartySettingsManagerInterface $third_party_settings_manager */
     $third_party_settings_manager = \Drupal::service('webform.third_party_settings_manager');
-    $os2forms_forloeb_settings = $third_party_settings_manager->getThirdPartySetting('os2forms', 'os2forms_forloeb') ?: 30;
+    $os2forms_forloeb_settings = $third_party_settings_manager->getThirdPartySetting('os2forms', 'os2forms_forloeb');
 
-    $webform->setSetting('purge_days', $os2forms_forloeb_settings['purge_days']);
+    $webform->setSetting('purge_days', $os2forms_forloeb_settings['purge_days'] ?? 30);
   }
 }
 
@@ -392,12 +392,12 @@ function _os2forms_forloeb_helper(): MaestroHelper {
 function os2forms_forloeb_form_os2forms_settings_alter(&$form, FormStateInterface $form_state) {
   /** @var \Drupal\webform\WebformThirdPartySettingsManagerInterface $third_party_settings_manager */
   $third_party_settings_manager = \Drupal::service('webform.third_party_settings_manager');
-  $os2forms_forloeb_settings = $third_party_settings_manager->getThirdPartySetting('os2forms', 'os2forms_forloeb') ?: 30;
+  $os2forms_forloeb_settings = $third_party_settings_manager->getThirdPartySetting('os2forms', 'os2forms_forloeb');
 
   $form['third_party_settings']['os2forms']['os2forms_forloeb']['purge_days'] = [
     '#type' => 'textfield',
     '#title' => t('Default number of days to retain submissions'),
-    '#default_value' => !(empty($os2forms_forloeb_settings)) ? $os2forms_forloeb_settings['purge_days'] : 30,
+    '#default_value' => $os2forms_forloeb_settings['purge_days'] ?? 30,
     '#description' => t('Default value is used when creating a new form, after that it is saved on a form level'),
   ];
 }
