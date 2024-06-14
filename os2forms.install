@@ -141,7 +141,7 @@ function os2forms_update_8904() {
   // Add field field.field.node.webform.field_os2forms_wff_area.
   // Field storage.
   $path = \Drupal::service('extension.list.module')->getPath('os2forms');
-  $field_storage_yml = Yaml::parse(file_get_contents( "$path/config/optional/field.storage.node.field_os2forms_wff_area.yml"));
+  $field_storage_yml = Yaml::parse(file_get_contents("$path/config/optional/field.storage.node.field_os2forms_wff_area.yml"));
   if (!FieldStorageConfig::loadByName('node', 'field_os2forms_wff_area')) {
     FieldStorageConfig::create($field_storage_yml)->save();
   }
