@@ -10,6 +10,9 @@ See ["how do I make a good changelog record?"](https://keepachangelog.com/en/1.0
 before starting to add changes. Use example [placed in the end of the page](#example-of-change-log-record)
 
 ## [Unreleased]
+
+## [3.16.0] 2024-06-14
+
 - Obsolete module removing - os2forms_consent
 - Obsolete module removing - webform_embed
 - Obsolete module removing - os2forms_webform_list
