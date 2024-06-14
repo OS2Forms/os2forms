@@ -78,6 +78,7 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
       - name: Install Dependencies
         run: |
+          composer config --no-plugins allow-plugins.mglaman/composer-drupal-lenient true
           composer install --no-interaction --no-progress
       - name: PHPCS
         run: |
