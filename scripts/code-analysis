@@ -11,9 +11,9 @@ drupal_composer() {
   composer --working-dir="$drupal_dir" --no-interaction "$@"
 }
 
-# Create new Drupal 9 project
+# Create new Drupal 10 project
 if [ ! -f "$drupal_dir/composer.json" ]; then
-  composer --no-interaction create-project drupal/recommended-project:^9 "$drupal_dir"
+  composer --no-interaction create-project drupal/recommended-project:^10 "$drupal_dir"
 fi
 # Copy our code into the modules folder
 mkdir -p "$drupal_dir/$module_path"

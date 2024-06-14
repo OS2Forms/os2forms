@@ -172,6 +172,7 @@ class NemloginRedirectSubscriber implements EventSubscriberInterface {
       if (!$authProviderPlugin->isAuthenticated()) {
         // Redirect directly to the external IdP.
         $response = new RedirectResponse($this->nemloginAuthProvider->getLoginUrl([], $authProviderPlugin->getPluginId())->toString());
+        $event->setResponse($response);
       }
       else {
         $settingFormConfig = $this->configFactory->get(SettingsForm::$configName);
