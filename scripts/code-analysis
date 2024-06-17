@@ -26,6 +26,11 @@ drupal_composer config minimum-stability dev
 # https://getcomposer.org/doc/06-config.md#allow-plugins
 drupal_composer config --no-plugins allow-plugins true
 
+# Making Drupal 10 compatible
+drupal_composer require psr/http-message:^1.0
+drupal_composer require mglaman/composer-drupal-lenient
+drupal_composer config --merge --json extra.drupal-lenient.allowed-list '["drupal/coc_forms_auto_export", "drupal/webform_node_element"]'
+
 drupal_composer require wikimedia/composer-merge-plugin
 drupal_composer config extra.merge-plugin.include "$module_path/composer.json"
 # https://www.drupal.org/project/drupal/issues/3220043#comment-14845434
