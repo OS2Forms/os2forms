@@ -239,6 +239,7 @@ final class MaestroNotificationHandler extends WebformHandlerBase {
       'cvr_element',
       'cvr_value_element',
       'os2forms_person_lookup',
+      'os2forms_mitid_child_other_guardian',
     ];
 
     $isAllowedElement = static fn ($e) => in_array($e['#type'], $elementTypes, TRUE);

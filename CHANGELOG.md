@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [S2FRMS-40] Adding child select autopopulate fields
+
 ## [3.15.2] 2024-05-27
 
 - [#108](https://github.com/OS2Forms/os2forms/pull/108)

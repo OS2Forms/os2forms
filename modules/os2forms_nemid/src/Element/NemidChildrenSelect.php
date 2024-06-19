@@ -17,4 +17,20 @@ use Drupal\Core\Render\Element\Select;
  */
 class NemidChildrenSelect extends Select {
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getInfo() {
+    return parent::getInfo() + [
+      '#ajax' => [
+        'callback' => [MitidChildrenSelectAjaxBehaviour::class, 'mitidChildrenSelectAjax'],
+        'event' => 'change',
+        'progress' => [
+          'type' => 'throbber',
+          'message' => $this->t('Please wait...'),
+        ],
+      ],
+    ];
+  }
+
 }

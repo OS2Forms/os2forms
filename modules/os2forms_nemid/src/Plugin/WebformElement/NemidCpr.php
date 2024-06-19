@@ -26,4 +26,11 @@ class NemidCpr extends ServiceplatformenCprElementBase implements NemidElementPe
     return CprLookupResult::CPR;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function appendNameAddressProtectedText(CprLookupResult $cprLookupResult) {
+    return '';
+  }
+
 }
