@@ -46,7 +46,6 @@ before starting to add changes. Use example [placed in the end of the page](#exa
   Fix array access with `purge_days` configuration.
 
 ## [3.14.1] 2024-01-16
->>>>>>> develop
 
 - CprFetchData adding ajax error fix
 
