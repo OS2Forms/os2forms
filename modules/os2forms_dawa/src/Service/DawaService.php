@@ -7,9 +7,9 @@ use Drupal\os2forms_dawa\Entity\DawaAddress;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
- * Class AuthProviderService.
+ * Class DawaService.
  *
- * @package Drupal\os2web_nemlogin\Service
+ * @package Drupal\os2forms_dawa\Service
  */
 class DawaService {
 

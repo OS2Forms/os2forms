@@ -3,6 +3,7 @@
 namespace Drupal\os2forms_dawa\Element;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\os2forms_dawa\Plugin\os2web\DataLookup\DatafordelerDataLookupInterface;
 use Drupal\webform\Element\WebformCompositeBase;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
@@ -94,8 +95,15 @@ class DawaElementAddressMatrikula extends WebformCompositeBase {
    *   Array of matrikula options key and the values are identical.
    */
   private static function getMatrikulaOptions($addressValue, array $element) {
+    $options = [];
+
     /** @var \Drupal\os2forms_dawa\Service\DawaService $dawaService */
     $dawaService = \Drupal::service('os2forms_dawa.service');
+
+    /** @var \Drupal\os2forms_dawa\Service\DatafordelerService $datafordelerService */
+
+    /** @var DatafordelerDataLookupInterface $datafordelerLookup */
+    $datafordelerLookup = \Drupal::service('plugin.manager.os2web_datalookup')->createInstance('datafordeler_data_lookup');
 
     // Getting address.
     $addressParams = new ParameterBag();
@@ -106,29 +114,30 @@ class DawaElementAddressMatrikula extends WebformCompositeBase {
     $address = $dawaService->getSingleAddress($addressParams);
 
     if ($address) {
-      // Getting matrikula options.
-      $matrikulaParams = new ParameterBag();
-      // Getting municipality code from address.
-      if ($municipality_code = $address->getMunicipalityCode()) {
-        $matrikulaParams->set('limit_by_municipality', $municipality_code);
-      }
-      // Getting property nr from address.
-      if ($property_nr = $address->getPropertyNumber()) {
-        $matrikulaParams->set('limit_by_property', $property_nr);
-      }
-      // If the matrikula option must not have the code.
-      if (isset($element['#remove_code'])) {
-        $matrikulaParams->set('remove_code', $element['#remove_code']);
-      }
+      $addressAccessId = $address->getAccessAddressId();
 
-      // Get the options.
-      $matrikulaOptions = $dawaService->getMatrikulaMatches($matrikulaParams);
+      // Find matrikula list from the houseid (husnummer):
+      $matrikulaIdList = $datafordelerLookup->getMatrikulaIds($addressAccessId);
 
-      // Use values as keys.
-      return array_combine($matrikulaOptions, $matrikulaOptions);
+      // Find Matrikula entry from matrikulas ID.
+      if (!empty($matrikulaIdList)) {
+        foreach ($matrikulaIdList as $matrikulaId) {
+          $matrikula = $datafordelerLookup->getMatrikulaEntry($matrikulaId);
+
+          if ($matrikula) {
+            $matrikulaOption = $matrikula->getMatrikulaNumber() . ' ' . $matrikula->getOwnershipName();
+
+            if (isset($element['#remove_code']) && !$element['#remove_code']) {
+              $matrikulaOption .= ' (' . $matrikula->getOwnerLicenseCode() . ')';
+            }
+
+            $options[$matrikulaOption] = $matrikulaOption;
+          }
+        }
+      }
     }
 
-    return [];
+    return $options;
   }
 
   /**
