@@ -46,7 +46,7 @@ class MitidChildPostalCode extends NemidElementBase {
   }
 
   /**
-   * Webform element validation handler for #type 'os2forms_mitid_child_postal_code'.
+   * Webform element validation handler for 'os2forms_mitid_child_postal_code'.
    */
   public static function validateMitidChildPostalCode(&$element, FormStateInterface $form_state, &$complete_form) {
     // Here you can add custom validation logic.

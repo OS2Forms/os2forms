@@ -46,7 +46,7 @@ class MitidChildHouseNr extends NemidElementBase {
   }
 
   /**
-   * Webform element validation handler for #type 'os2forms_mitid_child_house_nr'.
+   * Webform element validation handler for 'os2forms_mitid_child_house_nr'.
    */
   public static function validateMitidChildHouseNr(&$element, FormStateInterface $form_state, &$complete_form) {
     // Here you can add custom validation logic.

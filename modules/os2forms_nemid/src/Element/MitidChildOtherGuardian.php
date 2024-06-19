@@ -24,21 +24,21 @@ class MitidChildOtherGuardian extends Hidden {
     $class = static::class;
 
     $parentInfo = parent::getInfo() + [
-        '#element_validate' => [
-          [$class, 'validateMitidChildOtherGuardian'],
-        ],
-      ];
+      '#element_validate' => [
+        [$class, 'validateMitidChildOtherGuardian'],
+      ],
+    ];
 
     // Adding custom #pre_render.
     $parentInfo['#pre_render'] = [
-      [$class, 'preRenderMitidChildOtherGuardian']
+      [$class, 'preRenderMitidChildOtherGuardian'],
     ];
 
     return $parentInfo;
   }
 
   /**
-   * Webform element validation handler for #type 'os2forms_mitid_child_other_guardian'.
+   * Webform element validation handler 'os2forms_mitid_child_other_guardian'.
    */
   public static function validateMitidChildOtherGuardian(&$element, FormStateInterface $form_state, &$complete_form) {
     // Here you can add custom validation logic.
@@ -49,7 +49,10 @@ class MitidChildOtherGuardian extends Hidden {
    */
   public static function preRenderMitidChildOtherGuardian($element) {
     $element = parent::preRenderHidden($element);
-    static::setAttributes($element, ['os2forms-mitid-child-other-guardian', 'js-form-type-os2forms-mitid-child-other-guardian']);
+    static::setAttributes($element, [
+      'os2forms-mitid-child-other-guardian',
+      'js-form-type-os2forms-mitid-child-other-guardian',
+    ]);
 
     return $element;
   }

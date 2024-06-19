@@ -38,9 +38,9 @@ abstract class ServiceplatformenCprElementBase extends NemidElementBase {
   }
 
   /**
-   * Appends name and address protected text, if person has name/address protection.
+   * Appends name/address protected text, if person has name/address protection.
    *
-   * @param CprLookupResult $cprLookupResult
+   * @param \Drupal\os2web_datalookup\LookupResult\CprLookupResult $cprLookupResult
    *   Initialized CprLooupResult.
    *
    * @return string

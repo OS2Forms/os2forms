@@ -22,15 +22,15 @@ class NemidChildrenSelect extends Select {
    */
   public function getInfo() {
     return parent::getInfo() + [
-        '#ajax' => [
-          'callback' => [MitidChildrenSelectAjaxBehaviour::class, 'mitidChildrenSelectAjax'],
-          'event' => 'change',
-          'progress' => [
-            'type' => 'throbber',
-            'message' => $this->t('Please wait...'),
-          ],
+      '#ajax' => [
+        'callback' => [MitidChildrenSelectAjaxBehaviour::class, 'mitidChildrenSelectAjax'],
+        'event' => 'change',
+        'progress' => [
+          'type' => 'throbber',
+          'message' => $this->t('Please wait...'),
         ],
-      ];
+      ],
+    ];
   }
 
 }

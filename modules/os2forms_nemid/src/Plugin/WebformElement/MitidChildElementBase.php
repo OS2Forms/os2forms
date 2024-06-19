@@ -24,13 +24,13 @@ abstract class MitidChildElementBase extends WebformElementBase {
     // @see \Drupal\webform\Plugin\WebformElementBase::getDefaultProperties
     // @see \Drupal\webform\Plugin\WebformElementBase::getDefaultBaseProperties
     $properties = parent::getDefaultProperties() + [
-        'multiple' => '',
-        'size' => '',
-        'minlength' => '',
-        'maxlength' => '',
-        'placeholder' => '',
-        'readonly' => '',
-      ];
+      'multiple' => '',
+      'size' => '',
+      'minlength' => '',
+      'maxlength' => '',
+      'placeholder' => '',
+      'readonly' => '',
+    ];
 
     return $properties;
   }

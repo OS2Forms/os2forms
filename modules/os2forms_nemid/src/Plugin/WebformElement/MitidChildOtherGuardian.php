@@ -17,6 +17,9 @@ use Drupal\webform\WebformSubmissionInterface;
  */
 class MitidChildOtherGuardian extends Hidden {
 
+  /**
+   * {@inheritdoc}
+   */
   public function getValue(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
     if (isset($options['email']) || isset($options['pdf'])) {
       return '';
@@ -24,4 +27,5 @@ class MitidChildOtherGuardian extends Hidden {
 
     return parent::getValue($element, $webform_submission, $options);
   }
+
 }

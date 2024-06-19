@@ -46,7 +46,7 @@ class MitidChildCoaddress extends NemidElementBase {
   }
 
   /**
-   * Webform element validation handler for #type 'os2forms_mitid_child_coaddress'.
+   * Webform element validation handler for 'os2forms_mitid_child_coaddress'.
    */
   public static function validateMitidChildCoaddress(&$element, FormStateInterface $form_state, &$complete_form) {
     // Here you can add custom validation logic.

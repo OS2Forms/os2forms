@@ -46,7 +46,7 @@ class MitidChildKommunekode extends NemidElementBase {
   }
 
   /**
-   * Webform element validation handler for #type 'os2forms_mitid_child_kommunekode'.
+   * Webform element validation handler for 'os2forms_mitid_child_kommunekode'.
    */
   public static function validateMitidChildKommunekode(&$element, FormStateInterface $form_state, &$complete_form) {
     // Here you can add custom validation logic.

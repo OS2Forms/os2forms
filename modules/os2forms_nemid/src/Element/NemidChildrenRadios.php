@@ -2,7 +2,6 @@
 
 namespace Drupal\os2forms_nemid\Element;
 
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element\Radios;
 
 /**
@@ -23,14 +22,15 @@ class NemidChildrenRadios extends Radios {
    */
   public function getInfo() {
     return parent::getInfo() + [
-        '#ajax' => [
-          'callback' => [MitidChildrenSelectAjaxBehaviour::class, 'mitidChildrenSelectAjax'],
-          'event' => 'change',
-          'progress' => [
-            'type' => 'throbber',
-            'message' => $this->t('Please wait...'),
-          ],
+      '#ajax' => [
+        'callback' => [MitidChildrenSelectAjaxBehaviour::class, 'mitidChildrenSelectAjax'],
+        'event' => 'change',
+        'progress' => [
+          'type' => 'throbber',
+          'message' => $this->t('Please wait...'),
         ],
-      ];
+      ],
+    ];
   }
+
 }

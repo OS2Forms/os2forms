@@ -2,8 +2,6 @@
 
 namespace Drupal\os2forms_nemid\Plugin\WebformElement;
 
-use Drupal\webform\Plugin\WebformElementBase;
-
 /**
  * Provides a 'os2forms_mitid_child_floor' element.
  *
