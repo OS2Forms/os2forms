@@ -7,7 +7,7 @@ use Drupal\os2forms_dawa\Entity\DawaAddress;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
- * Class DawaService.
+ * DAWA API service class.
  *
  * @package Drupal\os2forms_dawa\Service
  */

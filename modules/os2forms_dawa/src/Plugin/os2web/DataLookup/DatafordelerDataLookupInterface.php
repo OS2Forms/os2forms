@@ -15,7 +15,7 @@ use Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupInterface;
 interface DatafordelerDataLookupInterface extends DataLookupInterface {
 
   /**
-   * Returns list of ID for Matrikula / jordstykke that is related with this address.
+   * Returns list of ID for Matrikula / jordstykke related with this address.
    *
    * @param string $addressAccessId
    *   Address to make search against.
@@ -31,8 +31,9 @@ interface DatafordelerDataLookupInterface extends DataLookupInterface {
    * @param string $matrikulaId
    *   Id to make search  against.
    *
-   * @return DatafordelerMatrikula|NULL
+   * @return \Drupal\os2forms_dawa\Entity\DatafordelerMatrikula|null
    *   Matrikula entry or NULL.
    */
   public function getMatrikulaEntry(string $matrikulaId) : ?DatafordelerMatrikula;
+
 }

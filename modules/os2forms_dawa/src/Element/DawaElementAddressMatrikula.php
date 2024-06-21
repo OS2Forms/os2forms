@@ -3,7 +3,6 @@
 namespace Drupal\os2forms_dawa\Element;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\os2forms_dawa\Plugin\os2web\DataLookup\DatafordelerDataLookupInterface;
 use Drupal\webform\Element\WebformCompositeBase;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
@@ -100,9 +99,7 @@ class DawaElementAddressMatrikula extends WebformCompositeBase {
     /** @var \Drupal\os2forms_dawa\Service\DawaService $dawaService */
     $dawaService = \Drupal::service('os2forms_dawa.service');
 
-    /** @var \Drupal\os2forms_dawa\Service\DatafordelerService $datafordelerService */
-
-    /** @var DatafordelerDataLookupInterface $datafordelerLookup */
+    /** @var \Drupal\os2forms_dawa\Plugin\os2web\DataLookup\DatafordelerDataLookupInterface $datafordelerLookup */
     $datafordelerLookup = \Drupal::service('plugin.manager.os2web_datalookup')->createInstance('datafordeler_data_lookup');
 
     // Getting address.

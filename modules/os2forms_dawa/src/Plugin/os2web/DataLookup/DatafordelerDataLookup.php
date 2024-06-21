@@ -8,7 +8,6 @@ use Drupal\os2forms_dawa\Entity\DatafordelerMatrikula;
 use Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupBase;
 use GuzzleHttp\ClientInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpClient\HttpClient;
 
 /**
  * Defines a plugin for Datafordeler Data.
@@ -23,7 +22,7 @@ class DatafordelerDataLookup extends DataLookupBase implements DatafordelerDataL
   /**
    * The HTTP client to fetch the feed data with.
    *
-   * @var ClientInterface
+   * @var \GuzzleHttp\ClientInterface
    */
   protected $httpClient;
 
@@ -43,7 +42,7 @@ class DatafordelerDataLookup extends DataLookupBase implements DatafordelerDataL
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('http_client')
+      $container->get('http_client'),
     );
   }
 
@@ -51,7 +50,7 @@ class DatafordelerDataLookup extends DataLookupBase implements DatafordelerDataL
    * {@inheritdoc}
    */
   public function getMatrikulaIds(string $addressAccessId) : array {
-    $url = "https://services.datafordeler.dk/BBR/BBRPublic/1/rest/grund";//
+    $url = "https://services.datafordeler.dk/BBR/BBRPublic/1/rest/grund";
 
     $configuration = $this->getConfiguration();
     $json = $this->httpClient->request('GET', $url, [
@@ -59,8 +58,8 @@ class DatafordelerDataLookup extends DataLookupBase implements DatafordelerDataL
         'husnummer' => $addressAccessId,
         'status' => 7,
         'username' => $configuration['username'],
-        'password' => $configuration['password']
-      ]
+        'password' => $configuration['password'],
+      ],
     ])->getBody();
 
     $jsonDecoded = json_decode($json, TRUE);
@@ -82,8 +81,8 @@ class DatafordelerDataLookup extends DataLookupBase implements DatafordelerDataL
       'query' => [
         'jordstykkeid' => $matrikulaId,
         'username' => $configuration['username'],
-        'password' => $configuration['password']
-      ]
+        'password' => $configuration['password'],
+      ],
     ])->getBody();
 
     $jsonDecoded = json_decode($json, TRUE);
@@ -129,54 +128,11 @@ class DatafordelerDataLookup extends DataLookupBase implements DatafordelerDataL
   /**
    * {@inheritdoc}
    */
-  public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
-    parent::validateConfigurationForm($form, $form_state);
-
-//    // Validating 'address_autocomplete_path', 'block_autocomplete_path',
-//    // 'matrikula_autocomplete_path'.
-//    $elementsToValidate = [
-//      'address_autocomplete_path',
-//      'block_autocomplete_path',
-//      'matrikula_autocomplete_path',
-//    ];
-//    foreach ($elementsToValidate as $elementKey) {
-//      $autocomplete_path = $form_state->getValue($elementKey);
-//      $json = file_get_contents($autocomplete_path);
-//      $jsonDecoded = json_decode($json, TRUE);
-//      if (empty($jsonDecoded)) {
-//        $form_state->setErrorByName($elementKey, $this->t('URL is not valid or it does not provide the result in the required format'));
-//      }
-//      else {
-//        $entry = reset($jsonDecoded);
-//        if (!array_key_exists('tekst', $entry)) {
-//          $form_state->setErrorByName($elementKey, $this->t('URL is not valid or it does not provide the result in the required format'));
-//        }
-//      }
-//    }
-//
-//    // Validating address_api_path.
-//    $autocomplete_path = $form_state->getValue('address_api_path');
-//    // Limiting the output.
-//    $json = file_get_contents($autocomplete_path . '?per_side=1');
-//    $jsonDecoded = json_decode($json, TRUE);
-//    if (empty($jsonDecoded)) {
-//      $form_state->setErrorByName('address_api_path', $this->t('URL is not valid or it does not provide the result in the required format'));
-//    }
-//    else {
-//      $entry = reset($jsonDecoded);
-//      if (!array_key_exists('id', $entry)) {
-//        $form_state->setErrorByName('address_api_path', $this->t('URL is not valid or it does not provide the result in the required format'));
-//      }
-//    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
     $configuration = $this->getConfiguration();
     $configuration['username'] = $form_state->getValue('username');
     $configuration['password'] = $form_state->getValue('password');
     $this->setConfiguration($configuration);
   }
+
 }
