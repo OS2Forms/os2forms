@@ -2,14 +2,13 @@
 
 namespace Drupal\os2forms_encrypt\Helper;
 
-use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\encrypt\EncryptServiceInterface;
 use Drupal\encrypt\Entity\EncryptionProfile;
-use Drupal\webform\Entity\WebformSubmission;
-use Drupal\webform\WebformInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * The Os2FormsEncryptor class.
+ */
 class Os2FormsEncryptor {
 
   /**
@@ -26,13 +25,14 @@ class Os2FormsEncryptor {
    */
   private EntityTypeManagerInterface $entityTypeManager;
 
-
   public function __construct(EncryptServiceInterface $encryptService, EntityTypeManagerInterface $entityTypeManager) {
     $this->encryptionService = $encryptService;
     $this->entityTypeManager = $entityTypeManager;
   }
 
   /**
+   * Encrypts value if element is configured to be encrypted.
+   *
    * @param string $value
    *   The value that should be encrypted.
    * @param string $element
@@ -41,10 +41,10 @@ class Os2FormsEncryptor {
    *   The webform id.
    *
    * @return string
-   *   The encrypted string if element is configured to be encrypted.
+   *   The resulting value.
    */
   public function encryptValue(string $value, string $element, string $webformId): string {
-    /** @var WebformInterface $webform */
+    /** @var \Drupal\webform\WebformInterface $webform */
     $webform = $this->entityTypeManager->getStorage('webform')->load($webformId);
 
     $config = $webform->getThirdPartySetting('webform_encrypt', 'element');
