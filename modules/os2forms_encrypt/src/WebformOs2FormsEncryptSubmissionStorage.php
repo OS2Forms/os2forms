@@ -342,7 +342,6 @@ class WebformOs2FormsEncryptSubmissionStorage extends WebformEncryptSubmissionSt
         }
       }
 
-
       foreach ($submissions_data as $sid => $submission_data) {
         $this->decryptChildren($submission_data);
         $webform_submissions[$sid]->setData($submission_data);
@@ -372,7 +371,8 @@ class WebformOs2FormsEncryptSubmissionStorage extends WebformEncryptSubmissionSt
         else {
           if (is_null($value)) {
             $data[$element_name] = $value;
-          } else {
+          }
+          else {
             $encrypted_value = $this->encrypt($value, $encryption_profile);
             // Save the encrypted data value.
             $data[$element_name] = $encrypted_value;
@@ -392,14 +392,9 @@ class WebformOs2FormsEncryptSubmissionStorage extends WebformEncryptSubmissionSt
    * @see Drupal\webform\WebformSubmissionStorage::doPreSave
    * @see Drupal\Core\Entity\ContentEntityStorageBase::doPreSave
    * @see Drupal\Core\Entity\EntityStorageBase::doPreSave
-   *
    */
-  protected function doPreSave(EntityInterface $entity)
-  {
+  protected function doPreSave(EntityInterface $entity) {
     /** @var \Drupal\webform\WebformSubmissionInterface $entity */
-
-    // From ContentEntityStorageBase.php.
-
     // Sync the changes made in the fields array to the internal values array.
     $entity->updateOriginalValues();
 
