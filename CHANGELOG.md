@@ -11,6 +11,10 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## [3.15.3] 2024-06-25
+
+- [OS-74] Replacing DAWA matrikula select with Datafordeler select
+
 ## [3.15.2] 2024-05-27
 
 - [#108](https://github.com/OS2Forms/os2forms/pull/108)
