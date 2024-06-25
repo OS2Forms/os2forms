@@ -60,7 +60,6 @@ class Os2FormsEncryptor {
     ];
 
     return serialize($encrypted_data);
-
   }
 
 }

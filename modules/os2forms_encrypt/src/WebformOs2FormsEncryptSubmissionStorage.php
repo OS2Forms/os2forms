@@ -13,10 +13,15 @@ use Drupal\webform_encrypt\WebformEncryptSubmissionStorage;
 use Drupal\webform_revisions\Controller\WebformRevisionsController;
 
 /**
- * This class extension WebformEncryptSubmissionStorage.
+ * This class extends WebformEncryptSubmissionStorage.
  *
  * This is to encrypt just the data sent to database and check if webform
  * revisions are enabled.
+ *
+ * The reason we need to tweak the encryption made by
+ * WebformEncryptSubmissionStorage is that the value of computed elements,
+ * e.g. Computed Twig, will be attempted computed AFTER encryptio. This can
+ * cause all sorts of exceptions and type errors on runtime.
  *
  * This mostly runs the same code (copied here as multiple
  * inherits is not a thing in PHP), with minor tweaks.
