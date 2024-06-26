@@ -4,7 +4,7 @@ namespace Drupal\os2forms_digital_post\Helper;
 
 use Drupal\os2forms_digital_post\Exception\CertificateLocatorException;
 use GuzzleHttp\Client;
-use Http\Adapter\Guzzle6\Client as GuzzleAdapter;
+use Http\Adapter\Guzzle7\Client as GuzzleAdapter;
 use Http\Factory\Guzzle\RequestFactory;
 use ItkDev\AzureKeyVault\Authorisation\VaultToken;
 use ItkDev\AzureKeyVault\KeyVault\VaultSecret;
