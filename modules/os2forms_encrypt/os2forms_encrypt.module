@@ -33,3 +33,15 @@ function os2forms_encrypt_entity_type_alter(array &$entity_types): void {
     $entity_types['webform_submission']->setStorageClass('Drupal\os2forms_encrypt\WebformOs2FormsEncryptSubmissionStorage');
   }
 }
+
+/**
+ * Implements hook_webform_computed_post_save_field_alter().
+ *
+ * Ensure encryption of computed element values.
+ */
+function os2forms_encrypt_webform_computed_post_save_field_alter(array &$fields): void {
+  /** @var \Drupal\os2forms_encrypt\Helper\Os2FormsEncryptor $os2formsEncryptor */
+  $os2formsEncryptor = \Drupal::service('os2forms_encrypt.encryptor');
+
+  $fields['value'] = $os2formsEncryptor->encryptValue($fields['value'], $fields['name'], $fields['webform_id']);
+}

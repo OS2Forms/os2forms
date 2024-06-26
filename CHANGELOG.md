@@ -11,6 +11,9 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [#114](https://github.com/OS2Forms/os2forms/pull/114)
+  Encrypted computed elements.
+
 ## [3.15.3] 2024-06-25
 
 - [OS-74] Replacing DAWA matrikula select with Datafordeler select
