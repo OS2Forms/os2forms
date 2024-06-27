@@ -58,6 +58,23 @@ class SettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('enabled'),
     ];
 
+    // TODO: RESOLVE WITH DEPENDENCY INJECTION
+    $encryptionOptions = \Drupal::service('encrypt.encryption_profile.manager')
+      ->getEncryptionProfileNamesAsOptions();
+
+    $form['default_encryption_profile'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Default encryption profile'),
+      '#description' => $this->t('Upon saving webforms, elements that are not configured to be encrypted will be configured to encrypted with the selected encryption profile. The os2forms-encrypt:enable command will also use the default encryption profile.'),
+      '#options' => $encryptionOptions,
+      '#default_value' => $config->get('default_encryption_profile'),
+      '#states' => [
+        'visible' => [
+          ':input[name="enabled"]' => ['checked' => TRUE],
+        ]
+      ]
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -69,6 +86,7 @@ class SettingsForm extends ConfigFormBase {
 
     $this->config(self::$configName)
       ->set('enabled', $form_state->getValue('enabled'))
+      ->set('default_encryption_profile', $form_state->getValue('default_encryption_profile'))
       ->save();
   }
 

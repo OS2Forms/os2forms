@@ -6,23 +6,6 @@
  */
 
 /**
- * Implements hook_webform_element_info_alter().
- *
- * Add extra processing function to "force" enabled encryption on webform
- * elements when they are being saved in the UI.
- */
-function os2forms_encrypt_element_info_alter(array &$definitions): void {
-  foreach ($definitions as $element_id => &$definition) {
-    if ($element_id === 'webform_element_encrypt') {
-      $definition['#process'][] = [
-        'Drupal\os2forms_encrypt\Element\WebformElementEncrypt',
-        'processWebformElementEncrypt',
-      ];
-    }
-  }
-}
-
-/**
  * Implements hook_entity_type_alter().
  *
  * Override webform submission class to enable encryption and revision.
@@ -44,4 +27,31 @@ function os2forms_encrypt_webform_computed_post_save_field_alter(array &$fields)
   $os2formsEncryptor = \Drupal::service('os2forms_encrypt.encryptor');
 
   $fields['value'] = $os2formsEncryptor->encryptValue($fields['value'], $fields['name'], $fields['webform_id']);
+}
+
+/**
+ * Implementes hook_webform_presave().
+ *
+ * Enable encryption on all webform elements, whenever saved.
+ */
+function os2forms_encrypt_webform_presave(\Drupal\webform\WebformInterface $entity): void {
+  /** @var \Drupal\os2forms_encrypt\Helper\Os2FormsEncryptor $os2formsEncryptor */
+  $os2formsEncryptor = Drupal::service('os2forms_encrypt.encryptor');
+
+  $os2formsEncryptor->enableEncryption($entity);
+}
+
+/**
+ * Implements hook_form_alter().
+ *
+ * Removes 'element_encrypt' element from element forms.
+ *
+ * The hook_webform_presave method ensures all elements are
+ * configured to be encrypted, making this element redundant.
+ */
+function os2forms_encrypt_form_alter(array &$form, \Drupal\Core\Form\FormStateInterface $form_state, string $form_id) {
+  /** @var \Drupal\os2forms_encrypt\Helper\FormHelper $formHelper */
+  $formHelper = Drupal::service('os2forms_encrypt.form_helper');
+
+  $formHelper->formAlter($form, $form_state, $form_id);
 }

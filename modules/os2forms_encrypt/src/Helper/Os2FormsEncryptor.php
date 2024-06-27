@@ -2,9 +2,13 @@
 
 namespace Drupal\os2forms_encrypt\Helper;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\encrypt\EncryptServiceInterface;
 use Drupal\encrypt\Entity\EncryptionProfile;
+use Drupal\os2forms_encrypt\Form\SettingsForm;
+use Drupal\webform\Entity\Webform;
+use Drupal\webform\WebformInterface;
 
 /**
  * The Os2FormsEncryptor class.
@@ -25,9 +29,17 @@ class Os2FormsEncryptor {
    */
   private EntityTypeManagerInterface $entityTypeManager;
 
-  public function __construct(EncryptServiceInterface $encryptService, EntityTypeManagerInterface $entityTypeManager) {
+  /**
+   * The config factory.
+   *
+   * @var ConfigFactoryInterface
+   */
+  private ConfigFactoryInterface $configFactory;
+
+  public function __construct(EncryptServiceInterface $encryptService, EntityTypeManagerInterface $entityTypeManager, ConfigFactoryInterface $configFactory) {
     $this->encryptionService = $encryptService;
     $this->entityTypeManager = $entityTypeManager;
+    $this->configFactory = $configFactory;
   }
 
   /**
@@ -60,6 +72,37 @@ class Os2FormsEncryptor {
     ];
 
     return serialize($encrypted_data);
+  }
+
+  /**
+   * Enables encrypt on all elements of webform.
+   *
+   * @param WebformInterface $webform
+   *   The webform.
+   *
+   * @return void
+   */
+  public function enableEncryption(WebformInterface $webform): void {
+
+    // Check that encryption is enabled.
+    $config = $this->configFactory->get(SettingsForm::$configName);
+    if (!$config->get('enabled') || !$webform instanceof Webform) {
+      return;
+    }
+
+    // Check that there are any elements to enable encryption on.
+    $elements = $webform->getElementsDecoded();
+
+    if (empty($elements)) {
+        return;
+    }
+
+    $encryptedElements = array_map(static fn () => [
+        'encrypt' => TRUE,
+        'encrypt_profile' => $config->get('default_encryption_profile'),
+    ] , $elements);
+
+    $webform->setThirdPartySetting('webform_encrypt', 'element', $encryptedElements);
   }
 
 }
