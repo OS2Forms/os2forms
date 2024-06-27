@@ -32,7 +32,7 @@ class Os2FormsEncryptor {
   /**
    * The config factory.
    *
-   * @var ConfigFactoryInterface
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
   private ConfigFactoryInterface $configFactory;
 
