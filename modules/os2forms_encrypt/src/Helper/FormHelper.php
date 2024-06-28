@@ -22,7 +22,7 @@ class FormHelper {
   public function formAlter(array &$form, FormStateInterface $form_state, string $form_id) {
     if ('webform_ui_element_form' === $form_id) {
       if (isset($form['element_encrypt'])) {
-        unset($form['element_encrypt']);
+        $form['element_encrypt']['#access'] = FALSE;
       }
     }
   }
