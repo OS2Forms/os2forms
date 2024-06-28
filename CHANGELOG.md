@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [#117](https://github.com/OS2Forms/os2forms/pull/117)
+  Encrypts all elements if encryption enabled.
 - [#114](https://github.com/OS2Forms/os2forms/pull/114)
   Encrypted computed elements.
 

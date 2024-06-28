@@ -2,9 +2,12 @@
 
 namespace Drupal\os2forms_encrypt\Form;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
+use Drupal\encrypt\EncryptionProfileManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class SettingsForm.
@@ -19,6 +22,28 @@ class SettingsForm extends ConfigFormBase {
    * @var string
    */
   public static string $configName = 'os2forms_encrypt.settings';
+
+  /**
+   * The config factory.
+   *
+   * @var \Drupal\encrypt\EncryptionProfileManager
+   */
+  private EncryptionProfileManager $encryptionProfileManager;
+
+  public function __construct(ConfigFactoryInterface $config_factory, EncryptionProfileManager $encryptionProfileManager) {
+    parent::__construct($config_factory);
+    $this->encryptionProfileManager = $encryptionProfileManager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('config.factory'),
+      $container->get('encrypt.encryption_profile.manager')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -58,6 +83,21 @@ class SettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('enabled'),
     ];
 
+    $encryptionOptions = $this->encryptionProfileManager->getEncryptionProfileNamesAsOptions();
+
+    $form['default_encryption_profile'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Default encryption profile'),
+      '#description' => $this->t('Upon saving webforms, elements that are not configured to be encrypted will be configured to encrypted with the selected encryption profile. The os2forms-encrypt:enable command will also use the default encryption profile.'),
+      '#options' => $encryptionOptions,
+      '#default_value' => $config->get('default_encryption_profile'),
+      '#states' => [
+        'visible' => [
+          ':input[name="enabled"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -69,6 +109,7 @@ class SettingsForm extends ConfigFormBase {
 
     $this->config(self::$configName)
       ->set('enabled', $form_state->getValue('enabled'))
+      ->set('default_encryption_profile', $form_state->getValue('default_encryption_profile'))
       ->save();
   }
 

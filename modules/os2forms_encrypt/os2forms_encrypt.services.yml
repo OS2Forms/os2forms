@@ -1,4 +1,11 @@
 services:
   os2forms_encrypt.encryptor:
     class: Drupal\os2forms_encrypt\Helper\Os2FormsEncryptor
-    arguments: ['@encryption', '@entity_type.manager']
+    arguments: ['@encryption', '@entity_type.manager', '@config.factory']
+
+  os2forms_encrypt.form_helper:
+    class: Drupal\os2forms_encrypt\Helper\FormHelper
+
+  os2forms_encrypt.settings_form:
+    class: Drupal\os2forms_encrypt\Form\SettingsForm
+    arguments: ['@config.factory', '@encrypt.encryption_profile.manager']
