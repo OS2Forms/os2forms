@@ -20,20 +20,20 @@ interface DatafordelerDataLookupInterface extends DataLookupInterface {
    * @param string $addressAccessId
    *   Address to make search against.
    *
-   * @return array
+   * @return string|null
    *   List if IDs.
    */
-  public function getMatrikulaIds(string $addressAccessId) : array;
+  public function getMatrikulaId(string $addressAccessId) : ?string;
 
   /**
-   * Returns matrikule entry that is found byt this ID.
+   * Returns matrikula entries that is found byt this ID.
    *
    * @param string $matrikulaId
    *   Id to make search  against.
    *
-   * @return \Drupal\os2forms_dawa\Entity\DatafordelerMatrikula|null
-   *   Matrikula entry or NULL.
+   * @return array
+   *   Matrikula entries list.
    */
-  public function getMatrikulaEntry(string $matrikulaId) : ?DatafordelerMatrikula;
+  public function getMatrikulaEntries(string $matrikulaId) : array;
 
 }

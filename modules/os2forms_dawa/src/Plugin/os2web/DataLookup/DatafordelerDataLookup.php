@@ -2,6 +2,7 @@
 
 namespace Drupal\os2forms_dawa\Plugin\os2web\DataLookup;
 
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\os2forms_dawa\Entity\DatafordelerMatrikula;
@@ -49,7 +50,7 @@ class DatafordelerDataLookup extends DataLookupBase implements DatafordelerDataL
   /**
    * {@inheritdoc}
    */
-  public function getMatrikulaIds(string $addressAccessId) : array {
+  public function getMatrikulaId(string $addressAccessId) : ?string {
     $url = "https://services.datafordeler.dk/BBR/BBRPublic/1/rest/grund";
 
     $configuration = $this->getConfiguration();
@@ -64,16 +65,19 @@ class DatafordelerDataLookup extends DataLookupBase implements DatafordelerDataL
 
     $jsonDecoded = json_decode($json, TRUE);
     if (is_array($jsonDecoded)) {
-      return $jsonDecoded[0]['jordstykkeList'];
+      if (NestedArray::keyExists($jsonDecoded, [0, 'jordstykkeList', 0])) {
+        return NestedArray::getValue($jsonDecoded, [0, 'jordstykkeList', 0]);
+      }
     }
 
-    return [];
+    return NULL;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getMatrikulaEntry(string $matrikulaId) : ?DatafordelerMatrikula {
+  public function getMatrikulaEntries(string $matrikulaId) : array {
+    $matrikulaEntries = [];
     $url = "https://services.datafordeler.dk/Matriklen2/Matrikel/2.0.0/rest/SamletFastEjendom";
 
     $configuration = $this->getConfiguration();
@@ -86,11 +90,17 @@ class DatafordelerDataLookup extends DataLookupBase implements DatafordelerDataL
     ])->getBody();
 
     $jsonDecoded = json_decode($json, TRUE);
+
     if (is_array($jsonDecoded)) {
-      return new DatafordelerMatrikula($jsonDecoded);
+      if (NestedArray::keyExists($jsonDecoded, ['features', 0, 'properties', 'jordstykke'])) {
+        $jordstykker = NestedArray::getValue($jsonDecoded, ['features', 0, 'properties', 'jordstykke']);
+        foreach ($jordstykker as $jordstyk) {
+          $matrikulaEntries[] = new DatafordelerMatrikula($jordstyk);
+        }
+      }
     }
 
-    return NULL;
+    return $matrikulaEntries;
   }
 
   /**

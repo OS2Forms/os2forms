@@ -41,13 +41,9 @@ class DatafordelerMatrikula {
    *   Address properties as JSON metadata.
    */
   public function __construct(array $json) {
-    if (isset($json['features']) && is_array($json['features'])) {
-      $jordstykke = $json['features'][0]['properties']['jordstykke'][0];
-
-      $this->ownerLicenseCode = $jordstykke['properties']['ejerlavskode'];
-      $this->ownershipName = $jordstykke['properties']['ejerlavsnavn'];
-      $this->matrikulaNumber = $jordstykke['properties']['matrikelnummer'];
-    }
+    $this->ownerLicenseCode = $json['properties']['ejerlavskode'];
+    $this->ownershipName = $json['properties']['ejerlavsnavn'];
+    $this->matrikulaNumber = $json['properties']['matrikelnummer'];
   }
 
   /**
