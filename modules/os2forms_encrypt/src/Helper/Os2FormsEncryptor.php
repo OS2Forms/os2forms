@@ -77,10 +77,8 @@ class Os2FormsEncryptor {
   /**
    * Enables encrypt on all elements of webform.
    *
-   * @param WebformInterface $webform
+   * @param \Drupal\webform\WebformInterface $webform
    *   The webform.
-   *
-   * @return void
    */
   public function enableEncryption(WebformInterface $webform): void {
 
@@ -94,13 +92,13 @@ class Os2FormsEncryptor {
     $elements = $webform->getElementsDecoded();
 
     if (empty($elements)) {
-        return;
+      return;
     }
 
     $encryptedElements = array_map(static fn () => [
-        'encrypt' => TRUE,
-        'encrypt_profile' => $config->get('default_encryption_profile'),
-    ] , $elements);
+      'encrypt' => TRUE,
+      'encrypt_profile' => $config->get('default_encryption_profile'),
+    ], $elements);
 
     $webform->setThirdPartySetting('webform_encrypt', 'element', $encryptedElements);
   }

@@ -30,14 +30,15 @@ class SettingsForm extends ConfigFormBase {
    */
   private EncryptionProfileManager $encryptionProfileManager;
 
-  public function __construct(ConfigFactoryInterface $config_factory, EncryptionProfileManager $encryptionProfileManager)
-  {
+  public function __construct(ConfigFactoryInterface $config_factory, EncryptionProfileManager $encryptionProfileManager) {
     parent::__construct($config_factory);
     $this->encryptionProfileManager = $encryptionProfileManager;
   }
 
-  public static function create(ContainerInterface $container)
-  {
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
       $container->get('encrypt.encryption_profile.manager')
@@ -93,8 +94,8 @@ class SettingsForm extends ConfigFormBase {
       '#states' => [
         'visible' => [
           ':input[name="enabled"]' => ['checked' => TRUE],
-        ]
-      ]
+        ],
+      ],
     ];
 
     return parent::buildForm($form, $form_state);

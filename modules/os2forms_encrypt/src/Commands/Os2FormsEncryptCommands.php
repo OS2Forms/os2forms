@@ -64,7 +64,6 @@ class Os2FormsEncryptCommands extends DrushCommands {
     // Load all webform entities.
     $webforms = $webformStorage->loadMultiple();
 
-
     /** @var \Drupal\webform\Entity\Webform $webform */
     foreach ($webforms as $webform) {
       $elements = $webform->getElementsDecoded();
