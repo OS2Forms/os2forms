@@ -51,22 +51,18 @@ class DatafordelerDataLookup extends DataLookupBase implements DatafordelerDataL
    * {@inheritdoc}
    */
   public function getMatrikulaId(string $addressAccessId) : ?string {
-    $url = "https://services.datafordeler.dk/BBR/BBRPublic/1/rest/grund";
+    $url = "https://services.datafordeler.dk/DAR/DAR/3.0.0/rest/husnummerTilJordstykke";
 
-    $configuration = $this->getConfiguration();
     $json = $this->httpClient->request('GET', $url, [
       'query' => [
-        'husnummer' => $addressAccessId,
-        'status' => 7,
-        'username' => $configuration['username'],
-        'password' => $configuration['password'],
+        'husnummerid' => $addressAccessId,
       ],
     ])->getBody();
 
     $jsonDecoded = json_decode($json, TRUE);
     if (is_array($jsonDecoded)) {
-      if (NestedArray::keyExists($jsonDecoded, [0, 'jordstykkeList', 0])) {
-        return NestedArray::getValue($jsonDecoded, [0, 'jordstykkeList', 0]);
+      if (NestedArray::keyExists($jsonDecoded, ['gældendeJordstykke', 'jordstykkeLokalId'])) {
+        return NestedArray::getValue($jsonDecoded, ['gældendeJordstykke', 'jordstykkeLokalId']);
       }
     }
 
