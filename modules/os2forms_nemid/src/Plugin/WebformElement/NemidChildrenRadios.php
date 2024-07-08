@@ -142,7 +142,7 @@ class NemidChildrenRadios extends Radios implements NemidElementPersonalInterfac
         if (is_array($children) && !empty($children)) {
           foreach ($children as $child) {
             if ($child['nameAddressProtected']) {
-              $options[$child['cpr']] = $child['cpr'] . ' (Navne- og adressebeskyttet)';
+              $options[$child['cpr']] = $child['cpr'] . ' (' . t('Name and address protection') . ')';
               $showAddressNameProtectionMessage = TRUE;
             }
             else {
@@ -156,7 +156,7 @@ class NemidChildrenRadios extends Radios implements NemidElementPersonalInterfac
     $element['#options'] = $options;
 
     if ($showAddressNameProtectionMessage) {
-      $element['#suffix'] = $element['#address_protection_help_text'];
+      $element['#suffix'] = '<div>' . $element['#address_protection_help_text'] . '</div>';
     }
   }
 

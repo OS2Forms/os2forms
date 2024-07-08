@@ -31,23 +31,23 @@ abstract class ServiceplatformenCprElementBase extends NemidElementBase {
 
         // Appending name and address protection.
         if (!empty($value)) {
-          $element['#value'] .= $this->appendNameAddressProtectedText($cprLookupResult);
+          $element['#value'] .= $this->getNameAddressProtectedText($cprLookupResult);
         }
       }
     }
   }
 
   /**
-   * Appends name/address protected text, if person has name/address protection.
+   * Returns name/address protected text, if person has name/address protection.
    *
    * @param \Drupal\os2web_datalookup\LookupResult\CprLookupResult $cprLookupResult
    *   Initialized CprLooupResult.
    *
    * @return string
-   *   String " (Navne- og adressebeskyttet)" or nothing.
+   *   String indicating Name and Address protection or nothing.
    */
-  public function appendNameAddressProtectedText(CprLookupResult $cprLookupResult) {
-    return $cprLookupResult->isNameAddressProtected() ? ' (Navne- og adressebeskyttet)' : '';
+  public function getNameAddressProtectedText(CprLookupResult $cprLookupResult) {
+    return $cprLookupResult->isNameAddressProtected() ? ' (' . t('Name and address protection') . ')' : '';
   }
 
 }

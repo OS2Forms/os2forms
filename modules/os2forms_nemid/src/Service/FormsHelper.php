@@ -139,15 +139,7 @@ class FormsHelper {
    *   CPRLookupResult or NULL.
    */
   public static function retrieveCachedCprLookupResult(FormStateInterface $form_state) {
-    /** @var \Drupal\os2web_datalookup\LookupResult\CprLookupResult $cprLookupResult */
-    $cprLookupResult = NULL;
-
-    // Trying to fetch person data from cache.
-    if ($form_state->has('cprLookupResult')) {
-      $cprLookupResult = $form_state->get('cprLookupResult');
-    }
-
-    return $cprLookupResult;
+    return $form_state->has('cprLookupResult') ? $form_state->get('cprLookupResult') : NULL;
   }
 
   /**
