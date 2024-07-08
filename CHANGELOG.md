@@ -15,7 +15,6 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 - Obsolete module removing - os2forms_consent
 - Obsolete module removing - webform_embed
-- Obsolete module removing - os2forms_webform_list
 - Obsolete module removing - field_color
 - Obsolete patch removing - dynamic_entity_reference
 - Obsolete patch removing - user_default_page
