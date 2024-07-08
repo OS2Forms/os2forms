@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## [3.15.4] 2024-07-08
+
 - [#117](https://github.com/OS2Forms/os2forms/pull/117)
   Encrypts all elements if encryption enabled.
 - [#114](https://github.com/OS2Forms/os2forms/pull/114)
@@ -239,7 +241,9 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - Security in case of vulnerabilities.
 ```
 
-[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.15.2...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.15.4...HEAD
+[3.15.4]: https://github.com/OS2Forms/os2forms/compare/3.15.3...3.15.4
+[3.15.3]: https://github.com/OS2Forms/os2forms/compare/3.15.2...3.15.3
 [3.15.2]: https://github.com/OS2Forms/os2forms/compare/3.15.1...3.15.2
 [3.15.1]: https://github.com/OS2Forms/os2forms/compare/3.15.0...3.15.1
 [3.15.0]: https://github.com/OS2Forms/os2forms/compare/3.14.1...3.15.0
