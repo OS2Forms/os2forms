@@ -2,7 +2,6 @@
 
 namespace Drupal\os2forms_dawa\Plugin\os2web\DataLookup;
 
-use Drupal\os2forms_dawa\Entity\DatafordelerMatrikula;
 use Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupInterface;
 
 /**
