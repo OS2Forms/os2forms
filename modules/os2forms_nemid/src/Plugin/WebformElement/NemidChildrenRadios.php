@@ -142,7 +142,7 @@ class NemidChildrenRadios extends Radios implements NemidElementPersonalInterfac
         if (is_array($children) && !empty($children)) {
           foreach ($children as $child) {
             if ($child['nameAddressProtected']) {
-              $options[$child['cpr']] = $child['cpr'] . ' (' . t('Name and address protection') . ')';
+              $options[$child['cpr']] = $child['cpr'] . ' (' . $this->t('Name and address protection') . ')';
               $showAddressNameProtectionMessage = TRUE;
             }
             else {

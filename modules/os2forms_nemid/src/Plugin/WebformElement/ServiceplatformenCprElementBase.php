@@ -47,7 +47,7 @@ abstract class ServiceplatformenCprElementBase extends NemidElementBase {
    *   String indicating Name and Address protection or nothing.
    */
   public function getNameAddressProtectedText(CprLookupResult $cprLookupResult) {
-    return $cprLookupResult->isNameAddressProtected() ? ' (' . t('Name and address protection') . ')' : '';
+    return $cprLookupResult->isNameAddressProtected() ? ' (' . $this->t('Name and address protection') . ')' : '';
   }
 
 }
