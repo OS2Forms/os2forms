@@ -56,6 +56,8 @@ class Os2FormsEncryptCommands extends DrushCommands {
       return;
     }
 
+    $defaultEncryptionProfile = $config->get('default_encryption_profile');
+
     // Get the storage for Webform entity type.
     $webformStorage = $this->entityTypeManager->getStorage('webform');
 
@@ -72,7 +74,7 @@ class Os2FormsEncryptCommands extends DrushCommands {
         if (!isset($config['element'][$key])) {
           $config['element'][$key] = [
             'encrypt' => TRUE,
-            'encrypt_profile' => 'webform',
+            'encrypt_profile' => $defaultEncryptionProfile,
           ];
           $changed = TRUE;
         }
