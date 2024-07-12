@@ -12,8 +12,8 @@ use Drupal\webform\WebformSubmissionInterface;
  *
  * @WebformElement(
  *   id = "os2forms_nemid_children_radios",
- *   label = @Translation("NemID Children Radios"),
- *   description = @Translation("Provides a NemID Children radios element."),
+ *   label = @Translation("MitID Children Radios"),
+ *   description = @Translation("Provides a MitID Children radios element."),
  *   category = @Translation("NemID"),
  * )
  *
@@ -27,8 +27,8 @@ class NemidChildrenRadios extends Radios implements NemidElementPersonalInterfac
    */
   protected function defineDefaultProperties() {
     $properties = [
-      'cpr_output_type' => '',
       'options' => [],
+      'address_protection_help_text' => '',
     ] + parent::defineDefaultProperties();
     return $properties;
   }
@@ -41,12 +41,10 @@ class NemidChildrenRadios extends Radios implements NemidElementPersonalInterfac
     $form['options']['options']['#required'] = FALSE;
     $form['options']['#access'] = FALSE;
 
-    $form['element']['cpr_output_type'] = [
-      '#type' => 'radios',
-      '#options' => ['cpr' => $this->t('CPR'), 'name' => $this->t('Name')],
-      '#title' => $this
-        ->t('CPR output type'),
-      '#required' => TRUE,
+    $form['element_description']['address_protection_help_text'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('Address protection help text'),
+      '#description' => $this->t('Address protection help text is shown if any of the children has address and name protection active'),
     ];
 
     return $form;
@@ -136,16 +134,19 @@ class NemidChildrenRadios extends Radios implements NemidElementPersonalInterfac
 
     $options = [];
 
+    $showAddressNameProtectionMessage = FALSE;
+
     if ($cprLookupResult) {
       $prepopulateKey = $this->getPrepopulateFieldFieldKey($element);
       if ($children = $cprLookupResult->getFieldValue($prepopulateKey)) {
         if (is_array($children) && !empty($children)) {
           foreach ($children as $child) {
-            if ($element['#cpr_output_type'] == 'cpr') {
-              $options[$child['cpr']] = $child['name'];
+            if ($child['nameAddressProtected']) {
+              $options[$child['cpr']] = $child['cpr'] . ' (' . $this->t('Name and address protection') . ')';
+              $showAddressNameProtectionMessage = TRUE;
             }
             else {
-              $options[$child['name']] = $child['name'];
+              $options[$child['cpr']] = $child['name'];
             }
           }
         }
@@ -153,6 +154,10 @@ class NemidChildrenRadios extends Radios implements NemidElementPersonalInterfac
     }
 
     $element['#options'] = $options;
+
+    if ($showAddressNameProtectionMessage) {
+      $element['#suffix'] = '<div>' . $element['#address_protection_help_text'] . '</div>';
+    }
   }
 
 }
