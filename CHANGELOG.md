@@ -11,6 +11,11 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## [3.15.5] 2024-07-12
+
+- [#111](https://github.com/OS2Forms/os2forms/pull/111)
+  Adding child select autopopulate fields
+
 ## [3.15.4] 2024-07-08
 
 - [#117](https://github.com/OS2Forms/os2forms/pull/117)
