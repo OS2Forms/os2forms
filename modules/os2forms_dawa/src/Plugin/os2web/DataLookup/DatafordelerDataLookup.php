@@ -2,6 +2,7 @@
 
 namespace Drupal\os2forms_dawa\Plugin\os2web\DataLookup;
 
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\os2forms_dawa\Entity\DatafordelerMatrikula;
@@ -49,31 +50,30 @@ class DatafordelerDataLookup extends DataLookupBase implements DatafordelerDataL
   /**
    * {@inheritdoc}
    */
-  public function getMatrikulaIds(string $addressAccessId) : array {
-    $url = "https://services.datafordeler.dk/BBR/BBRPublic/1/rest/grund";
+  public function getMatrikulaId(string $addressAccessId) : ?string {
+    $url = "https://services.datafordeler.dk/DAR/DAR/3.0.0/rest/husnummerTilJordstykke";
 
-    $configuration = $this->getConfiguration();
     $json = $this->httpClient->request('GET', $url, [
       'query' => [
-        'husnummer' => $addressAccessId,
-        'status' => 7,
-        'username' => $configuration['username'],
-        'password' => $configuration['password'],
+        'husnummerid' => $addressAccessId,
       ],
     ])->getBody();
 
     $jsonDecoded = json_decode($json, TRUE);
     if (is_array($jsonDecoded)) {
-      return $jsonDecoded[0]['jordstykkeList'];
+      if (NestedArray::keyExists($jsonDecoded, ['gældendeJordstykke', 'jordstykkeLokalId'])) {
+        return NestedArray::getValue($jsonDecoded, ['gældendeJordstykke', 'jordstykkeLokalId']);
+      }
     }
 
-    return [];
+    return NULL;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getMatrikulaEntry(string $matrikulaId) : ?DatafordelerMatrikula {
+  public function getMatrikulaEntries(string $matrikulaId) : array {
+    $matrikulaEntries = [];
     $url = "https://services.datafordeler.dk/Matriklen2/Matrikel/2.0.0/rest/SamletFastEjendom";
 
     $configuration = $this->getConfiguration();
@@ -86,11 +86,17 @@ class DatafordelerDataLookup extends DataLookupBase implements DatafordelerDataL
     ])->getBody();
 
     $jsonDecoded = json_decode($json, TRUE);
+
     if (is_array($jsonDecoded)) {
-      return new DatafordelerMatrikula($jsonDecoded);
+      if (NestedArray::keyExists($jsonDecoded, ['features', 0, 'properties', 'jordstykke'])) {
+        $jordstykker = NestedArray::getValue($jsonDecoded, ['features', 0, 'properties', 'jordstykke']);
+        foreach ($jordstykker as $jordstyk) {
+          $matrikulaEntries[] = new DatafordelerMatrikula($jordstyk);
+        }
+      }
     }
 
-    return NULL;
+    return $matrikulaEntries;
   }
 
   /**
