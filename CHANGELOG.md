@@ -11,6 +11,11 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## [3.15.6] 2024-07-16
+
+- [#120](https://github.com/OS2Forms/os2forms/pull/120)
+  S2FRMS-100 / OS-74 - changing address fetch API
+
 ## [3.15.5] 2024-07-12
 
 - [#111](https://github.com/OS2Forms/os2forms/pull/111)
