@@ -114,22 +114,19 @@ class DawaElementAddressMatrikula extends WebformCompositeBase {
       $addressAccessId = $address->getAccessAddressId();
 
       // Find matrikula list from the houseid (husnummer):
-      $matrikulaIdList = $datafordelerLookup->getMatrikulaIds($addressAccessId);
+      $matrikulaId = $datafordelerLookup->getMatrikulaId($addressAccessId);
 
-      // Find Matrikula entry from matrikulas ID.
-      if (!empty($matrikulaIdList)) {
-        foreach ($matrikulaIdList as $matrikulaId) {
-          $matrikula = $datafordelerLookup->getMatrikulaEntry($matrikulaId);
+      // Find Matrikula entries from matrikulas ID.
+      if ($matrikulaId) {
+        $matrikulaEnties = $datafordelerLookup->getMatrikulaEntries($matrikulaId);
+        foreach ($matrikulaEnties as $matrikula) {
+          $matrikulaOption = $matrikula->getMatrikulaNumber() . ' ' . $matrikula->getOwnershipName();
 
-          if ($matrikula) {
-            $matrikulaOption = $matrikula->getMatrikulaNumber() . ' ' . $matrikula->getOwnershipName();
-
-            if (isset($element['#remove_code']) && !$element['#remove_code']) {
-              $matrikulaOption .= ' (' . $matrikula->getOwnerLicenseCode() . ')';
-            }
-
-            $options[$matrikulaOption] = $matrikulaOption;
+          if (isset($element['#remove_code']) && !$element['#remove_code']) {
+            $matrikulaOption .= ' (' . $matrikula->getOwnerLicenseCode() . ')';
           }
+
+          $options[$matrikulaOption] = $matrikulaOption;
         }
       }
     }

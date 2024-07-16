@@ -11,6 +11,11 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## [3.15.6] 2024-07-16
+
+- [#120](https://github.com/OS2Forms/os2forms/pull/120)
+  S2FRMS-100 / OS-74 - changing address fetch API
+
 ## [3.15.5] 2024-07-12
 
 - [#111](https://github.com/OS2Forms/os2forms/pull/111)
@@ -22,6 +27,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
   Encrypts all elements if encryption enabled.
 - [#114](https://github.com/OS2Forms/os2forms/pull/114)
   Encrypted computed elements.
+- [OS-74] Updating DAWA matrikula select with Datafordeler select
 
 ## [3.15.3] 2024-06-25
 
