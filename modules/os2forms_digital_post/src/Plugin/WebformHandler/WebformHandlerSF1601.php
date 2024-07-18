@@ -217,12 +217,14 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
       'os2forms_nemid_company_cvr_fetch_data',
       'os2forms_nemid_cpr',
       'os2forms_person_lookup',
+      'os2forms_mitid_child_other_guardian',
       // @todo Remove these when we remove the elements.
       'cpr_element',
       'cpr_value_element',
       'cvr_element',
       'cvr_value_element',
     ];
+
     $elements = array_filter(
       $elements,
       static function (array $element) use ($elementTypes) {

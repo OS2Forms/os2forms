@@ -130,6 +130,19 @@ class FormsHelper {
   }
 
   /**
+   * Retrieves the cached CPRLookupResult which is stored in form_state.
+   *
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   Form state.
+   *
+   * @return \Drupal\os2web_datalookup\LookupResult\CprLookupResult|null
+   *   CPRLookupResult or NULL.
+   */
+  public static function retrieveCachedCprLookupResult(FormStateInterface $form_state) {
+    return $form_state->has('cprLookupResult') ? $form_state->get('cprLookupResult') : NULL;
+  }
+
+  /**
    * Performs lookup of person data.
    *
    * @param \Drupal\Core\Form\FormStateInterface $form_state
@@ -140,7 +153,7 @@ class FormsHelper {
    *
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
-  private function lookupPersonData(FormStateInterface $form_state) {
+  public function lookupPersonData(FormStateInterface $form_state) {
     $cprResult = new CprLookupResult();
     $cpr = NULL;
 
