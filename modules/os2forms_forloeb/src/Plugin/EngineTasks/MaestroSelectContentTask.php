@@ -207,6 +207,7 @@ class MaestroSelectContentTask extends PluginBase implements MaestroEngineTaskIn
     // Query for all webforms.
     $webforms = [];
     $nids = \Drupal::entityQuery('node')
+      ->accessCheck(FALSE)
       ->condition('type', 'webform')
       ->execute();
     $webform_nodes = Node::loadMultiple($nids);

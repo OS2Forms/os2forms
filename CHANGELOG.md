@@ -11,6 +11,20 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## [3.16.0] 2024-06-14
+
+- Obsolete module removing - os2forms_consent
+- Obsolete module removing - webform_embed
+- Obsolete module removing - field_color
+- Obsolete patch removing - dynamic_entity_reference
+- Obsolete patch removing - user_default_page
+- Reduntand dependency removing - linkit
+- Reduntand dependency removing - chosen
+- Reduntand dependency removing - queue_ui
+- Reduntand dependency removing - simple_ldap
+- Reduntand dependency removing - webform_scheduled_tasks
+- Drupal 10 compability fixes
+
 ## [3.15.6] 2024-07-16
 
 - [#120](https://github.com/OS2Forms/os2forms/pull/120)
