@@ -66,12 +66,12 @@ class Os2FormsEncryptCommands extends DrushCommands {
 
     /** @var \Drupal\webform\Entity\Webform $webform */
     foreach ($webforms as $webform) {
-      $elements = $webform->getElementsDecoded();
+      $elements = $webform->getElementsDecodedAndFlattened();
       $config = $webform->getThirdPartySettings('webform_encrypt');
 
       $changed = FALSE;
       foreach ($elements as $key => $element) {
-        if (!isset($config['element'][$key])) {
+        if (!isset($config['element'][$key]) || $config['element'][$key]['encrypt_profile'] === NULL) {
           $config['element'][$key] = [
             'encrypt' => TRUE,
             'encrypt_profile' => $defaultEncryptionProfile,

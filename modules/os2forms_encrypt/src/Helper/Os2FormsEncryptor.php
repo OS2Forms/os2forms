@@ -89,7 +89,7 @@ class Os2FormsEncryptor {
     }
 
     // Check that there are any elements to enable encryption on.
-    $elements = $webform->getElementsDecoded();
+    $elements = $webform->getElementsDecodedAndFlattened();
 
     if (empty($elements)) {
       return;
