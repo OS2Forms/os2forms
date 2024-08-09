@@ -11,6 +11,9 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [#123](https://github.com/OS2Forms/os2forms/pull/123)
+  Encrypt subelements
+
 ## [3.15.6] 2024-07-16
 
 - [#120](https://github.com/OS2Forms/os2forms/pull/120)
