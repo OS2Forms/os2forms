@@ -11,6 +11,11 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## [3.15.7] 2024-08-15
+
+- [#123](https://github.com/OS2Forms/os2forms/pull/123)
+  Encrypt subelements
+
 ## [3.15.6] 2024-07-16
 
 - [#120](https://github.com/OS2Forms/os2forms/pull/120)
@@ -252,7 +257,10 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - Security in case of vulnerabilities.
 ```
 
-[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.15.4...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.15.7...HEAD
+[3.15.7]: https://github.com/OS2Forms/os2forms/compare/3.15.6...3.15.7
+[3.15.6]: https://github.com/OS2Forms/os2forms/compare/3.15.5...3.15.6
+[3.15.5]: https://github.com/OS2Forms/os2forms/compare/3.15.4...3.15.5
 [3.15.4]: https://github.com/OS2Forms/os2forms/compare/3.15.3...3.15.4
 [3.15.3]: https://github.com/OS2Forms/os2forms/compare/3.15.2...3.15.3
 [3.15.2]: https://github.com/OS2Forms/os2forms/compare/3.15.1...3.15.2
