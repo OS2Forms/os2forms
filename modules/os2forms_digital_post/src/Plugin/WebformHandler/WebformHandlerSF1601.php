@@ -54,17 +54,9 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
    * @phpstan-param array<string, mixed> $configuration
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    $instance = new static($configuration, $plugin_id, $plugin_definition);
+    $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
 
-    $instance->loggerFactory = $container->get('logger.factory');
-    $instance->configFactory = $container->get('config.factory');
-    $instance->renderer = $container->get('renderer');
-    $instance->entityTypeManager = $container->get('entity_type.manager');
-    $instance->conditionsValidator = $container->get('webform_submission.conditions_validator');
-    $instance->tokenManager = $container->get('webform.token_manager');
     $instance->helper = $container->get(WebformHelperSF1601::class);
-
-    $instance->setConfiguration($configuration);
 
     return $instance;
   }
