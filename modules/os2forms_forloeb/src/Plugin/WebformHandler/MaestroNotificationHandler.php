@@ -49,7 +49,7 @@ final class MaestroNotificationHandler extends WebformHandlerBase {
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    $instance = new static($configuration, $plugin_id, $plugin_definition);
+    $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
 
     $instance->loggerFactory = $container->get('logger.factory');
     $instance->configFactory = $container->get('config.factory');
