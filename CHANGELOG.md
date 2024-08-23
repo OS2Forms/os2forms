@@ -13,6 +13,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 - [OS-119] Keeping value of CPR clean, not adding address protection text
 - Applied coding standards
+- [#192](https://github.com/OS2Forms/os2forms/pull/129)
+  Added audit logging module from os2web
 
 ## [3.16.0-beta1] 2024-08-27
 
