@@ -11,7 +11,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
-## [3.15.8] 2024-08-21
+## [3.15.8] 2024-08-26
 
 - [#127](https://github.com/OS2Forms/os2forms/pull/127)
   Correctly created MaestroNotificationHandler
