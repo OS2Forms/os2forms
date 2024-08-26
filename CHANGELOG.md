@@ -11,6 +11,11 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## [3.15.8] 2024-08-26
+
+- [#127](https://github.com/OS2Forms/os2forms/pull/127)
+  Correctly created MaestroNotificationHandler
+
 ## [3.15.7] 2024-08-15
 
 - [#123](https://github.com/OS2Forms/os2forms/pull/123)
@@ -257,7 +262,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - Security in case of vulnerabilities.
 ```
 
-[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.15.7...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.15.8...HEAD
+[3.15.8]: https://github.com/OS2Forms/os2forms/compare/3.15.7...3.15.8
 [3.15.7]: https://github.com/OS2Forms/os2forms/compare/3.15.6...3.15.7
 [3.15.6]: https://github.com/OS2Forms/os2forms/compare/3.15.5...3.15.6
 [3.15.5]: https://github.com/OS2Forms/os2forms/compare/3.15.4...3.15.5
