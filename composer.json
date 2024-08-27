@@ -23,25 +23,21 @@
         "dompdf/dompdf": "^2.0",
         "drupal/admin_toolbar": "^3.0",
         "drupal/advancedqueue": "^1.0",
-        "drupal/chosen": "^2.10",
-        "drupal/ckeditor_a11ychecker": "^2.0@alpha",
-        "drupal/clientside_validation": "^3.0",
+        "drupal/clientside_validation": "^4.0",
         "drupal/coc_forms_auto_export": "^2.0@alpha",
-        "drupal/config_entity_revisions": "^1.7.0",
+        "drupal/config_entity_revisions": "dev-2.0.x",
         "drupal/diff": "^1.0",
         "drupal/embed": "^1.4",
         "drupal/entity_print": "^2.1",
         "drupal/eu_cookie_compliance": "^1.8",
-        "drupal/events_logging": "^1.5",
-        "drupal/header_and_footer_scripts": "^3.0",
+        "drupal/events_logging": "^2.0@beta",
         "drupal/honeypot": "^2.0",
         "drupal/image_widget_crop": "^2.3",
         "drupal/ldap": "^4.2",
         "drupal/ldap_auth": "^1.17",
         "drupal/leaflet": "^10.0",
         "drupal/leaflet_layers": "^1.1",
-        "drupal/libraries": "^3.0@beta",
-        "drupal/linkit": "^5.0",
+        "drupal/libraries": "^4.0",
         "drupal/logging_alerts": "^2.0",
         "drupal/maestro": "^3.1",
         "drupal/mailsystem": "^4.1",
@@ -49,42 +45,40 @@
         "drupal/pathauto": "^1.5",
         "drupal/permissions_by_term": "^3.1 || ^2.25",
         "drupal/queue_mail": "^1.4",
-        "drupal/queue_ui": "^2.1",
         "drupal/r4032login": "^2.1",
         "drupal/redirect": "^1.4",
-        "drupal/simple_ldap": "^1.0@alpha",
-        "drupal/simplesamlphp_auth": "^3.2",
+        "drupal/simplesamlphp_auth": "^4.0",
         "drupal/smtp": "^1.0@beta",
         "drupal/sodium": "^2.4",
         "drupal/switch_page_theme": "^4.0",
         "drupal/telephone_validation": "^2.2",
         "drupal/token": "^1.5",
         "drupal/ultimate_cron": "^2.0.0",
-        "drupal/user_default_page": "^2.1",
+        "drupal/user_default_page": "^9.0",
         "drupal/webform": "^6.1",
         "drupal/webform_composite": "^1.0@RC",
         "drupal/webform_encrypt": "^2.0@alpha",
-        "drupal/webform_migrate": "^1.1",
+        "drupal/webform_migrate": "^2.0@alpha",
         "drupal/webform_node_element": "^1.2",
-        "drupal/webform_remote_handlers": "^1.6.0",
+        "drupal/webform_remote_handlers": "^3.0",
         "drupal/webform_remote_select": "^1.0.6",
         "drupal/webform_rest": "^4.0.0-beta2",
-        "drupal/webform_scheduled_tasks": "^2.0",
         "drupal/webform_validation": "^2.0",
         "drupal/webform_views": "^5.0@alpha",
-        "drupal/workflow_participants": "^2.4",
+        "drupal/workflow_participants": "^3.0@RC",
         "http-interop/http-factory-guzzle": "^1.0.0",
         "itk-dev/beskedfordeler-drupal": "^1.0",
-        "itk-dev/serviceplatformen": "dev-feature/guzzle6-adapter as 1.5",
+        "itk-dev/serviceplatformen": "^1.5",
         "os2web/os2web_datalookup": "^1.5",
         "os2web/os2web_nemlogin": "^1.0",
-        "php-http/guzzle6-adapter": "^2.0",
+        "php-http/guzzle7-adapter": "^1.0",
         "phpoffice/phpword": "^0.18.2",
         "symfony/options-resolver": "^5.4 || ^6.0",
         "tecnickcom/tcpdf": "~6",
         "webmozart/path-util": "^2.3",
         "wsdltophp/packagebase": "^5.0",
-        "zaporylie/composer-drupal-optimizations": "^1.2"
+        "zaporylie/composer-drupal-optimizations": "^1.2",
+        "mglaman/composer-drupal-lenient": "^1.0"
     },
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
@@ -107,19 +101,24 @@
                 "Unlock possibility of using Entity print module export to Word": "https://www.drupal.org/files/issues/2020-02-29/3096552-6.patch",
                 "Webform computed element post save alter": "https://www.drupal.org/files/issues/2024-06-25/webform_computed_post_save_field_alter.patch"
             },
-            "drupal/user_default_page": {
-                "Warning: in_array() expects parameter 2 to be array, null given in user_default_page_user_logout() (https://www.drupal.org/node/3246986)": "https://www.drupal.org/files/issues/2021-11-01/user_default_page-3246986-2.patch"
-            },
             "drupal/coc_forms_auto_export": {
-                "3240592 - Problem with phpseclib requirement in 2.x (https://www.drupal.org/project/coc_forms_auto_export/issues/3240592)": "https://www.drupal.org/files/issues/2021-10-04/requirement-namespace-3240592-1.patch"
+                "3240592 - Problem with phpseclib requirement in 2.x (https://www.drupal.org/project/coc_forms_auto_export/issues/3240592)": "https://www.drupal.org/files/issues/2021-10-04/requirement-namespace-3240592-1.patch",
+                "3286562 - Automated Drupal 10 compatibility fixes" : "https://www.drupal.org/files/issues/2022-06-15/coc_forms_auto_export.2.0.x-dev.rector.patch",
+                "3259009 - PHP Warnings/Notices on Download Page" : "https://git.drupalcode.org/project/coc_forms_auto_export/-/merge_requests/1.diff"
             },
-            "drupal/dynamic_entity_reference": {
-                "entityQuery reference JOINs should specify target_type (https://www.drupal.org/project/dynamic_entity_reference/issues/3120952#comment-14141038)": "https://www.drupal.org/files/issues/2021-06-22/entityquery-reference-joins-should-specify-target_type-3120952-24.patch"
+            "drupal/webform_node_element": {
+                "3290637 - Automated Drupal 10 compatibility fixes": "https://www.drupal.org/files/issues/2023-05-12/webform_node_element_d10-3290637-11.patch"
             },
             "drupal/webform_encrypt": {
                 "Ensure data is base64 encoded (https://www.drupal.org/project/webform_encrypt/issues/3399414)": "https://git.drupalcode.org/project/webform_encrypt/-/merge_requests/4.patch",
                 "PHP Warning if unserialize fails (https://www.drupal.org/project/webform_encrypt/issues/3292305)": "https://www.drupal.org/files/issues/2022-06-23/unserialize-php-notice.patch"
             }
+        },
+        "drupal-lenient": {
+            "allowed-list": [
+                "drupal/coc_forms_auto_export",
+                "drupal/webform_node_element"
+            ]
         }
     },
     "scripts": {
