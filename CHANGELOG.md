@@ -11,8 +11,9 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
-## [3.16.0] 2024-06-14
+## [3.16.0] 2024-08-27
 
+[#110](https://github.com/OS2Forms/os2forms/pull/110)
 - Obsolete module removing - os2forms_consent
 - Obsolete module removing - webform_embed
 - Obsolete module removing - field_color
@@ -24,6 +25,16 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - Reduntand dependency removing - simple_ldap
 - Reduntand dependency removing - webform_scheduled_tasks
 - Drupal 10 compability fixes
+
+## [3.15.8] 2024-08-26
+
+- [#127](https://github.com/OS2Forms/os2forms/pull/127)
+  Correctly created MaestroNotificationHandler
+
+## [3.15.7] 2024-08-15
+
+- [#123](https://github.com/OS2Forms/os2forms/pull/123)
+  Encrypt subelements
 
 ## [3.15.6] 2024-07-16
 
@@ -266,7 +277,11 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - Security in case of vulnerabilities.
 ```
 
-[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.15.4...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.15.8...HEAD
+[3.15.8]: https://github.com/OS2Forms/os2forms/compare/3.15.7...3.15.8
+[3.15.7]: https://github.com/OS2Forms/os2forms/compare/3.15.6...3.15.7
+[3.15.6]: https://github.com/OS2Forms/os2forms/compare/3.15.5...3.15.6
+[3.15.5]: https://github.com/OS2Forms/os2forms/compare/3.15.4...3.15.5
 [3.15.4]: https://github.com/OS2Forms/os2forms/compare/3.15.3...3.15.4
 [3.15.3]: https://github.com/OS2Forms/os2forms/compare/3.15.2...3.15.3
 [3.15.2]: https://github.com/OS2Forms/os2forms/compare/3.15.1...3.15.2

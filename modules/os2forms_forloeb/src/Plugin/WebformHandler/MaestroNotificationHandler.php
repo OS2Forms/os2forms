@@ -6,7 +6,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\os2forms_forloeb\MaestroHelper;
 use Drupal\webform\Plugin\WebformHandlerBase;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Maestro notification handler.
@@ -44,23 +43,6 @@ final class MaestroNotificationHandler extends WebformHandlerBase {
    * Maximum length of header label.
    */
   private const NOTIFICATION_SUBJECT_MAX_LENGTH = 128;
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    $instance = new static($configuration, $plugin_id, $plugin_definition);
-
-    $instance->loggerFactory = $container->get('logger.factory');
-    $instance->configFactory = $container->get('config.factory');
-    $instance->renderer = $container->get('renderer');
-    $instance->entityTypeManager = $container->get('entity_type.manager');
-    $instance->conditionsValidator = $container->get('webform_submission.conditions_validator');
-
-    $instance->setConfiguration($configuration);
-
-    return $instance;
-  }
 
   /**
    * {@inheritdoc}
