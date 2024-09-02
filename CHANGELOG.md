@@ -14,6 +14,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 ## [3.16.0] 2024-08-27
 
 [#110](https://github.com/OS2Forms/os2forms/pull/110)
+
 - Obsolete module removing - os2forms_consent
 - Obsolete module removing - webform_embed
 - Obsolete module removing - field_color
