@@ -11,6 +11,9 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [#192](https://github.com/OS2Forms/os2forms/pull/129)
+  Added audit loggin module from os2web
+
 ## [3.16.0] 2024-08-27
 
 [#110](https://github.com/OS2Forms/os2forms/pull/110)
