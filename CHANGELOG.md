@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [OS-115] Skipping empty maktrikula objects
+
 ## [3.16.0] 2024-08-27
 
 [#110](https://github.com/OS2Forms/os2forms/pull/110)
