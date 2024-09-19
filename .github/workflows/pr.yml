@@ -46,6 +46,7 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
       - name: Validate composer files
         run: |
+          composer config --no-plugins allow-plugins.mglaman/composer-drupal-lenient true
           composer validate --strict composer.json
           # Check that dependencies resolve.
           composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction
@@ -77,6 +78,7 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
       - name: Install Dependencies
         run: |
+          composer config --no-plugins allow-plugins.mglaman/composer-drupal-lenient true
           composer install --no-interaction --no-progress
       - name: PHPCS
         run: |

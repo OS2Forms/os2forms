@@ -2,7 +2,7 @@
 
 namespace Drupal\os2forms_digital_post\Drush\Commands;
 
-use Drupal\Core\Serialization\Yaml;
+use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Utility\Token;
 use Drupal\entity_print\Plugin\EntityPrintPluginManagerInterface;
 use Drupal\os2forms_digital_post\Helper\DigitalPostHelper;
