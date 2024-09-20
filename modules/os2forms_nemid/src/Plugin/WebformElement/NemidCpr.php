@@ -29,7 +29,7 @@ class NemidCpr extends ServiceplatformenCprElementBase implements NemidElementPe
   /**
    * {@inheritdoc}
    */
-  public function appendNameAddressProtectedText(CprLookupResult $cprLookupResult) {
+  public function getNameAddressProtectedText(CprLookupResult $cprLookupResult) {
     return '';
   }
 
