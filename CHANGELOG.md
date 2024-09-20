@@ -11,7 +11,10 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
-- [OS-119] Keeping value of CPR clean, not adding address protection text
+## [3.16.1] 2024-09-20
+
+- [#133]https://github.com/OS2Forms/os2forms/pull/133
+[OS-119] Keeping value of CPR clean, not adding address protection text
 
 ## [3.16.0] 2024-08-27
 
