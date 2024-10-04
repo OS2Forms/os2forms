@@ -1,0 +1,9 @@
+name: 'OS2Forms Digital Signature'
+type: module
+description: 'todo'
+package: 'OS2Forms'
+core_version_requirement: ^9 || ^10
+dependencies:
+  - 'webform:webform'
+
+configure: os2forms_digital_post.admin.settings

@@ -1,0 +1,18 @@
+# Webform os2forms_attachment_component routes.
+os2forms_digital_signature.sign_callback:
+  path: '/os2forms_digital_signature/{uuid}/{hash}/sign_callback'
+  defaults:
+    _controller: '\Drupal\os2forms_digital_signature\Controller\DigitalSignatureController::signCallback'
+  requirements:
+    _permission: 'access content'
+
+os2forms_digital_signature.test:
+  path: '/os2forms_digital_signature/{webform_submission}/test'
+  defaults:
+    _controller: '\Drupal\os2forms_digital_signature\Controller\DigitalSignatureController::test'
+#    _title_callback: '\Drupal\webform\Controller\WebformSubmissionViewController::title'
+#    view_mode: 'html'
+#    operation: webform_submission_view
+#    entity_access: 'webform_submission.view'
+  requirements:
+    _permission: 'access content'

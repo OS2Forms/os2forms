@@ -2,6 +2,7 @@
 
 namespace Drupal\os2forms_attachment\Element;
 
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\WebformSubmissionInterface;
 use Drupal\webform_attachment\Element\WebformAttachmentBase;
@@ -20,6 +21,7 @@ class AttachmentElement extends WebformAttachmentBase {
     return parent::getInfo() + [
       '#view_mode' => 'html',
       '#export_type' => 'pdf',
+      '#digital_signature' => FALSE,
       '#template' => '',
     ];
   }
@@ -28,6 +30,8 @@ class AttachmentElement extends WebformAttachmentBase {
    * {@inheritdoc}
    */
   public static function getFileContent(array $element, WebformSubmissionInterface $webform_submission) {
+    $submissionUuid = $webform_submission->uuid();
+
     // Override webform settings.
     static::overrideWebformSettings($element, $webform_submission);
 
@@ -51,18 +55,36 @@ class AttachmentElement extends WebformAttachmentBase {
     \Drupal::request()->request->set('_webform_submissions_view_mode', $view_mode);
 
     if ($element['#export_type'] === 'pdf') {
-      // Get scheme.
-      $scheme = 'temporary';
+      $file_path = NULL;
 
-      // Get filename.
-      $file_name = 'webform-entity-print-attachment--' . $webform_submission->getWebform()->id() . '-' . $webform_submission->id() . '.pdf';
+      // If attachment with digital signatur, check if we already have one.
+      if (isset($element['#digital_signature']) && $element['#digital_signature']) {
+        // Get scheme.
+        $scheme = 'private';
 
-      // Save printable document.
-      $print_engine = $print_engine_manager->createSelectedInstance($element['#export_type']);
-      $temporary_file_path = $print_builder->savePrintable([$webform_submission], $print_engine, $scheme, $file_name);
-      if ($temporary_file_path) {
-        $contents = file_get_contents($temporary_file_path);
-        \Drupal::service('file_system')->delete($temporary_file_path);
+        // Get filename.
+        $file_name = 'webform/' . $webform_submission->getWebform()->id() . '/digital_signature/' . $submissionUuid . '.pdf';
+        $file_path = "$scheme://$file_name";
+      }
+
+      if (!$file_path || !file_exists($file_path)) {
+        // Get scheme.
+        $scheme = 'temporary';
+        // Get filename.
+        $file_name = 'webform-entity-print-attachment--' . $webform_submission->getWebform()->id() . '-' . $webform_submission->id() . '.pdf';
+
+        // Save printable document.
+        $print_engine = $print_engine_manager->createSelectedInstance($element['#export_type']);
+        $file_path = $print_builder->savePrintable([$webform_submission], $print_engine, $scheme, $file_name);
+      }
+
+      if ($file_path) {
+        $contents = file_get_contents($file_path);
+
+        // Deleting temporary file.
+        if ($scheme == 'temporary') {
+          \Drupal::service('file_system')->delete($file_path);
+        }
       }
       else {
         // Log error.
