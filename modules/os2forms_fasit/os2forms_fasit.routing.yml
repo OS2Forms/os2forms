@@ -1,0 +1,7 @@
+os2forms_fasit.admin.settings:
+  path: '/admin/os2forms_fasit/settings'
+  defaults:
+    _form: '\Drupal\os2forms_fasit\Form\SettingsForm'
+    _title: 'Fasit settings'
+  requirements:
+    _permission: 'administer site configuration'
