@@ -149,7 +149,8 @@
             "phpstan/extension-installer": true,
             "simplesamlphp/composer-module-installer": true,
             "vaimo/composer-patches": true,
-            "zaporylie/composer-drupal-optimizations": true
+            "zaporylie/composer-drupal-optimizations": true,
+            "mglaman/composer-drupal-lenient": true
         }
     }
 }

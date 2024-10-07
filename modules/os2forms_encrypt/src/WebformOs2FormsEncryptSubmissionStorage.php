@@ -35,7 +35,7 @@ class WebformOs2FormsEncryptSubmissionStorage extends WebformEncryptSubmissionSt
    *
    * @see Drupal\webform\WebformSubmissionStorage::getColumns
    */
-  public function getColumns(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, $include_elements = TRUE) {
+  public function getColumns(?WebformInterface $webform = NULL, ?EntityInterface $source_entity = NULL, ?AccountInterface $account = NULL, $include_elements = TRUE) {
     if (!\Drupal::moduleHandler()->moduleExists('webform_revisions')) {
       return parent::getColumns($webform, $source_entity, $account, $include_elements);
     }

@@ -19,8 +19,8 @@ use Drupal\os2forms_digital_post\Plugin\WebformHandler\WebformHandlerSF1601;
 use Drupal\os2web_datalookup\LookupResult\CompanyLookupResult;
 use Drupal\os2web_datalookup\LookupResult\CprLookupResult;
 use Drupal\webform\WebformSubmissionInterface;
-use ItkDev\Serviceplatformen\Service\SF1601\Serializer;
 use ItkDev\Serviceplatformen\Service\SF1601\SF1601;
+use ItkDev\Serviceplatformen\Service\SF1601\Serializer;
 
 /**
  * MeMo helper.

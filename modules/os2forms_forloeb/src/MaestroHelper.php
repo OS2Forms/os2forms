@@ -4,9 +4,6 @@ namespace Drupal\os2forms_forloeb;
 
 use DigitalPost\MeMo\Action;
 use DigitalPost\MeMo\EntryPoint;
-use Drupal\advancedqueue\Entity\QueueInterface;
-use Drupal\advancedqueue\Job;
-use Drupal\advancedqueue\JobResult;
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -19,6 +16,9 @@ use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
+use Drupal\advancedqueue\Entity\QueueInterface;
+use Drupal\advancedqueue\Job;
+use Drupal\advancedqueue\JobResult;
 use Drupal\entity_print\Plugin\EntityPrintPluginManagerInterface;
 use Drupal\maestro\Engine\MaestroEngine;
 use Drupal\maestro\Utility\TaskHandler;
@@ -456,7 +456,7 @@ class MaestroHelper implements LoggerInterface {
    *
    * @see self::renderHtml()
    */
-  public function renderNotification(WebformSubmissionInterface $submission, string $handlerId, string $notificationType, array $templateTask, int $maestroQueueID, string $contentType = NULL): array {
+  public function renderNotification(WebformSubmissionInterface $submission, string $handlerId, string $notificationType, array $templateTask, int $maestroQueueID, ?string $contentType = NULL): array {
     $handler = $submission->getWebform()->getHandler($handlerId);
     $settings = $handler->getSettings();
 

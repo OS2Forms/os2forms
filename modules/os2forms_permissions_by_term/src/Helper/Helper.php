@@ -264,7 +264,7 @@ class Helper {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  private function filterWebformSelectOptions(array $options, array &$result = [], string $parent = NULL) {
+  private function filterWebformSelectOptions(array $options, array &$result = [], ?string $parent = NULL) {
     foreach ($options as $key => $option) {
       if ($option instanceof FieldFilteredMarkup) {
         $webform = $this->entityTypeManager->getStorage('webform')->load($key);

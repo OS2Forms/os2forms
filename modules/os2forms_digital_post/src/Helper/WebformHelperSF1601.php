@@ -2,12 +2,12 @@
 
 namespace Drupal\os2forms_digital_post\Helper;
 
-use Drupal\advancedqueue\Entity\QueueInterface;
-use Drupal\advancedqueue\Job;
-use Drupal\advancedqueue\JobResult;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\advancedqueue\Entity\QueueInterface;
+use Drupal\advancedqueue\Job;
+use Drupal\advancedqueue\JobResult;
 use Drupal\os2forms_digital_post\Exception\InvalidRecipientIdentifierElementException;
 use Drupal\os2forms_digital_post\Exception\RuntimeException;
 use Drupal\os2forms_digital_post\Exception\SubmissionNotFoundException;
@@ -199,6 +199,15 @@ final class WebformHelperSF1601 implements LoggerInterface {
 
   /**
    * {@inheritdoc}
+   *
+   * @param mixed $level
+   *   The level.
+   * @param string $message
+   *   The message.
+   * @param array $context
+   *   The context.
+   *
+   * @phpstan-param array<string, mixed> $context
    */
   public function log($level, $message, array $context = []): void {
     $this->logger->log($level, $message, $context);

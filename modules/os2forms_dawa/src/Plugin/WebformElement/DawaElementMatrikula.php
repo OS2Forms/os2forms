@@ -31,7 +31,7 @@ class DawaElementMatrikula extends DawaElementBase {
   /**
    * {@inheritdoc}
    */
-  public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
+  public function prepare(array &$element, ?WebformSubmissionInterface $webform_submission = NULL) {
     parent::prepare($element, $webform_submission);
 
     $element['#autocomplete_route_parameters']['remove_code'] = $element['#remove_code'] ?? FALSE;

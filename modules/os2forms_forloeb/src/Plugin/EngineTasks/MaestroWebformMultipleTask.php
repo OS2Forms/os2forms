@@ -27,7 +27,7 @@ class MaestroWebformMultipleTask extends MaestroWebformTask {
    *   [1] - is the queue ID
    *   The processID and queueID properties are defined in the MaestroTaskTrait.
    */
-  public function __construct(array $configuration = NULL) {
+  public function __construct(?array $configuration = NULL) {
     if (is_array($configuration)) {
       $this->processID = $configuration[0];
       $this->queueID = $configuration[1];
