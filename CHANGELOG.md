@@ -12,6 +12,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 ## [Unreleased]
 
 - [OS-119] Keeping value of CPR clean, not adding address protection text
+- Applied coding standards
 
 ## [3.16.0] 2024-08-27
 

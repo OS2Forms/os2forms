@@ -206,6 +206,8 @@ final class WebformHelperSF1601 implements LoggerInterface {
    *   The message.
    * @param array $context
    *   The context.
+   *
+   * @phpstan-param array<string, mixed> $context
    */
   public function log($level, $message, array $context = []): void {
     $this->logger->log($level, $message, $context);
