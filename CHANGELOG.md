@@ -14,7 +14,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - [OS-119] Keeping value of CPR clean, not adding address protection text
 - Applied coding standards
 
-## [3.16.0] 2024-08-27
+## [3.16.0-beta1] 2024-08-27
 
 [#110](https://github.com/OS2Forms/os2forms/pull/110)
 
@@ -281,7 +281,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - Security in case of vulnerabilities.
 ```
 
-[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.15.8...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.16.0-beta1...HEAD
+[3.16.0-beta1]: https://github.com/OS2Forms/os2forms/compare/3.15.8...3.16.0-beta1
 [3.15.8]: https://github.com/OS2Forms/os2forms/compare/3.15.7...3.15.8
 [3.15.7]: https://github.com/OS2Forms/os2forms/compare/3.15.6...3.15.7
 [3.15.6]: https://github.com/OS2Forms/os2forms/compare/3.15.5...3.15.6
