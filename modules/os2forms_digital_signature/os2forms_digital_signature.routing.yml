@@ -5,14 +5,11 @@ os2forms_digital_signature.sign_callback:
     _controller: '\Drupal\os2forms_digital_signature\Controller\DigitalSignatureController::signCallback'
   requirements:
     _permission: 'access content'
-
-os2forms_digital_signature.test:
-  path: '/os2forms_digital_signature/{webform_submission}/test'
+os2forms_digital_signature.settings:
+  path: '/admin/os2forms_digital_signature/settings'
   defaults:
-    _controller: '\Drupal\os2forms_digital_signature\Controller\DigitalSignatureController::test'
-#    _title_callback: '\Drupal\webform\Controller\WebformSubmissionViewController::title'
-#    view_mode: 'html'
-#    operation: webform_submission_view
-#    entity_access: 'webform_submission.view'
+    _form: '\Drupal\os2forms_digital_signature\Form\SettingsForm'
+    _title: 'Digital signature settings'
   requirements:
-    _permission: 'access content'
+    _permission: 'administer site configuration'
+

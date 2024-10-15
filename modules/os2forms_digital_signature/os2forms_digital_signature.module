@@ -1,6 +1,8 @@
 <?php
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StreamWrapper\StreamWrapperManager;
+use Drupal\os2forms_digital_signature\Form\SettingsForm;
 
 /**
  * Implements hook_webform_submission_form_alter().
@@ -25,4 +27,35 @@ function os2forms_digital_signature_webform_submission_form_alter(array &$form, 
       }
     }
   }
+}
+
+/**
+ * Implements hook_file_download().
+ *
+ * Custom access control for private files.
+ */
+function os2forms_digital_signature_file_download($uri) {
+  // Only operate on files in the private directory.
+  if (StreamWrapperManager::getScheme($uri) === 'private' && str_starts_with(StreamWrapperManager::getTarget($uri), 'signing/')) {
+    // Get allowed IPs settings.
+    $config = \Drupal::config(SettingsForm::$configName);
+    $allowedIps = $config->get('os2forms_digital_signature_submission_allowed_ips');
+
+    $allowedIpsArr = explode(',', $allowedIps);
+    $remoteIp = Drupal::request()->getClientIp();
+
+    // IP list is empty, or request IP is allowed.
+    if (empty($allowedIpsArr) || in_array($remoteIp, $allowedIpsArr)) {
+      $basename = basename($uri);
+      return [
+        'Content-disposition' => 'attachment; filename="' . $basename . '"',
+      ];
+    }
+
+    // Otherwise - Deny access.
+    return -1;
+  }
+
+  // Not submission file, allow normal access.
+  return NULL;
 }
