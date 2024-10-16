@@ -77,8 +77,8 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
 
     // Save the file data.
     try {
-      /** @var FileInterface $fileSubmissionPdf */
-      $fileSubmissionPdf = \Drupal::service('file.repository')->writeData($attachment['filecontent'], $fileUri, FileSystemInterface::EXISTS_REPLACE);
+      /** @var FileInterface $fileToSign */
+      $fileToSign = \Drupal::service('file.repository')->writeData($attachment['filecontent'], $fileUri, FileSystemInterface::EXISTS_REPLACE);
     }
     catch (\Exception $e) {
       \Drupal::logger('os2forms_digital_signature')->error('File cannot be saved: %fileUri, error: %error', ['%fileUri' => $fileUri, '%error' => $e->getMessage()]);
@@ -86,9 +86,9 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
     }
 
     // Set the status to permanent to prevent file deletion on cron.
-    //$fileSubmissionPdf->setPermanent();
-    $fileSubmissionPdf->save();
-    $submissionPdfPublicUrl = \Drupal::service('file_url_generator')->generateAbsoluteString($fileSubmissionPdf->getFileUri());
+    //$fileToSign->setPermanent();
+    $fileToSign->save();
+    $fileToSignPublicUrl = \Drupal::service('file_url_generator')->generateAbsoluteString($fileToSign->getFileUri());
 
     /** @var SigningService $signingService */
     $signingService = \Drupal::service('os2forms_digital_signature.signing_service');
@@ -106,7 +106,7 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
     $signatureCallbackUrl = Url::fromRoute('os2forms_digital_signature.sign_callback', ['uuid' => $webform_submission->uuid(), 'hash' => $hash]);
 
     // Starting signing, if everything is correct - this funcition will start redirect.
-    $signingService->sign($submissionPdfPublicUrl, $cid, $signatureCallbackUrl->setAbsolute()->toString());
+    $signingService->sign($fileToSignPublicUrl, $cid, $signatureCallbackUrl->setAbsolute()->toString());
   }
 
   /**
@@ -123,6 +123,19 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
     $attachments = NULL;
     $attachment = NULL;
 
+    // Getting all element types that are added to the webform.
+    //
+    // Priority is the following: check for os2forms_digital_signature_document, is not found try serving
+    // os2forms_attachment
+    $elementTypes = array_column($this->getWebform()->getElementsDecodedAndFlattened(), '#type');
+    $attachmentType = '';
+    if (in_array('os2forms_digital_signature_document', $elementTypes)) {
+      $attachmentType = 'os2forms_digital_signature_document';
+    }
+    elseif (in_array('os2forms_attachment', $elementTypes)) {
+      $attachmentType = 'os2forms_attachment';
+    }
+
     $elements = $this->getWebform()->getElementsInitializedAndFlattened();
     $element_attachments = $this->getWebform()->getElementsAttachments();
     foreach ($element_attachments as $element_attachment) {
@@ -132,10 +145,12 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
       }
 
       $element = $elements[$element_attachment];
-      if ($element['#type'] == 'os2forms_attachment') {
+
+      if ($element['#type'] == $attachmentType) {
         /** @var \Drupal\webform\Plugin\WebformElementAttachmentInterface $element_plugin */
         $element_plugin = $this->elementManager->getElementInstance($element);
         $attachments = $element_plugin->getEmailAttachments($element, $webform_submission);
+        break;
       }
     }
 
