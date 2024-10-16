@@ -5,6 +5,7 @@ namespace Drupal\os2forms_digital_signature\Controller;
 use Drupal\Component\Utility\Crypt;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Url;
+use Drupal\file\Entity\File;
 use Drupal\os2forms_digital_signature\Service\SigningService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -18,13 +19,18 @@ class DigitalSignatureController {
    *
    * @param $uuid
    *   Webform submission UUID.
+   * @param $hash
+   *    Hash to check if the request is authentic.
+   * @param $fid
+   *    File to replace (optional).
+   *
    * @return RedirectResponse
    *   Redirect response to form submission confirmation.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function signCallback($uuid, $hash) {
+  public function signCallback($uuid, $hash, $fid = NULL) {
     // Load the webform submission entity by UUID.
     $submissions = \Drupal::entityTypeManager()
       ->getStorage('webform_submission')
@@ -57,13 +63,21 @@ class DigitalSignatureController {
       throw new NotFoundHttpException();
     }
 
-    // Prepare the directory to ensure it exists and is writable.
+    /** @var FileSystemInterface $file_system */
     $file_system = \Drupal::service('file_system');
-    $expectedFileUri = "private://webform/$webformId/digital_signature/$uuid.pdf";
-    $directory = dirname($expectedFileUri);
 
-    if (!$file_system->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY)) {
-      \Drupal::logger('os2forms_digital_signature')->error('Failed to prepare directory %directory.', ['%directory' => $directory]);
+    // If $fid is present - we are replacing uploaded/managed file, otherwise creating a new one.
+    if ($fid) {
+      $file = File::load($fid);
+      $expectedFileUri = $file->getFileUri();
+    } else {
+      // Prepare the directory to ensure it exists and is writable.
+      $expectedFileUri = "private://webform/$webformId/digital_signature/$uuid.pdf";
+      $directory = dirname($expectedFileUri);
+
+      if (!$file_system->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY)) {
+        \Drupal::logger('os2forms_digital_signature')->error('Failed to prepare directory %directory.', ['%directory' => $directory]);
+      }
     }
 
     // Write the data to the file using Drupal's file system service.
@@ -73,6 +87,11 @@ class DigitalSignatureController {
       // Updating webform submission.
       $webformSubmission->setLocked(TRUE);
       $webformSubmission->save();
+
+      // If file existing, resave the file to update the size and etc.
+      if ($fid) {
+        File::load($fid)->save();
+      }
     }
     catch (\Exception $e) {
       \Drupal::logger('os2forms_digital_signature')->error('Failed to write to file %uri: @message', ['%uri' => $expectedFileUri, '@message' => $e->getMessage()]);

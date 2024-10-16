@@ -66,7 +66,6 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
       return;
     }
 
-    // TODO: think about file URL protection.
     $destinationDir = 'private://signing';
     if (!\Drupal::service('file_system')->prepareDirectory($destinationDir, FileSystemInterface::CREATE_DIRECTORY)) {
       \Drupal::logger('os2forms_digital_signature')->error('File directory cannot be created: %filedirectory', ['%filedirectory' => $destinationDir]);
@@ -103,7 +102,8 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
     $salt = \Drupal::service('settings')->get('hash_salt');
     $hash = Crypt::hashBase64($webform_submission->uuid() . $webform->id() . $salt);
 
-    $signatureCallbackUrl = Url::fromRoute('os2forms_digital_signature.sign_callback', ['uuid' => $webform_submission->uuid(), 'hash' => $hash]);
+    $attahchmentFid = $attachment['fid'] ?? NULL;
+    $signatureCallbackUrl = Url::fromRoute('os2forms_digital_signature.sign_callback', ['uuid' => $webform_submission->uuid(), 'hash' => $hash, 'fid' => $attahchmentFid]);
 
     // Starting signing, if everything is correct - this funcition will start redirect.
     $signingService->sign($fileToSignPublicUrl, $cid, $signatureCallbackUrl->setAbsolute()->toString());
@@ -150,6 +150,11 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
         /** @var \Drupal\webform\Plugin\WebformElementAttachmentInterface $element_plugin */
         $element_plugin = $this->elementManager->getElementInstance($element);
         $attachments = $element_plugin->getEmailAttachments($element, $webform_submission);
+
+        // If we are dealing with an uploaded file, attach the FID.
+        if ($fid = $webform_submission->getElementData($element_attachment)) {
+          $attachments[0]['fid'] = $fid;
+        }
         break;
       }
     }

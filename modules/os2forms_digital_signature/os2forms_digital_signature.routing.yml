@@ -1,8 +1,9 @@
 # Webform os2forms_attachment_component routes.
 os2forms_digital_signature.sign_callback:
-  path: '/os2forms_digital_signature/{uuid}/{hash}/sign_callback'
+  path: '/os2forms_digital_signature/{uuid}/{hash}/sign_callback/{fid}'
   defaults:
     _controller: '\Drupal\os2forms_digital_signature\Controller\DigitalSignatureController::signCallback'
+    fid: ''
   requirements:
     _permission: 'access content'
 os2forms_digital_signature.settings:
