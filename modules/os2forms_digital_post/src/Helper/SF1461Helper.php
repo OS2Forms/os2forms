@@ -15,7 +15,7 @@ class SF1461Helper {
    * See "BeskedFåTilsendt" on
    * https://digitaliseringskataloget.dk/integration/sf1461.
    */
-  public function buildResponseDocument(int $statusCode, string $errorMessage = NULL): \DOMDocument {
+  public function buildResponseDocument(int $statusCode, ?string $errorMessage = NULL): \DOMDocument {
     $xml = <<<'XML'
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <ns2:ModtagBeskedOutputType xmlns="urn:oio:sag-dok:3.0.0" xmlns:ns2="urn:oio:sts:1.0.0">

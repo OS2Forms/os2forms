@@ -46,7 +46,7 @@ class Os2formsPersonLookup extends WebformCompositeBase {
   /**
    * {@inheritdoc}
    */
-  protected function prepareElementValidateCallbacks(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
+  protected function prepareElementValidateCallbacks(array &$element, ?WebformSubmissionInterface $webform_submission = NULL) {
     parent::prepareElementValidateCallbacks($element, $webform_submission);
 
     $element['#element_validate'][] = [get_class($this), 'validatePerson'];
