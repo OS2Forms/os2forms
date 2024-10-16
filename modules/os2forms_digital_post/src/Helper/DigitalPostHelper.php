@@ -11,8 +11,8 @@ use Drupal\os2web_datalookup\Plugin\DataLookupManager;
 use Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupInterfaceCompany;
 use Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupInterfaceCpr;
 use Drupal\webform\WebformSubmissionInterface;
-use ItkDev\Serviceplatformen\Service\SF1601\Serializer;
 use ItkDev\Serviceplatformen\Service\SF1601\SF1601;
+use ItkDev\Serviceplatformen\Service\SF1601\Serializer;
 use Oio\Fjernprint\ForsendelseI;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
@@ -55,7 +55,7 @@ final class DigitalPostHelper implements LoggerInterface {
    *
    * @phpstan-return array<int, mixed>
    */
-  public function sendDigitalPost(string $type, Message $message, ?ForsendelseI $forsendelse, WebformSubmissionInterface $submission = NULL): array {
+  public function sendDigitalPost(string $type, Message $message, ?ForsendelseI $forsendelse, ?WebformSubmissionInterface $submission = NULL): array {
     $senderSettings = $this->settings->getSender();
     $options = [
       'test_mode' => (bool) $this->settings->getTestMode(),
@@ -76,6 +76,15 @@ final class DigitalPostHelper implements LoggerInterface {
 
   /**
    * {@inheritdoc}
+   *
+   * @param mixed $level
+   *   The level.
+   * @param string $message
+   *   The message.
+   * @param array $context
+   *   The context.
+   *
+   * @phpstan-param array<string, mixed> $context
    */
   public function log($level, $message, array $context = []): void {
     $this->logger->log($level, $message, $context);
