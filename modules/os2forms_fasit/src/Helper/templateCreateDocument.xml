@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpretInput xmlns="urn:oio:sagdok:dokument:2.0.0">
+  <NoteTekst xmlns="urn:oio:sagdok:3.0.0"/>
+  <AttributListe>
+    <Egenskaber>
+      <BrugervendtNoegleTekst xmlns="urn:oio:sagdok:3.0.0"/>
+      <BeskrivelseTekst xmlns="urn:oio:sagdok:3.0.0">BeskrivelseTekst</BeskrivelseTekst>
+      <BrevDato xmlns="urn:oio:sagdok:3.0.0">BrevDato</BrevDato>
+      <TitelTekst xmlns="urn:oio:sagdok:3.0.0">TitelTekst</TitelTekst>
+      <DokumentTypeTekst/>
+      <Virkning xmlns="urn:oio:sagdok:3.0.0">
+        <AktoerRef>
+          <UUIDIdentifikator/>
+        </AktoerRef>
+        <AktoerTypeKode>Bruger</AktoerTypeKode>
+      </Virkning>
+    </Egenskaber>
+  </AttributListe>
+  <TilstandListe>
+    <Fremdrift>
+      <FremdriftStatusKode>Modtaget</FremdriftStatusKode>
+    </Fremdrift>
+  </TilstandListe>
+  <RelationListe>
+    <Ansvarlig xmlns="urn:oio:sagdok:3.0.0">
+      <Virkning>
+        <AktoerRef>
+          <UUIDIdentifikator/>
+        </AktoerRef>
+        <AktoerTypeKode>Organisation</AktoerTypeKode>
+      </Virkning>
+      <ReferenceID>
+        <UUIDIdentifikator/>
+      </ReferenceID>
+    </Ansvarlig>
+    <Arkiver xmlns="urn:oio:sagdok:3.0.0">
+      <Virkning>
+        <AktoerRef>
+          <UUIDIdentifikator/>
+        </AktoerRef>
+        <AktoerTypeKode>Bruger</AktoerTypeKode>
+      </Virkning>
+      <ReferenceID>
+        <UUIDIdentifikator/>
+      </ReferenceID>
+    </Arkiver>
+    <Ejer xmlns="urn:oio:sagdok:3.0.0">
+      <Virkning>
+        <AktoerRef>
+          <UUIDIdentifikator/>
+        </AktoerRef>
+        <AktoerTypeKode>Organisation</AktoerTypeKode>
+      </Virkning>
+      <ReferenceID>
+        <UUIDIdentifikator/>
+      </ReferenceID>
+    </Ejer>
+    <Parter xmlns="urn:oio:sagdok:3.0.0">
+      <Virkning>
+        <AktoerRef>
+          <UUIDIdentifikator/>
+        </AktoerRef>
+        <AktoerTypeKode>Bruger</AktoerTypeKode>
+      </Virkning>
+      <ReferenceID xmlns="urn:oio:sagdok:3.0.0">
+        <UUIDIdentifikator xmlns="urn:oio:sagdok:3.0.0">UUIDIdentifikator0</UUIDIdentifikator>
+      </ReferenceID>
+    </Parter>
+  </RelationListe>
+  <VariantListe>
+    <Variant>
+      <VariantEgenskaber>
+        <VariantTekst xmlns="urn:oio:sagdok:3.0.0"/>
+        <Virkning xmlns="urn:oio:sagdok:3.0.0">
+          <AktoerRef>
+            <UUIDIdentifikator/>
+          </AktoerRef>
+          <AktoerTypeKode>Organisation</AktoerTypeKode>
+        </Virkning>
+      </VariantEgenskaber>
+      <Del>
+        <DelEgenskaber>
+          <DelTekst xmlns="urn:oio:sagdok:3.0.0">DelTekst</DelTekst>
+          <IndholdTekst xmlns="urn:oio:sagdok:3.0.0">IndholdTekst</IndholdTekst>
+          <Virkning xmlns="urn:oio:sagdok:3.0.0">
+            <AktoerRef>
+              <UUIDIdentifikator />
+            </AktoerRef>
+            <AktoerTypeKode>Bruger</AktoerTypeKode>
+          </Virkning>
+        </DelEgenskaber>
+        <DelRelationer>
+          <UnderRedigeringAf xmlns="urn:oio:sagdok:3.0.0">
+            <Virkning>
+              <AktoerRef>
+                <UUIDIdentifikator/>
+              </AktoerRef>
+              <AktoerTypeKode>Organisation</AktoerTypeKode>
+            </Virkning>
+            <ReferenceID>
+              <UUIDIdentifikator/>
+            </ReferenceID>
+          </UnderRedigeringAf>
+        </DelRelationer>
+      </Del>
+    </Variant>
+  </VariantListe>
+</OpretInput>

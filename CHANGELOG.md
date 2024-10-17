@@ -12,6 +12,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 ## [Unreleased]
 
 - [OS-119] Keeping value of CPR clean, not adding address protection text
+- Added `os2forms_fasit` module.
 - Applied coding standards
 - [#192](https://github.com/OS2Forms/os2forms/pull/129)
   Added audit logging module from os2web
