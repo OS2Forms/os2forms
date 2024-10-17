@@ -133,6 +133,7 @@ class AttachmentComponentForm extends EntityForm {
   public function exists($id) {
     $entity = $this->entityTypeManager->getStorage('os2forms_attachment_component')
       ->getQuery()
+      ->accessCheck(FALSE)
       ->condition('id', $id)
       ->execute();
     return (bool) $entity;

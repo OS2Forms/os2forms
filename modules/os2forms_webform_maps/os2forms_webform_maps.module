@@ -41,7 +41,7 @@ function os2forms_webform_maps_preprocess_webform_element_base_html__webform_map
   $variables['value']['#plain_text'] = $decoded_value->geojson;
 
   // Load the webform element base HTML template.
-  \Drupal::moduleHandler()->loadInclude('webform', 'inc', 'webform.theme.template');
+  \Drupal::moduleHandler()->loadInclude('webform', 'inc', 'includes/webform.theme.template');
   template_preprocess_webform_element_base_html($variables);
 
   // Generate a unique ID for the map image.

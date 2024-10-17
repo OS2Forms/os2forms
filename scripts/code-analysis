@@ -11,9 +11,9 @@ drupal_composer() {
   composer --working-dir="$drupal_dir" --no-interaction "$@"
 }
 
-# Create new Drupal 9 project
+# Create new Drupal 10 project
 if [ ! -f "$drupal_dir/composer.json" ]; then
-  composer --no-interaction create-project drupal/recommended-project:^9 "$drupal_dir"
+  composer --no-interaction create-project drupal/recommended-project:^10 "$drupal_dir"
 fi
 # Copy our code into the modules folder
 mkdir -p "$drupal_dir/$module_path"
@@ -25,6 +25,11 @@ drupal_composer config minimum-stability dev
 # Allow ALL plugins
 # https://getcomposer.org/doc/06-config.md#allow-plugins
 drupal_composer config --no-plugins allow-plugins true
+
+# Making Drupal 10 compatible
+drupal_composer require psr/http-message:^1.0
+drupal_composer require mglaman/composer-drupal-lenient
+drupal_composer config --merge --json extra.drupal-lenient.allowed-list '["drupal/coc_forms_auto_export", "drupal/webform_node_element"]'
 
 drupal_composer require wikimedia/composer-merge-plugin
 drupal_composer config extra.merge-plugin.include "$module_path/composer.json"
