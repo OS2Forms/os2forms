@@ -16,6 +16,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - [#192](https://github.com/OS2Forms/os2forms/pull/129)
   Added audit logging module from os2web
 - Remove dependency on webform migration module
+- [#100](https://github.com/OS2Forms/os2forms/pull/100)
+  Removed unused `tecnickcom/tcpdf` package.
 
 ## [3.16.0-beta1] 2024-08-27
 
