@@ -15,6 +15,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - Applied coding standards
 - [#192](https://github.com/OS2Forms/os2forms/pull/129)
   Added audit logging module from os2web
+- Remove dependency on webform migration module
 
 ## [3.16.0-beta1] 2024-08-27
 
