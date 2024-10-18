@@ -11,6 +11,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- Added `drush/drush` requirement to enforce D10.
 - [OS-119] Keeping value of CPR clean, not adding address protection text
 - Applied coding standards
 - [#192](https://github.com/OS2Forms/os2forms/pull/129)
