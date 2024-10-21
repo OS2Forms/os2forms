@@ -65,6 +65,7 @@
         "drupal/webform_validation": "^2.0",
         "drupal/webform_views": "^5.0@alpha",
         "drupal/workflow_participants": "^3.0@RC",
+        "drush/drush": "^12.5",
         "http-interop/http-factory-guzzle": "^1.0.0",
         "itk-dev/beskedfordeler-drupal": "^1.0",
         "itk-dev/serviceplatformen": "^1.5",
