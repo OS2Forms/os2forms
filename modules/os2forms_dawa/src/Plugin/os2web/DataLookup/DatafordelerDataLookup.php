@@ -6,6 +6,7 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\os2forms_dawa\Entity\DatafordelerMatrikula;
+use Drupal\os2web_audit\Service\Logger;
 use Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupBase;
 use GuzzleHttp\ClientInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -30,9 +31,15 @@ class DatafordelerDataLookup extends DataLookupBase implements DatafordelerDataL
   /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ClientInterface $httpClient) {
+  public function __construct(
+      array $configuration,
+      $plugin_id,
+      $plugin_definition,
+      ClientInterface $httpClient,
+      Logger $auditLogger,
+  ) {
     $this->httpClient = $httpClient;
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $auditLogger);
   }
 
   /**
@@ -44,6 +51,7 @@ class DatafordelerDataLookup extends DataLookupBase implements DatafordelerDataL
       $plugin_id,
       $plugin_definition,
       $container->get('http_client'),
+      $container->get('os2web_audit.logger'),
     );
   }
 
