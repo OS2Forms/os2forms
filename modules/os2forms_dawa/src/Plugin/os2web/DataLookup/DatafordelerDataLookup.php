@@ -102,7 +102,7 @@ class DatafordelerDataLookup extends DataLookupBase implements DatafordelerDataL
   /**
    * {@inheritdoc}
    */
-  public function defaultConfiguration() {
+  public function defaultConfiguration(): array {
     return [
       'username' => '',
       'password' => '',
