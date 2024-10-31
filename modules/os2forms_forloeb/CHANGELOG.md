@@ -9,6 +9,7 @@ before starting to add changes.
 
 ## [Unreleased]
 
+- Remove dependency on webform_migrate module
 - Implemented `hook_maestro_zero_user_notification` and added *Maestro
   notification* handler for sending notifications via email or digital post.
 - Cleaned up prefilling of forms in `MaestroWebformInheritTask`.
