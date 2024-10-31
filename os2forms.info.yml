@@ -22,7 +22,6 @@ dependencies:
   - 'drupal:webform_composite'
   - 'drupal:webform_entity_print'
   - 'drupal:webform_entity_print_attachment'
-  - 'drupal:webform_migrate'
   - 'drupal:webform_scheduled_email'
   - 'drupal:webform_submission_export_import'
   - 'drupal:webform_submission_log'

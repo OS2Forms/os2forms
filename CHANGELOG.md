@@ -11,12 +11,19 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- Applied coding standards
+- [#192](https://github.com/OS2Forms/os2forms/pull/129)
+  Added audit logging module from os2web
+- Remove dependency on webform migration module
+- [#100](https://github.com/OS2Forms/os2forms/pull/100)
+  Removed unused `tecnickcom/tcpdf` package.
+
 ## [3.16.1] 2024-09-20
 
 - [#133]https://github.com/OS2Forms/os2forms/pull/133
 [OS-119] Keeping value of CPR clean, not adding address protection text
 
-## [3.16.0] 2024-08-27
+## [3.16.0-beta1] 2024-08-27
 
 [#110](https://github.com/OS2Forms/os2forms/pull/110)
 
@@ -283,7 +290,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - Security in case of vulnerabilities.
 ```
 
-[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.15.8...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.16.0-beta1...HEAD
+[3.16.0-beta1]: https://github.com/OS2Forms/os2forms/compare/3.15.8...3.16.0-beta1
 [3.15.8]: https://github.com/OS2Forms/os2forms/compare/3.15.7...3.15.8
 [3.15.7]: https://github.com/OS2Forms/os2forms/compare/3.15.6...3.15.7
 [3.15.6]: https://github.com/OS2Forms/os2forms/compare/3.15.5...3.15.6
