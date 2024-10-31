@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## [3.16.2] 2024-10-31
+
 - Applied coding standards
 - [#192](https://github.com/OS2Forms/os2forms/pull/129)
   Added audit logging module from os2web
@@ -290,7 +292,9 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - Security in case of vulnerabilities.
 ```
 
-[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.16.0-beta1...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.16.2...HEAD
+[3.16.2]: https://github.com/OS2Forms/os2forms/compare/3.16.1...3.16.2
+[3.16.1]: https://github.com/OS2Forms/os2forms/compare/3.16.0-beta1...3.16.1
 [3.16.0-beta1]: https://github.com/OS2Forms/os2forms/compare/3.15.8...3.16.0-beta1
 [3.15.8]: https://github.com/OS2Forms/os2forms/compare/3.15.7...3.15.8
 [3.15.7]: https://github.com/OS2Forms/os2forms/compare/3.15.6...3.15.7
