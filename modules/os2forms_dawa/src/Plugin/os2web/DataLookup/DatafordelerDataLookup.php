@@ -32,11 +32,11 @@ class DatafordelerDataLookup extends DataLookupBase implements DatafordelerDataL
    * {@inheritdoc}
    */
   public function __construct(
-      array $configuration,
-      $plugin_id,
-      $plugin_definition,
-      ClientInterface $httpClient,
-      Logger $auditLogger,
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    ClientInterface $httpClient,
+    Logger $auditLogger,
   ) {
     $this->httpClient = $httpClient;
     parent::__construct($configuration, $plugin_id, $plugin_definition, $auditLogger);
