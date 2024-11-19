@@ -3,6 +3,8 @@
 Adds [Fasit Schultz](https://schultz.dk/loesninger/schultz-fasit/)
 handler for archiving purposes.
 
+For usage in danish, see [BENYTTELSE](docs/BENYTTELSE.md).
+
 ## Installation
 
 ```sh
