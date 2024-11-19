@@ -52,12 +52,10 @@ class SigningService {
    *   The cid made available by the get_cid() function.
    * @param string $forward_url
    *   The url on the local server to forward user to afterwards.
-   * @param bool $leave
-   *   Leave the pdf file on the remote server.
    *
    * @return void
    */
-  public function sign(string $document_uri, string $cid, string $forward_url, bool $leave = FALSE):void {
+  public function sign(string $document_uri, string $cid, string $forward_url):void {
     if (empty($document_uri) || empty($cid) || empty($forward_url)) {
       \Drupal::logger('os2forms_digital_signature')->error('Cannot initiate signing process, check params: document_uri: %document_uri, cid: %cid, forward_url: %forward_url', ['%document_uri' => $document_uri, '%cid' => $cid, '%forward_url' => $forward_url]);
       return;
@@ -78,18 +76,23 @@ class SigningService {
    *   The filename as given by the signing server.
    * @param boolean $leave
    *   If TRUE, leave the file on the remote server, default is to remove the file after download.
+   * @param boolean $annotate
+   *    If TRUE, download a pdf with an annotation page.
+   * @param array $attributes
+   *    An array of pairs of prompts and values that will be added to the annotation box, e.g.,
+   *      ['IP' => $_SERVER['REMOTE_ADDR'], 'Region' => 'Capital Region Copenhagen'].
    *
    * @return mixed|bool
    *   The binary data of the pdf or FALSE if an error occurred.
    */
-  public function download(string $filename, $leave = FALSE) {
+  public function download(string $filename, $leave = FALSE, $annotate = TRUE, $attributes = []) {
     if (empty($filename)) {
       return FALSE;
     }
     if (!preg_match('/^[a-f0-9]{32}\.pdf$/', $filename)) {
       return FALSE;
     }
-    $params = ['action' => 'download', 'file' => $filename, 'leave' => $leave];
+    $params = ['action' => 'download', 'file' => $filename, 'leave' => $leave, 'annotate' => $annotate, 'attributes' => $attributes];
     $url = $this->config->get('os2forms_digital_signature_remove_service_url') . http_build_query($params);
 
     $curl = curl_init($url);
