@@ -11,6 +11,9 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- Updated `os2web/os2web_audit` version
+- Updated `os2web/os2web_datalookup` version
+
 ## [3.16.2] 2024-10-31
 
 - Applied coding standards
