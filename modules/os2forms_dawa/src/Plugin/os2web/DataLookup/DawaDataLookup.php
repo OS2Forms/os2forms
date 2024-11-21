@@ -46,7 +46,7 @@ class DawaDataLookup extends DataLookupBase implements DawaDataLookupInterface {
   /**
    * {@inheritdoc}
    */
-  public function defaultConfiguration() {
+  public function defaultConfiguration(): array {
     return [
       'address_autocomplete_path' => 'https://dawa.aws.dk/adresser/autocomplete',
       'address_api_path' => 'https://dawa.aws.dk/adresser',
