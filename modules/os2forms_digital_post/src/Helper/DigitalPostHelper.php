@@ -8,8 +8,8 @@ use Drupal\os2forms_digital_post\Exception\RuntimeException;
 use Drupal\os2web_datalookup\LookupResult\CompanyLookupResult;
 use Drupal\os2web_datalookup\LookupResult\CprLookupResult;
 use Drupal\os2web_datalookup\Plugin\DataLookupManager;
-use Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupInterfaceCompany;
-use Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupInterfaceCpr;
+use Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupCompanyInterface;
+use Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupCprInterface;
 use Drupal\webform\WebformSubmissionInterface;
 use ItkDev\Serviceplatformen\Service\SF1601\SF1601;
 use ItkDev\Serviceplatformen\Service\SF1601\Serializer;
@@ -99,7 +99,7 @@ final class DigitalPostHelper implements LoggerInterface {
    */
   public function lookupCpr(string $cpr): CprLookupResult {
     $instance = $this->dataLookupManager->createDefaultInstanceByGroup('cpr_lookup');
-    if (!($instance instanceof DataLookupInterfaceCpr)) {
+    if (!($instance instanceof DataLookupCprInterface)) {
       throw new RuntimeException('Cannot get CPR data lookup instance');
     }
     $lookupResult = $instance->lookup($cpr);
@@ -115,7 +115,7 @@ final class DigitalPostHelper implements LoggerInterface {
    */
   public function lookupCvr(string $cvr): CompanyLookupResult {
     $instance = $this->dataLookupManager->createDefaultInstanceByGroup('cvr_lookup');
-    if (!($instance instanceof DataLookupInterfaceCompany)) {
+    if (!($instance instanceof DataLookupCompanyInterface)) {
       throw new RuntimeException('Cannot get CVR data lookup instance');
     }
     $lookupResult = $instance->lookup($cvr);

@@ -182,7 +182,7 @@ class FormsHelper {
     }
 
     if ($cpr) {
-      /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupInterfaceCpr $cprPlugin */
+      /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupCprInterface $cprPlugin */
       $cprPlugin = $this->dataLookManager->createDefaultInstanceByGroup('cpr_lookup');
 
       if ($cprPlugin->isReady()) {
@@ -284,7 +284,7 @@ class FormsHelper {
 
     // Performing the lookup.
     if ($cvr) {
-      /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupInterfaceCompany $cvrPlugin */
+      /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupCompanyInterface $cvrPlugin */
       $cvrPlugin = $this->dataLookManager->createDefaultInstanceByGroup('cvr_lookup');
 
       if ($cvrPlugin->isReady()) {
@@ -292,7 +292,7 @@ class FormsHelper {
       }
     }
     elseif ($pNumber) {
-      /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupInterfaceCompany $pNumberPlugin */
+      /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupCompanyInterface $pNumberPlugin */
       $pNumberPlugin = $this->dataLookManager->createDefaultInstanceByGroup('pnumber_lookup');
 
       if ($pNumberPlugin->isReady()) {
