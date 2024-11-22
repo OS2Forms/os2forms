@@ -9,5 +9,6 @@ dependencies:
   - 'os2web_datalookup:os2web_datalookup'
   - 'webform:webform'
   - 'webform:webform_submission_log'
+  - 'os2web:os2web_audit'
 
 configure: os2forms_digital_post.admin.settings
