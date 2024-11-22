@@ -11,6 +11,10 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- Ensured installation of `os2web_audit`
+  - `os2web_audit` has default logging through `watchdog`
+- Adds audit logging to `os2forms_digital_post`
+
 ## [3.17.0] 2024-11-21
 
 - Updated `os2web/os2web_audit` version
