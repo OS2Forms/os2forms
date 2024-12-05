@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- Added `os2forms_fasit` module.
+
 ## [3.17.0] 2024-11-21
 
 - Updated `os2web/os2web_audit` version
