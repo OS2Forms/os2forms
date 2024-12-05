@@ -13,6 +13,11 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 - Added `os2forms_fasit` module.
 
+## [3.17.0] 2024-11-21
+
+- Updated `os2web/os2web_audit` version
+- Updated `os2web/os2web_datalookup` version
+
 ## [3.16.2] 2024-10-31
 
 - Applied coding standards
@@ -294,7 +299,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - Security in case of vulnerabilities.
 ```
 
-[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.16.2...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.17.0...HEAD
+[3.17.0]: https://github.com/OS2Forms/os2forms/compare/3.16.2...3.17.0
 [3.16.2]: https://github.com/OS2Forms/os2forms/compare/3.16.1...3.16.2
 [3.16.1]: https://github.com/OS2Forms/os2forms/compare/3.16.0-beta1...3.16.1
 [3.16.0-beta1]: https://github.com/OS2Forms/os2forms/compare/3.15.8...3.16.0-beta1
