@@ -201,11 +201,17 @@ class FasitHelper {
 
     [$certificateOptions, $tempCertFilename] = $this->getCertificateOptionsAndTempCertFilename();
 
+    $body = $doc->saveXML();
+
+    if (!$body) {
+      throw new FasitXMLGenerationException('Could not save XML body');
+    }
+
     $options = [
       'headers' => [
         'Content-Type' => 'application/xml',
       ],
-      'body' => $doc->saveXML(),
+      'body' => $body,
       'cert' => $certificateOptions,
     ];
 
