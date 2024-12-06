@@ -8,3 +8,4 @@ dependencies:
   - 'drupal:os2forms'
   - 'drupal:os2web_nemlogin'
   - 'os2web_datalookup:os2web_datalookup'
+  - 'os2web:os2web_audit'

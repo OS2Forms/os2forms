@@ -11,6 +11,13 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## [3.19.0] 2024-12-06
+
+- Ensured installation of `os2web_audit`
+  - `os2web_audit` has default logging through `watchdog`
+- Adds audit logging to `os2forms_digital_post`
+- Adds audit logging to `os2forms_nemid`
+
 ## [3.18.0] 2024-12-05
 
 - Added `os2forms_fasit` module.
@@ -301,7 +308,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - Security in case of vulnerabilities.
 ```
 
-[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.18.0...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.19.0...HEAD
+[3.19.0]: https://github.com/OS2Forms/os2forms/compare/3.18.0...3.19.0
 [3.18.0]: https://github.com/OS2Forms/os2forms/compare/3.17.0...3.18.0
 [3.17.0]: https://github.com/OS2Forms/os2forms/compare/3.16.2...3.17.0
 [3.16.2]: https://github.com/OS2Forms/os2forms/compare/3.16.1...3.16.2

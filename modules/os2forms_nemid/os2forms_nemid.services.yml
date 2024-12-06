@@ -6,4 +6,4 @@ services:
       - {name: event_subscriber}
   os2forms_nemid.forms_helper:
     class: Drupal\os2forms_nemid\Service\FormsHelper
-    arguments: ['@os2web_nemlogin.auth_provider', '@plugin.manager.os2web_datalookup', '@current_route_match']
+    arguments: ['@os2web_nemlogin.auth_provider', '@plugin.manager.os2web_datalookup', '@current_route_match', '@os2web_audit.logger']
