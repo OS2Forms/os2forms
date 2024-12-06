@@ -8,9 +8,11 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\os2forms_nemid\Element\NemidCompanyCvrFetchData;
 use Drupal\os2forms_nemid\Element\NemidCompanyPNumber;
 use Drupal\os2forms_nemid\Element\NemidCprFetchData;
+use Drupal\os2web_audit\Service\Logger;
 use Drupal\os2web_datalookup\LookupResult\CompanyLookupResult;
 use Drupal\os2web_datalookup\LookupResult\CprLookupResult;
 use Drupal\os2web_datalookup\Plugin\DataLookupManager;
+use Drupal\os2web_nemlogin\Plugin\AuthProviderInterface;
 use Drupal\os2web_nemlogin\Service\AuthProviderService;
 use Drupal\webform\WebformSubmissionInterface;
 
@@ -71,6 +73,13 @@ class FormsHelper {
   private RouteMatchInterface $routeMatch;
 
   /**
+   * An audit logger.
+   *
+   * @var \Drupal\os2web_audit\Service\Logger
+   */
+  private Logger $auditLogger;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\os2web_nemlogin\Service\AuthProviderService $authProviderService
@@ -79,11 +88,19 @@ class FormsHelper {
    *   Datalookup plugin manager.
    * @param \Drupal\Core\Routing\RouteMatchInterface $routeMatch
    *   Route match service.
+   * @param \Drupal\os2web_audit\Service\Logger $auditLogger
+   *   Audit logger.
    */
-  public function __construct(AuthProviderService $authProviderService, DataLookupManager $dataLookPluginManager, RouteMatchInterface $routeMatch) {
+  public function __construct(
+    AuthProviderService $authProviderService,
+    DataLookupManager $dataLookPluginManager,
+    RouteMatchInterface $routeMatch,
+    Logger $auditLogger,
+  ) {
     $this->authProviderService = $authProviderService;
     $this->dataLookManager = $dataLookPluginManager;
     $this->routeMatch = $routeMatch;
+    $this->auditLogger = $auditLogger;
   }
 
   /**
@@ -125,6 +142,14 @@ class FormsHelper {
         }
       }
     }
+
+    // We need the auth provider for logging purposes.
+    $authProviderPlugin = $this->getAuthProvider($form_state);
+
+    $userCpr = $authProviderPlugin->fetchValue('cpr');
+    $lookedUpCpr = $cprLookupResult->getCpr();
+
+    $this->auditLogger->info('DataLookup', 'User with cpr ' . $userCpr . ' looked at cpr ' . $lookedUpCpr);
 
     return $cprLookupResult;
   }
@@ -196,7 +221,7 @@ class FormsHelper {
   /**
    * Retrieves the CompanyLookupResult which is stored in form_state.
    *
-   * If there is no CBVRLookupResult, it is requested and saved for future uses.
+   * If there is no CVRLookupResult, it is requested and saved for future uses.
    *
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   Form state.
@@ -406,6 +431,33 @@ class FormsHelper {
         }
       }
     }
+  }
+
+  /**
+   * Get active auth provider plugin.
+   *
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   Form state.
+   *
+   * @return \Drupal\os2web_nemlogin\Plugin\AuthProviderInterface
+   *   The active auth provider plugin.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\PluginException
+   */
+  private function getAuthProvider(FormStateInterface $form_state): AuthProviderInterface {
+    /** @var \Drupal\webform\WebformSubmissionInterface Interface $webformSubmission */
+    $webformSubmission = $form_state->getFormObject()->getEntity();
+    /** @var \Drupal\webform\WebformInterface $webform */
+    $webform = $webformSubmission->getWebform();
+    $webformNemidSettings = $webform->getThirdPartySetting('os2forms', 'os2forms_nemid');
+
+    // Getting auth plugin ID override.
+    $authPluginId = NULL;
+    if (!empty($webformNemidSettings['session_type'])) {
+      $authPluginId = $webformNemidSettings['session_type'];
+    }
+
+    return ($authPluginId) ? $this->authProviderService->getPluginInstance($authPluginId) : $this->authProviderService->getActivePlugin();
   }
 
 }
