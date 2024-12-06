@@ -149,7 +149,7 @@ class FormsHelper {
     $userCpr = $authProviderPlugin->fetchValue('cpr');
     $lookedUpCpr = $cprLookupResult->getCpr();
 
-    $this->auditLogger->info('DataLookup', 'User with cpr ' . $userCpr . ' looked at cpr ' . $lookedUpCpr);
+    $this->auditLogger->info('DataLookup', 'User with cpr ' . $userCpr . ' looked up cpr ' . $lookedUpCpr);
 
     return $cprLookupResult;
   }
