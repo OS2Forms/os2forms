@@ -5,6 +5,7 @@ namespace Drupal\os2forms_digital_post\Helper;
 use DigitalPost\MeMo\Message;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\os2forms_digital_post\Exception\RuntimeException;
+use Drupal\os2web_audit\Service\Logger;
 use Drupal\os2web_datalookup\LookupResult\CompanyLookupResult;
 use Drupal\os2web_datalookup\LookupResult\CprLookupResult;
 use Drupal\os2web_datalookup\Plugin\DataLookupManager;
@@ -35,6 +36,7 @@ final class DigitalPostHelper implements LoggerInterface {
     private readonly BeskedfordelerHelper $beskedfordelerHelper,
     private readonly LoggerChannelInterface $logger,
     private readonly LoggerChannelInterface $submissionLogger,
+    private readonly Logger $auditLogger,
   ) {
   }
 
@@ -64,12 +66,18 @@ final class DigitalPostHelper implements LoggerInterface {
     ];
     $service = new SF1601($options);
     $transactionId = Serializer::createUuid();
+
     $response = $service->kombiPostAfsend($transactionId, $type, $message, $forsendelse);
 
     $content = (string) $response->getContent();
     if (NULL !== $submission) {
       $this->beskedfordelerHelper->createMessage($submission->id(), $message, $content);
     }
+
+    // RecipientID should be the same in Message and Forsendelse,
+    // so fetch it from Message as it is always set.
+    $msg = sprintf('Sent digital post of type %s to %s', $type, $message->getMessageHeader()->getRecipient()->getRecipientID());
+    $this->auditLogger->info('DigitalPost', $msg);
 
     return [$response, $service->getLastKombiMeMoMessage()];
   }
