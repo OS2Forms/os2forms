@@ -7,4 +7,5 @@ dependencies:
   - drupal:webform
   - drupal:advancedqueue
   - os2forms:os2forms_attachment
+  - os2web:os2web_audit
 configure: os2forms_fasit.admin.settings
