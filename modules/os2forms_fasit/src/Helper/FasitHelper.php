@@ -11,6 +11,7 @@ use Drupal\os2forms_fasit\Exception\FileTypeException;
 use Drupal\os2forms_fasit\Exception\InvalidSettingException;
 use Drupal\os2forms_fasit\Exception\InvalidSubmissionException;
 use Drupal\os2forms_fasit\Plugin\WebformHandler\FasitWebformHandler;
+use Drupal\os2web_audit\Service\Logger;
 use Drupal\webform\Entity\WebformSubmission;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
@@ -33,7 +34,13 @@ class FasitHelper {
     'managed_file',
   ];
 
-  public function __construct(private readonly ClientInterface $client, private readonly EntityTypeManagerInterface $entityTypeManager, private readonly Settings $settings, private readonly CertificateLocatorHelper $certificateLocator) {
+  public function __construct(
+    private readonly ClientInterface $client,
+    private readonly EntityTypeManagerInterface $entityTypeManager,
+    private readonly Settings $settings,
+    private readonly CertificateLocatorHelper $certificateLocator,
+    private readonly Logger $auditLogger,
+  ) {
   }
 
   /**
@@ -231,6 +238,9 @@ class FasitHelper {
     if (Response::HTTP_OK !== $response->getStatusCode()) {
       throw new FasitResponseException(sprintf('Expected status code 200, received %d', $response->getStatusCode()));
     }
+
+    $msg = sprintf('Successfully uploaded document %s to cpr %s in Fasit. Webform id %s.', $fasitDocumentTitle, $fasitCpr, $submission->getWebform()->id());
+    $this->auditLogger->info('Fasit', $msg);
   }
 
   /**
@@ -307,7 +317,7 @@ class FasitHelper {
     $tempAttachmentFilename = tempnam(sys_get_temp_dir(), 'attachment');
     file_put_contents($tempAttachmentFilename, $fileContent);
 
-    return $this->uploadFile($fileName, $tempAttachmentFilename);
+    return $this->uploadFile($fileName, $tempAttachmentFilename, $submission->getWebform()->id());
   }
 
   /**
@@ -317,6 +327,8 @@ class FasitHelper {
    *   The original filename.
    * @param string $tempFilename
    *   The temp filename.
+   * @param string $webformId
+   *   The webform id.
    *
    * @throws \Drupal\os2forms_fasit\Exception\CertificateLocatorException
    *   Certificate locator exception.
@@ -325,7 +337,7 @@ class FasitHelper {
    *
    * @phpstan-return array<string, mixed>
    */
-  private function uploadFile(string $originalFilename, string $tempFilename): array {
+  private function uploadFile(string $originalFilename, string $tempFilename, string $webformId): array {
     $endpoint = sprintf('%s/%s/%s/documents/%s',
       $this->settings->getFasitApiBaseUrl(),
       $this->settings->getFasitApiTenant(),
@@ -371,6 +383,12 @@ class FasitHelper {
       throw new FasitResponseException('Could not get upload id from response');
     }
 
+    // Note, that this does not mean a document has been sent,
+    // to a citizen case in Fasit yet. This is done later by uploadDocument.
+    // The file has simply been made ready.
+    $msg = sprintf('Successfully uploaded file %s to Fasit. Webform id %s.', $originalFilename, $webformId);
+    $this->auditLogger->info('Fasit', $msg);
+
     return ['filename' => $originalFilename, 'id' => $content['id']];
   }
 
@@ -392,6 +410,7 @@ class FasitHelper {
     // Fetch element ids that may contain pdf files.
     /** @var \Drupal\webform\Entity\WebformSubmission $submission */
     $submission = $this->getSubmission($submissionId);
+    $webformId = $submission->getWebform()->id();
     $fileIds = $this->getFileElementKeysFromSubmission($submission);
     $fileStorage = $this->entityTypeManager->getStorage('file');
 
@@ -412,7 +431,7 @@ class FasitHelper {
       $tempFilename = tempnam(sys_get_temp_dir(), 'attachment');
       file_put_contents($tempFilename, $fileContent);
 
-      $uploads[] = $this->uploadFile($filename, $tempFilename);
+      $uploads[] = $this->uploadFile($filename, $tempFilename, $webformId);
     }
 
     return $uploads;

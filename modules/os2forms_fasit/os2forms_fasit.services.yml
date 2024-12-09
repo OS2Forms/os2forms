@@ -13,3 +13,4 @@ services:
       - '@entity_type.manager'
       - "@Drupal\\os2forms_fasit\\Helper\\Settings"
       - "@Drupal\\os2forms_fasit\\Helper\\CertificateLocatorHelper"
+      - "@os2web_audit.logger"
