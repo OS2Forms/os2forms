@@ -13,6 +13,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 - Added webform ID to digital post audit logging messages.
 - Added audit logging to `os2forms_fasit`
+- Added audit logging to `os2forms_fbs_handler`
 
 ## [3.19.0] 2024-12-06
 

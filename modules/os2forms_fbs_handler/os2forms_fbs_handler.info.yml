@@ -6,3 +6,4 @@ core_version_requirement: ^9 || ^10
 dependencies:
   - 'webform:webform'
   - 'advancedqueue:advancedqueue'
+  - 'os2web:os2web_audit'
