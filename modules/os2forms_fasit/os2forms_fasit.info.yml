@@ -1,0 +1,11 @@
+name: 'OS2Forms Fasit'
+type: module
+description: 'Fasit integration'
+package: OS2Forms
+core_version_requirement: ^9 || ^10
+dependencies:
+  - drupal:webform
+  - drupal:advancedqueue
+  - os2forms:os2forms_attachment
+  - os2web:os2web_audit
+configure: os2forms_fasit.admin.settings

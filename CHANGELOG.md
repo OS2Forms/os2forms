@@ -11,9 +11,43 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
-- [OS-119] Keeping value of CPR clean, not adding address protection text
+## [3.20.0] 2024-12-09
 
-## [3.16.0] 2024-08-27
+- Added webform ID to digital post audit logging messages.
+- Added audit logging to `os2forms_fasit`
+- Added audit logging to `os2forms_fbs_handler`
+
+## [3.19.0] 2024-12-06
+
+- Ensured installation of `os2web_audit`
+  - `os2web_audit` has default logging through `watchdog`
+- Adds audit logging to `os2forms_digital_post`
+- Adds audit logging to `os2forms_nemid`
+
+## [3.18.0] 2024-12-05
+
+- Added `os2forms_fasit` module.
+
+## [3.17.0] 2024-11-21
+
+- Updated `os2web/os2web_audit` version
+- Updated `os2web/os2web_datalookup` version
+
+## [3.16.2] 2024-10-31
+
+- Applied coding standards
+- [#192](https://github.com/OS2Forms/os2forms/pull/129)
+  Added audit logging module from os2web
+- Remove dependency on webform migration module
+- [#100](https://github.com/OS2Forms/os2forms/pull/100)
+  Removed unused `tecnickcom/tcpdf` package.
+
+## [3.16.1] 2024-09-20
+
+- [#133](https://github.com/OS2Forms/os2forms/pull/133)
+[OS-119] Keeping value of CPR clean, not adding address protection text
+
+## [3.16.0-beta1] 2024-08-27
 
 [#110](https://github.com/OS2Forms/os2forms/pull/110)
 
@@ -280,7 +314,14 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - Security in case of vulnerabilities.
 ```
 
-[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.15.8...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.20.0...HEAD
+[3.20.0]: https://github.com/OS2Forms/os2forms/compare/3.19.0...3.20.0
+[3.19.0]: https://github.com/OS2Forms/os2forms/compare/3.18.0...3.19.0
+[3.18.0]: https://github.com/OS2Forms/os2forms/compare/3.17.0...3.18.0
+[3.17.0]: https://github.com/OS2Forms/os2forms/compare/3.16.2...3.17.0
+[3.16.2]: https://github.com/OS2Forms/os2forms/compare/3.16.1...3.16.2
+[3.16.1]: https://github.com/OS2Forms/os2forms/compare/3.16.0-beta1...3.16.1
+[3.16.0-beta1]: https://github.com/OS2Forms/os2forms/compare/3.15.8...3.16.0-beta1
 [3.15.8]: https://github.com/OS2Forms/os2forms/compare/3.15.7...3.15.8
 [3.15.7]: https://github.com/OS2Forms/os2forms/compare/3.15.6...3.15.7
 [3.15.6]: https://github.com/OS2Forms/os2forms/compare/3.15.5...3.15.6

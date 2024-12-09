@@ -2,15 +2,16 @@
 
 namespace Drupal\os2forms_fbs_handler\Plugin\AdvancedQueue\JobType;
 
-use Drupal\advancedqueue\Job;
-use Drupal\advancedqueue\JobResult;
-use Drupal\advancedqueue\Plugin\AdvancedQueue\JobType\JobTypeBase;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\advancedqueue\Job;
+use Drupal\advancedqueue\JobResult;
+use Drupal\advancedqueue\Plugin\AdvancedQueue\JobType\JobTypeBase;
 use Drupal\os2forms_fbs_handler\Client\FBS;
 use Drupal\os2forms_fbs_handler\Client\Model\Guardian;
 use Drupal\os2forms_fbs_handler\Client\Model\Patron;
+use Drupal\os2web_audit\Service\Logger;
 use Drupal\webform\Entity\WebformSubmission;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -41,6 +42,7 @@ final class FbsCreateUser extends JobTypeBase implements ContainerFactoryPluginI
     $plugin_definition,
     LoggerChannelFactoryInterface $loggerFactory,
     protected readonly Client $client,
+    protected readonly Logger $auditLogger,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->submissionLogger = $loggerFactory->get('webform_submission');
@@ -55,7 +57,8 @@ final class FbsCreateUser extends JobTypeBase implements ContainerFactoryPluginI
       $plugin_id,
       $plugin_definition,
       $container->get('logger.factory'),
-      $container->get('http_client')
+      $container->get('http_client'),
+      $container->get('os2web_audit.logger'),
     );
   }
 
@@ -120,6 +123,9 @@ final class FbsCreateUser extends JobTypeBase implements ContainerFactoryPluginI
         }
 
         $this->submissionLogger->notice($this->t('The submission #@serial was successfully delivered', ['@serial' => $webformSubmission->serial()]), $logger_context);
+
+        $msg = sprintf('Successfully created FBS patron with cpr %s and guardian with cpr %s. Webform id %s.', $data['barn_cpr'], $data['cpr'], $webformSubmission->getWebform()->id());
+        $this->auditLogger->info('FBS', $msg);
 
         return JobResult::success();
       }

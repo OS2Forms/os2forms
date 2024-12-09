@@ -37,6 +37,7 @@ services:
       - "@Drupal\\os2forms_digital_post\\Helper\\BeskedfordelerHelper"
       - "@logger.channel.os2forms_digital_post"
       - "@logger.channel.os2forms_digital_post_submission"
+      - "@os2web_audit.logger"
 
   Drupal\os2forms_digital_post\Helper\WebformHelperSF1601:
     arguments:

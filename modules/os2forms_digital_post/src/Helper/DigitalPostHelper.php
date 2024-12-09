@@ -5,14 +5,15 @@ namespace Drupal\os2forms_digital_post\Helper;
 use DigitalPost\MeMo\Message;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\os2forms_digital_post\Exception\RuntimeException;
+use Drupal\os2web_audit\Service\Logger;
 use Drupal\os2web_datalookup\LookupResult\CompanyLookupResult;
 use Drupal\os2web_datalookup\LookupResult\CprLookupResult;
 use Drupal\os2web_datalookup\Plugin\DataLookupManager;
-use Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupInterfaceCompany;
-use Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupInterfaceCpr;
+use Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupCompanyInterface;
+use Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupCprInterface;
 use Drupal\webform\WebformSubmissionInterface;
-use ItkDev\Serviceplatformen\Service\SF1601\Serializer;
 use ItkDev\Serviceplatformen\Service\SF1601\SF1601;
+use ItkDev\Serviceplatformen\Service\SF1601\Serializer;
 use Oio\Fjernprint\ForsendelseI;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
@@ -35,6 +36,7 @@ final class DigitalPostHelper implements LoggerInterface {
     private readonly BeskedfordelerHelper $beskedfordelerHelper,
     private readonly LoggerChannelInterface $logger,
     private readonly LoggerChannelInterface $submissionLogger,
+    private readonly Logger $auditLogger,
   ) {
   }
 
@@ -55,7 +57,7 @@ final class DigitalPostHelper implements LoggerInterface {
    *
    * @phpstan-return array<int, mixed>
    */
-  public function sendDigitalPost(string $type, Message $message, ?ForsendelseI $forsendelse, WebformSubmissionInterface $submission = NULL): array {
+  public function sendDigitalPost(string $type, Message $message, ?ForsendelseI $forsendelse, ?WebformSubmissionInterface $submission = NULL): array {
     $senderSettings = $this->settings->getSender();
     $options = [
       'test_mode' => (bool) $this->settings->getTestMode(),
@@ -64,6 +66,7 @@ final class DigitalPostHelper implements LoggerInterface {
     ];
     $service = new SF1601($options);
     $transactionId = Serializer::createUuid();
+
     $response = $service->kombiPostAfsend($transactionId, $type, $message, $forsendelse);
 
     $content = (string) $response->getContent();
@@ -71,11 +74,27 @@ final class DigitalPostHelper implements LoggerInterface {
       $this->beskedfordelerHelper->createMessage($submission->id(), $message, $content);
     }
 
+    // RecipientID should be the same in Message and Forsendelse,
+    // so fetch it from Message as it is always set.
+    $msg = sprintf('Sent digital post of type %s to %s.', $type, $message->getMessageHeader()->getRecipient()->getRecipientID());
+    // If the cause is a submission, add webform id to audit logging message.
+    $msg .= $submission ? sprintf(' Webform id %s.', $submission->getWebform()->id()) : '';
+    $this->auditLogger->info('DigitalPost', $msg);
+
     return [$response, $service->getLastKombiMeMoMessage()];
   }
 
   /**
    * {@inheritdoc}
+   *
+   * @param mixed $level
+   *   The level.
+   * @param string $message
+   *   The message.
+   * @param array $context
+   *   The context.
+   *
+   * @phpstan-param array<string, mixed> $context
    */
   public function log($level, $message, array $context = []): void {
     $this->logger->log($level, $message, $context);
@@ -90,7 +109,7 @@ final class DigitalPostHelper implements LoggerInterface {
    */
   public function lookupCpr(string $cpr): CprLookupResult {
     $instance = $this->dataLookupManager->createDefaultInstanceByGroup('cpr_lookup');
-    if (!($instance instanceof DataLookupInterfaceCpr)) {
+    if (!($instance instanceof DataLookupCprInterface)) {
       throw new RuntimeException('Cannot get CPR data lookup instance');
     }
     $lookupResult = $instance->lookup($cpr);
@@ -106,7 +125,7 @@ final class DigitalPostHelper implements LoggerInterface {
    */
   public function lookupCvr(string $cvr): CompanyLookupResult {
     $instance = $this->dataLookupManager->createDefaultInstanceByGroup('cvr_lookup');
-    if (!($instance instanceof DataLookupInterfaceCompany)) {
+    if (!($instance instanceof DataLookupCompanyInterface)) {
       throw new RuntimeException('Cannot get CVR data lookup instance');
     }
     $lookupResult = $instance->lookup($cvr);
