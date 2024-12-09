@@ -35,11 +35,11 @@ class FasitHelper {
   ];
 
   public function __construct(
-      private readonly ClientInterface $client,
-      private readonly EntityTypeManagerInterface $entityTypeManager,
-      private readonly Settings $settings,
-      private readonly CertificateLocatorHelper $certificateLocator,
-      private readonly Logger $auditLogger,
+    private readonly ClientInterface $client,
+    private readonly EntityTypeManagerInterface $entityTypeManager,
+    private readonly Settings $settings,
+    private readonly CertificateLocatorHelper $certificateLocator,
+    private readonly Logger $auditLogger,
   ) {
   }
 
@@ -239,7 +239,7 @@ class FasitHelper {
       throw new FasitResponseException(sprintf('Expected status code 200, received %d', $response->getStatusCode()));
     }
 
-    $msg = sprintf('Successfully uploaded document %s to cpr %s in Fasit. Webform id: %s', $fasitDocumentTitle, $fasitCpr, $submission->getWebform()->id());
+    $msg = sprintf('Successfully uploaded document %s to cpr %s in Fasit. Webform id %s.', $fasitDocumentTitle, $fasitCpr, $submission->getWebform()->id());
     $this->auditLogger->info('Fasit', $msg);
   }
 
@@ -329,7 +329,7 @@ class FasitHelper {
    *   The temp filename.
    * @param string $webformId
    *   The webform id.
- *
+   *
    * @throws \Drupal\os2forms_fasit\Exception\CertificateLocatorException
    *   Certificate locator exception.
    * @throws \Drupal\os2forms_fasit\Exception\FasitResponseException
@@ -383,9 +383,10 @@ class FasitHelper {
       throw new FasitResponseException('Could not get upload id from response');
     }
 
-    // Note, that this does not mean a document has been sent to a citizen case in Fasit yet.
-    // This is done later by uploadDocument. The file has simply been made ready.
-    $msg = sprintf('Successfully uploaded file %s to Fasit. Webform id: %s', $originalFilename, $webformId);
+    // Note, that this does not mean a document has been sent,
+    // to a citizen case in Fasit yet. This is done later by uploadDocument.
+    // The file has simply been made ready.
+    $msg = sprintf('Successfully uploaded file %s to Fasit. Webform id %s.', $originalFilename, $webformId);
     $this->auditLogger->info('Fasit', $msg);
 
     return ['filename' => $originalFilename, 'id' => $content['id']];

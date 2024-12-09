@@ -77,6 +77,7 @@ final class DigitalPostHelper implements LoggerInterface {
     // RecipientID should be the same in Message and Forsendelse,
     // so fetch it from Message as it is always set.
     $msg = sprintf('Sent digital post of type %s to %s.', $type, $message->getMessageHeader()->getRecipient()->getRecipientID());
+    // If the cause is a submission, add webform id to audit logging message.
     $msg .= $submission ? sprintf(' Webform id %s.', $submission->getWebform()->id()) : '';
     $this->auditLogger->info('DigitalPost', $msg);
 
