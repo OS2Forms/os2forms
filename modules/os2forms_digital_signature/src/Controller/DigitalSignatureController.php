@@ -7,6 +7,7 @@ use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Url;
 use Drupal\file\Entity\File;
 use Drupal\os2forms_digital_signature\Service\SigningService;
+use Drupal\webform\WebformSubmissionInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -37,6 +38,7 @@ class DigitalSignatureController {
       ->loadByProperties(['uuid' => $uuid]);
 
     // Since loadByProperties returns an array, we need to fetch the first item.
+    /** @var WebformSubmissionInterface $webformSubmission */
     $webformSubmission = $submissions ? reset($submissions) : NULL;
     if (!$webformSubmission) {
       // Submission does not exist.
@@ -44,6 +46,16 @@ class DigitalSignatureController {
     }
 
     $webformId = $webformSubmission->getWebform()->id();
+
+    // Checking the action
+    $action = \Drupal::request()->query->get('name');
+    if ($action == 'cancel') {
+      $cancelUrl = $webformSubmission->getWebform()->toUrl()->toString();
+
+      // Redirect to the webform confirmation page.
+      $response = new RedirectResponse($cancelUrl);
+      return $response;
+    }
 
     // Checking hash.
     $salt = \Drupal::service('settings')->get('hash_salt');
