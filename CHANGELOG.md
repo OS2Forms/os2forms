@@ -11,6 +11,10 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## [3.20.1] 2024-12-10
+
+- Avoided accessing non-initialized property when logging in `os2forms_nemid`.
+
 ## [3.20.0] 2024-12-09
 
 - Added webform ID to digital post audit logging messages.
@@ -314,7 +318,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - Security in case of vulnerabilities.
 ```
 
-[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.20.0...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.20.1...HEAD
+[3.20.1]: https://github.com/OS2Forms/os2forms/compare/3.20.0...3.20.1
 [3.20.0]: https://github.com/OS2Forms/os2forms/compare/3.19.0...3.20.0
 [3.19.0]: https://github.com/OS2Forms/os2forms/compare/3.18.0...3.19.0
 [3.18.0]: https://github.com/OS2Forms/os2forms/compare/3.17.0...3.18.0
