@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- Updated `os2web_audit`.
+
 ## [3.20.1] 2024-12-10
 
 - Avoided accessing non-initialized property when logging in `os2forms_nemid`.
