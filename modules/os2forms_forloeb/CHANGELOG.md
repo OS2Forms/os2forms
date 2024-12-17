@@ -1,4 +1,5 @@
 # OS2Forms Forløb Change Log
+
 All notable changes to this project should be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
@@ -17,9 +18,11 @@ before starting to add changes.
 ## 2.5.2 - 27.03.2023
 
 ### Updated
+
 - Bumped drupal/ultimate_cron version fixing [Deprecated function: Implicit conversion from float-string](https://www.drupal.org/project/ultimate_cron/issues/3256142).
 
 ## 2.5.1 - 10.03.2023
+
 - Added github action for checking changelog changes when creating pull requests
 - Added os2forms/os2forms dependency
 - Changed composer patching configuration
@@ -30,18 +33,20 @@ before starting to add changes.
 ## 2.5.0 - 11.10.2022
 
 ### Added
+
 - retry task controller action
 - Added support for inheriting values without creating a submission
 
 ## 2.4.0
 
 ### Added
+
 - Github CI action for checking Drupal Coding standards with PHP Code Sniffer
 - Fixed coding standards issues
 
-
 ## Example of change log record
-```
+
+```markdown
 ## [x.x.x] Release name
 ### Added
 - Description on added functionality.
