@@ -130,6 +130,7 @@ docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.1-fpm composer c
 ### Markdown
 
 ```sh
+docker pull peterdavehello/markdownlint
 docker run --rm --volume $PWD:/md peterdavehello/markdownlint markdownlint --ignore vendor --ignore LICENSE.md '**/*.md' --fix
 docker run --rm --volume $PWD:/md peterdavehello/markdownlint markdownlint --ignore vendor --ignore LICENSE.md '**/*.md'
 ```
