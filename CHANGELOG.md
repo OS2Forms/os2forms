@@ -11,6 +11,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- Updated `os2web_audit`.
 - Added patch to get `hook_webform_post_load_data` in webform submissions.
 
 ## [3.20.1] 2024-12-10
