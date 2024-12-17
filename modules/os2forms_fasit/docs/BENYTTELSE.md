@@ -10,7 +10,7 @@ aftale hvilke certifikater der anvendes. Disse certifikater skal være OCES-3,
 f.eks. FOCES-3, og skal bruges i pem- eller cer-format.
 
 Dernæst oplyses det anvendte certifikats thumbprint eller public-key til Fasit,
-som derefter aktiverer snitfladen. Se evt. 
+som derefter aktiverer snitfladen. Se evt.
 [README#certificate](../README.md#certificate)
 for hvordan et certifikats thumbprint kan findes gennem kommandolinjen.
 
@@ -22,7 +22,7 @@ Her skal følgende sættes op:
 
 * Fasit API base url
   * Basis url’en til Fasit. Denne specificeres af Fasit.
-  * Eksempel: https://webservices.fasit.dk/
+  * Eksempel: <https://webservices.fasit.dk/>
 * Fasit API tenant
   * Fasit tenant. Denne specificeres af Fasit.
   * Eksempel: aarhus
@@ -30,14 +30,14 @@ Her skal følgende sættes op:
   * Hvilken version af af API’et der skal bruges. Her er mulighederne ’v1’ eller ’v2’. Der bør altid bruges ’v2’.
   * Eksempel: v2
 * Certificate
-  * Her kan angives detaljer til et azure key vault hvori certifikatet ligges (Azure key vault) eller en sti direkte til certifikatet (Filsystem)
+  * Her kan angives detaljer til et azure key vault hvori certifikatet ligges (Azure key vault) eller en sti direkte til
+    certifikatet (Filsystem)
 * Passphrase
   * Passphrase til certifikatet, hvis sådan et eksisterer.
 
-
 Se evt. Fasit Scultz dokumentationen for flere detaljer på opbygningen af endpoint url’er.
 
-Det er desuden muligt at teste om os2forms kan få fat i certifikatet på samme konfigurations-side. 
+Det er desuden muligt at teste om os2forms kan få fat i certifikatet på samme konfigurations-side.
 
 ## Handler
 
