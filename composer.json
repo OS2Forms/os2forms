@@ -68,7 +68,7 @@
         "http-interop/http-factory-guzzle": "^1.0.0",
         "itk-dev/beskedfordeler-drupal": "^1.0",
         "itk-dev/serviceplatformen": "^1.5",
-        "os2web/os2web_audit": "^0.1.1",
+        "os2web/os2web_audit": "^0.1.6",
         "os2web/os2web_datalookup": "^2.0",
         "os2web/os2web_nemlogin": "^1.0",
         "php-http/guzzle7-adapter": "^1.0",
@@ -98,7 +98,9 @@
             },
             "drupal/webform": {
                 "Unlock possibility of using Entity print module export to Word": "https://www.drupal.org/files/issues/2020-02-29/3096552-6.patch",
-                "Webform computed element post save alter": "https://www.drupal.org/files/issues/2024-06-25/webform_computed_post_save_field_alter.patch"
+                "Webform computed element post save alter": "https://www.drupal.org/files/issues/2024-06-25/webform_computed_post_save_field_alter.patch",
+                "Add custom hook (hook_webform_post_load_data) for audit logging": "https://gist.githubusercontent.com/cableman/d26898fc8f65ee0a31001bf391583b59/raw/6189dc4c2ceaabb19d25cc4b98b0b3028a6b0e1e/gistfile1.txt"
+
             },
             "drupal/coc_forms_auto_export": {
                 "3240592 - Problem with phpseclib requirement in 2.x (https://www.drupal.org/project/coc_forms_auto_export/issues/3240592)": "https://www.drupal.org/files/issues/2021-10-04/requirement-namespace-3240592-1.patch",
