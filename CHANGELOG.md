@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- Removed modules ldap_auth, logging_alerts, maillog
+
 ## [3.21.0] 2024-12-17
 
 - Updated `os2web_audit`.
