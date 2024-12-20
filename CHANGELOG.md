@@ -11,6 +11,9 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [#101](https://github.com/OS2Forms/os2forms/pull/101)
+  Added support for os2web_key
+
 ## [3.21.0] 2024-12-17
 
 - Updated `os2web_audit`.
