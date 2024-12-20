@@ -3,8 +3,11 @@
 namespace Drupal\os2forms_dawa\Plugin\os2web\DataLookup;
 
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\File\FileSystem;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\key\KeyRepository;
+use Drupal\key\KeyRepositoryInterface;
 use Drupal\os2forms_dawa\Entity\DatafordelerMatrikula;
 use Drupal\os2web_audit\Service\Logger;
 use Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupBase;
@@ -22,36 +25,39 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class DatafordelerDataLookup extends DataLookupBase implements DatafordelerDataLookupInterface, ContainerFactoryPluginInterface {
 
   /**
-   * The HTTP client to fetch the feed data with.
-   *
-   * @var \GuzzleHttp\ClientInterface
-   */
-  protected $httpClient;
-
-  /**
    * {@inheritdoc}
    */
   public function __construct(
     array $configuration,
     $plugin_id,
     $plugin_definition,
-    ClientInterface $httpClient,
+    protected ClientInterface $httpClient,
     Logger $auditLogger,
+    KeyRepositoryInterface $keyRepository,
+    FileSystem $fileSystem,
   ) {
-    $this->httpClient = $httpClient;
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $auditLogger);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $auditLogger, $keyRepository, $fileSystem);
   }
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    /** @var Logger $auditLogger */
+    $auditLogger = $container->get('os2web_audit.logger');
+    /** @var \Drupal\key\KeyRepositoryInterface $keyRepository */
+    $keyRepository = $container->get('key.repository');
+    /** @var \Drupal\Core\File\FileSystem $fileSystem */
+    $fileSystem = $container->get('file_system');
+
     return new static(
       $configuration,
       $plugin_id,
       $plugin_definition,
       $container->get('http_client'),
-      $container->get('os2web_audit.logger'),
+      $auditLogger,
+      $keyRepository,
+      $fileSystem,
     );
   }
 
