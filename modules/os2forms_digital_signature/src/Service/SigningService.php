@@ -5,7 +5,10 @@ namespace Drupal\os2forms_digital_signature\Service;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ImmutableConfig;
 use Drupal\os2forms_digital_signature\Form\SettingsForm;
+use Drupal\os2forms_digital_signature\Plugin\WebformHandler\DigitalSignatureWebformHandler;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\webform\Entity\Webform;
+use Drupal\webform\Entity\WebformSubmission;
 
 class SigningService {
 
@@ -121,6 +124,71 @@ class SigningService {
   private function getHash(string $value) : string {
     $hashSalt = $this->config->get('os2forms_digital_signature_sign_hash_salt');
     return sha1($hashSalt . $value);
+  }
+
+  /**
+   * Deletes stalled webform submissions that were left unsigned.
+   *
+   * Only checked the webforms that have digital_signature handler enabled and the submission is older that a specified
+   * period.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function deleteStalledSubmissions() : void {
+    $digitalSignatureWebforms = [];
+
+    // Finding webforms that have any handler.
+    $query = \Drupal::entityQuery('webform')
+      ->exists('handlers'); // Only webforms with handlers configured.
+    $handler_webform_ids = $query->execute();
+
+    // No webforms with handlers, aborting.
+    if (empty($handler_webform_ids)) {
+      return;
+    }
+
+    // Find all with os2forms_digital_signature handlers enabled.
+    foreach ($handler_webform_ids as $webform_id) {
+      $webform = Webform::load($webform_id);
+      if (!$webform) {
+        continue;
+      }
+
+      $handlers = $webform->getHandlers();
+      foreach ($handlers as $handler) {
+        // Check if the handler is of type 'os2forms_digital_signature'.
+        if ($handler->getPluginId() === 'os2forms_digital_signature' && $handler->isEnabled()) {
+          $digitalSignatureWebforms[] = $webform->id();
+          break;
+        }
+      }
+    }
+
+    // No webforms, aborting.
+    if (empty($digitalSignatureWebforms)) {
+      return;
+    }
+
+    // Find all stalled webform submissions of digital signature forms.
+    $retention_period = ($this->config->get('os2forms_digital_signature_submission_retention_period')) ?? 300;
+    $timestamp_threshold = \Drupal::time()->getRequestTime() - $retention_period;
+    $query = \Drupal::entityQuery('webform_submission')
+      ->accessCheck(FALSE)
+      ->condition('webform_id', $digitalSignatureWebforms, 'IN')
+      ->condition('locked', 0)
+      ->condition('created', $timestamp_threshold, '<');
+    $submission_ids = $query->execute();
+
+    // No submissions, aborting.
+    if (empty($submission_ids)) {
+      return;
+    }
+
+    // Deleting all stalled webform submissions.
+    foreach ($submission_ids as $submission_id) {
+      $submission = WebformSubmission::load($submission_id);
+      $submission->delete();
+    }
   }
 
 }

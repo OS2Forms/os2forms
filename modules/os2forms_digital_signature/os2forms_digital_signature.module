@@ -5,6 +5,17 @@ use Drupal\Core\StreamWrapper\StreamWrapperManager;
 use Drupal\os2forms_digital_signature\Form\SettingsForm;
 
 /**
+ * Implements hook_cron().
+ *
+ * Deletes stalled webform submissions that were left unsigned.
+ */
+function os2forms_digital_signature_cron() {
+  /** @var \Drupal\os2forms_digital_signature\Service\SigningService $service */
+  $service = \Drupal::service('os2forms_digital_signature.signing_service');
+  $service->deleteStalledSubmissions();
+}
+
+/**
  * Implements hook_webform_submission_form_alter().
  *
  * Replaces submit button title, if digital signature present.

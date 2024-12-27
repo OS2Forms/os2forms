@@ -53,6 +53,12 @@ class SettingsForm extends ConfigFormBase {
       '#default_value' => $this->config(self::$configName)->get('os2forms_digital_signature_submission_allowed_ips'),
       '#description' => t('Comma separated. Ex. 192.168.1.1,192.168.2.1'),
     ];
+    $form['os2forms_digital_signature_submission_retention_period'] = [
+      '#type' => 'textfield',
+      '#title' => t('Unsigned submission timespan (s)'),
+      '#default_value' => ($this->config(self::$configName)->get('os2forms_digital_signature_submission_retention_period')) ?? 300,
+      '#description' => t('How many seconds can unsigned submission exist before being automatically deleted'),
+    ];
 
     return parent::buildForm($form, $form_state);
   }
