@@ -13,6 +13,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 - [#101](https://github.com/OS2Forms/os2forms/pull/101)
   Added support for os2web_key
+- Updated `os2forms_fbs_handler` to use latest endpoints and operations.
 
 ## [3.21.0] 2024-12-17
 
