@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- Updated `os2forms_fbs_handler` to use latest endpoints and operations.
+
 ## [3.21.0] 2024-12-17
 
 - Updated `os2web_audit`.

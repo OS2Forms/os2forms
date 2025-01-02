@@ -87,9 +87,6 @@ final class FbsCreateUser extends JobTypeBase implements ContainerFactoryPluginI
 
         $data = $webformSubmission->getData();
 
-        // Checker child patron exists.
-        $patron = $fbs->doUserExists($data['barn_cpr']);
-
         // Create Guardian.
         $guardian = new Guardian(
           $data['cpr'],
@@ -97,26 +94,43 @@ final class FbsCreateUser extends JobTypeBase implements ContainerFactoryPluginI
           $data['email']
         );
 
+        // Check if child patron exists.
+        $patronId = $fbs->authenticatePatron($data['barn_cpr']);
+
         // If "yes" update the child patron and create the guardian (the
         // guardian is not another patron user).
-        if (!is_null($patron)) {
-          // Create Patron object with updated values.
-          $patron->preferredPickupBranch = $data['afhentningssted'];
-          $patron->emailAddress = $data['barn_mail'];
-          $patron->receiveEmail = TRUE;
-          $patron->cpr = $data['barn_cpr'];
-          $patron->pincode = $data['pinkode'];
+        if (!is_null($patronId)) {
+          // Fetch patron.
+          $patron = $fbs->getPatron($patronId);
 
-          $fbs->updatePatron($patron);
-          $fbs->createGuardian($patron, $guardian);
+          if (!is_null($patron)) {
+            // Create Patron object with updated values.
+            $patron->preferredPickupBranch = $data['afhentningssted'];
+            $patron->emailAddresses = [
+              [
+                'emailAddress' => $data['barn_mail'],
+                'receiveNotification' => TRUE,
+              ],
+            ];
+            $patron->receiveEmail = TRUE;
+            $patron->pincode = $data['pinkode'];
+
+            $fbs->updatePatron($patron);
+            $fbs->createGuardian($patron, $guardian);
+          }
         }
         else {
           // If "no" create child patron and guardian.
           $patron = new Patron();
           $patron->preferredPickupBranch = $data['afhentningssted'];
-          $patron->emailAddress = $data['barn_mail'];
+          $patron->emailAddresses = [
+            [
+              'emailAddress' => $data['barn_mail'],
+              'receiveNotification' => TRUE,
+            ],
+          ];
           $patron->receiveEmail = TRUE;
-          $patron->cpr = $data['barn_cpr'];
+          $patron->personId = $data['barn_cpr'];
           $patron->pincode = $data['pinkode'];
 
           $fbs->createPatronWithGuardian($patron, $guardian);
