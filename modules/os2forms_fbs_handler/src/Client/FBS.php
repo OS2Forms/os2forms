@@ -90,7 +90,7 @@ class FBS {
     // Authenticate the patron.
     $json = $this->request('/external/{agency_id}/patrons/preauthenticated/v10', $cpr);
     if ($json->authenticateStatus === $this::AUTHENTICATE_STATUS_VALID) {
-        return $json->patronId;
+      return $json->patronId;
     }
 
     return NULL;
@@ -124,47 +124,48 @@ class FBS {
     return $this->request($uri, $payload);
   }
 
-    /**
-     * Get patron information.
-     *
-     * @param string $patronId
-     *   The patron to update.
-     *
-     * @return \Drupal\os2forms_fbs_handler\Client\Model\Patron
-     *   Patron object
-     *
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \JsonException
-     */
-    public function getPatron(string $patronId): ?Patron {
-      $uri = '/external/{agency_id}/patrons/' . $patronId . '/v4';
+  /**
+   * Get patron information.
+   *
+   * @param string $patronId
+   *   The patron to update.
+   *
+   * @return \Drupal\os2forms_fbs_handler\Client\Model\Patron
+   *   Patron object
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
+   * @throws \JsonException
+   */
+  public function getPatron(string $patronId): ?Patron {
+    $uri = '/external/{agency_id}/patrons/' . $patronId . '/v4';
 
-      $json = $this->request($uri, [], RequestMethodInterface::METHOD_GET);
+    $json = $this->request($uri, [], RequestMethodInterface::METHOD_GET);
 
-      if ($json->authenticateStatus === "VALID") {
-        return new Patron(
-          $json->patron->patronId,
-          (bool) $json->patron->receiveSms,
-          (bool) $json->patron->receivePostalMail,
-          $json->patron->notificationProtocols,
-          $json->patron->phoneNumber,
-          is_null($json->patron->onHold) ? $json->patron->onHold : (array) $json->patron->onHold,
-          $json->patron->preferredLanguage,
-          (bool) $json->patron->guardianVisibility,
-          $json->patron->defaultInterestPeriod,
-          (bool) $json->patron->resident,
+    if ($json->authenticateStatus === "VALID") {
+      return new Patron(
+        $json->patron->patronId,
+        (bool) $json->patron->receiveSms,
+        (bool) $json->patron->receivePostalMail,
+        $json->patron->notificationProtocols,
+        $json->patron->phoneNumber,
+        is_null($json->patron->onHold) ? $json->patron->onHold : (array) $json->patron->onHold,
+        $json->patron->preferredLanguage,
+        (bool) $json->patron->guardianVisibility,
+        $json->patron->defaultInterestPeriod,
+        (bool) $json->patron->resident,
+        [
           [
-            [
-              'emailAddress' => $json->patron->emailAddress,
-              'receiveNotification' => $json->patron->receiveEmail,
-            ],
+            'emailAddress' => $json->patron->emailAddress,
+            'receiveNotification' => $json->patron->receiveEmail,
           ],
-          (bool) $json->patron->receiveEmail,
-          $json->patron->preferredPickupBranch
-        );
-      }
-      return NULL;
+        ],
+        (bool) $json->patron->receiveEmail,
+        $json->patron->preferredPickupBranch
+      );
     }
+
+    return NULL;
+  }
 
   /**
    * Update patron information.
