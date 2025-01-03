@@ -25,7 +25,7 @@ final class Guardian {
    */
   public function toArray(): array {
     return [
-      'cprNumber' => $this->cpr,
+      'personIdentifier' => $this->cpr,
       'name' => $this->name,
       'email' => $this->email,
     ];
