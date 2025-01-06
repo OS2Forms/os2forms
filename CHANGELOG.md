@@ -13,6 +13,9 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 - [#101](https://github.com/OS2Forms/os2forms/pull/101)
   Added support for os2web_key
+
+## [3.21.1] 2025-01-06
+
 - Updated Maestro notification handler assignment message format.
 - Updated `os2forms_fbs_handler` to use latest endpoints and operations.
 
@@ -328,7 +331,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - Security in case of vulnerabilities.
 ```
 
-[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.21.0...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.21.1...HEAD
+[3.21.1]: https://github.com/OS2Forms/os2forms/compare/3.21.0...3.21.1
 [3.21.0]: https://github.com/OS2Forms/os2forms/compare/3.20.1...3.21.0
 [3.20.1]: https://github.com/OS2Forms/os2forms/compare/3.20.0...3.20.1
 [3.20.0]: https://github.com/OS2Forms/os2forms/compare/3.19.0...3.20.0
