@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- Adds missing `http-message-util` requirement and use statement.
+
 ## [3.21.1] 2025-01-06
 
 - Updated Maestro notification handler assignment message format.
