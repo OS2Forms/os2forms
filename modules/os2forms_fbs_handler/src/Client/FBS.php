@@ -4,6 +4,7 @@ namespace Drupal\os2forms_fbs_handler\Client;
 
 use Drupal\os2forms_fbs_handler\Client\Model\Guardian;
 use Drupal\os2forms_fbs_handler\Client\Model\Patron;
+use Fig\Http\Message\RequestMethodInterface;
 use GuzzleHttp\Client;
 use Symfony\Component\HttpFoundation\Request;
 
