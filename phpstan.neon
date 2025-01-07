@@ -2,6 +2,7 @@ parameters:
   level: 6
   paths:
     - modules/os2forms_digital_post/
+    - modules/os2forms_fbs_handler/
   excludePaths:
     # @see https://github.com/mglaman/drupal-check/issues/261#issuecomment-1030141772/
     - vendor

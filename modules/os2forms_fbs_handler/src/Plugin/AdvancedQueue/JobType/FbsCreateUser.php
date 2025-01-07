@@ -35,6 +35,8 @@ final class FbsCreateUser extends JobTypeBase implements ContainerFactoryPluginI
 
   /**
    * {@inheritdoc}
+   *
+   * @phpstan-param array<mixed> $configuration
    */
   public function __construct(
     array $configuration,
@@ -50,6 +52,8 @@ final class FbsCreateUser extends JobTypeBase implements ContainerFactoryPluginI
 
   /**
    * {@inheritdoc}
+   *
+   * @phpstan-param array<mixed> $configuration
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(

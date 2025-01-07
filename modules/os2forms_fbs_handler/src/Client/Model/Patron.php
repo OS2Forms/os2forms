@@ -9,6 +9,10 @@ final class Patron {
 
   /**
    * Default constructor.
+   *
+   * @phpstan-param array<mixed>|null $notificationProtocols
+   * @phpstan-param array<mixed>|null $onHold
+   * @phpstan-param array<mixed>|null $emailAddresses
    */
   public function __construct(
     public readonly ?string $patronId = NULL,
@@ -35,6 +39,8 @@ final class Patron {
    *
    * @return array
    *   Array with field required by FBS calls.
+   *
+   * @phpstan-return array<string, string>
    */
   public function toArray(): array {
     return [

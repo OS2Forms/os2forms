@@ -45,6 +45,8 @@ final class FbsWebformHandler extends WebformHandlerBase {
 
   /**
    * Constructs an FbsWebformHandler object.
+   *
+   * @phpstan-param array<mixed> $configuration
    */
   public function __construct(
     array $configuration,
@@ -70,6 +72,8 @@ final class FbsWebformHandler extends WebformHandlerBase {
 
   /**
    * {@inheritdoc}
+   *
+   * @phpstan-param array<mixed> $configuration
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
@@ -87,6 +91,10 @@ final class FbsWebformHandler extends WebformHandlerBase {
 
   /**
    * {@inheritdoc}
+   *
+   * @phpstan-param array<mixed> $form
+   *
+   * @phpstan-return array<mixed>
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state): array {
     if (is_null($this->getQueue())) {
@@ -143,6 +151,8 @@ final class FbsWebformHandler extends WebformHandlerBase {
 
   /**
    * {@inheritdoc}
+   *
+   * @phpstan-param array<mixed> $form
    */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state): void {
     parent::submitConfigurationForm($form, $form_state);
