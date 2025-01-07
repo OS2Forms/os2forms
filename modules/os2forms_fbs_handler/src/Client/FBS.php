@@ -243,6 +243,8 @@ class FBS {
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    * @throws \JsonException
+   *
+   * @phpstan-param array<mixed>|string $data
    */
   private function request(string $uri, array|string $data, string $method = Request::METHOD_POST): mixed {
     $url = rtrim($this->endpoint, '/\\');
