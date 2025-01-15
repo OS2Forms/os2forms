@@ -22,10 +22,12 @@ final class Guardian {
    *
    * @return array
    *   Array with field required by FBS calls.
+   *
+   * @phpstan-return array<string, string>
    */
   public function toArray(): array {
     return [
-      'cprNumber' => $this->cpr,
+      'personIdentifier' => $this->cpr,
       'name' => $this->name,
       'email' => $this->email,
     ];

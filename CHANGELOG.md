@@ -13,6 +13,16 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 - Removed modules ldap_auth, logging_alerts, maillog
 
+## [3.21.2] 2025-01-07
+
+- Adds missing `http-message-util` requirement and use statement.
+- Runs code-analysis on `os2forms_fbs_handler` module.
+
+## [3.21.1] 2025-01-06
+
+- Updated Maestro notification handler assignment message format.
+- Updated `os2forms_fbs_handler` to use latest endpoints and operations.
+
 ## [3.21.0] 2024-12-17
 
 - Updated `os2web_audit`.
@@ -325,7 +335,9 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - Security in case of vulnerabilities.
 ```
 
-[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.21.0...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.21.2...HEAD
+[3.21.2]: https://github.com/OS2Forms/os2forms/compare/3.21.1...3.21.2
+[3.21.1]: https://github.com/OS2Forms/os2forms/compare/3.21.0...3.21.1
 [3.21.0]: https://github.com/OS2Forms/os2forms/compare/3.20.1...3.21.0
 [3.20.1]: https://github.com/OS2Forms/os2forms/compare/3.20.0...3.20.1
 [3.20.0]: https://github.com/OS2Forms/os2forms/compare/3.19.0...3.20.0

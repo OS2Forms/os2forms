@@ -24,6 +24,7 @@ final class MaestroNotificationHandler extends WebformHandlerBase {
   public const NOTIFICATION = 'notification';
 
   public const TYPE = 'type';
+  public const FORMAT = 'format';
   public const SENDER_LABEL = 'sender_label';
   public const NOTIFICATION_ENABLE = 'notification_enable';
   public const NOTIFICATION_RECIPIENT = 'notification_recipient';
@@ -153,7 +154,7 @@ final class MaestroNotificationHandler extends WebformHandlerBase {
       }
       $form[self::NOTIFICATION][$notificationType][self::NOTIFICATION_CONTENT] = [
         '#type' => 'text_format',
-        '#format' => 'restricted_html',
+        '#format' => $this->configuration[self::NOTIFICATION][$notificationType][self::NOTIFICATION_CONTENT][self::FORMAT] ?? 'restricted_html',
         '#title' => $this->t('Message'),
         '#default_value' => $content ?? self::TOKEN_MAESTRO_TASK_URL,
         '#description' => $this->t('The actual notification content. Must contain the <code>@token_maestro_task_url</code> token which is the URL to the Maestro task.',
