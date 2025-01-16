@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- Removed modules ldap_auth, logging_alerts, maillog
+
 ## [3.21.2] 2025-01-07
 
 - Adds missing `http-message-util` requirement and use statement.
