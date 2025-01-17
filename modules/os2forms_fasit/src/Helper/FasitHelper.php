@@ -4,6 +4,7 @@ namespace Drupal\os2forms_fasit\Helper;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\os2forms_attachment\Element\AttachmentElement;
 use Drupal\os2forms_fasit\Exception\FasitResponseException;
 use Drupal\os2forms_fasit\Exception\FasitXMLGenerationException;
@@ -16,6 +17,7 @@ use Drupal\webform\Entity\WebformSubmission;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Utils;
+use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -38,7 +40,7 @@ class FasitHelper {
     private readonly ClientInterface $client,
     private readonly EntityTypeManagerInterface $entityTypeManager,
     private readonly Settings $settings,
-    private readonly CertificateLocatorHelper $certificateLocator,
+    private readonly FileSystemInterface $fileSystem,
     private readonly Logger $auditLogger,
   ) {
   }
@@ -206,8 +208,6 @@ class FasitHelper {
       }
     }
 
-    [$certificateOptions, $tempCertFilename] = $this->getCertificateOptionsAndTempCertFilename();
-
     $body = $doc->saveXML();
 
     if (!$body) {
@@ -219,20 +219,15 @@ class FasitHelper {
         'Content-Type' => 'application/xml',
       ],
       'body' => $body,
-      'cert' => $certificateOptions,
+      'cert' => $this->settings->getCertificate(),
     ];
 
     // Attempt upload.
     try {
-      $response = $this->client->request('POST', $endpoint, $options);
+      $response = $this->post($endpoint, $options);
     }
     catch (GuzzleException $e) {
       throw new FasitResponseException($e->getMessage(), $e->getCode());
-    } finally {
-      // Remove the certificate from disk.
-      if (file_exists($tempCertFilename)) {
-        unlink($tempCertFilename);
-      }
     }
 
     if (Response::HTTP_OK !== $response->getStatusCode()) {
@@ -260,26 +255,6 @@ class FasitHelper {
     if (!isset($handlerConfiguration[FasitWebformHandler::FASIT_HANDLER_GENERAL][$setting])) {
       throw new InvalidSettingException('Handler settings does not contain configuration of ' . str_replace('_', ' ', $setting));
     }
-  }
-
-  /**
-   * Gets certificate options and temp certificate filename.
-   *
-   * @throws \Drupal\os2forms_fasit\Exception\CertificateLocatorException
-   *   Certificate locator exception.
-   *
-   * @phpstan-return array<mixed, mixed>
-   */
-  private function getCertificateOptionsAndTempCertFilename(): array {
-    $certificateLocator = $this->certificateLocator->getCertificateLocator();
-    $localCertFilename = tempnam(sys_get_temp_dir(), 'cert');
-    file_put_contents($localCertFilename, $certificateLocator->getCertificate());
-    $certificateOptions =
-      $certificateLocator->hasPassphrase() ?
-        [$localCertFilename, $certificateLocator->getPassphrase()]
-        : $localCertFilename;
-
-    return [$certificateOptions, $localCertFilename];
   }
 
   /**
@@ -345,8 +320,6 @@ class FasitHelper {
       self::FASIT_API_METHOD_UPLOAD
     );
 
-    [$certificateOptions, $tempCertFilename] = $this->getCertificateOptionsAndTempCertFilename();
-
     // Attempt upload.
     try {
       $options = [
@@ -356,18 +329,13 @@ class FasitHelper {
           'X-Title' => pathinfo($originalFilename, PATHINFO_FILENAME),
         ],
         'body' => Utils::tryFopen($tempFilename, 'r'),
-        'cert' => $certificateOptions,
       ];
 
-      $response = $this->client->request('POST', $endpoint, $options);
+      $response = $this->post($endpoint, $options);
     }
     catch (GuzzleException $e) {
       throw new FasitResponseException($e->getMessage(), $e->getCode());
     } finally {
-      // Remove the certificate from disk.
-      if (file_exists($tempCertFilename)) {
-        unlink($tempCertFilename);
-      }
       // Remove the attachment from disk.
       if (file_exists($tempFilename)) {
         unlink($tempFilename);
@@ -508,6 +476,62 @@ class FasitHelper {
   private function getSubmission(string $submissionId): EntityInterface {
     $storage = $this->entityTypeManager->getStorage('webform_submission');
     return $storage->load($submissionId);
+  }
+
+  /**
+   * Send POST request to Fasit API.
+   *
+   * @param string $endpoint
+   *   The API endpoint.
+   * @param array<string, mixed> $options
+   *   The request options.
+   *
+   * @return \Psr\Http\Message\ResponseInterface
+   *   The response.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
+   *   A Guzzle exception.
+   */
+  private function post(string $endpoint, array $options): ResponseInterface {
+    try {
+      $certificate = $this->settings->getCertificate();
+      $certPath = $this->fileSystem->tempnam($this->fileSystem->getTempDirectory(), 'os2forms_fasit_cert');
+      // `tempnam` has created a file, so we must replace when saving.
+      $this->fileSystem->saveData($certificate, $certPath, FileSystemInterface::EXISTS_REPLACE);
+      $options['cert'] = $certPath;
+
+      return $this->client->request('POST', $endpoint, $options);
+    } finally {
+      // Remove the certificate from disk.
+      if (isset($certPath) && file_exists($certPath)) {
+        unlink($certPath);
+      }
+    }
+  }
+
+  /**
+   * Ping the Fasit API and expect a 400 Bad Request response.
+   *
+   * @throws \Throwable
+   */
+  public function pingApi(): void {
+    $endpoint = sprintf('%s/%s/%s/documents/%s',
+      $this->settings->getFasitApiBaseUrl(),
+      $this->settings->getFasitApiTenant(),
+      $this->settings->getFasitApiVersion(),
+      self::FASIT_API_METHOD_UPLOAD
+    );
+
+    try {
+      $this->post($endpoint, []);
+    }
+    catch (\Throwable $t) {
+      // Throw if it's not a 400 Bad Request exception.
+      if (!($t instanceof GuzzleException)
+        || Response::HTTP_BAD_REQUEST !== $t->getCode()) {
+        throw $t;
+      }
+    }
   }
 
 }

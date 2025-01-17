@@ -18,6 +18,7 @@ use ItkDev\Serviceplatformen\Certificate\FilesystemCertificateLocator;
 class CertificateLocatorHelper {
   public const LOCATOR_TYPE = 'locator_type';
   public const LOCATOR_TYPE_AZURE_KEY_VAULT = 'azure_key_vault';
+  public const LOCATOR_TYPE_HASHICORP_KEY_VAULT = 'hashicorp_key_vault';
   public const LOCATOR_TYPE_FILE_SYSTEM = 'file_system';
   public const LOCATOR_PASSPHRASE = 'passphrase';
   public const LOCATOR_AZURE_KEY_VAULT_TENANT_ID = 'tenant_id';

@@ -8,4 +8,5 @@ dependencies:
   - drupal:advancedqueue
   - os2forms:os2forms_attachment
   - os2web:os2web_audit
+  - os2web_key:os2web_key
 configure: os2forms_fasit.admin.settings

@@ -12,7 +12,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 ## [Unreleased]
 
 - [#101](https://github.com/OS2Forms/os2forms/pull/101)
-  Added support for os2web_key
+  - Added support for `os2web_key` in Digital post
+  - Added support for `os2web_key` in Fasit handler.
 
 ## [3.21.1] 2025-01-06
 

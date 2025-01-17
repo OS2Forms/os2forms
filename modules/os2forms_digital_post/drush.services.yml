@@ -1,5 +1,6 @@
 services:
-  Drupal\os2forms_digital_post\Drush\Commands\DigitalPostTestCommands:
+  os2forms_digital_post.commands:
+    class: \Drupal\os2forms_digital_post\Commands\DigitalPostTestCommands
     arguments:
       - '@Drupal\os2forms_digital_post\Helper\DigitalPostHelper'
       - '@token'

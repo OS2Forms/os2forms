@@ -1,0 +1,6 @@
+services:
+  Drupal\os2forms_fasit\Drush\Commands\FasitTestCommands:
+    arguments:
+      - '@Drupal\os2forms_fasit\Helper\FasitHelper'
+    tags:
+      - { name: drush.command }

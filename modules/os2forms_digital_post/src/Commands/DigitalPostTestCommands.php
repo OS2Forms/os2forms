@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\os2forms_digital_post\Drush\Commands;
+namespace Drupal\os2forms_digital_post\Commands;
 
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Utility\Token;
