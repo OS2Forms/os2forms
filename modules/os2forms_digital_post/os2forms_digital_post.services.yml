@@ -32,7 +32,7 @@ services:
   Drupal\os2forms_digital_post\Helper\DigitalPostHelper:
     arguments:
       - "@Drupal\\os2forms_digital_post\\Helper\\Settings"
-      - "@os2web_key.key_helper"
+      - "@Drupal\\os2web_key\\KeyHelper"
       - "@plugin.manager.os2web_datalookup"
       - "@Drupal\\os2forms_digital_post\\Helper\\MeMoHelper"
       - "@Drupal\\os2forms_digital_post\\Helper\\ForsendelseHelper"
