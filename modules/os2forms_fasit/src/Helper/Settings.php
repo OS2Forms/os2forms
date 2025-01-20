@@ -48,7 +48,7 @@ final class Settings {
   public function getFasitApiVersion(): ?string {
     return $this->get(SettingsForm::FASIT_API_VERSION);
   }
-  
+
   /**
    * Get key.
    */
