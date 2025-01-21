@@ -221,8 +221,6 @@ class FasitHelper {
         'Content-Type' => 'application/xml',
       ],
       'body' => $body,
-      // 'cert' => $this->settings->getKeyValue(),
-//      'cert' => $this->getCertificate(),
     ];
 
     // Attempt upload.
@@ -551,25 +549,6 @@ class FasitHelper {
         throw $t;
       }
     }
-  }
-
-  /**
-   * Get certificate.
-   *
-   * @throws InvalidSettingException
-   */
-  private function getCertificate(): mixed {
-    $config = $this->settings->getFasitCertificateConfig();
-    $provider = $config['certificate_provider'];
-    if (SettingsForm::PROVIDER_TYPE_KEY === $provider) {
-      return $this->settings->getKeyValue();
-    }
-    elseif (SettingsForm::PROVIDER_TYPE_FORM === $provider) {
-      [$certificateOptions, $tempCertFilename] = $this->getCertificateOptionsAndTempCertFilename();
-      return $certificateOptions;
-    }
-
-    throw new InvalidSettingException('Invalid certificate configuration');
   }
 
   /**

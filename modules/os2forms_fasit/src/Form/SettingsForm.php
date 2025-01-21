@@ -141,7 +141,6 @@ final class SettingsForm extends ConfigFormBase {
       '#states' => [
         'visible' => [
           ':input[name="certificate[certificate_provider]"]' => ['value' => self::PROVIDER_TYPE_FORM],
-          'and',
           ':input[name="certificate[locator_type]"]' => ['value' => CertificateLocatorHelper::LOCATOR_TYPE_AZURE_KEY_VAULT],
         ],
       ],
@@ -164,7 +163,6 @@ final class SettingsForm extends ConfigFormBase {
         '#states' => [
           'required' => [
             ':input[name="certificate[certificate_provider]"]' => ['value' => self::PROVIDER_TYPE_FORM],
-            'and',
             ':input[name="certificate[locator_type]"]' => ['value' => CertificateLocatorHelper::LOCATOR_TYPE_AZURE_KEY_VAULT],
           ],
         ],
@@ -177,7 +175,6 @@ final class SettingsForm extends ConfigFormBase {
       '#states' => [
         'visible' => [
           ':input[name="certificate[certificate_provider]"]' => ['value' => self::PROVIDER_TYPE_FORM],
-          'and',
           ':input[name="certificate[locator_type]"]' => ['value' => CertificateLocatorHelper::LOCATOR_TYPE_FILE_SYSTEM],
         ],
       ],
@@ -189,8 +186,7 @@ final class SettingsForm extends ConfigFormBase {
         '#states' => [
           'required' => [
             ':input[name="certificate[certificate_provider]"]' => ['value' => self::PROVIDER_TYPE_FORM],
-            'and',
-            ':input[name="certificate[locator_type]"]' => ['value' => CertificateLocatorHelper::LOCATOR_TYPE_FILE_SYSTEM]
+            ':input[name="certificate[locator_type]"]' => ['value' => CertificateLocatorHelper::LOCATOR_TYPE_FILE_SYSTEM],
           ],
         ],
       ],

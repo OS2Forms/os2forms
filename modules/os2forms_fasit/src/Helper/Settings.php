@@ -50,7 +50,7 @@ final class Settings {
   }
 
   /**
-   * Get Fasit configuration selector
+   * Get Fasit configuration selector.
    */
   public function getFasitCertificateConfig(): ?array {
     return $this->get(SettingsForm::CERTIFICATE);
