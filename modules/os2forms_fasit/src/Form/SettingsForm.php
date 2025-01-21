@@ -6,6 +6,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\os2forms_fasit\Helper\CertificateLocatorHelper;
 use Drupal\os2forms_fasit\Helper\FasitHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -21,6 +22,9 @@ final class SettingsForm extends ConfigFormBase {
   public const FASIT_API_VERSION = 'fasit_api_version';
   public const CERTIFICATE = 'certificate';
   public const KEY = 'key';
+  public const CERTIFICATE_PROVIDER = 'certificate_provider';
+  public const PROVIDER_TYPE_FORM = 'form';
+  public const PROVIDER_TYPE_KEY = 'key';
 
   public const ACTION_PING_API = 'action_ping_api';
 
@@ -98,14 +102,122 @@ final class SettingsForm extends ConfigFormBase {
       '#description' => $this->t('Specifies which api version to use. Should probably be v2'),
     ];
 
-    $form[self::KEY] = [
+    $certificateConfig = $config->get(self::CERTIFICATE) ?? [];
+
+    $form[self::CERTIFICATE] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Certificate'),
+      '#tree' => TRUE,
+
+      self::CERTIFICATE_PROVIDER => [
+        '#type' => 'select',
+        '#title' => $this->t('Provider'),
+        '#options' => [
+          self::PROVIDER_TYPE_FORM => $this->t('Form'),
+          self::PROVIDER_TYPE_KEY => $this->t('Key'),
+        ],
+        '#default_value' => $certificateConfig[self::CERTIFICATE_PROVIDER] ?? self::PROVIDER_TYPE_FORM,
+        '#description' => $this->t('Specifies which provider to use'),
+      ],
+    ];
+
+    $form[self::CERTIFICATE][CertificateLocatorHelper::LOCATOR_TYPE] = [
+      '#type' => 'select',
+      '#title' => $this->t('Certificate locator type'),
+      '#options' => [
+        CertificateLocatorHelper::LOCATOR_TYPE_AZURE_KEY_VAULT => $this->t('Azure key vault'),
+        CertificateLocatorHelper::LOCATOR_TYPE_FILE_SYSTEM => $this->t('File system'),
+      ],
+      '#default_value' => $certificateConfig[CertificateLocatorHelper::LOCATOR_TYPE] ?? NULL,
+      '#states' => [
+        'visible' => [':input[name="certificate[certificate_provider]"]' => ['value' => self::PROVIDER_TYPE_FORM]],
+      ],
+      '#description' => $this->t('Specifies which locator to use'),
+    ];
+
+    $form[self::CERTIFICATE][CertificateLocatorHelper::LOCATOR_TYPE_AZURE_KEY_VAULT] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Azure key vault'),
+      '#states' => [
+        'visible' => [
+          ':input[name="certificate[certificate_provider]"]' => ['value' => self::PROVIDER_TYPE_FORM],
+          'and',
+          ':input[name="certificate[locator_type]"]' => ['value' => CertificateLocatorHelper::LOCATOR_TYPE_AZURE_KEY_VAULT],
+        ],
+      ],
+    ];
+
+    $settings = [
+      CertificateLocatorHelper::LOCATOR_AZURE_KEY_VAULT_TENANT_ID => ['title' => $this->t('Tenant id')],
+      CertificateLocatorHelper::LOCATOR_AZURE_KEY_VAULT_APPLICATION_ID => ['title' => $this->t('Application id')],
+      CertificateLocatorHelper::LOCATOR_AZURE_KEY_VAULT_CLIENT_SECRET => ['title' => $this->t('Client secret')],
+      CertificateLocatorHelper::LOCATOR_AZURE_KEY_VAULT_NAME => ['title' => $this->t('Name')],
+      CertificateLocatorHelper::LOCATOR_AZURE_KEY_VAULT_SECRET => ['title' => $this->t('Secret')],
+      CertificateLocatorHelper::LOCATOR_AZURE_KEY_VAULT_VERSION => ['title' => $this->t('Version')],
+    ];
+
+    foreach ($settings as $key => $info) {
+      $form[self::CERTIFICATE][CertificateLocatorHelper::LOCATOR_TYPE_AZURE_KEY_VAULT][$key] = [
+        '#type' => 'textfield',
+        '#title' => $info['title'],
+        '#default_value' => $certificateConfig[CertificateLocatorHelper::LOCATOR_TYPE_AZURE_KEY_VAULT][$key] ?? NULL,
+        '#states' => [
+          'required' => [
+            ':input[name="certificate[certificate_provider]"]' => ['value' => self::PROVIDER_TYPE_FORM],
+            'and',
+            ':input[name="certificate[locator_type]"]' => ['value' => CertificateLocatorHelper::LOCATOR_TYPE_AZURE_KEY_VAULT],
+          ],
+        ],
+      ];
+    }
+
+    $form[self::CERTIFICATE][CertificateLocatorHelper::LOCATOR_TYPE_FILE_SYSTEM] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('File system'),
+      '#states' => [
+        'visible' => [
+          ':input[name="certificate[certificate_provider]"]' => ['value' => self::PROVIDER_TYPE_FORM],
+          'and',
+          ':input[name="certificate[locator_type]"]' => ['value' => CertificateLocatorHelper::LOCATOR_TYPE_FILE_SYSTEM],
+        ],
+      ],
+
+      'path' => [
+        '#type' => 'textfield',
+        '#title' => $this->t('Path'),
+        '#default_value' => $certificateConfig[CertificateLocatorHelper::LOCATOR_TYPE_FILE_SYSTEM]['path'] ?? NULL,
+        '#states' => [
+          'required' => [
+            ':input[name="certificate[certificate_provider]"]' => ['value' => self::PROVIDER_TYPE_FORM],
+            'and',
+            ':input[name="certificate[locator_type]"]' => ['value' => CertificateLocatorHelper::LOCATOR_TYPE_FILE_SYSTEM]
+          ],
+        ],
+      ],
+    ];
+
+    $form[self::CERTIFICATE][CertificateLocatorHelper::LOCATOR_PASSPHRASE] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Passphrase'),
+      '#default_value' => $certificateConfig[CertificateLocatorHelper::LOCATOR_PASSPHRASE] ?? NULL,
+      '#states' => [
+        'visible' => [
+          ':input[name="certificate[certificate_provider]"]' => ['value' => self::PROVIDER_TYPE_FORM],
+        ],
+      ],
+    ];
+
+    $form[self::CERTIFICATE][self::PROVIDER_TYPE_KEY] = [
       '#type' => 'key_select',
       '#key_filters' => [
         'type' => 'os2web_key_certificate',
       ],
       '#title' => $this->t('Key'),
       '#required' => TRUE,
-      '#default_value' => $config->get(self::KEY),
+      '#default_value' => $config->get(self::PROVIDER_TYPE_KEY),
+      '#states' => [
+        'visible' => [':input[name="certificate[certificate_provider]"]' => ['value' => self::PROVIDER_TYPE_KEY]],
+      ],
     ];
 
     $form['actions']['ping_api'] = [
@@ -135,6 +247,17 @@ final class SettingsForm extends ConfigFormBase {
       return;
     }
 
+    $values = $form_state->getValues();
+
+    if (self::PROVIDER_TYPE_FORM === $values[self::CERTIFICATE][self::CERTIFICATE_PROVIDER]) {
+      if (CertificateLocatorHelper::LOCATOR_TYPE_FILE_SYSTEM === $values[self::CERTIFICATE][CertificateLocatorHelper::LOCATOR_TYPE]) {
+        $path = $values[self::CERTIFICATE][CertificateLocatorHelper::LOCATOR_TYPE_FILE_SYSTEM]['path'] ?? NULL;
+        if (!file_exists($path)) {
+          $form_state->setErrorByName('certificate][file_system][path', $this->t('Invalid certificate path: %path', ['%path' => $path]));
+        }
+      }
+    }
+
     parent::validateForm($form, $form_state);
   }
 
@@ -160,7 +283,7 @@ final class SettingsForm extends ConfigFormBase {
       self::FASIT_API_BASE_URL,
       self::FASIT_API_TENANT,
       self::FASIT_API_VERSION,
-      self::KEY,
+      self::CERTIFICATE,
     ] as $key) {
       $config->set($key, $form_state->getValue($key));
     }

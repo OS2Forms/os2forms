@@ -11,6 +11,7 @@ use Drupal\os2forms_fasit\Exception\FasitXMLGenerationException;
 use Drupal\os2forms_fasit\Exception\FileTypeException;
 use Drupal\os2forms_fasit\Exception\InvalidSettingException;
 use Drupal\os2forms_fasit\Exception\InvalidSubmissionException;
+use Drupal\os2forms_fasit\Form\SettingsForm;
 use Drupal\os2forms_fasit\Plugin\WebformHandler\FasitWebformHandler;
 use Drupal\os2web_audit\Service\Logger;
 use Drupal\webform\Entity\WebformSubmission;
@@ -41,6 +42,7 @@ class FasitHelper {
     private readonly EntityTypeManagerInterface $entityTypeManager,
     private readonly Settings $settings,
     private readonly FileSystemInterface $fileSystem,
+    private readonly CertificateLocatorHelper $certificateLocator,
     private readonly Logger $auditLogger,
   ) {
   }
@@ -219,7 +221,8 @@ class FasitHelper {
         'Content-Type' => 'application/xml',
       ],
       'body' => $body,
-      'cert' => $this->settings->getCertificate(),
+      // 'cert' => $this->settings->getKeyValue(),
+//      'cert' => $this->getCertificate(),
     ];
 
     // Attempt upload.
@@ -494,11 +497,27 @@ class FasitHelper {
    */
   private function post(string $endpoint, array $options): ResponseInterface {
     try {
-      $certificate = $this->settings->getCertificate();
-      $certPath = $this->fileSystem->tempnam($this->fileSystem->getTempDirectory(), 'os2forms_fasit_cert');
-      // `tempnam` has created a file, so we must replace when saving.
-      $this->fileSystem->saveData($certificate, $certPath, FileSystemInterface::EXISTS_REPLACE);
-      $options['cert'] = $certPath;
+      $config = $this->settings->getFasitCertificateConfig();
+
+      // Key => string
+      // Azure => file without passphrase
+      // Filesystem => file with potential passphrase.
+      $provider = $config['certificate_provider'];
+
+      if (SettingsForm::PROVIDER_TYPE_KEY === $provider) {
+        $certificate = $this->settings->getKeyValue();
+        $certPath = $this->fileSystem->tempnam($this->fileSystem->getTempDirectory(), 'os2forms_fasit_cert');
+        // `tempnam` has created a file, so we must replace when saving.
+        $this->fileSystem->saveData($certificate, $certPath, FileSystemInterface::EXISTS_REPLACE);
+        $options['cert'] = $certPath;
+      }
+      elseif (SettingsForm::PROVIDER_TYPE_FORM === $provider) {
+        [$certificateOptions] = $this->getCertificateOptionsAndTempCertFilename();
+        $options['cert'] = $certificateOptions;
+      }
+      else {
+        throw new InvalidSettingException('Invalid certificate configuration');
+      }
 
       return $this->client->request('POST', $endpoint, $options);
     } finally {
@@ -532,6 +551,45 @@ class FasitHelper {
         throw $t;
       }
     }
+  }
+
+  /**
+   * Get certificate.
+   *
+   * @throws InvalidSettingException
+   */
+  private function getCertificate(): mixed {
+    $config = $this->settings->getFasitCertificateConfig();
+    $provider = $config['certificate_provider'];
+    if (SettingsForm::PROVIDER_TYPE_KEY === $provider) {
+      return $this->settings->getKeyValue();
+    }
+    elseif (SettingsForm::PROVIDER_TYPE_FORM === $provider) {
+      [$certificateOptions, $tempCertFilename] = $this->getCertificateOptionsAndTempCertFilename();
+      return $certificateOptions;
+    }
+
+    throw new InvalidSettingException('Invalid certificate configuration');
+  }
+
+  /**
+   * Gets certificate options and temp certificate filename.
+   *
+   * @throws \Drupal\os2forms_fasit\Exception\CertificateLocatorException
+   *   Certificate locator exception.
+   *
+   * @phpstan-return array<mixed, mixed>
+   */
+  private function getCertificateOptionsAndTempCertFilename(): array {
+    $certificateLocator = $this->certificateLocator->getCertificateLocator();
+    $localCertFilename = tempnam(sys_get_temp_dir(), 'cert');
+    file_put_contents($localCertFilename, $certificateLocator->getCertificate());
+    $certificateOptions =
+      $certificateLocator->hasPassphrase() ?
+        [$localCertFilename, $certificateLocator->getPassphrase()]
+        : $localCertFilename;
+
+    return [$certificateOptions, $localCertFilename];
   }
 
 }

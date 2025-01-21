@@ -50,18 +50,43 @@ final class Settings {
   }
 
   /**
-   * Get key.
+   * Get Fasit configuration selector
    */
-  public function getKey(): ?string {
+  public function getFasitCertificateConfig(): ?array {
+    return $this->get(SettingsForm::CERTIFICATE);
+  }
+
+  /**
+   * Get Fasit certificate provider.
+   */
+  public function getFasitCertificateProvider(): string {
+    $config = $this->getFasitCertificateConfig();
+
+    return $config[SettingsForm::CERTIFICATE_PROVIDER] ?? SettingsForm::PROVIDER_TYPE_FORM;
+  }
+
+  /**
+   * Get Fasit certificate locator.
+   */
+  public function getFasitCertificateLocator(): string {
+    $config = $this->getFasitCertificateConfig();
+
+    return $config[CertificateLocatorHelper::LOCATOR_TYPE] ?? CertificateLocatorHelper::LOCATOR_TYPE_FILE_SYSTEM;
+  }
+
+  /**
+   * Get Fasit key certificate configuration.
+   */
+  public function getFasitCertificateKey(): ?string {
     return $this->get(SettingsForm::KEY);
   }
 
   /**
    * Get certificate.
    */
-  public function getCertificate(): ?string {
+  public function getKeyValue(): ?string {
     $key = $this->keyRepository->getKey(
-      $this->getKey(),
+      $this->getFasitCertificateKey(),
     );
 
     return $key?->getKeyValue();
