@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\os2forms_fasit\Drush\Commands;
+namespace Drupal\os2forms_fasit\Commands;
 
 use Drupal\os2forms_fasit\Helper\FasitHelper;
 use Drush\Commands\DrushCommands;
