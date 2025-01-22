@@ -34,7 +34,7 @@ final class DigitalPostTestCommands extends DrushCommands {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): self {
     return new static(
       $container->get(DigitalPostHelper::class),
       $container->get('token'),
