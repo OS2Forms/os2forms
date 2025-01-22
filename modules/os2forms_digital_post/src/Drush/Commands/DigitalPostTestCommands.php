@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\os2forms_digital_post\Commands;
+namespace Drupal\os2forms_digital_post\Drush\Commands;
 
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Utility\Token;
@@ -12,12 +12,13 @@ use Drush\Commands\DrushCommands;
 use ItkDev\Serviceplatformen\Service\SF1601\SF1601;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 
 /**
- * Test commands for digital post.
+ * A Drush commandfile.
  */
-class DigitalPostTestCommands extends DrushCommands {
+final class DigitalPostTestCommands extends DrushCommands {
 
   /**
    * Constructor.
@@ -28,6 +29,18 @@ class DigitalPostTestCommands extends DrushCommands {
     private readonly EntityPrintPluginManagerInterface $entityPrintPluginManager,
     private readonly Settings $digitalPostSettings,
   ) {
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get(DigitalPostHelper::class),
+      $container->get('token'),
+      $container->get('plugin.manager.entity_print.print_engine'),
+      $container->get(Settings::class),
+    );
   }
 
   /**
