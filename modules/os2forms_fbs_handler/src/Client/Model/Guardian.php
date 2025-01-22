@@ -22,6 +22,8 @@ final class Guardian {
    *
    * @return array
    *   Array with field required by FBS calls.
+   *
+   * @phpstan-return array<string, string>
    */
   public function toArray(): array {
     return [
