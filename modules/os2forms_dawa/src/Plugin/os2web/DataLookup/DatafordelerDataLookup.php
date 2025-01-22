@@ -6,7 +6,6 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\File\FileSystem;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\key\KeyRepository;
 use Drupal\key\KeyRepositoryInterface;
 use Drupal\os2forms_dawa\Entity\DatafordelerMatrikula;
 use Drupal\os2web_audit\Service\Logger;
@@ -43,7 +42,7 @@ class DatafordelerDataLookup extends DataLookupBase implements DatafordelerDataL
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    /** @var Logger $auditLogger */
+    /** @var \Drupal\os2web_audit\Service\Logger $auditLogger */
     $auditLogger = $container->get('os2web_audit.logger');
     /** @var \Drupal\key\KeyRepositoryInterface $keyRepository */
     $keyRepository = $container->get('key.repository');

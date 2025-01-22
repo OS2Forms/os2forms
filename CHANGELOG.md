@@ -12,7 +12,10 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 ## [Unreleased]
 
 - [#101](https://github.com/OS2Forms/os2forms/pull/101)
-  Added support for os2web_key
+  - Added support for `os2web_key` in Digital post
+  - Added support for `os2web_key` in Fasit handler.
+    - Switched from saving settings in key value store to config, i.e
+      the module needs to be reconfigured.
 - Removed modules ldap_auth, logging_alerts, maillog
 
 ## [3.21.2] 2025-01-07

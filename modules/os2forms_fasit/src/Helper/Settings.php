@@ -2,66 +2,94 @@
 
 namespace Drupal\os2forms_fasit\Helper;
 
-use Drupal\Core\KeyValueStore\KeyValueFactoryInterface;
-use Drupal\Core\KeyValueStore\KeyValueStoreInterface;
-use Drupal\os2forms_fasit\Exception\InvalidSettingException;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\ImmutableConfig;
+use Drupal\key\KeyRepositoryInterface;
 use Drupal\os2forms_fasit\Form\SettingsForm;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * General settings for os2forms_fasit.
  */
 final class Settings {
   /**
-   * The store.
+   * The config.
    *
-   * @var \Drupal\Core\KeyValueStore\KeyValueStoreInterface
+   * @var \Drupal\Core\Config\ImmutableConfig
    */
-  private KeyValueStoreInterface $store;
-
-  /**
-   * The key value collection name.
-   *
-   * @var string
-   */
-  private $collection = 'os2forms_fasit';
+  private ImmutableConfig $config;
 
   /**
    * The constructor.
    */
-  public function __construct(KeyValueFactoryInterface $keyValueFactory) {
-    $this->store = $keyValueFactory->get($this->collection);
+  public function __construct(
+    ConfigFactoryInterface $configFactory,
+    private readonly KeyRepositoryInterface $keyRepository,
+  ) {
+    $this->config = $configFactory->get(SettingsForm::CONFIG_NAME);
   }
 
   /**
    * Get fasit api base url.
    */
-  public function getFasitApiBaseUrl(): string {
-    return $this->get(SettingsForm::FASIT_API_BASE_URL, '');
+  public function getFasitApiBaseUrl(): ?string {
+    return $this->get(SettingsForm::FASIT_API_BASE_URL);
   }
 
   /**
-   * Get fasit api base url.
+   * Get fasit api tenant.
    */
-  public function getFasitApiTenant(): string {
-    return $this->get(SettingsForm::FASIT_API_TENANT, '');
+  public function getFasitApiTenant(): ?string {
+    return $this->get(SettingsForm::FASIT_API_TENANT);
   }
 
   /**
-   * Get fasit api base url.
+   * Get fasit api version.
    */
-  public function getFasitApiVersion(): string {
-    return $this->get(SettingsForm::FASIT_API_VERSION, '');
+  public function getFasitApiVersion(): ?string {
+    return $this->get(SettingsForm::FASIT_API_VERSION);
+  }
+
+  /**
+   * Get Fasit configuration selector.
+   */
+  public function getFasitCertificateConfig(): ?array {
+    return $this->get(SettingsForm::CERTIFICATE);
+  }
+
+  /**
+   * Get Fasit certificate provider.
+   */
+  public function getFasitCertificateProvider(): string {
+    $config = $this->getFasitCertificateConfig();
+
+    return $config[SettingsForm::CERTIFICATE_PROVIDER] ?? SettingsForm::PROVIDER_TYPE_FORM;
+  }
+
+  /**
+   * Get Fasit certificate locator.
+   */
+  public function getFasitCertificateLocator(): string {
+    $config = $this->getFasitCertificateConfig();
+
+    return $config[CertificateLocatorHelper::LOCATOR_TYPE] ?? CertificateLocatorHelper::LOCATOR_TYPE_FILE_SYSTEM;
+  }
+
+  /**
+   * Get Fasit key certificate configuration.
+   */
+  public function getFasitCertificateKey(): ?string {
+    return $this->get(SettingsForm::KEY);
   }
 
   /**
    * Get certificate.
-   *
-   * @phpstan-return array<string, mixed>
    */
-  public function getCertificate(): array {
-    $value = $this->get(SettingsForm::CERTIFICATE);
-    return is_array($value) ? $value : [];
+  public function getKeyValue(): ?string {
+    $key = $this->keyRepository->getKey(
+      $this->getFasitCertificateKey(),
+    );
+
+    return $key?->getKeyValue();
   }
 
   /**
@@ -75,42 +103,8 @@ final class Settings {
    * @return mixed
    *   The setting value.
    */
-  private function get(string $key, $default = NULL) {
-    $resolver = $this->getSettingsResolver();
-    if (!$resolver->isDefined($key)) {
-      throw new InvalidSettingException(sprintf('Setting %s is not defined', $key));
-    }
-
-    return $this->store->get($key, $default);
-  }
-
-  /**
-   * Set settings.
-   *
-   * @throws \Symfony\Component\OptionsResolver\Exception\ExceptionInterface
-   *
-   * @phpstan-param array<string, mixed> $settings
-   */
-  public function setSettings(array $settings): self {
-    $settings = $this->getSettingsResolver()->resolve($settings);
-    foreach ($settings as $key => $value) {
-      $this->store->set($key, $value);
-    }
-
-    return $this;
-  }
-
-  /**
-   * Get settings resolver.
-   */
-  private function getSettingsResolver(): OptionsResolver {
-    return (new OptionsResolver())
-      ->setDefaults([
-        SettingsForm::FASIT_API_BASE_URL => '',
-        SettingsForm::FASIT_API_TENANT => '',
-        SettingsForm::FASIT_API_VERSION => '',
-        SettingsForm::CERTIFICATE => [],
-      ]);
+  private function get(string $key, $default = NULL): mixed {
+    return $this->config->get($key) ?? $default;
   }
 
 }
