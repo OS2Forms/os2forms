@@ -1,7 +1,0 @@
-services:
-  os2forms_fasit.commands:
-    class: \Drupal\os2forms_fasit\Commands\FasitTestCommands
-    arguments:
-      - '@Drupal\os2forms_fasit\Helper\FasitHelper'
-    tags:
-      - { name: drush.command }

@@ -1,21 +1,32 @@
 <?php
 
-namespace Drupal\os2forms_fasit\Commands;
+namespace Drupal\os2forms_fasit\Drush\Commands;
 
 use Drupal\os2forms_fasit\Helper\FasitHelper;
 use Drush\Commands\DrushCommands;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Test commands for fasit.
+ * A Drush commandfile.
  */
-class FasitTestCommands extends DrushCommands {
+final class FasitTestCommand extends DrushCommands {
 
   /**
-   * Constructor.
+   * Constructs a FasitTestCommand object.
    */
   public function __construct(
     private readonly FasitHelper $helper,
   ) {
+    parent::__construct();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get(FasitHelper::class),
+    );
   }
 
   /**
