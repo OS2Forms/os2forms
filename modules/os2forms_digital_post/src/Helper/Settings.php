@@ -23,6 +23,9 @@ final class Settings {
 
   public const CERTIFICATE = 'certificate';
   public const KEY = 'key';
+  public const CERTIFICATE_PROVIDER = 'certificate_provider';
+  public const PROVIDER_TYPE_FORM = 'form';
+  public const PROVIDER_TYPE_KEY = 'key';
 
   public const PROCESSING = 'processing';
   public const QUEUE = 'queue';
@@ -68,6 +71,13 @@ final class Settings {
     $value = $this->get(self::SENDER);
 
     return is_array($value) ? $value : [];
+  }
+
+  /**
+   * Get certificate provider.
+   */
+  public function getCertificateProvider(): ?string {
+    return $this->get([self::CERTIFICATE, self::CERTIFICATE_PROVIDER]);
   }
 
   /**

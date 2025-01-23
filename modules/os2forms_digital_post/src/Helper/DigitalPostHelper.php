@@ -35,6 +35,7 @@ final class DigitalPostHelper implements LoggerInterface {
     private readonly MeMoHelper $meMoHelper,
     private readonly ForsendelseHelper $forsendelseHelper,
     private readonly BeskedfordelerHelper $beskedfordelerHelper,
+    private readonly CertificateLocatorHelper $certificateLocatorHelper,
     private readonly LoggerChannelInterface $logger,
     private readonly LoggerChannelInterface $submissionLogger,
     private readonly Logger $auditLogger,
@@ -60,14 +61,23 @@ final class DigitalPostHelper implements LoggerInterface {
    */
   public function sendDigitalPost(string $type, Message $message, ?ForsendelseI $forsendelse, ?WebformSubmissionInterface $submission = NULL): array {
     $senderSettings = $this->settings->getSender();
+
+    if (Settings::PROVIDER_TYPE_FORM === $this->settings->getCertificateProvider()) {
+      $certificateLocator = $this->certificateLocatorHelper->getCertificateLocator();
+    }
+    else {
+      $certificateLocator = new KeyCertificateLocator(
+        $this->settings->getCertificateKey(),
+        $this->keyHelper
+      );
+    }
+
     $options = [
       'test_mode' => (bool) $this->settings->getTestMode(),
       'authority_cvr' => $senderSettings[Settings::SENDER_IDENTIFIER],
-      'certificate_locator' => new KeyCertificateLocator(
-        $this->settings->getCertificateKey(),
-        $this->keyHelper
-      ),
+      'certificate_locator' => $certificateLocator,
     ];
+
     $service = new SF1601($options);
     $transactionId = Serializer::createUuid();
 

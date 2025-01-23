@@ -37,6 +37,7 @@ services:
       - "@Drupal\\os2forms_digital_post\\Helper\\MeMoHelper"
       - "@Drupal\\os2forms_digital_post\\Helper\\ForsendelseHelper"
       - "@Drupal\\os2forms_digital_post\\Helper\\BeskedfordelerHelper"
+      - "@Drupal\\os2forms_digital_post\\Helper\\CertificateLocatorHelper"
       - "@logger.channel.os2forms_digital_post"
       - "@logger.channel.os2forms_digital_post_submission"
       - "@os2web_audit.logger"
