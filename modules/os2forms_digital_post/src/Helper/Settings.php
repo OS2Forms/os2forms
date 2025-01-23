@@ -7,6 +7,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ImmutableConfig;
 use Drupal\key\KeyInterface;
 use Drupal\key\KeyRepositoryInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * General settings for os2forms_digital_post.
@@ -49,6 +50,7 @@ final class Settings {
    */
   public function __construct(
     ConfigFactoryInterface $configFactory,
+    #[Autowire(service: 'key.repository')]
     private readonly KeyRepositoryInterface $keyRepository,
   ) {
     $this->runtimeConfig = $configFactory->get(self::CONFIG_NAME);

@@ -21,6 +21,7 @@ use Drupal\webform\WebformSubmissionStorageInterface;
 use ItkDev\Serviceplatformen\Service\SF1601\SF1601;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Webform helper.
@@ -51,11 +52,14 @@ final class WebformHelperSF1601 implements LoggerInterface {
   public function __construct(
     private readonly Settings $settings,
     EntityTypeManagerInterface $entityTypeManager,
+    #[Autowire(service: 'plugin.manager.os2web_datalookup')]
     private readonly DataLookupManager $dataLookupManager,
     private readonly MeMoHelper $meMoHelper,
     private readonly ForsendelseHelper $forsendelseHelper,
     private readonly BeskedfordelerHelper $beskedfordelerHelper,
+    #[Autowire(service: 'logger.channel.os2forms_digital_post')]
     private readonly LoggerChannelInterface $logger,
+    #[Autowire(service: 'logger.channel.os2forms_digital_post_submission')]
     private readonly LoggerChannelInterface $submissionLogger,
     private readonly DigitalPostHelper $digitalPostHelper,
   ) {

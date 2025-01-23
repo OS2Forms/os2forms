@@ -35,7 +35,6 @@ final class SettingsForm extends ConfigFormBase {
     ConfigFactoryInterface $config_factory,
     EntityTypeManagerInterface $entityTypeManager,
     private readonly Settings $settings,
-    private readonly CertificateLocatorHelper $certificateLocatorHelper,
   ) {
     parent::__construct($config_factory);
     $this->queueStorage = $entityTypeManager->getStorage('advancedqueue_queue');
@@ -51,7 +50,6 @@ final class SettingsForm extends ConfigFormBase {
       $container->get('config.factory'),
       $container->get('entity_type.manager'),
       $container->get(Settings::class),
-      $container->get(CertificateLocatorHelper::class),
     );
   }
 
@@ -289,15 +287,6 @@ final class SettingsForm extends ConfigFormBase {
       ),
     ];
 
-    $form['actions']['testCertificate'] = [
-      '#type' => 'submit',
-      '#name' => 'testCertificate',
-      '#value' => $this->t('Test certificate'),
-      '#states' => [
-        'visible' => [':input[name="certificate[certificate_provider]"]' => ['value' => Settings::PROVIDER_TYPE_FORM]],
-      ],
-    ];
-
     return $form;
   }
 
@@ -307,11 +296,6 @@ final class SettingsForm extends ConfigFormBase {
    * @phpstan-param array<string, mixed> $form
    */
   public function validateForm(array &$form, FormStateInterface $form_state): void {
-    $triggeringElement = $form_state->getTriggeringElement();
-    if ('testCertificate' === ($triggeringElement['#name'] ?? NULL)) {
-      return;
-    }
-
     $values = $form_state->getValues();
 
     if (Settings::PROVIDER_TYPE_FORM === $values[Settings::CERTIFICATE][Settings::CERTIFICATE_PROVIDER]) {
@@ -332,12 +316,6 @@ final class SettingsForm extends ConfigFormBase {
    * @phpstan-param array<string, mixed> $form
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
-    $triggeringElement = $form_state->getTriggeringElement();
-    if ('testCertificate' === ($triggeringElement['#name'] ?? NULL)) {
-      $this->testCertificate();
-      return;
-    }
-
     $config = $this->config(Settings::CONFIG_NAME);
     foreach ([
       Settings::TEST_MODE,
@@ -374,22 +352,6 @@ final class SettingsForm extends ConfigFormBase {
     }
 
     return (string) $description;
-  }
-
-  /**
-   * Test certificate.
-   */
-  private function testCertificate(): void {
-    try {
-
-      $certificateLocator = $this->certificateLocatorHelper->getCertificateLocator();
-      $certificateLocator->getCertificates();
-      $this->messenger()->addStatus($this->t('Certificate succesfully tested'));
-    }
-    catch (\Throwable $throwable) {
-      $message = $this->t('Error testing certificate: %message', ['%message' => $throwable->getMessage()]);
-      $this->messenger()->addError($message);
-    }
   }
 
 }

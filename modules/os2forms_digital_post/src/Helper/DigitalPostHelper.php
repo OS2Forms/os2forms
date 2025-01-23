@@ -18,6 +18,7 @@ use ItkDev\Serviceplatformen\Service\SF1601\Serializer;
 use Oio\Fjernprint\ForsendelseI;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Webform helper.
@@ -31,13 +32,17 @@ final class DigitalPostHelper implements LoggerInterface {
   public function __construct(
     private readonly Settings $settings,
     private readonly KeyHelper $keyHelper,
+    #[Autowire(service: 'plugin.manager.os2web_datalookup')]
     private readonly DataLookupManager $dataLookupManager,
     private readonly MeMoHelper $meMoHelper,
     private readonly ForsendelseHelper $forsendelseHelper,
     private readonly BeskedfordelerHelper $beskedfordelerHelper,
     private readonly CertificateLocatorHelper $certificateLocatorHelper,
+    #[Autowire(service: 'logger.channel.os2forms_digital_post')]
     private readonly LoggerChannelInterface $logger,
+    #[Autowire(service: 'logger.channel.os2forms_digital_post_submission')]
     private readonly LoggerChannelInterface $submissionLogger,
+    #[Autowire(service: 'os2web_audit.logger')]
     private readonly Logger $auditLogger,
   ) {
   }
