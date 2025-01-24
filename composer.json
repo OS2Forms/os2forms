@@ -59,7 +59,7 @@
         "itk-dev/serviceplatformen": "^1.5",
         "mglaman/composer-drupal-lenient": "^1.0",
         "os2web/os2web_audit": "^0.1.6",
-        "os2web/os2web_datalookup": "dev-feature/os2web_key as 2.0.0",
+        "os2web/os2web_datalookup": "^2.0",
         "os2web/os2web_key": "^1.0",
         "os2web/os2web_nemlogin": "^1.0",
         "os2web/os2web_simplesaml": "dev-master",
