@@ -81,10 +81,6 @@
         "wsdltophp/packagegenerator": "^4.0"
     },
     "repositories": {
-        "os2web/os2web_datalookup": {
-            "type": "vcs",
-            "url": "https://github.com/itk-dev/os2web_datalookup"
-        },
         "drupal": {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
