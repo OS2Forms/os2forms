@@ -209,10 +209,10 @@ final class SettingsForm extends ConfigFormBase {
         'type' => 'os2web_key_certificate',
       ],
       '#title' => $this->t('Key'),
-      '#required' => TRUE,
       '#default_value' => $config->get(self::PROVIDER_TYPE_KEY),
       '#states' => [
         'visible' => [':input[name="certificate[certificate_provider]"]' => ['value' => self::PROVIDER_TYPE_KEY]],
+        'required' => [':input[name="certificate[certificate_provider]"]' => ['value' => self::PROVIDER_TYPE_KEY]],
       ],
     ];
 

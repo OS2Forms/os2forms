@@ -252,10 +252,10 @@ final class SettingsForm extends ConfigFormBase {
       '#key_description' => FALSE,
       '#title' => $this->t('Key'),
       '#default_value' => $this->settings->getEditableValue([Settings::CERTIFICATE, Settings::PROVIDER_TYPE_KEY]),
-      '#required' => TRUE,
       '#description' => $this->createDescription([Settings::CERTIFICATE, Settings::PROVIDER_TYPE_KEY]),
       '#states' => [
         'visible' => [':input[name="certificate[certificate_provider]"]' => ['value' => Settings::PROVIDER_TYPE_KEY]],
+        'required' => [':input[name="certificate[certificate_provider]"]' => ['value' => Settings::PROVIDER_TYPE_KEY]],
       ],
     ];
 
