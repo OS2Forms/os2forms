@@ -45,7 +45,7 @@ class CertificateLocatorHelper {
     $locatorType = $certificateSettings['locator_type'];
     $options = $certificateSettings[$locatorType];
     $options += [
-      'passphrase' => $certificateSettings['passphrase'] ?: '',
+      'passphrase' => $certificateSettings['passphrase'],
     ];
 
     if (self::LOCATOR_TYPE_AZURE_KEY_VAULT === $locatorType) {
