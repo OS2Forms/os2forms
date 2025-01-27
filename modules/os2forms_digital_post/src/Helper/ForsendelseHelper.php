@@ -2,14 +2,12 @@
 
 namespace Drupal\os2forms_digital_post\Helper;
 
-use Drupal\Core\Render\ElementInfoManager;
 use Drupal\os2forms_digital_post\Exception\InvalidForsendelseException;
 use Drupal\os2forms_digital_post\Model\Document;
 use Drupal\os2forms_digital_post\Plugin\WebformHandler\WebformHandlerSF1601;
 use Drupal\os2web_datalookup\LookupResult\CompanyLookupResult;
 use Drupal\os2web_datalookup\LookupResult\CprLookupResult;
 use Drupal\webform\WebformSubmissionInterface;
-use Drupal\webform\WebformTokenManagerInterface;
 use ItkDev\Serviceplatformen\Service\SF1601\Serializer;
 use Oio\Dkal\AfsendelseModtager;
 use Oio\Ebxml\CountryIdentificationCode;
@@ -18,7 +16,6 @@ use Oio\Fjernprint\ForsendelseI;
 use Oio\Fjernprint\ForsendelseModtager;
 use Oio\Fjernprint\ModtagerAdresse;
 use Oio\Fjernprint\PostParametre;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Forsendelse helper.
@@ -26,22 +23,6 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 class ForsendelseHelper extends AbstractMessageHelper {
   // PostKategoriKode.
   public const POST_KATEGORI_KODE_PRIORITAIRE = 'Prioritaire';
-
-  /**
-   * {@inheritDoc}
-   */
-  // phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
-  public function __construct(
-    Settings $settings,
-    #[Autowire(service: 'plugin.manager.element_info')]
-    ElementInfoManager $elementInfoManager,
-    #[Autowire(service: 'webform.token_manager')]
-    WebformTokenManagerInterface $webformTokenManager,
-  ) {
-    parent::__construct($settings, $elementInfoManager, $webformTokenManager);
-  }
-
-  // phpcs:enable
 
   /**
    * Build forsendelse.
