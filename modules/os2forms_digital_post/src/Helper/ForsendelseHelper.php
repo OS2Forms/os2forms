@@ -30,6 +30,7 @@ class ForsendelseHelper extends AbstractMessageHelper {
   /**
    * {@inheritDoc}
    */
+  // phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
   public function __construct(
     Settings $settings,
     #[Autowire(service: 'plugin.manager.element_info')]
@@ -39,6 +40,8 @@ class ForsendelseHelper extends AbstractMessageHelper {
   ) {
     parent::__construct($settings, $elementInfoManager, $webformTokenManager);
   }
+
+  // phpcs:enable
 
   /**
    * Build forsendelse.
