@@ -15,15 +15,9 @@ services:
 
   Drupal\os2forms_digital_post\Helper\MeMoHelper:
     autowire: true
-    arguments:
-      $elementInfoManager: "@plugin.manager.element_info"
-      $webformTokenManager: "@webform.token_manager"
 
   Drupal\os2forms_digital_post\Helper\ForsendelseHelper:
     autowire: true
-    arguments:
-      $elementInfoManager: "@plugin.manager.element_info"
-      $webformTokenManager: "@webform.token_manager"
 
   Drupal\os2forms_digital_post\Helper\DigitalPostHelper:
     autowire: true
