@@ -78,7 +78,9 @@ final class Settings {
    * Get Fasit key certificate configuration.
    */
   public function getFasitCertificateKey(): ?string {
-    return $this->get(SettingsForm::KEY);
+    $config = $this->getFasitCertificateConfig();
+
+    return $config[SettingsForm::PROVIDER_TYPE_KEY] ?? NULL;
   }
 
   /**

@@ -2,14 +2,15 @@
 
 namespace Drupal\os2forms_fasit\Drush\Commands;
 
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\os2forms_fasit\Helper\FasitHelper;
 use Drush\Commands\DrushCommands;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * A Drush commandfile.
  */
 final class FasitTestCommand extends DrushCommands {
+  use AutowireTrait;
 
   /**
    * Constructs a FasitTestCommand object.
@@ -18,15 +19,6 @@ final class FasitTestCommand extends DrushCommands {
     private readonly FasitHelper $helper,
   ) {
     parent::__construct();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get(FasitHelper::class),
-    );
   }
 
   /**

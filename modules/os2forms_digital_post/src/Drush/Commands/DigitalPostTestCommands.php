@@ -1,8 +1,9 @@
 <?php
 
-namespace Drupal\os2forms_digital_post\Commands;
+namespace Drupal\os2forms_digital_post\Drush\Commands;
 
 use Drupal\Component\Serialization\Yaml;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Utility\Token;
 use Drupal\entity_print\Plugin\EntityPrintPluginManagerInterface;
 use Drupal\os2forms_digital_post\Helper\DigitalPostHelper;
@@ -12,12 +13,14 @@ use Drush\Commands\DrushCommands;
 use ItkDev\Serviceplatformen\Service\SF1601\SF1601;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 
 /**
  * Test commands for digital post.
  */
-class DigitalPostTestCommands extends DrushCommands {
+final class DigitalPostTestCommands extends DrushCommands {
+  use AutowireTrait;
 
   /**
    * Constructor.
@@ -25,6 +28,7 @@ class DigitalPostTestCommands extends DrushCommands {
   public function __construct(
     private readonly DigitalPostHelper $digitalPostHelper,
     private readonly Token $token,
+    #[Autowire(service: 'plugin.manager.entity_print.print_engine')]
     private readonly EntityPrintPluginManagerInterface $entityPrintPluginManager,
     private readonly Settings $digitalPostSettings,
   ) {

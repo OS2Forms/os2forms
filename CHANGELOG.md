@@ -13,6 +13,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 - [#101](https://github.com/OS2Forms/os2forms/pull/101)
   - Added support for `os2web_key` in Digital post
+  - Switched from saving settings in key value store to config, i.e
+    the module needs to be reconfigured.
   - Added support for `os2web_key` in Fasit handler.
     - Switched from saving settings in key value store to config, i.e
       the module needs to be reconfigured.

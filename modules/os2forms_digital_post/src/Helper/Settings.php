@@ -7,6 +7,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ImmutableConfig;
 use Drupal\key\KeyInterface;
 use Drupal\key\KeyRepositoryInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * General settings for os2forms_digital_post.
@@ -23,6 +24,9 @@ final class Settings {
 
   public const CERTIFICATE = 'certificate';
   public const KEY = 'key';
+  public const CERTIFICATE_PROVIDER = 'certificate_provider';
+  public const PROVIDER_TYPE_FORM = 'form';
+  public const PROVIDER_TYPE_KEY = 'key';
 
   public const PROCESSING = 'processing';
   public const QUEUE = 'queue';
@@ -46,6 +50,7 @@ final class Settings {
    */
   public function __construct(
     ConfigFactoryInterface $configFactory,
+    #[Autowire(service: 'key.repository')]
     private readonly KeyRepositoryInterface $keyRepository,
   ) {
     $this->runtimeConfig = $configFactory->get(self::CONFIG_NAME);
@@ -68,6 +73,13 @@ final class Settings {
     $value = $this->get(self::SENDER);
 
     return is_array($value) ? $value : [];
+  }
+
+  /**
+   * Get certificate provider.
+   */
+  public function getCertificateProvider(): ?string {
+    return $this->get([self::CERTIFICATE, self::CERTIFICATE_PROVIDER]);
   }
 
   /**

@@ -11,6 +11,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
+use Drupal\os2forms_digital_post\Helper\CertificateLocatorHelper;
 use Drupal\os2forms_digital_post\Helper\Settings;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -134,17 +135,127 @@ final class SettingsForm extends ConfigFormBase {
       '#type' => 'fieldset',
       '#title' => $this->t('Certificate'),
       '#tree' => TRUE,
+    ];
 
-      Settings::KEY => [
-        '#type' => 'key_select',
-        '#key_filters' => [
-          'type' => 'os2web_key_certificate',
+    $form[Settings::CERTIFICATE][Settings::CERTIFICATE_PROVIDER] = [
+      '#type' => 'select',
+      '#title' => $this->t('Provider'),
+      '#options' => [
+        Settings::PROVIDER_TYPE_FORM => $this->t('Form'),
+        Settings::PROVIDER_TYPE_KEY => $this->t('Key'),
+      ],
+      '#default_value' => $this->settings->getEditableValue([Settings::CERTIFICATE, Settings::CERTIFICATE_PROVIDER]) ?? Settings::PROVIDER_TYPE_FORM,
+      '#description' => $this->t('Specifies which provider to use'),
+    ];
+
+    $form[Settings::CERTIFICATE][CertificateLocatorHelper::LOCATOR_TYPE] = [
+      '#type' => 'select',
+      '#title' => $this->t('Certificate locator type'),
+      '#options' => [
+        CertificateLocatorHelper::LOCATOR_TYPE_AZURE_KEY_VAULT => $this->t('Azure key vault'),
+        CertificateLocatorHelper::LOCATOR_TYPE_FILE_SYSTEM => $this->t('File system'),
+      ],
+      '#default_value' => $this->settings->getEditableValue([
+        Settings::CERTIFICATE,
+        CertificateLocatorHelper::LOCATOR_TYPE,
+      ]) ?? NULL,
+      '#states' => [
+        'visible' => [':input[name="certificate[certificate_provider]"]' => ['value' => Settings::PROVIDER_TYPE_FORM]],
+      ],
+      '#description' => $this->t('Specifies which locator to use'),
+    ];
+
+    $form[Settings::CERTIFICATE][CertificateLocatorHelper::LOCATOR_TYPE_AZURE_KEY_VAULT] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Azure key vault'),
+      '#states' => [
+        'visible' => [
+          ':input[name="certificate[certificate_provider]"]' => ['value' => Settings::PROVIDER_TYPE_FORM],
+          ':input[name="certificate[locator_type]"]' => ['value' => CertificateLocatorHelper::LOCATOR_TYPE_AZURE_KEY_VAULT],
         ],
-        '#key_description' => FALSE,
-        '#title' => $this->t('Key'),
-        '#default_value' => $this->settings->getEditableValue([Settings::CERTIFICATE, Settings::KEY]),
-        '#required' => TRUE,
-        '#description' => $this->createDescription([Settings::CERTIFICATE, Settings::KEY]),
+      ],
+    ];
+
+    $settings = [
+      CertificateLocatorHelper::LOCATOR_AZURE_KEY_VAULT_TENANT_ID => ['title' => $this->t('Tenant id')],
+      CertificateLocatorHelper::LOCATOR_AZURE_KEY_VAULT_APPLICATION_ID => ['title' => $this->t('Application id')],
+      CertificateLocatorHelper::LOCATOR_AZURE_KEY_VAULT_CLIENT_SECRET => ['title' => $this->t('Client secret')],
+      CertificateLocatorHelper::LOCATOR_AZURE_KEY_VAULT_NAME => ['title' => $this->t('Name')],
+      CertificateLocatorHelper::LOCATOR_AZURE_KEY_VAULT_SECRET => ['title' => $this->t('Secret')],
+      CertificateLocatorHelper::LOCATOR_AZURE_KEY_VAULT_VERSION => ['title' => $this->t('Version')],
+    ];
+
+    foreach ($settings as $key => $info) {
+      $form[Settings::CERTIFICATE][CertificateLocatorHelper::LOCATOR_TYPE_AZURE_KEY_VAULT][$key] = [
+        '#type' => 'textfield',
+        '#title' => $info['title'],
+        '#default_value' => $this->settings->getEditableValue([
+          Settings::CERTIFICATE,
+          CertificateLocatorHelper::LOCATOR_TYPE_AZURE_KEY_VAULT,
+          $key,
+        ]) ?? NULL,
+        '#states' => [
+          'required' => [
+            ':input[name="certificate[certificate_provider]"]' => ['value' => Settings::PROVIDER_TYPE_FORM],
+            ':input[name="certificate[locator_type]"]' => ['value' => CertificateLocatorHelper::LOCATOR_TYPE_AZURE_KEY_VAULT],
+          ],
+        ],
+      ];
+    }
+
+    $form[Settings::CERTIFICATE][CertificateLocatorHelper::LOCATOR_TYPE_FILE_SYSTEM] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('File system'),
+      '#states' => [
+        'visible' => [
+          ':input[name="certificate[certificate_provider]"]' => ['value' => Settings::PROVIDER_TYPE_FORM],
+          ':input[name="certificate[locator_type]"]' => ['value' => CertificateLocatorHelper::LOCATOR_TYPE_FILE_SYSTEM],
+        ],
+      ],
+
+      CertificateLocatorHelper::LOCATOR_FILE_SYSTEM_PATH => [
+        '#type' => 'textfield',
+        '#title' => $this->t('Path'),
+        '#default_value' => $this->settings->getEditableValue([
+          Settings::CERTIFICATE,
+          CertificateLocatorHelper::LOCATOR_TYPE_FILE_SYSTEM,
+          CertificateLocatorHelper::LOCATOR_FILE_SYSTEM_PATH,
+        ]) ?? NULL,
+        '#states' => [
+          'required' => [
+            ':input[name="certificate[certificate_provider]"]' => ['value' => Settings::PROVIDER_TYPE_FORM],
+            ':input[name="certificate[locator_type]"]' => ['value' => CertificateLocatorHelper::LOCATOR_TYPE_FILE_SYSTEM],
+          ],
+        ],
+      ],
+    ];
+
+    $form[Settings::CERTIFICATE][CertificateLocatorHelper::LOCATOR_PASSPHRASE] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Passphrase'),
+      '#default_value' => $this->settings->getEditableValue([
+        Settings::CERTIFICATE,
+        CertificateLocatorHelper::LOCATOR_PASSPHRASE,
+      ]) ?? '',
+      '#states' => [
+        'visible' => [
+          ':input[name="certificate[certificate_provider]"]' => ['value' => Settings::PROVIDER_TYPE_FORM],
+        ],
+      ],
+    ];
+
+    $form[Settings::CERTIFICATE][Settings::PROVIDER_TYPE_KEY] = [
+      '#type' => 'key_select',
+      '#key_filters' => [
+        'type' => 'os2web_key_certificate',
+      ],
+      '#key_description' => FALSE,
+      '#title' => $this->t('Key'),
+      '#default_value' => $this->settings->getEditableValue([Settings::CERTIFICATE, Settings::PROVIDER_TYPE_KEY]),
+      '#description' => $this->createDescription([Settings::CERTIFICATE, Settings::PROVIDER_TYPE_KEY]),
+      '#states' => [
+        'visible' => [':input[name="certificate[certificate_provider]"]' => ['value' => Settings::PROVIDER_TYPE_KEY]],
+        'required' => [':input[name="certificate[certificate_provider]"]' => ['value' => Settings::PROVIDER_TYPE_KEY]],
       ],
     ];
 
@@ -177,6 +288,26 @@ final class SettingsForm extends ConfigFormBase {
     ];
 
     return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   *
+   * @phpstan-param array<string, mixed> $form
+   */
+  public function validateForm(array &$form, FormStateInterface $form_state): void {
+    $values = $form_state->getValues();
+
+    if (Settings::PROVIDER_TYPE_FORM === $values[Settings::CERTIFICATE][Settings::CERTIFICATE_PROVIDER]) {
+      if (CertificateLocatorHelper::LOCATOR_TYPE_FILE_SYSTEM === $values[Settings::CERTIFICATE][CertificateLocatorHelper::LOCATOR_TYPE]) {
+        $path = $values[Settings::CERTIFICATE][CertificateLocatorHelper::LOCATOR_TYPE_FILE_SYSTEM][CertificateLocatorHelper::LOCATOR_FILE_SYSTEM_PATH] ?? NULL;
+        if (!file_exists($path)) {
+          $form_state->setErrorByName('certificate][file_system][path', $this->t('Invalid certificate path: %path', ['%path' => $path]));
+        }
+      }
+    }
+
+    parent::validateForm($form, $form_state);
   }
 
   /**
