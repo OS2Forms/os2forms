@@ -88,7 +88,7 @@ class SigningService {
    * @return mixed|bool
    *   The binary data of the pdf or FALSE if an error occurred.
    */
-  public function download(string $filename, $leave = FALSE, $annotate = TRUE, $attributes = []) {
+  public function download(string $filename, $leave = FALSE, $annotate = FALSE, $attributes = []) {
     if (empty($filename)) {
       return FALSE;
     }

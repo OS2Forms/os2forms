@@ -68,10 +68,10 @@ class DigitalSignatureController {
     /** @var SigningService $signingService */
     $signingService = \Drupal::service('os2forms_digital_signature.signing_service');
 
-    $signeFilename = \Drupal::request()->get('file');
-    $signedFileContent = $signingService->download($signeFilename);
+    $signedFilename = \Drupal::request()->get('file');
+    $signedFileContent = $signingService->download($signedFilename);
     if (!$signedFileContent) {
-      \Drupal::logger('os2forms_digital_signature')->warning('Missing file on remote server %file.', ['%file' => $signeFilename]);
+      \Drupal::logger('os2forms_digital_signature')->warning('Missing file on remote server %file.', ['%file' => $signedFilename]);
       throw new NotFoundHttpException();
     }
 
