@@ -8,7 +8,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\advancedqueue\Job;
 use Drupal\advancedqueue\JobResult;
 use Drupal\advancedqueue\Plugin\AdvancedQueue\JobType\JobTypeBase;
-use Drupal\os2forms_fbs_handler\Client\FBS;
+use Drupal\os2forms_fbs_handler\Client\Fbs;
 use Drupal\os2forms_fbs_handler\Client\Model\Guardian;
 use Drupal\os2forms_fbs_handler\Client\Model\Patron;
 use Drupal\os2web_audit\Service\Logger;
@@ -84,7 +84,7 @@ final class FbsCreateUser extends JobTypeBase implements ContainerFactoryPluginI
       $config = $payload['configuration'];
 
       try {
-        $fbs = new FBS($this->client, $config['endpoint_url'], $config['agency_id'], $config['username'], $config['password']);
+        $fbs = new Fbs($this->client, $config['endpoint_url'], $config['agency_id'], $config['username'], $config['password']);
 
         // Log into FBS and obtain session.
         $fbs->login();

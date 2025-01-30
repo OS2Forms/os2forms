@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Minimalistic client to create user with guardians at FBS.
  */
-class FBS {
+class Fbs {
 
   /**
    * FBS session key.
@@ -154,12 +154,13 @@ class FBS {
         (bool) $json->patron->receiveSms,
         (bool) $json->patron->receivePostalMail,
         $json->patron->notificationProtocols,
-        $json->patron->phoneNumber,
         is_null($json->patron->onHold) ? $json->patron->onHold : (array) $json->patron->onHold,
         $json->patron->preferredLanguage,
         (bool) $json->patron->guardianVisibility,
         $json->patron->defaultInterestPeriod,
         (bool) $json->patron->resident,
+        $json->patron->phoneNumber,
+
         [
           [
             'emailAddress' => $json->patron->emailAddress,

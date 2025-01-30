@@ -25,12 +25,12 @@ final class Patron {
     public readonly ?int $defaultInterestPeriod = NULL,
     public readonly ?bool $resident = NULL,
     // Allow these properties below to be updatable.
+    public ?string $phoneNumber = NULL,
     public ?array $emailAddresses = NULL,
     public ?bool $receiveEmail = NULL,
     public ?string $preferredPickupBranch = NULL,
     public ?string $personId = NULL,
     public ?string $pincode = NULL,
-    public ?string $phoneNumber = NULL,
   ) {
   }
 
