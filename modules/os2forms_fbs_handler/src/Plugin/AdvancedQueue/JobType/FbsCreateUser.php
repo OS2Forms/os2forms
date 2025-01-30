@@ -110,13 +110,15 @@ final class FbsCreateUser extends JobTypeBase implements ContainerFactoryPluginI
           if (!is_null($patron)) {
             // Create Patron object with updated values.
             $patron->preferredPickupBranch = $data['afhentningssted'];
-            $patron->emailAddresses = [
-              [
-                'emailAddress' => $data['barn_mail'],
-                'receiveNotification' => TRUE,
-              ],
-            ];
-            if (isset($data['barn_tlf'])) {
+            if (!empty($data['barn_mail'])) {
+              $patron->emailAddresses = [
+                [
+                  'emailAddress' => $data['barn_mail'],
+                  'receiveNotification' => TRUE,
+                ],
+              ];
+            }
+            if (!empty($data['barn_tlf'])) {
               $patron->phoneNumber = $data['barn_tlf'];
             }
             $patron->receiveEmail = TRUE;
@@ -130,16 +132,18 @@ final class FbsCreateUser extends JobTypeBase implements ContainerFactoryPluginI
           // If "no" create child patron and guardian.
           $patron = new Patron();
           $patron->preferredPickupBranch = $data['afhentningssted'];
-          $patron->emailAddresses = [
-            [
-              'emailAddress' => $data['barn_mail'],
-              'receiveNotification' => TRUE,
-            ],
-          ];
+          if (!empty($data['barn_mail'])) {
+            $patron->emailAddresses = [
+              [
+                'emailAddress' => $data['barn_mail'],
+                'receiveNotification' => TRUE,
+              ],
+            ];
+          }
           $patron->receiveEmail = TRUE;
           $patron->personId = $data['barn_cpr'];
           $patron->pincode = $data['pinkode'];
-          if (isset($data['barn_tlf'])) {
+          if (!empty($data['barn_tlf'])) {
             $patron->phoneNumber = $data['barn_tlf'];
           }
 
