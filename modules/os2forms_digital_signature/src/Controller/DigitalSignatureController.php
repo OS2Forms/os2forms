@@ -48,7 +48,7 @@ class DigitalSignatureController {
     $webformId = $webformSubmission->getWebform()->id();
 
     // Checking the action
-    $action = \Drupal::request()->query->get('name');
+    $action = \Drupal::request()->query->get('action');
     if ($action == 'cancel') {
       $cancelUrl = $webformSubmission->getWebform()->toUrl()->toString();
 
