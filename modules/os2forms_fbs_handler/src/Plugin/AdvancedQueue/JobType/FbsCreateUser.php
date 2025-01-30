@@ -116,6 +116,9 @@ final class FbsCreateUser extends JobTypeBase implements ContainerFactoryPluginI
                 'receiveNotification' => TRUE,
               ],
             ];
+            if (isset($data['barn_tlf'])) {
+              $patron->phoneNumber = $data['barn_tlf'];
+            }
             $patron->receiveEmail = TRUE;
             $patron->pincode = $data['pinkode'];
 
@@ -136,6 +139,9 @@ final class FbsCreateUser extends JobTypeBase implements ContainerFactoryPluginI
           $patron->receiveEmail = TRUE;
           $patron->personId = $data['barn_cpr'];
           $patron->pincode = $data['pinkode'];
+          if (isset($data['barn_tlf'])) {
+            $patron->phoneNumber = $data['barn_tlf'];
+          }
 
           $fbs->createPatronWithGuardian($patron, $guardian);
         }
