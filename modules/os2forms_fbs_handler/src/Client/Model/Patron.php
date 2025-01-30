@@ -19,7 +19,6 @@ final class Patron {
     public readonly ?bool $receiveSms = FALSE,
     public readonly ?bool $receivePostalMail = FALSE,
     public readonly ?array $notificationProtocols = NULL,
-    public readonly ?string $phoneNumber = NULL,
     public readonly ?array $onHold = NULL,
     public readonly ?string $preferredLanguage = NULL,
     public readonly ?bool $guardianVisibility = NULL,
@@ -31,6 +30,7 @@ final class Patron {
     public ?string $preferredPickupBranch = NULL,
     public ?string $personId = NULL,
     public ?string $pincode = NULL,
+    public ?string $phoneNumber = NULL,
   ) {
   }
 
