@@ -118,9 +118,9 @@ class Fbs {
       'pincode' => $patron->pincode,
       'preferredPickupBranch' => $patron->preferredPickupBranch,
       'name' => 'Unknown Name',
-      'emailAddresses' => isset($patron->emailAddresses) && $patron->emailAddresses ? $patron->emailAddresses : [],
+      'emailAddresses' => $patron->emailAddresses ?? [],
       'guardian' => $guardian->toArray(),
-      'phoneNumbers' => isset($patron->phoneNumber) && $patron->phoneNumber ? [
+      'phoneNumbers' => $patron->phoneNumber ? [
         [
           'receiveNotification' => TRUE,
           'phoneNumber' => $patron->phoneNumber,
@@ -192,10 +192,10 @@ class Fbs {
     $payload = [
       'patron' => [
         'preferredPickupBranch' => $patron->preferredPickupBranch,
-        'emailAddresses' => isset($patron->emailAddresses) && $patron->emailAddresses ? $patron->emailAddresses : [],
+        'emailAddresses' => $patron->emailAddresses ?? [],
         'guardianVisibility' => $patron->guardianVisibility,
         'receivePostalMail' => $patron->receiveEmail,
-        'phoneNumbers' => isset($patron->phoneNumber) && $patron->phoneNumber ? [
+        'phoneNumbers' => $patron->phoneNumber ? [
           [
             'receiveNotification' => TRUE,
             'phoneNumber' => $patron->phoneNumber,
