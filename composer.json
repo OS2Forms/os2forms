@@ -34,7 +34,6 @@
         "drupal/events_logging": "^2.0@beta",
         "drupal/gin": "^3.0-rc",
         "drupal/honeypot": "^2.0",
-        "drupal/image_widget_crop": "^2.3",
         "drupal/ldap": "^4.2",
         "drupal/leaflet": "^10.0",
         "drupal/leaflet_layers": "^1.1",
