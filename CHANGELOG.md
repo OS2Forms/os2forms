@@ -11,8 +11,10 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
-- Removed modules ldap_auth, logging_alerts, maillog
-- Removed module image_widget_crop
+## [3.22.0] 2025-02-03
+
+- Removed modules ldap_auth, logging_alerts, maillog [#151](https://github.com/OS2Forms/os2forms/pull/151)
+- Removed module image_widget_crop [#OS-143](https://github.com/OS2Forms/os2forms/pull/159)
 
 ## [3.21.2] 2025-01-07
 
