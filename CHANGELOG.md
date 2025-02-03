@@ -12,6 +12,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 ## [Unreleased]
 
 - Removed modules ldap_auth, logging_alerts, maillog
+- Removed module image_widget_crop
 
 ## [3.21.2] 2025-01-07
 
