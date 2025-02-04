@@ -12,6 +12,7 @@ use Drupal\webform\WebformTokenManagerInterface;
 use Drupal\webform_attachment\Element\WebformAttachmentBase;
 use ItkDev\Serviceplatformen\Service\SF1601\Serializer;
 use Oio\Fjernprint\ForsendelseI;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Abstract message helper.
@@ -23,6 +24,7 @@ abstract class AbstractMessageHelper {
    */
   public function __construct(
     readonly protected Settings $settings,
+    #[Autowire(service: 'plugin.manager.element_info')]
     readonly protected ElementInfoManager $elementInfoManager,
     readonly protected WebformTokenManagerInterface $webformTokenManager,
   ) {

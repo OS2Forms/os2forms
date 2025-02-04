@@ -38,12 +38,12 @@ class CertificateLocatorHelper {
    * Get certificate locator.
    */
   public function getCertificateLocator(): CertificateLocatorInterface {
-    $certificateSettings = $this->settings->getCertificate();
+    $config = $this->settings->getFasitCertificateConfig();
 
-    $locatorType = $certificateSettings[self::LOCATOR_TYPE];
-    $options = $certificateSettings[$locatorType];
+    $locatorType = $config[self::LOCATOR_TYPE];
+    $options = $config[$locatorType];
     $options += [
-      self::LOCATOR_PASSPHRASE => $certificateSettings[self::LOCATOR_PASSPHRASE] ?: '',
+      self::LOCATOR_PASSPHRASE => $config[self::LOCATOR_PASSPHRASE] ?: '',
     ];
 
     if (self::LOCATOR_TYPE_AZURE_KEY_VAULT === $locatorType) {

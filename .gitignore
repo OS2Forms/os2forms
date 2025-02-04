@@ -4,5 +4,3 @@
 composer.lock
 vendor
 
-node_modules/
-yarn.lock

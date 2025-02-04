@@ -1,16 +1,13 @@
 services:
   Drupal\os2forms_fasit\Helper\Settings:
+    autowire: true
     arguments:
-      - "@keyvalue"
+      $keyRepository: "@key.repository"
 
   Drupal\os2forms_fasit\Helper\CertificateLocatorHelper:
-    arguments:
-      - "@Drupal\\os2forms_fasit\\Helper\\Settings"
+    autowire: true
 
   Drupal\os2forms_fasit\Helper\FasitHelper:
+    autowire: true
     arguments:
-      - '@http_client'
-      - '@entity_type.manager'
-      - "@Drupal\\os2forms_fasit\\Helper\\Settings"
-      - "@Drupal\\os2forms_fasit\\Helper\\CertificateLocatorHelper"
-      - "@os2web_audit.logger"
+      $auditLogger: "@os2web_audit.logger"

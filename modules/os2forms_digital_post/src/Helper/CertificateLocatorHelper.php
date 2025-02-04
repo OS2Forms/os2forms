@@ -16,8 +16,17 @@ use ItkDev\Serviceplatformen\Certificate\FilesystemCertificateLocator;
  * Certificate locator helper.
  */
 class CertificateLocatorHelper {
+  public const LOCATOR_TYPE = 'locator_type';
   public const LOCATOR_TYPE_AZURE_KEY_VAULT = 'azure_key_vault';
   public const LOCATOR_TYPE_FILE_SYSTEM = 'file_system';
+  public const LOCATOR_PASSPHRASE = 'passphrase';
+  public const LOCATOR_AZURE_KEY_VAULT_TENANT_ID = 'tenant_id';
+  public const LOCATOR_AZURE_KEY_VAULT_APPLICATION_ID = 'application_id';
+  public const LOCATOR_AZURE_KEY_VAULT_CLIENT_SECRET = 'client_secret';
+  public const LOCATOR_AZURE_KEY_VAULT_NAME = 'name';
+  public const LOCATOR_AZURE_KEY_VAULT_SECRET = 'secret';
+  public const LOCATOR_AZURE_KEY_VAULT_VERSION = 'version';
+  public const LOCATOR_FILE_SYSTEM_PATH = 'path';
 
   /**
    * {@inheritdoc}
@@ -31,12 +40,12 @@ class CertificateLocatorHelper {
    * Get certificate locator.
    */
   public function getCertificateLocator(): CertificateLocatorInterface {
-    $certificateSettings = $this->settings->getCertificate();
+    $certificateSettings = $this->settings->getEditableValue(Settings::CERTIFICATE);
 
     $locatorType = $certificateSettings['locator_type'];
     $options = $certificateSettings[$locatorType];
     $options += [
-      'passphrase' => $certificateSettings['passphrase'] ?: '',
+      'passphrase' => $certificateSettings['passphrase'],
     ];
 
     if (self::LOCATOR_TYPE_AZURE_KEY_VAULT === $locatorType) {

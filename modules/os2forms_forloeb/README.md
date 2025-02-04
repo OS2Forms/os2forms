@@ -4,11 +4,13 @@ Adds a Maestro workflow engine and advanced workflow functionality to OS2forms.
 
 ## Installing OS2forms 2.1 med Forløb
 
-This module requires the codebase from the [OS2forms core project](https://github.com/OS2Forms/os2forms8) installed per the documentation and by selecting the os2forms_forloeb_profile at installation. After succesful installation you should have the OS2forms med Forløb Module available for install via gui.
+This module requires the codebase from the [OS2forms core project](https://github.com/OS2Forms/os2forms8) installed per
+the documentation and by selecting the os2forms_forloeb_profile at installation. After succesful installation you should
+have the OS2forms med Forløb Module available for install via gui.
 
 You can also install the module by using Drush:
 
-```
+```shell
 ./vendor/bin/drush pm:enable os2forms_forloeb
 ```
 
@@ -32,19 +34,17 @@ Settings for OS2Forms forløb are defined on `/admin/config/system/os2forms_forl
 
 #### Known anonymous roles
 
-In order to make the notifications work, Maestro workflow tasks must be assigned
-to a *known anonymous role* and these roles are defined under *Known anonymous
-roles*.
+In order to make the notifications work, Maestro workflow tasks must be assigned to a *known anonymous role* and these
+roles are defined under *Known anonymous roles*.
 
 #### Processing
 
-A notification is not sent to a user immediately, but added to a queue which
-must be processed asynchronously. Specify the queue handling notification jobs.
+A notification is not sent to a user immediately, but added to a queue which must be processed asynchronously. Specify
+the queue handling notification jobs.
 
 #### Templates
 
 Define templates for emails and digital post (PDF).
-
 
 To reference assets, e.g. stylesheet or images, in your templates,
 you can use the `base_url` Twig variable to get the base URL:

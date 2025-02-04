@@ -11,12 +11,14 @@ use Drupal\os2web_datalookup\LookupResult\CprLookupResult;
 use Drupal\os2web_datalookup\Plugin\DataLookupManager;
 use Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupCompanyInterface;
 use Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupCprInterface;
+use Drupal\os2web_key\KeyHelper;
 use Drupal\webform\WebformSubmissionInterface;
 use ItkDev\Serviceplatformen\Service\SF1601\SF1601;
 use ItkDev\Serviceplatformen\Service\SF1601\Serializer;
 use Oio\Fjernprint\ForsendelseI;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Webform helper.
@@ -29,13 +31,18 @@ final class DigitalPostHelper implements LoggerInterface {
    */
   public function __construct(
     private readonly Settings $settings,
-    private readonly CertificateLocatorHelper $certificateLocatorHelper,
+    private readonly KeyHelper $keyHelper,
+    #[Autowire(service: 'plugin.manager.os2web_datalookup')]
     private readonly DataLookupManager $dataLookupManager,
     private readonly MeMoHelper $meMoHelper,
     private readonly ForsendelseHelper $forsendelseHelper,
     private readonly BeskedfordelerHelper $beskedfordelerHelper,
+    private readonly CertificateLocatorHelper $certificateLocatorHelper,
+    #[Autowire(service: 'logger.channel.os2forms_digital_post')]
     private readonly LoggerChannelInterface $logger,
+    #[Autowire(service: 'logger.channel.os2forms_digital_post_submission')]
     private readonly LoggerChannelInterface $submissionLogger,
+    #[Autowire(service: 'os2web_audit.logger')]
     private readonly Logger $auditLogger,
   ) {
   }
@@ -59,11 +66,23 @@ final class DigitalPostHelper implements LoggerInterface {
    */
   public function sendDigitalPost(string $type, Message $message, ?ForsendelseI $forsendelse, ?WebformSubmissionInterface $submission = NULL): array {
     $senderSettings = $this->settings->getSender();
+
+    if (Settings::PROVIDER_TYPE_FORM === $this->settings->getCertificateProvider()) {
+      $certificateLocator = $this->certificateLocatorHelper->getCertificateLocator();
+    }
+    else {
+      $certificateLocator = new KeyCertificateLocator(
+        $this->settings->getCertificateKey(),
+        $this->keyHelper
+      );
+    }
+
     $options = [
       'test_mode' => (bool) $this->settings->getTestMode(),
       'authority_cvr' => $senderSettings[Settings::SENDER_IDENTIFIER],
-      'certificate_locator' => $this->certificateLocatorHelper->getCertificateLocator(),
+      'certificate_locator' => $certificateLocator,
     ];
+
     $service = new SF1601($options);
     $transactionId = Serializer::createUuid();
 
