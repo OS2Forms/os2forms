@@ -26,6 +26,7 @@ abstract class AbstractMessageHelper {
     readonly protected Settings $settings,
     #[Autowire(service: 'plugin.manager.element_info')]
     readonly protected ElementInfoManager $elementInfoManager,
+    #[Autowire(service: 'webform.token_manager')]
     readonly protected WebformTokenManagerInterface $webformTokenManager,
   ) {
   }
