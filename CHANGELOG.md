@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- Updated `os2forms_fbs_handler` to include and correct set phone number [#161](https://github.com/OS2Forms/os2forms/pull/161)
+
 ## [3.22.0] 2025-02-03
 
 - Removed modules ldap_auth, logging_alerts, maillog [#151](https://github.com/OS2Forms/os2forms/pull/151)

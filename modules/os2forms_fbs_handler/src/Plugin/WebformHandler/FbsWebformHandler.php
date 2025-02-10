@@ -183,6 +183,7 @@ final class FbsWebformHandler extends WebformHandlerBase {
       'afhentningssted',
       'barn_cpr',
       'barn_mail',
+      'barn_tlf',
       'cpr',
       'email',
       'navn',

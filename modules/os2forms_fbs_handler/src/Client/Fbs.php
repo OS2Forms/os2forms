@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Minimalistic client to create user with guardians at FBS.
  */
-class FBS {
+class Fbs {
 
   /**
    * FBS session key.
@@ -118,8 +118,14 @@ class FBS {
       'pincode' => $patron->pincode,
       'preferredPickupBranch' => $patron->preferredPickupBranch,
       'name' => 'Unknown Name',
-      'emailAddresses' => $patron->emailAddresses,
+      'emailAddresses' => $patron->emailAddresses ?? [],
       'guardian' => $guardian->toArray(),
+      'phoneNumbers' => $patron->phoneNumber ? [
+        [
+          'receiveNotification' => TRUE,
+          'phoneNumber' => $patron->phoneNumber,
+        ],
+      ] : [],
     ];
 
     return $this->request($uri, $payload);
@@ -148,12 +154,13 @@ class FBS {
         (bool) $json->patron->receiveSms,
         (bool) $json->patron->receivePostalMail,
         $json->patron->notificationProtocols,
-        $json->patron->phoneNumber,
         is_null($json->patron->onHold) ? $json->patron->onHold : (array) $json->patron->onHold,
         $json->patron->preferredLanguage,
         (bool) $json->patron->guardianVisibility,
         $json->patron->defaultInterestPeriod,
         (bool) $json->patron->resident,
+        $json->patron->phoneNumber,
+
         [
           [
             'emailAddress' => $json->patron->emailAddress,
@@ -185,15 +192,15 @@ class FBS {
     $payload = [
       'patron' => [
         'preferredPickupBranch' => $patron->preferredPickupBranch,
-        'emailAddresses' => $patron->emailAddresses,
+        'emailAddresses' => $patron->emailAddresses ?? [],
         'guardianVisibility' => $patron->guardianVisibility,
         'receivePostalMail' => $patron->receiveEmail,
-        'phoneNumbers' => [
+        'phoneNumbers' => $patron->phoneNumber ? [
           [
             'receiveNotification' => TRUE,
             'phoneNumber' => $patron->phoneNumber,
           ],
-        ],
+        ] : [],
       ],
       'pincodeChange' => [
         'pincode' => $patron->pincode,
