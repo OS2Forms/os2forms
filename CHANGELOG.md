@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## [3.22.1] 2025-02-10
+
 - Updated `os2forms_fbs_handler` to include and correct set phone number [#161](https://github.com/OS2Forms/os2forms/pull/161)
 
 ## [3.22.0] 2025-02-03
@@ -340,7 +342,9 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - Security in case of vulnerabilities.
 ```
 
-[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.21.2...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.22.1...HEAD
+[3.22.1]: https://github.com/OS2Forms/os2forms/compare/3.22.0...3.22.1
+[3.22.0]: https://github.com/OS2Forms/os2forms/compare/3.21.2...3.22.0
 [3.21.2]: https://github.com/OS2Forms/os2forms/compare/3.21.1...3.21.2
 [3.21.1]: https://github.com/OS2Forms/os2forms/compare/3.21.0...3.21.1
 [3.21.0]: https://github.com/OS2Forms/os2forms/compare/3.20.1...3.21.0
