@@ -75,7 +75,14 @@ class AttachmentElement extends WebformAttachmentBase {
 
         // Save printable document.
         $print_engine = $print_engine_manager->createSelectedInstance($element['#export_type']);
-        $file_path = $print_builder->savePrintable([$webform_submission], $print_engine, $scheme, $file_name);
+
+        // Adding digital signature
+        if (isset($element['#digital_signature']) && $element['#digital_signature']) {
+          $file_path = $print_builder->savePrintableDigitalSignature([$webform_submission], $print_engine, $scheme, $file_name);
+        }
+        else {
+          $file_path = $print_builder->savePrintable([$webform_submission], $print_engine, $scheme, $file_name);
+        }
       }
 
       if ($file_path) {
