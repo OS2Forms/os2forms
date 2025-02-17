@@ -147,9 +147,15 @@ class FormsHelper {
     $authProviderPlugin = $this->getAuthProvider($form_state);
 
     $userCpr = $authProviderPlugin->fetchValue('cpr');
-    $lookedUpCpr = $cprLookupResult->getCpr();
+    $lookedUpCpr = $cprLookupResult->getFieldValue('cpr');
 
-    $this->auditLogger->info('DataLookup', 'User with cpr ' . $userCpr . ' looked up cpr ' . $lookedUpCpr);
+    // Current method is called whenever the webform is rendered.
+    // As a result, it is also called in situations where both
+    // userCpr and lookedUpCpr does not make sense, e.g.
+    // adding an element to a webform.
+    if ($userCpr && $lookedUpCpr) {
+      $this->auditLogger->info('DataLookup', 'User with cpr ' . $userCpr . ' looked up cpr ' . $lookedUpCpr);
+    }
 
     return $cprLookupResult;
   }
