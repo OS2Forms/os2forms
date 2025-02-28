@@ -11,9 +11,13 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
-## [3.22.1] 2025-02-28
+## [3.22.2] 2025-02-28
 
 - Updated `os2web_audit`.
+
+## [3.22.1] 2025-02-10
+
+- Updated `os2forms_fbs_handler` to include and correct set phone number [#161](https://github.com/OS2Forms/os2forms/pull/161)
 
 ## [3.22.0] 2025-02-03
 
