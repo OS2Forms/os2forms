@@ -346,7 +346,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - Security in case of vulnerabilities.
 ```
 
-[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.22.1...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.22.2...HEAD
+[3.22.2]: https://github.com/OS2Forms/os2forms/compare/3.22.1...3.22.2
 [3.22.1]: https://github.com/OS2Forms/os2forms/compare/3.22.0...3.22.1
 [3.22.0]: https://github.com/OS2Forms/os2forms/compare/3.21.2...3.22.0
 [3.21.2]: https://github.com/OS2Forms/os2forms/compare/3.21.1...3.21.2
