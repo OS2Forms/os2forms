@@ -1,0 +1,16 @@
+services:
+  Drupal\os2forms_fasit\Helper\Settings:
+    arguments:
+      - "@keyvalue"
+
+  Drupal\os2forms_fasit\Helper\CertificateLocatorHelper:
+    arguments:
+      - "@Drupal\\os2forms_fasit\\Helper\\Settings"
+
+  Drupal\os2forms_fasit\Helper\FasitHelper:
+    arguments:
+      - '@http_client'
+      - '@entity_type.manager'
+      - "@Drupal\\os2forms_fasit\\Helper\\Settings"
+      - "@Drupal\\os2forms_fasit\\Helper\\CertificateLocatorHelper"
+      - "@os2web_audit.logger"

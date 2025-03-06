@@ -11,9 +11,88 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
-- [OS-115] Skipping empty maktrikula objects
+## [4.0.0] 2025-03-06
+
+- This is an alias for for 3.22.2. Major change is the module removal, which can lead to lack of backward support.
+See full release note here:
+https://github.com/OS2Forms/os2forms_docs/blob/master/docs/releases/2024-Q4-Release-notes.md
+
+## [3.22.2] 2025-02-28
+
+- Updated `os2web_audit`.
+
+## [3.22.1] 2025-02-10
+
+- Updated `os2forms_fbs_handler` to include and correct set phone number [#161](https://github.com/OS2Forms/os2forms/pull/161)
+
+## [3.22.0] 2025-02-03
+
+- Removed modules ldap_auth, logging_alerts, maillog [#151](https://github.com/OS2Forms/os2forms/pull/151)
+- Removed module image_widget_crop [#OS-143](https://github.com/OS2Forms/os2forms/pull/159)
+
+## [3.21.2] 2025-01-07
+
+- Adds missing `http-message-util` requirement and use statement.
+- Runs code-analysis on `os2forms_fbs_handler` module.
+
+## [3.21.1] 2025-01-06
+
+- Updated Maestro notification handler assignment message format.
+- Updated `os2forms_fbs_handler` to use latest endpoints and operations.
+
+## [3.21.0] 2024-12-17
+
+- Updated `os2web_audit`.
+- Added patch to get `hook_webform_post_load_data` in webform submissions.
+
+## [3.20.1] 2024-12-10
+
+- Avoided accessing non-initialized property when logging in `os2forms_nemid`.
+
+## [3.20.0] 2024-12-09
+
+- Added webform ID to digital post audit logging messages.
+- Added audit logging to `os2forms_fasit`
+- Added audit logging to `os2forms_fbs_handler`
+
+## [3.19.0] 2024-12-06
+
+- Ensured installation of `os2web_audit`
+  - `os2web_audit` has default logging through `watchdog`
+- Adds audit logging to `os2forms_digital_post`
+- Adds audit logging to `os2forms_nemid`
+
+## [3.18.0] 2024-12-05
+
+- Added `os2forms_fasit` module.
+
+## [3.17.0] 2024-11-21
+
+- Updated `os2web/os2web_audit` version
+- Updated `os2web/os2web_datalookup` version
+
+## [3.16.2] 2024-10-31
+
+- Applied coding standards
+- [#192](https://github.com/OS2Forms/os2forms/pull/129)
+  Added audit logging module from os2web
+- Remove dependency on webform migration module
+- [#100](https://github.com/OS2Forms/os2forms/pull/100)
+  Removed unused `tecnickcom/tcpdf` package.
+
+## [3.16.1] 2024-09-20
+
+- [#133](https://github.com/OS2Forms/os2forms/pull/133)
+[OS-119] Keeping value of CPR clean, not adding address protection text
+
+## [3.16.0-beta1] 2024-08-27
 
 ## [3.16.0] 2024-08-27
+
+f/OS-115_dawa_address
+- [OS-115] Skipping empty maktrikula objects
+
+
 
 [#110](https://github.com/OS2Forms/os2forms/pull/110)
 
@@ -280,7 +359,21 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - Security in case of vulnerabilities.
 ```
 
-[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.15.8...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.22.2...HEAD
+[3.22.2]: https://github.com/OS2Forms/os2forms/compare/3.22.1...3.22.2
+[3.22.1]: https://github.com/OS2Forms/os2forms/compare/3.22.0...3.22.1
+[3.22.0]: https://github.com/OS2Forms/os2forms/compare/3.21.2...3.22.0
+[3.21.2]: https://github.com/OS2Forms/os2forms/compare/3.21.1...3.21.2
+[3.21.1]: https://github.com/OS2Forms/os2forms/compare/3.21.0...3.21.1
+[3.21.0]: https://github.com/OS2Forms/os2forms/compare/3.20.1...3.21.0
+[3.20.1]: https://github.com/OS2Forms/os2forms/compare/3.20.0...3.20.1
+[3.20.0]: https://github.com/OS2Forms/os2forms/compare/3.19.0...3.20.0
+[3.19.0]: https://github.com/OS2Forms/os2forms/compare/3.18.0...3.19.0
+[3.18.0]: https://github.com/OS2Forms/os2forms/compare/3.17.0...3.18.0
+[3.17.0]: https://github.com/OS2Forms/os2forms/compare/3.16.2...3.17.0
+[3.16.2]: https://github.com/OS2Forms/os2forms/compare/3.16.1...3.16.2
+[3.16.1]: https://github.com/OS2Forms/os2forms/compare/3.16.0-beta1...3.16.1
+[3.16.0-beta1]: https://github.com/OS2Forms/os2forms/compare/3.15.8...3.16.0-beta1
 [3.15.8]: https://github.com/OS2Forms/os2forms/compare/3.15.7...3.15.8
 [3.15.7]: https://github.com/OS2Forms/os2forms/compare/3.15.6...3.15.7
 [3.15.6]: https://github.com/OS2Forms/os2forms/compare/3.15.5...3.15.6

@@ -61,7 +61,7 @@ class NemidChildrenRadios extends Radios implements NemidElementPersonalInterfac
   /**
    * {@inheritdoc}
    */
-  public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
+  public function prepare(array &$element, ?WebformSubmissionInterface $webform_submission = NULL) {
     // Setting empty options to avoid errors during load.
     $element['#options'] = [];
     parent::prepare($element, $webform_submission);

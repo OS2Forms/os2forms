@@ -25,7 +25,7 @@ abstract class DawaElementBase extends TextField {
   /**
    * {@inheritdoc}
    */
-  public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
+  public function prepare(array &$element, ?WebformSubmissionInterface $webform_submission = NULL) {
     parent::prepare($element, $webform_submission);
 
     $element['#autocomplete_route_name'] = 'os2forms_dawa.element.autocomplete';
