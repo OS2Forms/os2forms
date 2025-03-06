@@ -87,6 +87,13 @@ https://github.com/OS2Forms/os2forms_docs/blob/master/docs/releases/2024-Q4-Rele
 
 ## [3.16.0-beta1] 2024-08-27
 
+## [3.16.0] 2024-08-27
+
+f/OS-115_dawa_address
+- [OS-115] Skipping empty maktrikula objects
+
+
+
 [#110](https://github.com/OS2Forms/os2forms/pull/110)
 
 - Obsolete module removing - os2forms_consent
