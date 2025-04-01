@@ -11,6 +11,10 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [PR-166](https://github.com/OS2Forms/os2forms/pull/166)
+  - Fix digital post commands
+  - Updated versions in GitHub Actions `uses` steps
+
 ## [4.0.0] 2025-03-06
 
 - This is an alias for for 3.22.2. Major change is the module removal, which can lead to lack of backward support.
