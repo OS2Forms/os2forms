@@ -5,6 +5,7 @@
  * Install file for OS2Forms module.
  */
 
+use Composer\InstalledVersions;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\taxonomy\Entity\Term;
@@ -63,21 +64,17 @@ function os2forms_requirements($phase) {
     'value' => $messages,
   ];
 
-  $commit_sha = exec('git rev-parse HEAD');
-  $tag = exec("git describe --tags --abbrev=0");
-  $remote = exec('git config --get remote.origin.url');
+  $reference = InstalledVersions::getReference("os2forms/os2forms");
+  $version = InstalledVersions::getPrettyVersion("os2forms/os2forms");
 
   $version_messages = [
     '#prefix' => t('OS2Forms version'),
     '#theme' => 'item_list',
     '#items' => [
-      0 => t('tag <strong>@tag</strong> (commit: <strong>@commit</strong>)', [
-        '@tag' => $tag,
-        '@commit' => $commit_sha,
-      ]),
-      1 => t('remote: <strong>@remote</strong>', [
-        '@remote' => $remote,
-      ]),
+      0 => t('version <strong>@version</strong> (commit: <strong>@reference</strong>)', [
+        '@version' => $version,
+        '@reference' => $reference,
+      ])
     ],
   ];
 

@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- Updating the display of os2forms package on the status page
+
 ## [4.0.0] 2025-03-06
 
 - This is an alias for for 3.22.2. Major change is the module removal, which can lead to lack of backward support.
