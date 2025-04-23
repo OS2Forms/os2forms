@@ -12,6 +12,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 ## [Unreleased]
 
 - Updating the display of os2forms package on the status page
+- Adding os2forms_digital_signature module
 
 ## [4.0.0] 2025-03-06
 
