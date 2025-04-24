@@ -74,7 +74,7 @@ function os2forms_requirements($phase) {
       0 => t('version <strong>@version</strong> (commit: <strong>@reference</strong>)', [
         '@version' => $version,
         '@reference' => $reference,
-      ])
+      ]),
     ],
   ];
 
