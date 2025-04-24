@@ -104,7 +104,12 @@ class DatafordelerDataLookup extends DataLookupBase implements DatafordelerDataL
       if (NestedArray::keyExists($jsonDecoded, ['features', 0, 'properties', 'jordstykke'])) {
         $jordstykker = NestedArray::getValue($jsonDecoded, ['features', 0, 'properties', 'jordstykke']);
         foreach ($jordstykker as $jordstyk) {
-          $matrikulaEntries[] = new DatafordelerMatrikula($jordstyk);
+          try {
+            $matrikulaEntries[] = new DatafordelerMatrikula($jordstyk);
+          }
+          catch (\TypeError $e) {
+            // Could not create matrikula object.
+          }
         }
       }
     }

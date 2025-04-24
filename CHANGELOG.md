@@ -13,12 +13,32 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 - [#101](https://github.com/OS2Forms/os2forms/pull/101)
   - Added support for `os2web_key` in Digital post
-  - Switched from saving settings in key value store to config, i.e
-    the module needs to be reconfigured.
+    - Switched from saving settings in key value store to config, i.e
+      the module needs to be reconfigured.
   - Added support for `os2web_key` in Fasit handler.
     - Switched from saving settings in key value store to config, i.e
       the module needs to be reconfigured.
 - Removed modules ldap_auth, logging_alerts, maillog
+- Updating the display of os2forms package on the status page
+
+## [4.0.0] 2025-03-06
+
+- This is an alias for for 3.22.2. Major change is the module removal, which can lead to lack of backward support.
+See full release note here:
+https://github.com/OS2Forms/os2forms_docs/blob/master/docs/releases/2024-Q4-Release-notes.md
+
+## [3.22.2] 2025-02-28
+
+- Updated `os2web_audit`.
+
+## [3.22.1] 2025-02-10
+
+- Updated `os2forms_fbs_handler` to include and correct set phone number [#161](https://github.com/OS2Forms/os2forms/pull/161)
+
+## [3.22.0] 2025-02-03
+
+- Removed modules ldap_auth, logging_alerts, maillog [#151](https://github.com/OS2Forms/os2forms/pull/151)
+- Removed module image_widget_crop [#OS-143](https://github.com/OS2Forms/os2forms/pull/159)
 
 ## [3.21.2] 2025-01-07
 
@@ -76,6 +96,13 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 [OS-119] Keeping value of CPR clean, not adding address protection text
 
 ## [3.16.0-beta1] 2024-08-27
+
+## [3.16.0] 2024-08-27
+
+f/OS-115_dawa_address
+- [OS-115] Skipping empty maktrikula objects
+
+
 
 [#110](https://github.com/OS2Forms/os2forms/pull/110)
 
@@ -342,7 +369,10 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - Security in case of vulnerabilities.
 ```
 
-[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.21.2...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.22.2...HEAD
+[3.22.2]: https://github.com/OS2Forms/os2forms/compare/3.22.1...3.22.2
+[3.22.1]: https://github.com/OS2Forms/os2forms/compare/3.22.0...3.22.1
+[3.22.0]: https://github.com/OS2Forms/os2forms/compare/3.21.2...3.22.0
 [3.21.2]: https://github.com/OS2Forms/os2forms/compare/3.21.1...3.21.2
 [3.21.1]: https://github.com/OS2Forms/os2forms/compare/3.21.0...3.21.1
 [3.21.0]: https://github.com/OS2Forms/os2forms/compare/3.20.1...3.21.0
