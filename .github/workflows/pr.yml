@@ -47,6 +47,8 @@ jobs:
       - name: Validate composer files
         run: |
           composer config --no-plugins allow-plugins.mglaman/composer-drupal-lenient true
+          # The --strict flag on validate has been removed due to the package drupal/config_entity_revisions 2.0.x-dev
+          # being considered a version cf. https://getcomposer.org/doc/articles/versions.md#branches
           composer validate composer.json
           # Check that dependencies resolve.
           composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction
