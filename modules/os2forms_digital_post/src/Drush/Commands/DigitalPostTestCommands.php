@@ -26,10 +26,12 @@ final class DigitalPostTestCommands extends DrushCommands {
    * Constructor.
    */
   public function __construct(
+    #[Autowire(service: DigitalPostHelper::class)]
     private readonly DigitalPostHelper $digitalPostHelper,
     private readonly Token $token,
     #[Autowire(service: 'plugin.manager.entity_print.print_engine')]
     private readonly EntityPrintPluginManagerInterface $entityPrintPluginManager,
+    #[Autowire(service: Settings::class)]
     private readonly Settings $digitalPostSettings,
   ) {
   }

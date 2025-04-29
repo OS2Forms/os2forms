@@ -121,18 +121,18 @@ run the checks locally.
 ### PHP
 
 ```sh
-docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.1-fpm composer install
+docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.3-fpm composer install
 # Fix (some) coding standards issues.
-docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.1-fpm composer coding-standards-apply
-docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.1-fpm composer coding-standards-check
+docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.3-fpm composer coding-standards-apply
+docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.3-fpm composer coding-standards-check
 ```
 
 ### Markdown
 
 ```sh
 docker pull peterdavehello/markdownlint
-docker run --rm --volume $PWD:/md peterdavehello/markdownlint markdownlint --ignore vendor --ignore LICENSE.md '**/*.md' --fix
-docker run --rm --volume $PWD:/md peterdavehello/markdownlint markdownlint --ignore vendor --ignore LICENSE.md '**/*.md'
+docker run --rm --volume $PWD:/md peterdavehello/markdownlint markdownlint '**/*.md' --fix
+docker run --rm --volume $PWD:/md peterdavehello/markdownlint markdownlint '**/*.md'
 ```
 
 ## Code analysis
@@ -143,7 +143,7 @@ Running statis code analysis on a standalone Drupal module is a bit tricky, so w
 analysis:
 
 ```shell
-docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.1-fpm ./scripts/code-analysis
+docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.3-fpm ./scripts/code-analysis
 ```
 
 **Note**: Currently the code analysis is only run on the `os2forms_digital_post` sub-module (cf. [`phpstan.neon`](./phpstan.neon)).
