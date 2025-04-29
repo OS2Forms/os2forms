@@ -22,23 +22,15 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class DatafordelerDataLookup extends DataLookupBase implements DatafordelerDataLookupInterface, ContainerFactoryPluginInterface {
 
   /**
-   * The HTTP client to fetch the feed data with.
-   *
-   * @var \GuzzleHttp\ClientInterface
-   */
-  protected $httpClient;
-
-  /**
    * {@inheritdoc}
    */
   public function __construct(
     array $configuration,
     $plugin_id,
     $plugin_definition,
-    ClientInterface $httpClient,
+    protected ClientInterface $httpClient,
     Logger $auditLogger,
   ) {
-    $this->httpClient = $httpClient;
     parent::__construct($configuration, $plugin_id, $plugin_definition, $auditLogger);
   }
 

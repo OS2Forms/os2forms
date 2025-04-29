@@ -23,10 +23,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions: [ '8.1' ]
+        php-versions: [ '8.3' ]
         dependency-version: [ prefer-lowest, prefer-stable ]
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@v2
         with:
@@ -47,18 +47,23 @@ jobs:
       - name: Validate composer files
         run: |
           composer config --no-plugins allow-plugins.mglaman/composer-drupal-lenient true
-          composer validate --strict composer.json
+          # The --strict flag on validate has been removed due to the package drupal/config_entity_revisions 2.0.x-dev
+          # being considered a version cf. https://getcomposer.org/doc/articles/versions.md#branches
+          composer validate composer.json
           # Check that dependencies resolve.
           composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction
+      - name: Check that composer file is normalized
+        run: |
+          composer normalize --dry-run
 
   php-coding-standards:
     name: PHP coding standards
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions: [ '8.1' ]
+        php-versions: [ '8.3' ]
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@v2
         with:
@@ -89,9 +94,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions: [ '8.1' ]
+        php-versions: [ '8.3' ]
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@v2
         with:
@@ -113,27 +118,13 @@ jobs:
         run: |
           ./scripts/code-analysis
 
-  markdownlint:
+  coding-standards-markdown:
+    name: Markdown coding standards
     runs-on: ubuntu-latest
-    name: markdownlint
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache yarn packages
-        uses: actions/cache@v4
-        id: yarn-cache
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Yarn install
-        uses: actions/setup-node@v2
-        with:
-          node-version: '20'
-      - run: yarn install
-      - name: markdownlint
-        run: yarn coding-standards-check/markdownlint
+
+      - name: Coding standards
+        run: |
+          docker run --rm --volume $PWD:/md peterdavehello/markdownlint markdownlint '**/*.md'
