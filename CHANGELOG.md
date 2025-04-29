@@ -14,6 +14,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - [PR-166](https://github.com/OS2Forms/os2forms/pull/166)
   - Fix digital post commands
   - Updated versions in GitHub Actions `uses` steps
+- Updating the display of os2forms package on the status page
 
 ## [4.0.0] 2025-03-06
 
