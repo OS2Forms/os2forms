@@ -11,13 +11,16 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [PR-166](https://github.com/OS2Forms/os2forms/pull/166)
+  - Fix digital post commands
+  - Updated versions in GitHub Actions `uses` steps
 - Updating the display of os2forms package on the status page
 
 ## [4.0.0] 2025-03-06
 
-- This is an alias for for 3.22.2. Major change is the module removal, which can lead to lack of backward support.
-See full release note here:
-https://github.com/OS2Forms/os2forms_docs/blob/master/docs/releases/2024-Q4-Release-notes.md
+- This is an alias for for 3.22.2. Major change is the module removal, which can
+  lead to lack of backward support. See full release note here:
+  <https://github.com/OS2Forms/os2forms_docs/blob/master/docs/releases/2024-Q4-Release-notes.md>
 
 ## [3.22.2] 2025-02-28
 
@@ -92,9 +95,8 @@ https://github.com/OS2Forms/os2forms_docs/blob/master/docs/releases/2024-Q4-Rele
 ## [3.16.0] 2024-08-27
 
 f/OS-115_dawa_address
+
 - [OS-115] Skipping empty maktrikula objects
-
-
 
 [#110](https://github.com/OS2Forms/os2forms/pull/110)
 
