@@ -127,4 +127,4 @@ jobs:
 
       - name: Coding standards
         run: |
-          docker run --rm --volume $PWD:/md peterdavehello/markdownlint markdownlint '**/*.md'
+          docker run --rm --volume $PWD:/md itkdev/markdownlint markdownlint '**/*.md'
