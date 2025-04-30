@@ -1,0 +1,17 @@
+# https://hub.docker.com/r/ddev/ddev-php-base
+
+services:
+  php:
+    image: ddev/ddev-php-base
+    profiles:
+      - dev
+    working_dir: /app
+    volumes:
+      - ./:/app
+
+  markdownlint:
+    image: itkdev/markdownlint
+    # The default working dir is `/md`
+    working_dir: /app
+    volumes:
+      - ./:/app
