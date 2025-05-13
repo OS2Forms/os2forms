@@ -19,7 +19,7 @@ function os2forms_digital_post_schema() {
 }
 
 /**
- * Implements hook_update_N().
+ * Install OS2Web key module.
  */
 function os2forms_digital_post_update_9001(): void {
   \Drupal::service('module_installer')->install([
