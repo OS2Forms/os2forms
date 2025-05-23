@@ -102,6 +102,9 @@
                 "Add custom hook (hook_webform_post_load_data) for audit logging": "https://gist.githubusercontent.com/cableman/d26898fc8f65ee0a31001bf391583b59/raw/6189dc4c2ceaabb19d25cc4b98b0b3028a6b0e1e/gistfile1.txt"
 
             },
+            "drupal/coc_forms_auto_export": {
+                "3256951: - Unable to receive attachments in emails sent" : "https://git.drupalcode.org/project/coc_forms_auto_export/-/merge_requests/11.diff"
+            },
             "drupal/webform_node_element": {
                 "3290637 - Automated Drupal 10 compatibility fixes": "https://www.drupal.org/files/issues/2023-05-12/webform_node_element_d10-3290637-11.patch"
             },
