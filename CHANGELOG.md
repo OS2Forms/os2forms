@@ -15,6 +15,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
   - Fix digital post commands
   - Updated versions in GitHub Actions `uses` steps
 - Updating the display of os2forms package on the status page
+- Remove unused and abandoned package `webmozart/path-util`.
 
 ## [4.0.0] 2025-03-06
 
