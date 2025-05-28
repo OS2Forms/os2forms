@@ -121,18 +121,27 @@ run the checks locally.
 ### PHP
 
 ```sh
-docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.3-fpm composer install
+docker compose pull
+docker compose run --rm php composer install
 # Fix (some) coding standards issues.
-docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.3-fpm composer coding-standards-apply
-docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.3-fpm composer coding-standards-check
+docker compose run --rm php composer coding-standards-apply
+docker compose run --rm php composer coding-standards-check
 ```
+
+> [!TIP]
+> If the `composer install` commands fails with
+>
+> > Unable to install module simplesamlphp/simplesamlphp-assets-base, package name must be on the form "VENDOR/simplesamlphp-module-MODULENAME".
+>
+> you can remove the `vendor` folder and rerun the `composer install` command (cf.
+> <https://www.drupal.org/project/simplesamlphp_auth/issues/3350773>).
 
 ### Markdown
 
 ```sh
-docker pull peterdavehello/markdownlint
-docker run --rm --volume $PWD:/md peterdavehello/markdownlint markdownlint '**/*.md' --fix
-docker run --rm --volume $PWD:/md peterdavehello/markdownlint markdownlint '**/*.md'
+docker compose pull
+docker compose run --rm markdownlint markdownlint '**/*.md' --fix
+docker compose run --rm markdownlint markdownlint '**/*.md'
 ```
 
 ## Code analysis
@@ -143,7 +152,7 @@ Running statis code analysis on a standalone Drupal module is a bit tricky, so w
 analysis:
 
 ```shell
-docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.3-fpm ./scripts/code-analysis
+docker compose run --rm php ./scripts/code-analysis
 ```
 
 **Note**: Currently the code analysis is only run on the `os2forms_digital_post` sub-module (cf. [`phpstan.neon`](./phpstan.neon)).

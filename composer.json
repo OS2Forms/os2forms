@@ -103,6 +103,7 @@
             "mglaman/composer-drupal-lenient": true,
             "phpstan/extension-installer": true,
             "simplesamlphp/composer-module-installer": true,
+            "simplesamlphp/composer-xmlprovider-installer": true,
             "vaimo/composer-patches": true,
             "zaporylie/composer-drupal-optimizations": true
         },
