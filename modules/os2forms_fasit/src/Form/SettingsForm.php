@@ -205,9 +205,6 @@ final class SettingsForm extends ConfigFormBase {
 
     $form[self::CERTIFICATE][self::PROVIDER_TYPE_KEY] = [
       '#type' => 'key_select',
-      '#key_filters' => [
-        'type' => 'os2web_key_certificate',
-      ],
       '#title' => $this->t('Key'),
       '#default_value' => $certificateConfig[self::PROVIDER_TYPE_KEY] ?? NULL,
       '#states' => [
