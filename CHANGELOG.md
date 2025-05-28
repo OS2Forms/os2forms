@@ -11,18 +11,18 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
-- [PR-168](https://github.com/OS2Forms/os2forms/pull/168)
-  Cleaned up code
-- [PR-166](https://github.com/OS2Forms/os2forms/pull/166)
-  - Fix digital post commands
-  - Updated versions in GitHub Actions `uses` steps
-- [#101](https://github.com/OS2Forms/os2forms/pull/101)
+- [PR-101](https://github.com/OS2Forms/os2forms/pull/101)
   - Added support for `os2web_key` in Digital post
     - Switched from saving settings in key value store to config, i.e
       the module needs to be reconfigured.
   - Added support for `os2web_key` in Fasit handler.
     - Switched from saving settings in key value store to config, i.e
       the module needs to be reconfigured.
+- [PR-168](https://github.com/OS2Forms/os2forms/pull/168)
+  Cleaned up code
+- [PR-166](https://github.com/OS2Forms/os2forms/pull/166)
+  - Fix digital post commands
+  - Updated versions in GitHub Actions `uses` steps
 - Updating the display of os2forms package on the status page
 
 ## [4.0.0] 2025-03-06
