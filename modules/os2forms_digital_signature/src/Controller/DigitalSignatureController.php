@@ -6,11 +6,12 @@ use Drupal\Component\Utility\Crypt;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Url;
 use Drupal\file\Entity\File;
-use Drupal\os2forms_digital_signature\Service\SigningService;
-use Drupal\webform\WebformSubmissionInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * Digital Signature Controller.
+ */
 class DigitalSignatureController {
 
   /**
@@ -29,14 +30,14 @@ class DigitalSignatureController {
    *
    * Expecting the file name to be coming as GET parameter.
    *
-   * @param $uuid
+   * @param string $uuid
    *   Webform submission UUID.
-   * @param $hash
-   *    Hash to check if the request is authentic.
-   * @param $fid
-   *    File to replace (optional).
+   * @param string $hash
+   *   Hash to check if the request is authentic.
+   * @param int|null $fid
+   *   File to replace (optional).
    *
-   * @return RedirectResponse
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
    *   Redirect response to form submission confirmation.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
@@ -49,7 +50,7 @@ class DigitalSignatureController {
       ->loadByProperties(['uuid' => $uuid]);
 
     // Since loadByProperties returns an array, we need to fetch the first item.
-    /** @var WebformSubmissionInterface $webformSubmission */
+    /** @var \Drupal\webform\WebformSubmissionInterface $webformSubmission */
     $webformSubmission = $submissions ? reset($submissions) : NULL;
     if (!$webformSubmission) {
       // Submission does not exist.
@@ -58,7 +59,7 @@ class DigitalSignatureController {
 
     $webformId = $webformSubmission->getWebform()->id();
 
-    // Checking the action
+    // Checking the action.
     $action = \Drupal::request()->query->get('action');
     if ($action == 'cancel') {
       $cancelUrl = $webformSubmission->getWebform()->toUrl()->toString();
@@ -76,7 +77,7 @@ class DigitalSignatureController {
       throw new NotFoundHttpException();
     }
 
-    /** @var SigningService $signingService */
+    /** @var \Drupal\os2forms_digital_signature\Service\SigningService $signingService */
     $signingService = \Drupal::service('os2forms_digital_signature.signing_service');
 
     $signedFilename = \Drupal::request()->get('file');
@@ -86,14 +87,16 @@ class DigitalSignatureController {
       throw new NotFoundHttpException();
     }
 
-    /** @var FileSystemInterface $file_system */
+    /** @var \Drupal\Core\File\FileSystemInterface $file_system */
     $file_system = \Drupal::service('file_system');
 
-    // If $fid is present - we are replacing uploaded/managed file, otherwise creating a new one.
+    // If $fid is present - we are replacing uploaded/managed file, otherwise
+    // creating a new one.
     if ($fid) {
       $file = File::load($fid);
       $expectedFileUri = $file->getFileUri();
-    } else {
+    }
+    else {
       // Prepare the directory to ensure it exists and is writable.
       $expectedFileUri = "private://webform/$webformId/digital_signature/$uuid.pdf";
       $directory = dirname($expectedFileUri);
@@ -105,7 +108,7 @@ class DigitalSignatureController {
 
     // Write the data to the file using Drupal's file system service.
     try {
-      $file_system->saveData($signedFileContent, $expectedFileUri , FileSystemInterface::EXISTS_REPLACE);
+      $file_system->saveData($signedFileContent, $expectedFileUri, FileSystemInterface::EXISTS_REPLACE);
 
       // Updating webform submission.
       $webformSubmission->setLocked(TRUE);
@@ -117,7 +120,11 @@ class DigitalSignatureController {
       }
     }
     catch (\Exception $e) {
-      $this->logger->error('Failed to write to file %uri: @message', ['%uri' => $expectedFileUri, '@message' => $e->getMessage()]);
+      $this->logger->error('Failed to write to file %uri: @message',
+        [
+          '%uri' => $expectedFileUri,
+          '@message' => $e->getMessage(),
+        ]);
     }
 
     // Build the URL for the webform submission confirmation page.

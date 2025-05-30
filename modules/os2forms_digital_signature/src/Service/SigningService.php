@@ -10,8 +10,10 @@ use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\os2forms_digital_signature\Form\SettingsForm;
 use GuzzleHttp\ClientInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Drupal\webform\Entity\WebformSubmission;
 
+/**
+ * Digital signing service.
+ */
 class SigningService {
 
   /**
@@ -39,7 +41,8 @@ class SigningService {
     private readonly ClientInterface $httpClient,
     ConfigFactoryInterface $configFactory,
     EntityTypeManager $entityTypeManager,
-    private readonly LoggerChannelInterface $logger) {
+    private readonly LoggerChannelInterface $logger,
+  ) {
     $this->config = $configFactory->get(SettingsForm::$configName);
     $this->webformStorage = $entityTypeManager->getStorage('webform');
     $this->webformSubmissionStorage = $entityTypeManager->getStorage('webform_submission');
@@ -48,10 +51,10 @@ class SigningService {
   /**
    * Fetch a new cid.
    *
-   * @return string|NULL
+   * @return string|null
    *   The correlation id.
    */
-  public function get_cid() : ?string {
+  public function getCid() : ?string {
     $url = $this->config->get('os2forms_digital_signature_remove_service_url') . 'action=getcid';
     $response = $this->httpClient->request('GET', $url);
     $result = $response->getBody()->getContents();
@@ -64,29 +67,41 @@ class SigningService {
   /**
    * Sign the document.
    *
-   * Signing is done by redirecting the user's browser to a url on the signing server that takes the user
-   * through the signing flow.
+   * Signing is done by redirecting the user's browser to a url on the signing
+   * server that takes the user through the signing flow.
    *
    * This function will never return.
    *
    * @param string $document_uri
-   *   A uri to a file on the local server that we want to sign or the file name on the signing server in the SIGN_PDF_UPLOAD_DIR.
-   *   In case of a local file, it must be prefixed by 'http://' or 'https://' and be readable from the signing server.
+   *   A uri to a file on the local server that we want to sign or the file name
+   *   on the signing server in the SIGN_PDF_UPLOAD_DIR.
+   *   In case of a local file, it must be prefixed by 'http://' or 'https://'
+   *   and be readable from the signing server.
    * @param string $cid
-   *   The cid made available by the get_cid() function.
+   *   The cid made available by the getCid() function.
    * @param string $forward_url
    *   The url on the local server to forward user to afterwards.
-   *
-   * @return void
    */
   public function sign(string $document_uri, string $cid, string $forward_url):void {
     if (empty($document_uri) || empty($cid) || empty($forward_url)) {
-      $this->logger->error('Cannot initiate signing process, check params: document_uri: %document_uri, cid: %cid, forward_url: %forward_url', ['%document_uri' => $document_uri, '%cid' => $cid, '%forward_url' => $forward_url]);
+      $this->logger->error('Cannot initiate signing process, check params: document_uri: %document_uri, cid: %cid, forward_url: %forward_url',
+        [
+          '%document_uri' => $document_uri,
+          '%cid' => $cid,
+          '%forward_url' => $forward_url,
+        ]
+      );
       return;
     }
 
     $hash = $this->getHash($forward_url);
-    $params = ['action' => 'sign', 'cid' => $cid, 'hash' => $hash, 'uri' => base64_encode($document_uri), 'forward_url' => base64_encode($forward_url)];
+    $params = [
+      'action' => 'sign',
+      'cid' => $cid,
+      'hash' => $hash,
+      'uri' => base64_encode($document_uri),
+      'forward_url' => base64_encode($forward_url),
+    ];
     $url = $this->config->get('os2forms_digital_signature_remove_service_url') . http_build_query($params);
 
     $response = new RedirectResponse($url);
@@ -98,13 +113,18 @@ class SigningService {
    *
    * @param string $filename
    *   The filename as given by the signing server.
-   * @param boolean $leave
-   *   If TRUE, leave the file on the remote server, default is to remove the file after download.
-   * @param boolean $annotate
-   *    If TRUE, download a pdf with an annotation page.
+   * @param bool $leave
+   *   If TRUE, leave the file on the remote server, default is to remove the
+   *   file after download.
+   * @param bool $annotate
+   *   If TRUE, download a pdf with an annotation page.
    * @param array $attributes
-   *    An array of pairs of prompts and values that will be added to the annotation box, e.g.,
-   *      ['IP' => $_SERVER['REMOTE_ADDR'], 'Region' => 'Capital Region Copenhagen'].
+   *   An array of pairs of prompts and values that will be added to the
+   *   annotation box, e.g.
+   *   [
+   *     'IP' => $_SERVER['REMOTE_ADDR'],
+   *     'Region' => 'Capital Region Copenhagen'
+   *   ].
    *
    * @return mixed|bool
    *   The binary data of the pdf or FALSE if an error occurred.
@@ -116,7 +136,13 @@ class SigningService {
     if (!preg_match('/^[a-f0-9]{32}\.pdf$/', $filename)) {
       return FALSE;
     }
-    $params = ['action' => 'download', 'file' => $filename, 'leave' => $leave, 'annotate' => $annotate, 'attributes' => $attributes];
+    $params = [
+      'action' => 'download',
+      'file' => $filename,
+      'leave' => $leave,
+      'annotate' => $annotate,
+      'attributes' => $attributes,
+    ];
     $url = $this->config->get('os2forms_digital_signature_remove_service_url') . http_build_query($params);
 
     $response = $this->httpClient->request('GET', $url);
@@ -135,7 +161,7 @@ class SigningService {
   /**
    * Calculate the hash value.
    *
-   * @param string $name
+   * @param string $value
    *   The value to hash including salt.
    *
    * @return string
@@ -149,8 +175,8 @@ class SigningService {
   /**
    * Deletes stalled webform submissions that were left unsigned.
    *
-   * Only checked the webforms that have digital_signature handler enabled and the submission is older that a specified
-   * period.
+   * Only checked the webforms that have digital_signature handler enabled and
+   * the submission is older that a specified period.
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
@@ -159,7 +185,7 @@ class SigningService {
 
     // Finding webforms that have any handler.
     $query = \Drupal::entityQuery('webform')
-      ->exists('handlers'); // Only webforms with handlers configured.
+      ->exists('handlers');
     $handler_webform_ids = $query->execute();
 
     // No webforms with handlers, aborting.

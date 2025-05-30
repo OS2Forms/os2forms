@@ -6,14 +6,12 @@ use Drupal\Component\Utility\Crypt;
 use Drupal\Core\File\FileExists;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Url;
-use Drupal\file\FileInterface;
-use Drupal\os2forms_digital_signature\Service\SigningService;
 use Drupal\webform\Plugin\WebformHandlerBase;
 use Drupal\webform\WebformSubmissionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Webform submission debug handler.
+ * Digital signature webform handler.
  *
  * @WebformHandler(
  *   id = "os2forms_digital_signature",
@@ -68,8 +66,8 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
   }
 
   /**
-    * {@inheritdoc}
-    */
+   * {@inheritdoc}
+   */
   public function preSave(WebformSubmissionInterface $webform_submission) {
     $webform = $webform_submission->getWebform();
 
@@ -79,7 +77,12 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
 
     $attachment = $this->getSubmissionAttachment($webform_submission);
     if (!$attachment) {
-      $this->logger->error('Attachment cannot be created webform: %webform, webform_submission: %webform_submission', ['%webform' => $webform->id(), '%webform_submission' => $webform_submission->uuid()]);
+      $this->logger->error('Attachment cannot be created webform: %webform, webform_submission: %webform_submission',
+        [
+          '%webform' => $webform->id(),
+          '%webform_submission' => $webform_submission->uuid(),
+        ]
+      );
       return;
     }
 
@@ -89,25 +92,29 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
       return;
     }
 
-    $fileUri = $destinationDir . '/' . $webform_submission->uuid() .'.pdf';
+    $fileUri = $destinationDir . '/' . $webform_submission->uuid() . '.pdf';
 
     // Save the file data.
     try {
-      /** @var FileInterface $fileToSign */
+      /** @var \Drupal\file\FileInterface $fileToSign */
       $fileToSign = \Drupal::service('file.repository')->writeData($attachment['filecontent'], $fileUri, FileExists::Replace);
     }
     catch (\Exception $e) {
-      $this->logger->error('File cannot be saved: %fileUri, error: %error', ['%fileUri' => $fileUri, '%error' => $e->getMessage()]);
+      $this->logger->error('File cannot be saved: %fileUri, error: %error',
+        [
+          '%fileUri' => $fileUri,
+          '%error' => $e->getMessage(),
+        ]);
       return;
     }
 
     $fileToSign->save();
     $fileToSignPublicUrl = \Drupal::service('file_url_generator')->generateAbsoluteString($fileToSign->getFileUri());
 
-    /** @var SigningService $signingService */
+    /** @var \Drupal\os2forms_digital_signature\Service\SigningService $signingService */
     $signingService = \Drupal::service('os2forms_digital_signature.signing_service');
 
-    $cid = $signingService->get_cid();
+    $cid = $signingService->getCid();
     if (empty($cid)) {
       $this->logger->error('Failed to obtain cid. Is server running?');
       return;
@@ -118,9 +125,16 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
     $hash = Crypt::hashBase64($webform_submission->uuid() . $webform->id() . $salt);
 
     $attachmentFid = $attachment['fid'] ?? NULL;
-    $signatureCallbackUrl = Url::fromRoute('os2forms_digital_signature.sign_callback', ['uuid' => $webform_submission->uuid(), 'hash' => $hash, 'fid' => $attachmentFid]);
+    $signatureCallbackUrl = Url::fromRoute('os2forms_digital_signature.sign_callback',
+      [
+        'uuid' => $webform_submission->uuid(),
+        'hash' => $hash,
+        'fid' => $attachmentFid,
+      ]
+    );
 
-    // Starting signing, if everything is correct - this funcition will start redirect.
+    // Starting signing, if everything is correct - this funcition will start
+    // redirect.
     $signingService->sign($fileToSignPublicUrl, $cid, $signatureCallbackUrl->setAbsolute()->toString());
   }
 
@@ -128,10 +142,11 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
    * Get OS2forms file attachment.
    *
    * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
-   *    A webform submission.
+   *   A webform submission.
    *
    * @return array|null
-   *    Array of attachment data.
+   *   Array of attachment data.
+   *
    * @throws \Exception
    */
   protected function getSubmissionAttachment(WebformSubmissionInterface $webform_submission) {
@@ -140,8 +155,8 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
 
     // Getting all element types that are added to the webform.
     //
-    // Priority is the following: check for os2forms_digital_signature_document, is not found try serving
-    // os2forms_attachment
+    // Priority is the following: check for os2forms_digital_signature_document,
+    // is not found try serving os2forms_attachment.
     $elementTypes = array_column($this->getWebform()->getElementsDecodedAndFlattened(), '#type');
     $attachmentType = '';
     if (in_array('os2forms_digital_signature_document', $elementTypes)) {
@@ -154,7 +169,8 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
     $elements = $this->getWebform()->getElementsInitializedAndFlattened();
     $element_attachments = $this->getWebform()->getElementsAttachments();
     foreach ($element_attachments as $element_attachment) {
-      // Check if the element attachment key is excluded and should not attach any files.
+      // Check if the element attachment key is excluded and should not attach
+      // any files.
       if (isset($this->configuration['excluded_elements'][$element_attachment])) {
         continue;
       }

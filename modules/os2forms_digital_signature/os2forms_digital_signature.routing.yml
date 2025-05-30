@@ -13,4 +13,3 @@ os2forms_digital_signature.settings:
     _title: 'Digital signature settings'
   requirements:
     _permission: 'administer site configuration'
-

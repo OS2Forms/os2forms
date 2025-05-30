@@ -33,10 +33,9 @@ class DigitalSignatureDocument extends WebformManagedFileBase {
   /**
    * {@inheritdoc}
    */
-  protected function getFileExtensions(array $element = NULL) {
+  protected function getFileExtensions(?array $element = NULL) {
     return 'pdf';
   }
-
 
   /**
    * {@inheritdoc}

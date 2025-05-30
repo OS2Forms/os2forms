@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * This module enables Digital Signature functionality for Webforms.
+ */
+
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperManager;
 use Drupal\os2forms_digital_signature\Form\SettingsForm;
@@ -33,7 +38,7 @@ function os2forms_digital_signature_webform_submission_form_alter(array &$form, 
       $settings = $config->get('settings');
 
       // Checking if the title has not been overridden.
-      if ($settings['default_submit_button_label'] == $form['actions']['submit']['#value']){
+      if ($settings['default_submit_button_label'] == $form['actions']['submit']['#value']) {
         $form['actions']['submit']['#value'] = t('Sign and submit');
       }
     }
