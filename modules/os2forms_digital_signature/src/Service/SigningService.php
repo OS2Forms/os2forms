@@ -2,6 +2,7 @@
 
 namespace Drupal\os2forms_digital_signature\Service;
 
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Entity\EntityStorageInterface;
@@ -39,6 +40,7 @@ class SigningService {
 
   public function __construct(
     private readonly ClientInterface $httpClient,
+    private readonly TimeInterface $time,
     ConfigFactoryInterface $configFactory,
     EntityTypeManager $entityTypeManager,
     private readonly LoggerChannelInterface $logger,
@@ -184,7 +186,7 @@ class SigningService {
     $digitalSignatureWebforms = [];
 
     // Finding webforms that have any handler.
-    $query = \Drupal::entityQuery('webform')
+    $query = $this->webformStorage->getQuery()
       ->exists('handlers');
     $handler_webform_ids = $query->execute();
 
@@ -217,7 +219,7 @@ class SigningService {
 
     // Find all stalled webform submissions of digital signature forms.
     $retention_period = ($this->config->get('os2forms_digital_signature_submission_retention_period')) ?? 300;
-    $timestamp_threshold = \Drupal::time()->getRequestTime() - $retention_period;
+    $timestamp_threshold = $this->time->getRequestTime() - $retention_period;
     $query = $this->webformSubmissionStorage->getQuery()
       ->accessCheck(FALSE)
       ->condition('webform_id', $digitalSignatureWebforms, 'IN')

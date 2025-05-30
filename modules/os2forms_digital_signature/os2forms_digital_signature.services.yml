@@ -7,6 +7,7 @@ services:
     class: Drupal\os2forms_digital_signature\Service\SigningService
     arguments:
       - '@http_client'
+      - '@datetime.time'
       - '@config.factory'
       - '@entity_type.manager'
       - '@logger.channel.os2forms_digital_signature'

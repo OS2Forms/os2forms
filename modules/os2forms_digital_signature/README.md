@@ -29,7 +29,7 @@ URL: `admin/os2forms_digital_signature/settings`
 
 - **Signature server URL**
 
-  The URL of the service providing digital signature. This is the example of a known service https://signering.bellcom.dk/sign.php?
+  The URL of the service providing digital signature. This is the example of a known service [https://signering.bellcom.dk/sign.php?](https://signering.bellcom.dk/sign.php?)
 
 - **Hash Salt used for signature**
 

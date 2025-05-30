@@ -33,8 +33,8 @@ class Os2formsAttachmentPrintBuilder extends PrintBuilder {
   /**
    * Modified version of the original savePrintable() function.
    *
-   * The only difference is modified call to prepareRenderer with digitalPost flag
-   * TRUE.
+   * The only difference is modified call to prepareRenderer with digitalPost
+   * flag TRUE.
    *
    * @see PrintBuilder::savePrintable()
    *
@@ -65,8 +65,6 @@ class Os2formsAttachmentPrintBuilder extends PrintBuilder {
   /**
    * Override prepareRenderer() the print engine with the passed entities.
    *
-   * @see PrintBuilder::prepareRenderer
-   *
    * @param array $entities
    *   An array of entities.
    * @param \Drupal\entity_print\Plugin\PrintEngineInterface $print_engine
@@ -78,8 +76,10 @@ class Os2formsAttachmentPrintBuilder extends PrintBuilder {
    *
    * @return \Drupal\entity_print\Renderer\RendererInterface
    *   A print renderer.
+   *
+   * @see PrintBuilder::prepareRenderer
    */
-  protected function prepareRenderer(array $entities, PrintEngineInterface $print_engine, $use_default_css, $digitalSignature = false) {
+  protected function prepareRenderer(array $entities, PrintEngineInterface $print_engine, $use_default_css, $digitalSignature = FALSE) {
     if (empty($entities)) {
       throw new \InvalidArgumentException('You must pass at least 1 entity');
     }
