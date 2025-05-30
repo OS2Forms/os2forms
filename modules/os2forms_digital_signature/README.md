@@ -35,6 +35,6 @@ URL: `admin/os2forms_digital_signature/settings`
   Must match hash salt on the signature server
 
 
-- **List IP's which can download unsigned PDF submissions**
+- **List IPs which can download unsigned PDF submissions**
 
   Only requests from this IP will be able to download PDF which are to be signed.

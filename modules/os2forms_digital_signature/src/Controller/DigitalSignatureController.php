@@ -14,6 +14,17 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class DigitalSignatureController {
 
   /**
+   * Logger for channel - os2forms_digital_signature.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $logger;
+
+  public function __construct() {
+    $this->logger = \Drupal::logger('os2forms_digital_signature');
+  }
+
+  /**
    * Callback for the file being signed.
    *
    * Expecting the file name to be coming as GET parameter.
@@ -71,7 +82,7 @@ class DigitalSignatureController {
     $signedFilename = \Drupal::request()->get('file');
     $signedFileContent = $signingService->download($signedFilename);
     if (!$signedFileContent) {
-      \Drupal::logger('os2forms_digital_signature')->warning('Missing file on remote server %file.', ['%file' => $signedFilename]);
+      $this->logger->warning('Missing file on remote server %file.', ['%file' => $signedFilename]);
       throw new NotFoundHttpException();
     }
 
@@ -88,7 +99,7 @@ class DigitalSignatureController {
       $directory = dirname($expectedFileUri);
 
       if (!$file_system->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY)) {
-        \Drupal::logger('os2forms_digital_signature')->error('Failed to prepare directory %directory.', ['%directory' => $directory]);
+        $this->logger->error('Failed to prepare directory %directory.', ['%directory' => $directory]);
       }
     }
 
@@ -106,7 +117,7 @@ class DigitalSignatureController {
       }
     }
     catch (\Exception $e) {
-      \Drupal::logger('os2forms_digital_signature')->error('Failed to write to file %uri: @message', ['%uri' => $expectedFileUri, '@message' => $e->getMessage()]);
+      $this->logger->error('Failed to write to file %uri: @message', ['%uri' => $expectedFileUri, '@message' => $e->getMessage()]);
     }
 
     // Build the URL for the webform submission confirmation page.

@@ -4,11 +4,13 @@ namespace Drupal\os2forms_digital_signature\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Digital post settings form.
  */
 class SettingsForm extends ConfigFormBase {
+  use StringTranslationTrait;
 
   /**
    * Name of the config.
@@ -37,27 +39,27 @@ class SettingsForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['os2forms_digital_signature_remove_service_url'] = [
       '#type' => 'textfield',
-      '#title' => t("Signature server URL"),
+      '#title' => $this->t('Signature server URL'),
       '#default_value' => $this->config(self::$configName)->get('os2forms_digital_signature_remove_service_url'),
-      '#description' => t('E.g. https://signering.bellcom.dk/sign.php?'),
+      '#description' => $this->t('E.g. https://signering.bellcom.dk/sign.php?'),
     ];
     $form['os2forms_digital_signature_sign_hash_salt'] = [
       '#type' => 'textfield',
-      '#title' => t("Hash Salt used for signature"),
+      '#title' => $this->t('Hash Salt used for signature'),
       '#default_value' => $this->config(self::$configName)->get('os2forms_digital_signature_sign_hash_salt'),
-      '#description' => t('Must match hash salt on the signature server'),
+      '#description' => $this->t('Must match hash salt on the signature server'),
     ];
     $form['os2forms_digital_signature_submission_allowed_ips'] = [
       '#type' => 'textfield',
-      '#title' => t("List IP's which can download unsigned PDF submissions"),
+      '#title' => $this->t('List IPs which can download unsigned PDF submissions'),
       '#default_value' => $this->config(self::$configName)->get('os2forms_digital_signature_submission_allowed_ips'),
-      '#description' => t('Comma separated. Ex. 192.168.1.1,192.168.2.1'),
+      '#description' => $this->t('Comma separated. e.g. 192.168.1.1,192.168.2.1'),
     ];
     $form['os2forms_digital_signature_submission_retention_period'] = [
       '#type' => 'textfield',
-      '#title' => t('Unsigned submission timespan (s)'),
+      '#title' => $this->t('Unsigned submission timespan (s)'),
       '#default_value' => ($this->config(self::$configName)->get('os2forms_digital_signature_submission_retention_period')) ?? 300,
-      '#description' => t('How many seconds can unsigned submission exist before being automatically deleted'),
+      '#description' => $this->t('How many seconds can unsigned submission exist before being automatically deleted'),
     ];
 
     return parent::buildForm($form, $form_state);
