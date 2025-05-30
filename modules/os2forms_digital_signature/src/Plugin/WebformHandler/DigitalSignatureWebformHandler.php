@@ -3,6 +3,7 @@
 namespace Drupal\os2forms_digital_signature\Plugin\WebformHandler;
 
 use Drupal\Component\Utility\Crypt;
+use Drupal\Core\File\FileExists;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Url;
 use Drupal\file\FileInterface;
@@ -93,15 +94,13 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
     // Save the file data.
     try {
       /** @var FileInterface $fileToSign */
-      $fileToSign = \Drupal::service('file.repository')->writeData($attachment['filecontent'], $fileUri, FileSystemInterface::EXISTS_REPLACE);
+      $fileToSign = \Drupal::service('file.repository')->writeData($attachment['filecontent'], $fileUri, FileExists::Replace);
     }
     catch (\Exception $e) {
       $this->logger->error('File cannot be saved: %fileUri, error: %error', ['%fileUri' => $fileUri, '%error' => $e->getMessage()]);
       return;
     }
 
-    // Set the status to permanent to prevent file deletion on cron.
-    //$fileToSign->setPermanent();
     $fileToSign->save();
     $fileToSignPublicUrl = \Drupal::service('file_url_generator')->generateAbsoluteString($fileToSign->getFileUri());
 
