@@ -4,15 +4,26 @@ namespace Drupal\os2forms_attachment;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\File\FileExists;
+use Drupal\Core\File\FileSystemInterface;
+use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\entity_print\Event\PreSendPrintEvent;
 use Drupal\entity_print\Event\PrintEvents;
 use Drupal\entity_print\Plugin\PrintEngineInterface;
 use Drupal\entity_print\PrintBuilder;
+use Drupal\entity_print\Renderer\RendererFactoryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * The OS2Forms attachment print builder service.
  */
 class Os2formsAttachmentPrintBuilder extends PrintBuilder {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct(RendererFactoryInterface $renderer_factory, EventDispatcherInterface $event_dispatcher, TranslationInterface $string_translation, protected readonly FileSystemInterface $file_system) {
+    parent::__construct($renderer_factory, $event_dispatcher, $string_translation);
+  }
 
   /**
    * {@inheritdoc}
@@ -55,7 +66,7 @@ class Os2formsAttachmentPrintBuilder extends PrintBuilder {
     $uri = "$scheme://$filename";
 
     // Save the file.
-    return \Drupal::service('file_system')->saveData($print_engine->getBlob(), $uri, FileExists::Replace);
+    return $this->file_system->saveData($print_engine->getBlob(), $uri, FileExists::Replace);
   }
 
   /**
