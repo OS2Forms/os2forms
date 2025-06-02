@@ -121,30 +121,38 @@ run the checks locally.
 ### PHP
 
 ```sh
-docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.1-fpm composer install
-docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.1-fpm composer coding-standards-check
-
+docker compose pull
+docker compose run --rm php composer install
 # Fix (some) coding standards issues.
-docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.1-fpm composer coding-standards-apply
+docker compose run --rm php composer coding-standards-apply
+docker compose run --rm php composer coding-standards-check
 ```
+
+> [!TIP]
+> If the `composer install` commands fails with
+>
+> > Unable to install module simplesamlphp/simplesamlphp-assets-base, package name must be on the form "VENDOR/simplesamlphp-module-MODULENAME".
+>
+> you can remove the `vendor` folder and rerun the `composer install` command (cf.
+> <https://www.drupal.org/project/simplesamlphp_auth/issues/3350773>).
 
 ### Markdown
 
 ```sh
-docker run --rm --volume ${PWD}:/app --workdir /app node:20 yarn install
-docker run --rm --volume ${PWD}:/app --workdir /app node:20 yarn coding-standards-check/markdownlint
-
-# Fix (some) coding standards issues.
-docker run --rm --volume ${PWD}:/app --workdir /app node:20 yarn coding-standards-apply/markdownlint
+docker compose pull
+docker compose run --rm markdownlint markdownlint '**/*.md' --fix
+docker compose run --rm markdownlint markdownlint '**/*.md'
 ```
 
 ## Code analysis
 
 We use [PHPStan](https://phpstan.org/) for static code analysis.
 
-Running statis code analysis on a standalone Drupal module is a bit tricky, so
-we use a helper script to run the analysis:
+Running statis code analysis on a standalone Drupal module is a bit tricky, so we use a helper script to run the
+analysis:
 
-```sh
-./scripts/code-analysis
+```shell
+docker compose run --rm php ./scripts/code-analysis
 ```
+
+**Note**: Currently the code analysis is only run on the `os2forms_digital_post` sub-module (cf. [`phpstan.neon`](./phpstan.neon)).
