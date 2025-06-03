@@ -11,6 +11,9 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [PR-176](https://github.com/OS2Forms/os2forms/pull/176)
+  - Patches `coc_forms_auto_export` to ensure attachments are added to emails,
+    cf. [Unable to receive attachments in emails sent](https://www.drupal.org/project/coc_forms_auto_export/issues/3256951)
 - [PR-168](https://github.com/OS2Forms/os2forms/pull/168)
   Cleaned up code
 - [PR-166](https://github.com/OS2Forms/os2forms/pull/166)
@@ -365,7 +368,8 @@ f/OS-115_dawa_address
 - Security in case of vulnerabilities.
 ```
 
-[Unreleased]: https://github.com/OS2Forms/os2forms/compare/3.22.2...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms/compare/4.0.0...HEAD
+[4.0.0]: https://github.com/OS2Forms/os2forms/compare/3.22.2...4.0.0
 [3.22.2]: https://github.com/OS2Forms/os2forms/compare/3.22.1...3.22.2
 [3.22.1]: https://github.com/OS2Forms/os2forms/compare/3.22.0...3.22.1
 [3.22.0]: https://github.com/OS2Forms/os2forms/compare/3.21.2...3.22.0
