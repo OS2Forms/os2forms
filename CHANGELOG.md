@@ -14,6 +14,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - [PR-176](https://github.com/OS2Forms/os2forms/pull/176)
   - Patches `coc_forms_auto_export` to ensure attachments are added to emails,
     cf. [Unable to receive attachments in emails sent](https://www.drupal.org/project/coc_forms_auto_export/issues/3256951)
+- [PR-168](https://github.com/OS2Forms/os2forms/pull/168)
+  Cleaned up code
 - [PR-166](https://github.com/OS2Forms/os2forms/pull/166)
   - Fix digital post commands
   - Updated versions in GitHub Actions `uses` steps

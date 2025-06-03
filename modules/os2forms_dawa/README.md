@@ -1,10 +1,11 @@
 # OS2Forms DAWA Drupal module
 
-# Module purpose
+## Module purpose
 
-The aim of this module is to provide integration with Danish Addresses Web API (DAWA https://dawa.aws.dk) and provider address autocomplete fields.
+The aim of this module is to provide integration with Danish Addresses Web API (DAWA <https://dawa.aws.dk>) and provider
+address autocomplete fields.
 
-# How does it work
+## How does it work
 
 Module exposes couple of new Autocomplete components that are available in the webform build process.
 
