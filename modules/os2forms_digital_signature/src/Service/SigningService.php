@@ -240,7 +240,7 @@ class SigningService {
   }
 
   /**
-   * Returns Remove service URL.
+   * Returns Remote signature service URL.
    *
    * @return string
    *   Remote Service URL, if missing '?' or '&', '?' will be added

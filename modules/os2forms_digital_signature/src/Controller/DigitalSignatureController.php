@@ -3,26 +3,44 @@
 namespace Drupal\os2forms_digital_signature\Controller;
 
 use Drupal\Component\Utility\Crypt;
+use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\File\FileExists;
 use Drupal\Core\File\FileSystemInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Drupal\file\Entity\File;
+use Drupal\os2forms_digital_signature\Service\SigningService;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Digital Signature Controller.
  */
-class DigitalSignatureController {
+class DigitalSignatureController extends ControllerBase {
 
   /**
-   * Logger for channel - os2forms_digital_signature.
-   *
-   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   * Constructor.
    */
-  protected $logger;
+  public function __construct(
+    private readonly LoggerInterface $logger,
+    private readonly Settings $settings,
+    private readonly SigningService $signingService,
+    private readonly FileSystemInterface $fileSystem,
+  ) {
+  }
 
-  public function __construct() {
-    $this->logger = \Drupal::logger('os2forms_digital_signature');
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('logger.channel.os2forms_digital_signature'),
+      $container->get('settings'),
+      $container->get('os2forms_digital_signature.signing_service'),
+      $container->get('file_system'),
+    );
   }
 
   /**
@@ -70,25 +88,19 @@ class DigitalSignatureController {
     }
 
     // Checking hash.
-    $salt = \Drupal::service('settings')->get('hash_salt');
+    $salt = $this->settings->get('hash_salt');
     $tmpHash = Crypt::hashBase64($uuid . $webformId . $salt);
     if ($hash !== $tmpHash) {
       // Submission exist, but the provided hash is incorrect.
       throw new NotFoundHttpException();
     }
 
-    /** @var \Drupal\os2forms_digital_signature\Service\SigningService $signingService */
-    $signingService = \Drupal::service('os2forms_digital_signature.signing_service');
-
     $signedFilename = \Drupal::request()->get('file');
-    $signedFileContent = $signingService->download($signedFilename);
+    $signedFileContent = $this->signingService->download($signedFilename);
     if (!$signedFileContent) {
       $this->logger->warning('Missing file on remote server %file.', ['%file' => $signedFilename]);
       throw new NotFoundHttpException();
     }
-
-    /** @var \Drupal\Core\File\FileSystemInterface $file_system */
-    $file_system = \Drupal::service('file_system');
 
     // If $fid is present - we are replacing uploaded/managed file, otherwise
     // creating a new one.
@@ -101,14 +113,14 @@ class DigitalSignatureController {
       $expectedFileUri = "private://webform/$webformId/digital_signature/$uuid.pdf";
       $directory = dirname($expectedFileUri);
 
-      if (!$file_system->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY)) {
+      if (!$this->fileSystem->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY)) {
         $this->logger->error('Failed to prepare directory %directory.', ['%directory' => $directory]);
       }
     }
 
     // Write the data to the file using Drupal's file system service.
     try {
-      $file_system->saveData($signedFileContent, $expectedFileUri, FileSystemInterface::EXISTS_REPLACE);
+      $this->fileSystem->saveData($signedFileContent, $expectedFileUri, FileExists::Replace);
 
       // Updating webform submission.
       $webformSubmission->setLocked(TRUE);
