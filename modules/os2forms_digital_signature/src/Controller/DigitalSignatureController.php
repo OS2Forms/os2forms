@@ -4,6 +4,7 @@ namespace Drupal\os2forms_digital_signature\Controller;
 
 use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\File\FileExists;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Site\Settings;
@@ -13,12 +14,20 @@ use Drupal\os2forms_digital_signature\Service\SigningService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Digital Signature Controller.
  */
 class DigitalSignatureController extends ControllerBase {
+
+  /**
+   * File Storage.
+   *
+   * @var EntityStorageInterface
+   */
+  protected EntityStorageInterface $fileStorage;
 
   /**
    * Constructor.
@@ -28,7 +37,9 @@ class DigitalSignatureController extends ControllerBase {
     private readonly Settings $settings,
     private readonly SigningService $signingService,
     private readonly FileSystemInterface $fileSystem,
+    private readonly RequestStack $requestStack,
   ) {
+    $this->fileStorage = $this->entityTypeManager()->getStorage('file');
   }
 
   /**
@@ -40,6 +51,7 @@ class DigitalSignatureController extends ControllerBase {
       $container->get('settings'),
       $container->get('os2forms_digital_signature.signing_service'),
       $container->get('file_system'),
+      $container->get('request_stack'),
     );
   }
 
@@ -63,7 +75,7 @@ class DigitalSignatureController extends ControllerBase {
    */
   public function signCallback($uuid, $hash, $fid = NULL) {
     // Load the webform submission entity by UUID.
-    $submissions = \Drupal::entityTypeManager()
+    $submissions = $this->entityTypeManager()
       ->getStorage('webform_submission')
       ->loadByProperties(['uuid' => $uuid]);
 
@@ -78,7 +90,9 @@ class DigitalSignatureController extends ControllerBase {
     $webformId = $webformSubmission->getWebform()->id();
 
     // Checking the action.
-    $action = \Drupal::request()->query->get('action');
+    $request = $this->requestStack->getCurrentRequest();
+
+    $action = $request->query->get('action');
     if ($action == 'cancel') {
       $cancelUrl = $webformSubmission->getWebform()->toUrl()->toString();
 
@@ -95,7 +109,7 @@ class DigitalSignatureController extends ControllerBase {
       throw new NotFoundHttpException();
     }
 
-    $signedFilename = \Drupal::request()->get('file');
+    $signedFilename = $request->get('file');
     $signedFileContent = $this->signingService->download($signedFilename);
     if (!$signedFileContent) {
       $this->logger->warning('Missing file on remote server %file.', ['%file' => $signedFilename]);
@@ -128,7 +142,7 @@ class DigitalSignatureController extends ControllerBase {
 
       // If file existing, resave the file to update the size and etc.
       if ($fid) {
-        File::load($fid)->save();
+        $this->fileStorage->load($fid)?->save();
       }
     }
     catch (\Exception $e) {
