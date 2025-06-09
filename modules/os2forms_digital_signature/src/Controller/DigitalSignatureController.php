@@ -9,7 +9,6 @@ use Drupal\Core\File\FileExists;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
-use Drupal\file\Entity\File;
 use Drupal\os2forms_digital_signature\Service\SigningService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -25,7 +24,7 @@ class DigitalSignatureController extends ControllerBase {
   /**
    * File Storage.
    *
-   * @var EntityStorageInterface
+   * @var \Drupal\Core\Entity\EntityStorageInterface
    */
   protected EntityStorageInterface $fileStorage;
 
@@ -119,7 +118,7 @@ class DigitalSignatureController extends ControllerBase {
     // If $fid is present - we are replacing uploaded/managed file, otherwise
     // creating a new one.
     if ($fid) {
-      $file = File::load($fid);
+      $file = $this->fileStorage->load($fid);
       $expectedFileUri = $file->getFileUri();
     }
     else {
