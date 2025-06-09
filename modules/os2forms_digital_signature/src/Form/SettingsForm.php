@@ -37,10 +37,10 @@ class SettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $form['os2forms_digital_signature_remove_service_url'] = [
+    $form['os2forms_digital_signature_remote_service_url'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Signature server URL'),
-      '#default_value' => $this->config(self::$configName)->get('os2forms_digital_signature_remove_service_url'),
+      '#default_value' => $this->config(self::$configName)->get('os2forms_digital_signature_remote_service_url'),
       '#description' => $this->t('E.g. https://signering.bellcom.dk/sign.php?'),
     ];
     $form['os2forms_digital_signature_sign_hash_salt'] = [

@@ -3,11 +3,18 @@
 namespace Drupal\os2forms_digital_signature\Plugin\WebformHandler;
 
 use Drupal\Component\Utility\Crypt;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\File\FileExists;
 use Drupal\Core\File\FileSystemInterface;
+use Drupal\Core\File\FileUrlGeneratorInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
+use Drupal\file\FileRepositoryInterface;
+use Drupal\os2forms_digital_signature\Service\SigningService;
+use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Drupal\webform\Plugin\WebformHandlerBase;
 use Drupal\webform\WebformSubmissionInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -30,29 +37,56 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
    *
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
-  protected $moduleHandler;
+  private readonly ModuleHandlerInterface $moduleHandler;
 
   /**
    * The webform element plugin manager.
    *
    * @var \Drupal\webform\Plugin\WebformElementManagerInterface
    */
-  protected $elementManager;
+  private readonly WebformElementManagerInterface $elementManager;
 
   /**
    * Logger for channel - os2forms_digital_signature.
    *
-   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   * @var \Psr\Log\LoggerInterface
    */
-  protected $logger;
+  private readonly LoggerInterface $logger;
 
   /**
-   * {@inheritdoc}
+   * File system interface.
+   *
+   * @var \Drupal\Core\File\FileSystemInterface
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->logger = \Drupal::logger('os2forms_digital_signature');
-  }
+  private readonly FileSystemInterface $fileSystem;
+
+  /**
+   * File repository.
+   *
+   * @var \Drupal\file\FileRepositoryInterface
+   */
+  private readonly FileRepositoryInterface $fileRepository;
+
+  /**
+   * File URL generator.
+   *
+   * @var \Drupal\Core\File\FileUrlGeneratorInterface
+   */
+  private readonly FileUrlGeneratorInterface $fileUrlGenerator;
+
+  /**
+   * OS2Forms signing service.
+   *
+   * @var \Drupal\os2forms_digital_signature\Service\SigningService
+   */
+  private readonly SigningService $signingService;
+
+  /**
+   * Settings service.
+   *
+   * @var \Drupal\Core\Site\Settings
+   */
+  private readonly Settings $settings;
 
   /**
    * {@inheritdoc}
@@ -61,6 +95,12 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
     $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
     $instance->moduleHandler = $container->get('module_handler');
     $instance->elementManager = $container->get('plugin.manager.webform.element');
+    $instance->logger = $container->get('logger.channel.os2forms_digital_signature');
+    $instance->fileSystem = $container->get('file_system');
+    $instance->fileRepository = $container->get('file.repository');
+    $instance->fileUrlGenerator = $container->get('file_url_generator');
+    $instance->signingService = $container->get('os2forms_digital_signature.signing_service');
+    $instance->settings = $container->get('settings');
 
     return $instance;
   }
@@ -87,7 +127,7 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
     }
 
     $destinationDir = 'private://signing';
-    if (!\Drupal::service('file_system')->prepareDirectory($destinationDir, FileSystemInterface::CREATE_DIRECTORY)) {
+    if (!$this->fileSystem->prepareDirectory($destinationDir, FileSystemInterface::CREATE_DIRECTORY)) {
       $this->logger->error('File directory cannot be created: %filedirectory', ['%filedirectory' => $destinationDir]);
       return;
     }
@@ -96,8 +136,7 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
 
     // Save the file data.
     try {
-      /** @var \Drupal\file\FileInterface $fileToSign */
-      $fileToSign = \Drupal::service('file.repository')->writeData($attachment['filecontent'], $fileUri, FileExists::Replace);
+      $fileToSign = $this->fileRepository->writeData($attachment['filecontent'], $fileUri, FileExists::Replace);
     }
     catch (\Exception $e) {
       $this->logger->error('File cannot be saved: %fileUri, error: %error',
@@ -109,19 +148,16 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
     }
 
     $fileToSign->save();
-    $fileToSignPublicUrl = \Drupal::service('file_url_generator')->generateAbsoluteString($fileToSign->getFileUri());
+    $fileToSignPublicUrl = $this->fileUrlGenerator->generateAbsoluteString($fileToSign->getFileUri());
 
-    /** @var \Drupal\os2forms_digital_signature\Service\SigningService $signingService */
-    $signingService = \Drupal::service('os2forms_digital_signature.signing_service');
-
-    $cid = $signingService->getCid();
+    $cid = $this->signingService->getCid();
     if (empty($cid)) {
       $this->logger->error('Failed to obtain cid. Is server running?');
       return;
     }
 
     // Creating hash.
-    $salt = \Drupal::service('settings')->get('hash_salt');
+    $salt = $this->settings->get('hash_salt');
     $hash = Crypt::hashBase64($webform_submission->uuid() . $webform->id() . $salt);
 
     $attachmentFid = $attachment['fid'] ?? NULL;
@@ -135,7 +171,7 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
 
     // Starting signing, if everything is correct - this funcition will start
     // redirect.
-    $signingService->sign($fileToSignPublicUrl, $cid, $signatureCallbackUrl->setAbsolute()->toString());
+    $this->signingService->sign($fileToSignPublicUrl, $cid, $signatureCallbackUrl->setAbsolute()->toString());
   }
 
   /**

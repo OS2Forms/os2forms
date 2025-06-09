@@ -29,14 +29,14 @@ class SigningService {
    *
    * @var \Drupal\Core\Entity\EntityStorageInterface
    */
-  protected EntityStorageInterface $webformStorage;
+  private readonly EntityStorageInterface $webformStorage;
 
   /**
    * WebformSubmission storage.
    *
    * @var \Drupal\Core\Entity\EntityStorageInterface
    */
-  protected EntityStorageInterface $webformSubmissionStorage;
+  private readonly EntityStorageInterface $webformSubmissionStorage;
 
   public function __construct(
     private readonly ClientInterface $httpClient,
@@ -57,7 +57,7 @@ class SigningService {
    *   The correlation id.
    */
   public function getCid() : ?string {
-    $url = $this->config->get('os2forms_digital_signature_remove_service_url') . 'action=getcid';
+    $url = $this->getServiceUrl() . http_build_query(['action' => 'getcid']);
     $response = $this->httpClient->request('GET', $url);
     $result = $response->getBody()->getContents();
 
@@ -104,7 +104,7 @@ class SigningService {
       'uri' => base64_encode($document_uri),
       'forward_url' => base64_encode($forward_url),
     ];
-    $url = $this->config->get('os2forms_digital_signature_remove_service_url') . http_build_query($params);
+    $url = $this->getServiceUrl() . http_build_query($params);
 
     $response = new RedirectResponse($url);
     $response->send();
@@ -145,7 +145,7 @@ class SigningService {
       'annotate' => $annotate,
       'attributes' => $attributes,
     ];
-    $url = $this->config->get('os2forms_digital_signature_remove_service_url') . http_build_query($params);
+    $url = $this->getServiceUrl() . http_build_query($params);
 
     $response = $this->httpClient->request('GET', $url);
     $return = $response->getBody()->getContents();
@@ -237,6 +237,23 @@ class SigningService {
       $submission = $this->webformSubmissionStorage->load($submission_id);
       $submission->delete();
     }
+  }
+
+  /**
+   * Returns Remove service URL.
+   *
+   * @return string
+   *   Remote Service URL, if missing '?' or '&', '?' will be added
+   *   automatically.
+   */
+  public function getServiceUrl() : string {
+    $url = $this->config->get('os2forms_digital_signature_remote_service_url');
+    // Handling URL, if it does not end with '?' or '&'.
+    if (!str_ends_with($url, '?') && !str_ends_with($url, '&')) {
+      return $url . '?';
+    }
+
+    return $url;
   }
 
 }
