@@ -11,7 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
-- Remove unused and abandoned package `webmozart/path-util`.
+- [PR-179](https://github.com/OS2Forms/os2forms/pull/179)
+  Remove unused and abandoned package `webmozart/path-util`.
 
 ## [4.1.0] 2025-06-03
 
