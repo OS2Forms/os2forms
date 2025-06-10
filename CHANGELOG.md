@@ -18,6 +18,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
   - Added support for `os2web_key` in Fasit handler.
     - Switched from saving settings in key value store to config, i.e
       the module needs to be reconfigured.
+- [PR-179](https://github.com/OS2Forms/os2forms/pull/179)
+  Remove unused and abandoned package `webmozart/path-util`.
 
 ## [4.1.0] 2025-06-03
 
