@@ -1,0 +1,9 @@
+name: 'OS2Forms Digital Signature'
+type: module
+description: 'Provides digital signature functionality'
+package: 'OS2Forms'
+core_version_requirement: ^9 || ^10
+dependencies:
+  - 'webform:webform'
+
+configure: os2forms_digital_signature.settings

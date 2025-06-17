@@ -1,0 +1,5 @@
+os2forms_digital_signature.admin.settings:
+  title: OS2Forms digital signature
+  description: Configure the OS2Forms digital signature module
+  parent: system.admin_config_system
+  route_name: os2forms_digital_signature.settings
