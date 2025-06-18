@@ -58,7 +58,7 @@
         "itk-dev/serviceplatformen": "^1.5",
         "mglaman/composer-drupal-lenient": "^1.0",
         "os2web/os2web_audit": "^1.0",
-        "os2web/os2web_datalookup": "dev-feature/os2web_key as 2.1.0",
+        "os2web/os2web_datalookup": "^3.0",
         "os2web/os2web_key": "^1.0",
         "os2web/os2web_nemlogin": "^1.0",
         "os2web/os2web_simplesaml": "dev-master",
@@ -79,10 +79,6 @@
         "wsdltophp/packagegenerator": "^4.0"
     },
     "repositories": {
-        "os2web/os2web_datalookup": {
-            "type": "vcs",
-            "url": "https://github.com/itk-dev/os2web_datalookup"
-        },
         "drupal": {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
