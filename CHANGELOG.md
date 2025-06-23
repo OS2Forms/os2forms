@@ -15,6 +15,9 @@ before starting to add changes. Use example [placed in the end of the page](#exa
   Remove unused and abandoned package `webmozart/path-util`.
 - [PR-167](https://github.com/OS2Forms/os2forms/pull/167)
   Adding os2forms_digital_signature module
+- [PR-184](https://github.com/OS2Forms/os2forms/pull/184)
+  - Patches `coc_forms_auto_export` to ensure settings can be saved upon initial
+    attempt, cf. [Unable to save initial settings due to unfocusable form control](https://www.drupal.org/project/coc_forms_auto_export/issues/3531004)
 
 ## [4.1.0] 2025-06-03
 
