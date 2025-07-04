@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- Avoid double-saving submissions when handling name and address protection.
+
 ## [4.1.0] 2025-06-03
 
 - [PR-176](https://github.com/OS2Forms/os2forms/pull/176)

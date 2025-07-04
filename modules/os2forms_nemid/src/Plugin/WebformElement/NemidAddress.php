@@ -47,12 +47,14 @@ class NemidAddress extends ServiceplatformenCprElementBase implements NemidEleme
     // Only manipulate element on submission create form.
     if (!$webformSubmission->isCompleted()) {
       if ($cprLookupResult && $cprLookupResult->isNameAddressProtected()) {
-        // TODO: What is this used for?
+        // @todo What is this used for?
         $element['#info_message'] = 'adresse beskyttelse';
         NestedArray::setValue($form['elements'], $element['#webform_parents'], $element);
 
-        // It is important that the 'os2forms_nemid_submission_set_address_protected' submit action is executed before the 'save' action.
-        // Otherwise, submissions are both created and completed, resulting in unexpected behavior, e.g., handlers being run twice.
+        // It is important the 'os2forms_nemid_submission_set_address_protected'
+        // submit action is executed before the 'save' action. Otherwise,
+        // submissions are both created and completed, resulting in unexpected
+        // behavior, e.g., handlers being run twice.
         if (isset($form['actions']['submit']['#submit']) && is_array($form['actions']['submit']['#submit'])) {
           array_unshift($form['actions']['submit']['#submit'], 'os2forms_nemid_submission_set_address_protected');
         }
