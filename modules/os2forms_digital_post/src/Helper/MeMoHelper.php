@@ -74,7 +74,7 @@ class MeMoHelper extends AbstractMessageHelper {
         (new File())
           ->setEncodingFormat($document->mimeType)
           ->setLanguage($document->language)
-          ->setFilename($document->filename)
+          ->setFilename(SF1601::sanitizeFilename($document->filename))
           ->setContent($document->content),
       ]);
 
