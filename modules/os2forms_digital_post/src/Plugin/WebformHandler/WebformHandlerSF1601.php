@@ -2,6 +2,7 @@
 
 namespace Drupal\os2forms_digital_post\Plugin\WebformHandler;
 
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\os2forms_digital_post\Helper\WebformHelperSF1601;
 use Drupal\webform\Plugin\WebformHandlerBase;
@@ -270,9 +271,30 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
             self::MEMO_ACTIONS . '][actions][' . $index . '][url',
             $this->t('Url for action %action is required.', [
               '%action' => $this->getTranslatedActionName($action['action']),
-              '%url' => $action['url'] ?? '',
             ])
           );
+        }
+        else {
+          $url = $action['url'];
+          // URL must be absolute and use https (cf. https://digitaliser.dk/digital-post/nyhedsarkiv/2024/nov/oeget-validering-i-digital-post)
+          if (!UrlHelper::isValid($url, absolute: TRUE)) {
+            $formState->setErrorByName(
+              self::MEMO_ACTIONS . '][actions][' . $index . '][url',
+              $this->t('Url <code>@url</code> for action %action must be absolute, i.e. start with <code>https://</code>.', [
+                '@url' => $url,
+                '%action' => $this->getTranslatedActionName($action['action']),
+              ])
+            );
+          }
+          elseif ('https' !== parse_url($url, PHP_URL_SCHEME)) {
+            $formState->setErrorByName(
+              self::MEMO_ACTIONS . '][actions][' . $index . '][url',
+              $this->t('Url <code>@url</code> for action %action must use the <code>https</code> scheme, i.e. start with <code>https://</code>.', [
+                '@url' => $url,
+                '%action' => $this->getTranslatedActionName($action['action']),
+              ])
+                      );
+          }
         }
         if (isset($definedActions[$action['action']])) {
           $formState->setErrorByName(
