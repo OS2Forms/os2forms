@@ -2,8 +2,8 @@
 
 namespace Drupal\os2forms_digital_post\Plugin\WebformHandler;
 
-use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\os2forms_digital_post\Helper\MeMoHelper;
 use Drupal\os2forms_digital_post\Helper\WebformHelperSF1601;
 use Drupal\webform\Plugin\WebformHandlerBase;
 use Drupal\webform\WebformSubmissionInterface;
@@ -137,23 +137,18 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
       '#description' => $this->t('Remove an action by clearing %action and saving.', ['%action' => (string) $this->t('Action')]),
     ];
 
+    $form[self::MEMO_ACTIONS]['message'] = [
+      '#markup' => $this->t('<strong>Important</strong>: All action URLs must be absolute and secure, i.e. start with <code>https://</code>.'),
+    ];
+
     $form[self::MEMO_ACTIONS]['actions'] = [
       '#type' => 'table',
     ];
 
-    $actionOptions = [
-      // @todo Handle SF1601::ACTION_AFTALE.
-      SF1601::ACTION_BEKRAEFT => $this->getTranslatedActionName(SF1601::ACTION_BEKRAEFT),
-      SF1601::ACTION_BETALING => $this->getTranslatedActionName(SF1601::ACTION_BETALING),
-      SF1601::ACTION_FORBEREDELSE => $this->getTranslatedActionName(SF1601::ACTION_FORBEREDELSE),
-      SF1601::ACTION_INFORMATION => $this->getTranslatedActionName(SF1601::ACTION_INFORMATION),
-      SF1601::ACTION_SELVBETJENING => $this->getTranslatedActionName(SF1601::ACTION_SELVBETJENING),
-      SF1601::ACTION_TILMELDING => $this->getTranslatedActionName(SF1601::ACTION_TILMELDING),
-      SF1601::ACTION_UNDERSKRIV => $this->getTranslatedActionName(SF1601::ACTION_UNDERSKRIV),
-    ];
+    $actionOptions = MeMoHelper::getTranslatedActionNames();
     $actions = $this->configuration[self::MEMO_ACTIONS]['actions'] ?? [];
     for ($i = 0; $i <= count($actions); $i++) {
-      $action = $actions[$i];
+      $action = $actions[$i] ?? [];
       $form[self::MEMO_ACTIONS]['actions'][$i]['action'] = [
         '#type' => 'select',
         '#title' => $this->t('Action'),
@@ -276,31 +271,24 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
         }
         else {
           $url = $action['url'];
-          // URL must be absolute and use https (cf. https://digitaliser.dk/digital-post/nyhedsarkiv/2024/nov/oeget-validering-i-digital-post)
-          if (!UrlHelper::isValid($url, absolute: TRUE)) {
-            $formState->setErrorByName(
-              self::MEMO_ACTIONS . '][actions][' . $index . '][url',
-              $this->t('Url <code>@url</code> for action %action must be absolute, i.e. start with <code>https://</code>.', [
-                '@url' => $url,
-                '%action' => $this->getTranslatedActionName($action['action']),
-              ])
-            );
+          // Add warning if URL contains tokens.
+          if (preg_match('/\[[a-z_:]+/', $url)) {
+            $message = $this->t('Make sure that the tokens in the URL <code>@url</code> for action %action expands to an absolute URL, i.e. something starting with <code>https://</code>.', [
+              '@url' => $url,
+              '%action' => MeMoHelper::getTranslatedActionName($action['action']),
+            ]);
+            $this->messenger()->addWarning($message);
+            continue;
           }
-          elseif ('https' !== parse_url($url, PHP_URL_SCHEME)) {
-            $formState->setErrorByName(
-              self::MEMO_ACTIONS . '][actions][' . $index . '][url',
-              $this->t('Url <code>@url</code> for action %action must use the <code>https</code> scheme, i.e. start with <code>https://</code>.', [
-                '@url' => $url,
-                '%action' => $this->getTranslatedActionName($action['action']),
-              ])
-                      );
+          if ($message = MeMoHelper::validateActionUrl($url, $action)) {
+            $formState->setErrorByName(self::MEMO_ACTIONS . '][actions][' . $index . '][url', $message);
           }
         }
         if (isset($definedActions[$action['action']])) {
           $formState->setErrorByName(
             self::MEMO_ACTIONS . '][actions][' . $index . '][action',
             $this->t('Action %action already defined.', [
-              '%action' => $this->getTranslatedActionName($action['action']),
+              '%action' => MeMoHelper::getTranslatedActionName($action['action']),
             ])
           );
         }
@@ -357,35 +345,6 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
    */
   public function postPurge(array $webformSubmissions) {
     $this->helper->deleteMessages($webformSubmissions);
-  }
-
-  /**
-   * Translated action names.
-   *
-   * @var array|null
-   *
-   * @phpstan-var array<string, string>
-   */
-  private ?array $translatedActionNames = NULL;
-
-  /**
-   * Get translated action name.
-   */
-  private function getTranslatedActionName(string $action): string {
-    if (NULL === $this->translatedActionNames) {
-      $this->translatedActionNames = [
-        SF1601::ACTION_AFTALE => (string) $this->t('Aftale', [], ['context' => 'memo action']),
-        SF1601::ACTION_BEKRAEFT => (string) $this->t('Bekræft', [], ['context' => 'memo action']),
-        SF1601::ACTION_BETALING => (string) $this->t('Betaling', [], ['context' => 'memo action']),
-        SF1601::ACTION_FORBEREDELSE => (string) $this->t('Forberedelse', [], ['context' => 'memo action']),
-        SF1601::ACTION_INFORMATION => (string) $this->t('Information', [], ['context' => 'memo action']),
-        SF1601::ACTION_SELVBETJENING => (string) $this->t('Selvbetjening', [], ['context' => 'memo action']),
-        SF1601::ACTION_TILMELDING => (string) $this->t('Tilmelding', [], ['context' => 'memo action']),
-        SF1601::ACTION_UNDERSKRIV => (string) $this->t('Underskriv', [], ['context' => 'memo action']),
-      ];
-    }
-
-    return $this->translatedActionNames[$action] ?? $action;
   }
 
 }

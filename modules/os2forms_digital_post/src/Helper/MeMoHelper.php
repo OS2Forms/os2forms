@@ -14,6 +14,8 @@ use DigitalPost\MeMo\MessageBody;
 use DigitalPost\MeMo\MessageHeader;
 use DigitalPost\MeMo\Recipient;
 use DigitalPost\MeMo\Sender;
+use Drupal\Component\Utility\UrlHelper;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\os2forms_digital_post\Model\Document;
 use Drupal\os2forms_digital_post\Plugin\WebformHandler\WebformHandlerSF1601;
 use Drupal\os2web_datalookup\LookupResult\CompanyLookupResult;
@@ -175,6 +177,9 @@ class MeMoHelper extends AbstractMessageHelper {
     }
     elseif ($options['url']) {
       $url = $this->replaceTokens($options['url'], $submission);
+      if ($message = self::validateActionUrl($url, $options)) {
+        throw new \RuntimeException((string) $message);
+      }
       $action->setEntryPoint(
         (new EntryPoint())
           ->setUrl($url)
@@ -182,6 +187,69 @@ class MeMoHelper extends AbstractMessageHelper {
     }
 
     return $action;
+  }
+
+  /**
+   * Validate an action URL.
+   *
+   * @param string $url
+   *   The URL.
+   * @param array $options
+   *   The options.
+   *
+   * @return \Drupal\Core\StringTranslation\TranslatableMarkup|null
+   *   A message if the URL is not valid for an action.
+   */
+  public static function validateActionUrl(string $url, array $options): ?TranslatableMarkup {
+    // URL must be absolute and use https (cf. https://digitaliser.dk/digital-post/nyhedsarkiv/2024/nov/oeget-validering-i-digital-post)
+    if (!UrlHelper::isValid($url, absolute: TRUE)) {
+      return new TranslatableMarkup('URL <code>@url</code> for action %action must be absolute, i.e. start with <code>https://</code>.', [
+        '@url' => $url,
+        '%action' => self::getTranslatedActionName($options['action']),
+      ]);
+    }
+    elseif ('https' !== parse_url($url, PHP_URL_SCHEME)) {
+      return new TranslatableMarkup('URL <code>@url</code> for action %action must use the <code>https</code> scheme, i.e. start with <code>https://</code>.', [
+        '@url' => $url,
+        '%action' => self::getTranslatedActionName($options['action']),
+      ]);
+    }
+  }
+
+  /**
+   * Translated action names.
+   *
+   * @var array|null
+   *
+   * @phpstan-var array<string, string>
+   */
+  private static ?array $translatedActionNames = NULL;
+
+  /**
+   * Get translated action names.
+   */
+  public static function getTranslatedActionNames(): array {
+    if (NULL === self::$translatedActionNames) {
+      self::$translatedActionNames = [
+        SF1601::ACTION_AFTALE => (string) new TranslatableMarkup('Aftale', [], ['context' => 'memo action']),
+        SF1601::ACTION_BEKRAEFT => (string) new TranslatableMarkup('Bekræft', [], ['context' => 'memo action']),
+        SF1601::ACTION_BETALING => (string) new TranslatableMarkup('Betaling', [], ['context' => 'memo action']),
+        SF1601::ACTION_FORBEREDELSE => (string) new TranslatableMarkup('Forberedelse', [], ['context' => 'memo action']),
+        SF1601::ACTION_INFORMATION => (string) new TranslatableMarkup('Information', [], ['context' => 'memo action']),
+        SF1601::ACTION_SELVBETJENING => (string) new TranslatableMarkup('Selvbetjening', [], ['context' => 'memo action']),
+        SF1601::ACTION_TILMELDING => (string) new TranslatableMarkup('Tilmelding', [], ['context' => 'memo action']),
+        SF1601::ACTION_UNDERSKRIV => (string) new TranslatableMarkup('Underskriv', [], ['context' => 'memo action']),
+      ];
+    }
+
+    return self::$translatedActionNames;
+  }
+
+  /**
+   * Get translated action name.
+   */
+  public static function getTranslatedActionName(string $action): string {
+    return self::$translatedActionNames[$action] ?? $action;
   }
 
 }
