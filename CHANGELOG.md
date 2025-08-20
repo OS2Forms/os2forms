@@ -11,6 +11,9 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [PR-191](https://github.com/OS2Forms/os2forms/pull/191)
+  Re-throws exception to ensure failed status during Maestro notification job.
+
 ## [4.1.0] 2025-06-03
 
 - [PR-176](https://github.com/OS2Forms/os2forms/pull/176)
