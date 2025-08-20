@@ -55,7 +55,7 @@
         "fig/http-message-util": "^1.1",
         "http-interop/http-factory-guzzle": "^1.0.0",
         "itk-dev/beskedfordeler-drupal": "^1.0",
-        "itk-dev/serviceplatformen": "dev-feature/5189-memo-1.2 as 1.7.0",
+        "itk-dev/serviceplatformen": "^1.7.1",
         "mglaman/composer-drupal-lenient": "^1.0",
         "os2web/os2web_audit": "^1.0",
         "os2web/os2web_datalookup": "^2.0",
@@ -79,10 +79,6 @@
         "wsdltophp/packagegenerator": "^4.0"
     },
     "repositories": {
-        "itk-dev/serviceplatformen": {
-            "type": "vcs",
-            "url": "https://github.com/itk-dev/serviceplatformen"
-        },
         "drupal": {
             "type": "composer",
             "url": "https://packages.drupal.org/8"

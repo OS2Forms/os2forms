@@ -133,17 +133,16 @@ class DigitalPostTestCommands extends DrushCommands {
     $io->section('Digital post');
     $io->definitionList(
       ['Type' => $type],
-      ['Document' => sprintf('%s (%s) (sanitized: %s)', $document->filename, $document->mimeType, SF1601::sanitizeFilename($document->filename))],
       ['Subject' => $subject],
       ['Message' => $message],
-      ['MeMe version' => $meMoVersion],
+      ['Document' => sprintf('%s (%s)', $document->filename, $document->mimeType)],
+      ['MeMo version' => $meMoVersion ?? '–'],
     );
 
     $actions = array_map($this->buildAction(...), $options['action']);
 
     foreach ($recipients as $recipient) {
       try {
-        $io->writeln(sprintf('Recipient: %s', $recipient));
         $recipientLookupResult = $this->digitalPostHelper->lookupRecipient($recipient);
 
         $meMoMessage = $this->digitalPostHelper->getMeMoHelper()->buildMessage($recipientLookupResult, $senderLabel,
@@ -158,6 +157,12 @@ class DigitalPostTestCommands extends DrushCommands {
           $type,
           $meMoMessage,
           $forsendelse
+        );
+
+        $io->definitionList(
+          ['Recipient' => $recipient],
+          ['Document' => sprintf('%s (%s)', $document->filename, $document->mimeType)],
+          ['MeMo version' => $meMoMessage->getMemoVersion()],
         );
 
         $io->success(sprintf('Digital post sent to %s (MeMo %s)', $recipient, $meMoMessage->getMemoVersion()));
