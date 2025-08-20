@@ -199,6 +199,8 @@ class MeMoHelper extends AbstractMessageHelper {
    *
    * @return \Drupal\Core\StringTranslation\TranslatableMarkup|null
    *   A message if the URL is not valid for an action.
+   *
+   * @phpstan-param array<string, mixed> $options
    */
   public static function validateActionUrl(string $url, array $options): ?TranslatableMarkup {
     // URL must be absolute and use https (cf. https://digitaliser.dk/digital-post/nyhedsarkiv/2024/nov/oeget-validering-i-digital-post)
@@ -214,6 +216,8 @@ class MeMoHelper extends AbstractMessageHelper {
         '%action' => self::getTranslatedActionName($options['action']),
       ]);
     }
+
+    return NULL;
   }
 
   /**
@@ -227,6 +231,9 @@ class MeMoHelper extends AbstractMessageHelper {
 
   /**
    * Get translated action names.
+   *
+   * @return array<string, string>
+   *   The translated action names.
    */
   public static function getTranslatedActionNames(): array {
     if (NULL === self::$translatedActionNames) {

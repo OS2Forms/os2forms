@@ -265,7 +265,7 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
           $formState->setErrorByName(
             self::MEMO_ACTIONS . '][actions][' . $index . '][url',
             $this->t('Url for action %action is required.', [
-              '%action' => $this->getTranslatedActionName($action['action']),
+              '%action' => MeMoHelper::getTranslatedActionName($action['action']),
             ])
           );
         }
