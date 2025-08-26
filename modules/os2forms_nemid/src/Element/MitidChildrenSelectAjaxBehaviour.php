@@ -45,6 +45,10 @@ class MitidChildrenSelectAjaxBehaviour {
     if ($cprPlugin->isReady()) {
       $cprLookupResult = $cprPlugin->lookup($childCpr);
 
+      if (!$cprLookupResult->isSuccessful()) {
+        return $response;
+      }
+
       /** @var \Drupal\webform\WebformSubmissionForm $webformSubmissionForm */
       $webformSubmissionForm = $form_state->getFormObject();
       /** @var \Drupal\webform\WebformSubmissionInterface $webformSubmission */
