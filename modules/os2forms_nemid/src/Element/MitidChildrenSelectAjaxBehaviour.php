@@ -52,6 +52,10 @@ class MitidChildrenSelectAjaxBehaviour {
       $webform = $webformSubmission->getWebform();
       $elementsFlattened = $webform->getElementsInitializedAndFlattened();
 
+      if (!$cprLookupResult->isSuccessful()) {
+        return $response;
+      }
+
       foreach ($elementsFlattened as $flattenedElement) {
         if (isset($flattenedElement['#type'])) {
           $parents = $flattenedElement['#webform_parents'];
