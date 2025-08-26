@@ -10,6 +10,7 @@ before starting to add changes.
 
 ## [Unreleased]
 
+- Added condition tp maestro notification submission handler
 - Remove dependency on webform_migrate module
 - Implemented `hook_maestro_zero_user_notification` and added *Maestro
   notification* handler for sending notifications via email or digital post.
