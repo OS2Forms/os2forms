@@ -11,7 +11,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
-
+- Added condition tp maestro notification submission handler
 
 ## [4.1.0] 2025-06-03
 
