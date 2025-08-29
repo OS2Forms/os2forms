@@ -147,6 +147,8 @@ class DigitalPostTestCommands extends DrushCommands {
 
         $meMoMessage = $this->digitalPostHelper->getMeMoHelper()->buildMessage($recipientLookupResult, $senderLabel,
           $messageLabel, $document, $actions);
+        // If a valid memo-version option has been provided, set that version on
+        // the message.
         if ($meMoVersion) {
           $meMoMessage->setMemoVersion($meMoVersion);
         }
