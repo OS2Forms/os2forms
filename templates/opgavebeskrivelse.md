@@ -9,7 +9,7 @@ assignees: ''
 
 **Opgavebeskrivelse**: {venligst henvis til eventuelle danske ord, der bruges til at definere aktiviteten i omfanget.}
 
-**Møde eller møderækkke**: {en eventuel henvisning til mødet, hvor opgaven blev aftalt, inklusive dato og tidspunkt.}
+**Møde eller møderække**: {en eventuel henvisning til mødet, hvor opgaven blev aftalt, inklusive dato og tidspunkt.}
 
 **Opdragsgiver**: {henvis til beslutningsorganet, der er enige om opgaven.}
 
