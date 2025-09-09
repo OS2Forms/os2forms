@@ -27,6 +27,7 @@ class AttachmentElement extends WebformAttachmentBase {
       'view_mode' => 'html',
       'template' => '',
       'export_type' => '',
+      'digital_signature' => '',
       'exclude_empty' => '',
       'exclude_empty_checkbox' => '',
       'excluded_elements' => '',
@@ -88,6 +89,11 @@ class AttachmentElement extends WebformAttachmentBase {
         'html' => $this->t('HTML'),
       ],
     ];
+    $form['attachment']['digital_signature'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Digital signature'),
+    ];
+
     // Set #access so that help is always visible.
     WebformElementHelper::setPropertyRecursive($form['attachment']['help'], '#access', TRUE);
 

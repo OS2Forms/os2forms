@@ -11,7 +11,19 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
-- Added condition to maestro notification submission handler
+- [PR-215](https://github.com/OS2Forms/os2forms/pull/215)
+  Added condition to maestro notification submission handler
+- [PR-101](https://github.com/OS2Forms/os2forms/pull/101)
+  - Added support for `os2web_key` in Digital post
+    - Switched from saving settings in key value store to config, i.e
+      the module needs to be reconfigured.
+  - Added support for `os2web_key` in Fasit handler.
+    - Switched from saving settings in key value store to config, i.e
+      the module needs to be reconfigured.
+- [PR-179](https://github.com/OS2Forms/os2forms/pull/179)
+  Remove unused and abandoned package `webmozart/path-util`.
+- [PR-167](https://github.com/OS2Forms/os2forms/pull/167)
+  Adding os2forms_digital_signature module
 
 ## [4.1.0] 2025-06-03
 

@@ -7,6 +7,7 @@ dependencies:
   - 'beskedfordeler:beskedfordeler'
   - 'drupal:advancedqueue'
   - 'os2web_datalookup:os2web_datalookup'
+  - 'os2web_key:os2web_key'
   - 'webform:webform'
   - 'webform:webform_submission_log'
   - 'os2web:os2web_audit'
