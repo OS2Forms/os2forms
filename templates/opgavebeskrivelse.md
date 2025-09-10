@@ -1,6 +1,6 @@
 ---
 name: Opgavebeskrivelse
-about: Standard skabelon for definition af opgaver
+description: Standard skabelon for definition af opgaver
 title: ''
 labels: ''
 assignees: ''
