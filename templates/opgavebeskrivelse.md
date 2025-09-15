@@ -31,5 +31,5 @@ assignees: ''
 ## Accept kriterier 
 {Beskriv med enkle ord, hvornår opgaven betragtes som fuldført, og angiv eventuelle formelle godkendelseskrav.}
 
-## Risici & konsekvenser, hvis opgaven ikke udføres.
-{Beskriv med enkle ord, hvilke risice og konsekvenser det har, hvis opgaven ikke udføres.}
+## Risici & konsekvenser, hvis opgaven ikke udføres
+{Beskriv med enkle ord, hvilke risici og konsekvenser det har, hvis opgaven ikke udføres.}
