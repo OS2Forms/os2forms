@@ -60,7 +60,6 @@ class CustomWebformSubmissionListBuilder extends WebformSubmissionListBuilder {
     return $build;
   }
 
-
   /**
    * Add permissions check on operations.
    *
@@ -99,3 +98,4 @@ class CustomWebformSubmissionListBuilder extends WebformSubmissionListBuilder {
   }
 
 }
+
