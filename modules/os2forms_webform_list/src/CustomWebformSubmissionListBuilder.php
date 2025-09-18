@@ -60,6 +60,13 @@ class CustomWebformSubmissionListBuilder extends WebformSubmissionListBuilder {
     return $build;
   }
 
+
+  /**
+   * Add permissions check on operations.
+   *
+   * @return array
+   *   A renderable array containing the entity list.
+   */
   public function getDefaultOperations(EntityInterface $entity): array {
     if ($this->currentUser->hasPermission('access webform submission list bulk operations and actions')) {
       return parent::getDefaultOperations($entity);
@@ -69,7 +76,7 @@ class CustomWebformSubmissionListBuilder extends WebformSubmissionListBuilder {
       $operations = [];
 
       if ($entity->access('view')) {
-        $operations[ 'view' ] = [
+        $operations['view'] = [
           'title' => $this->t('View'),
           'weight' => 20,
           'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform.user.submission'),
@@ -80,7 +87,7 @@ class CustomWebformSubmissionListBuilder extends WebformSubmissionListBuilder {
         && $this->currentUser->hasPermission('access webform submission log')
         && $webform->hasSubmissionLog()
         && $this->moduleHandler->moduleExists('webform_submission_log')) {
-        $operations[ 'log' ] = [
+        $operations['log'] = [
           'title' => $this->t('Log'),
           'weight' => 100,
           'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.log'),
@@ -90,4 +97,5 @@ class CustomWebformSubmissionListBuilder extends WebformSubmissionListBuilder {
       return $operations;
     }
   }
+
 }

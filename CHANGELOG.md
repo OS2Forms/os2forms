@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [PR-224](https://github.com/OS2Forms/os2forms/pull/224)
+  - Add permission for accessing actions and bulk operations in webform submission list
 - [PR-101](https://github.com/OS2Forms/os2forms/pull/101)
   - Added support for `os2web_key` in Digital post
     - Switched from saving settings in key value store to config, i.e
