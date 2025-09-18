@@ -98,4 +98,3 @@ class CustomWebformSubmissionListBuilder extends WebformSubmissionListBuilder {
   }
 
 }
-
