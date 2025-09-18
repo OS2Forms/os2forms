@@ -14,5 +14,6 @@ function os2forms_webform_list_entity_type_alter(array &$entity_types) {
   /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entity_types */
   // Define a new list builder classes.
   $entity_types['webform']->setListBuilderClass('Drupal\os2forms_webform_list\CustomWebformEntityListBuilder');
+  $entity_types['webform_submission']->setListBuilderClass('Drupal\os2forms_webform_list\CustomWebformSubmissionListBuilder');
   $entity_types['maestro_template']->setListBuilderClass('Drupal\os2forms_webform_list\CustomMaestroTemplateEntityListBuilder');
 }
