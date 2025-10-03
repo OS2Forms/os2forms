@@ -114,11 +114,11 @@
         },
         "enable-patching": true,
         "patches": {
-            "drupal/core": {
-                "Allow conditionals based on computed twig (https://www.drupal.org/project/webform/issues/3481569)": "https://www.drupal.org/files/issues/2024-11-05/revert-core-states.patch"
-            },
             "drupal/coc_forms_auto_export": {
                 "3256951: - Unable to receive attachments in emails sent": "https://git.drupalcode.org/project/coc_forms_auto_export/-/merge_requests/11.diff"
+            },
+            "drupal/core": {
+                "Allow conditionals based on computed twig (https://www.drupal.org/project/webform/issues/3481569)": "https://www.drupal.org/files/issues/2024-11-05/revert-core-states.patch"
             },
             "drupal/entity_print": {
                 "2733781 - Add Export to Word Support": "https://www.drupal.org/files/issues/2019-11-22/2733781-47.patch"

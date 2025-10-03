@@ -11,6 +11,9 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [PR-228](https://github.com/OS2Forms/os2forms/pull/228)
+  Added Drupal Core patch ensuring conditionals based upon computed twig
+  works as intended.
 - [PR-101](https://github.com/OS2Forms/os2forms/pull/101)
   - Added support for `os2web_key` in Digital post
     - Switched from saving settings in key value store to config, i.e
