@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [PR-215](https://github.com/OS2Forms/os2forms/pull/215)
+  Added condition to maestro notification submission handler
 - [PR-101](https://github.com/OS2Forms/os2forms/pull/101)
   - Added support for `os2web_key` in Digital post
     - Switched from saving settings in key value store to config, i.e
@@ -24,6 +26,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
   Adding os2forms_digital_signature module
 - [PR-222](https://github.com/OS2Forms/os2forms/pull/222)
   Correctly sets sender label on Maestro digital post notifications.
+- [OS-199] Remove modules that are not used and not covered by central maintenance from OS2forms
 
 ## [4.1.0] 2025-06-03
 
