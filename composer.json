@@ -116,6 +116,9 @@
                 "3256951: - Unable to receive attachments in emails sent": "https://git.drupalcode.org/project/coc_forms_auto_export/-/merge_requests/11.diff",
                 "3531004: Unable to save initial settings due to unfocusable form control": "https://www.drupal.org/files/issues/2025-06-19/text_area_with_text_edit_always_fails_reqired_set_via_states.patch"
             },
+            "drupal/core": {
+                "Allow conditionals based on computed twig (https://www.drupal.org/project/webform/issues/3481569)": "https://www.drupal.org/files/issues/2024-11-05/revert-core-states.patch"
+            },
             "drupal/entity_print": {
                 "2733781 - Add Export to Word Support": "https://www.drupal.org/files/issues/2019-11-22/2733781-47.patch"
             },
