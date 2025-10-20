@@ -399,7 +399,10 @@ class MaestroHelper implements LoggerInterface {
       $senderLabel = $subject;
       $messageLabel = $subject;
 
-      $recipientLookupResult = $this->digitalPostHelper->lookupRecipient($recipient);
+      // Remove all non-digits from recipient identifier.
+      $recipientIdentifier = preg_replace('/[^\d]+/', '', $recipient);
+
+      $recipientLookupResult = $this->digitalPostHelper->lookupRecipient($recipientIdentifier);
       $actions = [
         (new Action())
           ->setActionCode(SF1601::ACTION_SELVBETJENING)
