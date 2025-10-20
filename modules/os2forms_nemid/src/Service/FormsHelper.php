@@ -268,7 +268,7 @@ class FormsHelper {
   }
 
   /**
-   * Performs lookup of the company data..
+   * Performs lookup of the company data.
    *
    * Uses CVR or P-number based services depending on the available values.
    *

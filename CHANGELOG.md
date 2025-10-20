@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [PR-192](https://github.com/OS2Forms/os2forms/pull/192)
+  Fix bug in MitidChildrenSelectAjaxBehaviour.php
 - [PR-228](https://github.com/OS2Forms/os2forms/pull/228)
   Added Drupal Core patch ensuring conditionals based upon computed twig
   works as intended.
