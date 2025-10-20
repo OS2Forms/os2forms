@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Install hooks for os2forms_fasit.
+ */
+
+/**
+ * Install Key module.
+ */
+function os2forms_fasit_update_9001(): void {
+  \Drupal::service('module_installer')->install([
+    'key',
+  ], TRUE);
+}

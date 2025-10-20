@@ -11,6 +11,13 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [PR-101](https://github.com/OS2Forms/os2forms/pull/101)
+  - Added support for `os2web_key` in Digital post
+    - Switched from saving settings in key value store to config, i.e
+      the module needs to be reconfigured.
+  - Added support for `os2web_key` in Fasit handler.
+    - Switched from saving settings in key value store to config, i.e
+      the module needs to be reconfigured.
 - [PR-179](https://github.com/OS2Forms/os2forms/pull/179)
   Remove unused and abandoned package `webmozart/path-util`.
 - [PR-167](https://github.com/OS2Forms/os2forms/pull/167)
@@ -18,6 +25,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - [PR-184](https://github.com/OS2Forms/os2forms/pull/184)
   - Patches `coc_forms_auto_export` to ensure settings can be saved upon initial
     attempt, cf. [Unable to save initial settings due to unfocusable form control](https://www.drupal.org/project/coc_forms_auto_export/issues/3531004)
+- [OS-199] Remove modules that are not used and not covered by central maintenance from OS2forms
 
 ## [4.1.0] 2025-06-03
 

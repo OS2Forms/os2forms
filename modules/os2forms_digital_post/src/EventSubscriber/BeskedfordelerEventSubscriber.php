@@ -8,6 +8,7 @@ use Drupal\beskedfordeler\Helper\MessageHelper;
 use Drupal\os2forms_digital_post\Helper\BeskedfordelerHelper;
 use Drupal\os2forms_digital_post\Helper\WebformHelperSF1601;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Event subscriber for PostStatusBeskedModtagEvent.
@@ -23,6 +24,7 @@ final class BeskedfordelerEventSubscriber extends AbstractBeskedfordelerEventSub
     private readonly BeskedfordelerHelper $beskedfordelerHelper,
     private readonly MessageHelper $messageHelper,
     private readonly WebformHelperSF1601 $webformHelper,
+    #[Autowire(service: 'logger.channel.os2forms_digital_post')]
     LoggerInterface $logger,
   ) {
     parent::__construct($logger);
