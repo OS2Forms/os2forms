@@ -239,6 +239,7 @@ class MaestroHelper implements LoggerInterface {
         || $handler->isDisabled()
         || $handler->isExcluded()
         || !$handler->isNotificationEnabled($notificationType)
+        || !$handler->checkConditions($submission)
         ) {
           continue;
         }
@@ -250,13 +251,14 @@ class MaestroHelper implements LoggerInterface {
           'subject' => $subject,
           'taskUrl' => $taskUrl,
           'actionLabel' => $actionLabel,
+          'senderLabel' => $senderLabel,
         ] = $this->renderNotification($submission, $handler->getHandlerId(), $notificationType, $templateTask, $maestroQueueID);
 
         if ('email' === $contentType) {
           $this->sendNotificationEmail($recipient, $subject, $content, $submission, $notificationType);
         }
         else {
-          $this->sendNotificationDigitalPost($recipient, $subject, $content, $taskUrl, $actionLabel, $submission, $notificationType);
+          $this->sendNotificationDigitalPost($recipient, $subject, $content, $taskUrl, $actionLabel, $submission, $notificationType, $senderLabel);
         }
       }
     }
@@ -368,7 +370,9 @@ class MaestroHelper implements LoggerInterface {
    * @param \Drupal\webform\WebformSubmissionInterface $submission
    *   The webform submission.
    * @param string $notificationType
-   *   The notification type (one of the NOTIFICATION_* constannts).
+   *   The notification type (one of the NOTIFICATION_* constants).
+   * @param string $senderLabel
+   *   The sender label.
    */
   private function sendNotificationDigitalPost(
     string $recipient,
@@ -378,6 +382,7 @@ class MaestroHelper implements LoggerInterface {
     string $actionLabel,
     WebformSubmissionInterface $submission,
     string $notificationType,
+    string $senderLabel,
   ): void {
     try {
       $document = new Document(
@@ -386,7 +391,6 @@ class MaestroHelper implements LoggerInterface {
         $subject . '.pdf'
       );
 
-      $senderLabel = $subject;
       $messageLabel = $subject;
 
       $recipientLookupResult = $this->digitalPostHelper->lookupRecipient($recipient);
@@ -436,13 +440,13 @@ class MaestroHelper implements LoggerInterface {
    * @param string $handlerId
    *   The handler ID.
    * @param string $notificationType
-   *   The notification type (one of the NOTIFICATION_* constannts).
+   *   The notification type (one of the NOTIFICATION_* constants).
    * @param array $templateTask
    *   The Maestro template task.
    * @param int $maestroQueueID
    *   The Maestro queue ID.
    * @param string|null $contentType
-   *   Optional content type. If not set the content type will be compoted based
+   *   Optional content type. If not set the content type will be computed based
    *   on the recipient.
    *
    * @return array
@@ -453,12 +457,19 @@ class MaestroHelper implements LoggerInterface {
    *   - subject
    *   - taskUrl (for digital post)
    *   - actionLabel (for digital post)
+   *   - senderLabel (for digital post)
    *
    * @see self::renderHtml()
    */
   public function renderNotification(WebformSubmissionInterface $submission, string $handlerId, string $notificationType, array $templateTask, int $maestroQueueID, ?string $contentType = NULL): array {
     $handler = $submission->getWebform()->getHandler($handlerId);
     $settings = $handler->getSettings();
+
+    $senderLabel = $settings[MaestroNotificationHandler::NOTIFICATION][MaestroNotificationHandler::SENDER_LABEL] ?? NULL;
+
+    if (NULL === $senderLabel) {
+      throw new RuntimeException(sprintf('Cannot get setting for Maestro notification: %s', MaestroNotificationHandler::SENDER_LABEL));
+    }
 
     $data = $submission->getData();
     $recipientElement = $settings[MaestroNotificationHandler::NOTIFICATION][MaestroNotificationHandler::RECIPIENT_ELEMENT] ?? NULL;
@@ -558,6 +569,7 @@ class MaestroHelper implements LoggerInterface {
         'subject' => $subject,
         'taskUrl' => $taskUrl,
         'actionLabel' => $actionLabel,
+        'senderLabel' => $senderLabel,
       ];
     }
 
