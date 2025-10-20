@@ -12,6 +12,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 ## [Unreleased]
 
 - Avoid double-saving submissions when handling name and address protection.
+- [PR-189](https://github.com/OS2Forms/os2forms/pull/189)
+  - Added support for MeMo 1.2 and added additional validation of MeMo actions.
 
 ## [4.1.0] 2025-06-03
 
