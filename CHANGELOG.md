@@ -27,6 +27,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
   Remove unused and abandoned package `webmozart/path-util`.
 - [PR-167](https://github.com/OS2Forms/os2forms/pull/167)
   Adding os2forms_digital_signature module
+- [PR-222](https://github.com/OS2Forms/os2forms/pull/222)
+  Correctly sets sender label on Maestro digital post notifications.
 - [OS-199] Remove modules that are not used and not covered by central maintenance from OS2forms
 
 ## [4.1.0] 2025-06-03
