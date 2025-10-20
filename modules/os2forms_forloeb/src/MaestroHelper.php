@@ -205,7 +205,14 @@ class MaestroHelper implements LoggerInterface {
 
     $submission = $this->webformSubmissionStorage->load($submissionID);
 
-    $this->sendNotification($notificationType, $submission, $templateTask, $maestroQueueID);
+    try {
+      $this->sendNotification($notificationType, $submission, $templateTask, $maestroQueueID);
+    }
+    catch (\Exception $e) {
+      // Logging is done by the sendNotification method.
+      // The job should be considered failed.
+      return JobResult::failure($e->getMessage());
+    }
 
     return JobResult::success();
   }
@@ -261,12 +268,15 @@ class MaestroHelper implements LoggerInterface {
       }
     }
     catch (\Exception $exception) {
+      // Log with context and rethrow exception.
       $this->error('Error sending notification: @message', $context + [
         '@message' => $exception->getMessage(),
         'handler_id' => 'os2forms_forloeb',
         'operation' => 'notification failed',
         'exception' => $exception,
       ]);
+
+      throw $exception;
     }
   }
 
@@ -389,7 +399,10 @@ class MaestroHelper implements LoggerInterface {
       $senderLabel = $subject;
       $messageLabel = $subject;
 
-      $recipientLookupResult = $this->digitalPostHelper->lookupRecipient($recipient);
+      // Remove all non-digits from recipient identifier.
+      $recipientIdentifier = preg_replace('/[^\d]+/', '', $recipient);
+
+      $recipientLookupResult = $this->digitalPostHelper->lookupRecipient($recipientIdentifier);
       $actions = [
         (new Action())
           ->setActionCode(SF1601::ACTION_SELVBETJENING)
