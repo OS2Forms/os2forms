@@ -13,6 +13,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 - [PR-202](https://github.com/OS2Forms/os2forms/pull/202)
   - Removed non-digits from recipient id in Maestro digital post notifications.
+- [PR-189](https://github.com/OS2Forms/os2forms/pull/189)
+  - Added support for MeMo 1.2 and added additional validation of MeMo actions.
 
 ## [4.1.0] 2025-06-03
 
