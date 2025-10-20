@@ -239,6 +239,7 @@ class MaestroHelper implements LoggerInterface {
         || $handler->isDisabled()
         || $handler->isExcluded()
         || !$handler->isNotificationEnabled($notificationType)
+        || !$handler->checkConditions($submission)
         ) {
           continue;
         }

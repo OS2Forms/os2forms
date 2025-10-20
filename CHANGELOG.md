@@ -14,6 +14,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - [PR-228](https://github.com/OS2Forms/os2forms/pull/228)
   Added Drupal Core patch ensuring conditionals based upon computed twig
   works as intended.
+- [PR-215](https://github.com/OS2Forms/os2forms/pull/215)
+  Added condition to maestro notification submission handler
 - [PR-101](https://github.com/OS2Forms/os2forms/pull/101)
   - Added support for `os2web_key` in Digital post
     - Switched from saving settings in key value store to config, i.e
@@ -25,6 +27,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
   Remove unused and abandoned package `webmozart/path-util`.
 - [PR-167](https://github.com/OS2Forms/os2forms/pull/167)
   Adding os2forms_digital_signature module
+- [OS-199] Remove modules that are not used and not covered by central maintenance from OS2forms
 
 ## [4.1.0] 2025-06-03
 
