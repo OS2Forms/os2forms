@@ -15,9 +15,9 @@ close: null
 uid: 1
 template: false
 archive: false
-id: os2forms_digital_post_example
-title: 'OS2Forms Digital post example'
-description: 'Simple example form with a digital post handler'
+id: os2forms_digital_post_example_2
+title: 'OS2Forms Digital post example with invalid handler URL'
+description: 'Simple example form with a digital post handler with invalid handler URL'
 category: Example
 elements: |-
   message:
@@ -240,10 +240,6 @@ handlers:
         actions:
           -
             action: INFORMATION
-            url: '[site:url]'
+            url: 'http://eksempel.dk'
             label: 'Se her!'
-          -
-            action: SELVBETJENING
-            url: 'https://eksempel.dk'
-            label: 'Eksempel'
 variants: {  }
