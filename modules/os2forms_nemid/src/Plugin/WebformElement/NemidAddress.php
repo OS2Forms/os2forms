@@ -52,7 +52,7 @@ class NemidAddress extends ServiceplatformenCprElementBase implements NemidEleme
         // It is important the 'os2forms_nemid_submission_set_address_protected'
         // submit action is executed before the 'save' action. Otherwise,
         // submissions are both created and completed, resulting in unexpected
-        // behavior, e.g., handlers being run twice.
+        // behavior, e.g. handlers being run twice.
         if (isset($form['actions']['submit']['#submit']) && is_array($form['actions']['submit']['#submit'])) {
           array_unshift($form['actions']['submit']['#submit'], 'os2forms_nemid_submission_set_address_protected');
         }
