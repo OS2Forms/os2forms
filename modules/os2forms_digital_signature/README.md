@@ -4,6 +4,8 @@
 
 This module provides functionality for adding digital signature to the webform PDF submissions.
 
+To use this module, you must also have a signature server set up (https://github.com/MitID-Digital-Signature). The signature server consists of two parts. A frontend module (https://github.com/MitID-Digital-Signature/os2forms_dig_sig_server/) and a backend component (https://github.com/MitID-Digital-Signature/Signing-Server/).
+
 ## How does it work
 
 ### Activating Digital Signature
