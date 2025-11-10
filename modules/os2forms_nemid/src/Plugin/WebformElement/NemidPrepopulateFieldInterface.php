@@ -14,7 +14,7 @@ interface NemidPrepopulateFieldInterface {
   /**
    * String representation of the prepopulate field key.
    *
-   * Is used to prepopulate the field from the corresponding plugin..
+   * Is used to prepopulate the field from the corresponding plugin.
    *
    * @param array $element
    *   The element to prepopulate value for.

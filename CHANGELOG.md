@@ -11,6 +11,13 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [PR-192](https://github.com/OS2Forms/os2forms/pull/192)
+  Fix bug in MitidChildrenSelectAjaxBehaviour.php
+- [PR-228](https://github.com/OS2Forms/os2forms/pull/228)
+  Added Drupal Core patch ensuring conditionals based upon computed twig
+  works as intended.
+- [PR-215](https://github.com/OS2Forms/os2forms/pull/215)
+  Added condition to maestro notification submission handler
 - [PR-101](https://github.com/OS2Forms/os2forms/pull/101)
   - Added support for `os2web_key` in Digital post
     - Switched from saving settings in key value store to config, i.e
@@ -24,6 +31,12 @@ before starting to add changes. Use example [placed in the end of the page](#exa
   Adding os2forms_digital_signature module
 - [PR-223](https://github.com/OS2Forms/os2forms/pull/223)
   Moved GitHub feature template to GitHub folder
+- [PR-184](https://github.com/OS2Forms/os2forms/pull/184)
+  - Patches `coc_forms_auto_export` to ensure settings can be saved upon initial
+    attempt, cf. [Unable to save initial settings due to unfocusable form control](https://www.drupal.org/project/coc_forms_auto_export/issues/3531004)
+- [PR-222](https://github.com/OS2Forms/os2forms/pull/222)
+  Correctly sets sender label on Maestro digital post notifications.
+- [OS-199] Remove modules that are not used and not covered by central maintenance from OS2forms
 
 ## [4.1.0] 2025-06-03
 
