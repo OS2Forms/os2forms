@@ -3,8 +3,10 @@
 namespace Drupal\os2forms_dawa\Plugin\os2web\DataLookup;
 
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\File\FileSystem;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\key\KeyRepositoryInterface;
 use Drupal\os2forms_dawa\Entity\DatafordelerMatrikula;
 use Drupal\os2web_audit\Service\Logger;
 use Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupBase;
@@ -30,20 +32,31 @@ class DatafordelerDataLookup extends DataLookupBase implements DatafordelerDataL
     $plugin_definition,
     protected ClientInterface $httpClient,
     Logger $auditLogger,
+    KeyRepositoryInterface $keyRepository,
+    FileSystem $fileSystem,
   ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $auditLogger);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $auditLogger, $keyRepository, $fileSystem);
   }
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    /** @var \Drupal\os2web_audit\Service\Logger $auditLogger */
+    $auditLogger = $container->get('os2web_audit.logger');
+    /** @var \Drupal\key\KeyRepositoryInterface $keyRepository */
+    $keyRepository = $container->get('key.repository');
+    /** @var \Drupal\Core\File\FileSystem $fileSystem */
+    $fileSystem = $container->get('file_system');
+
     return new static(
       $configuration,
       $plugin_id,
       $plugin_definition,
       $container->get('http_client'),
-      $container->get('os2web_audit.logger'),
+      $auditLogger,
+      $keyRepository,
+      $fileSystem,
     );
   }
 

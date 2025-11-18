@@ -28,7 +28,7 @@ use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 /**
  * Test commands for digital post.
  */
-class DigitalPostTestCommands extends DrushCommands {
+final class DigitalPostTestCommands extends DrushCommands {
   use AutowireTrait;
 
   /**
@@ -196,7 +196,9 @@ class DigitalPostTestCommands extends DrushCommands {
       Yaml::encode([
         'testMode' => $this->digitalPostSettings->getTestMode(),
         'sender' => $this->digitalPostSettings->getSender(),
-        'certificate' => $this->digitalPostSettings->getCertificate(),
+        'certificate' => [
+          'key' => $this->digitalPostSettings->getKey(),
+        ],
         'processing' => $this->digitalPostSettings->getProcessing(),
       ]),
       '',

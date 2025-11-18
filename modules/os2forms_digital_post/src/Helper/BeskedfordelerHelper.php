@@ -9,6 +9,7 @@ use Drupal\os2forms_digital_post\Model\Message;
 use Drupal\webform\WebformSubmissionInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Beskedfordeler helper.
@@ -24,6 +25,7 @@ class BeskedfordelerHelper {
   public function __construct(
     private readonly Connection $database,
     private readonly MeMoHelper $meMoHelper,
+    #[Autowire(service: 'logger.channel.os2forms_digital_post')]
     LoggerInterface $logger,
   ) {
     $this->setLogger($logger);

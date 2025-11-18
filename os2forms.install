@@ -228,3 +228,12 @@ function _os2form_install_init_area_terms() {
 function os2forms_update_103001() {
   \Drupal::service('module_installer')->install(['os2web_audit']);
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable os2web_key module.
+ */
+function os2forms_update_103002() {
+  \Drupal::service('module_installer')->install(['os2web_key']);
+}
