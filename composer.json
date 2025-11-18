@@ -53,7 +53,7 @@
         "fig/http-message-util": "^1.1",
         "http-interop/http-factory-guzzle": "^1.0.0",
         "itk-dev/beskedfordeler-drupal": "^1.0",
-        "itk-dev/serviceplatformen": "^1.5",
+        "itk-dev/serviceplatformen": "^1.7.1",
         "mglaman/composer-drupal-lenient": "^1.0",
         "os2web/os2web_audit": "^1.0",
         "os2web/os2web_datalookup": "^3.0",

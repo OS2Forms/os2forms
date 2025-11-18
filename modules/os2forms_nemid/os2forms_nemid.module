@@ -469,5 +469,4 @@ function os2forms_nemid_submission_set_address_protected(array $form, FormStateI
   $data = $webformSubmission->getData();
   $data['os2forms_nemid_elements_nemid_address_protected'] = TRUE;
   $webformSubmission->setData($data);
-  $webformSubmission->save();
 }

@@ -39,6 +39,13 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - [PR-222](https://github.com/OS2Forms/os2forms/pull/222)
   Correctly sets sender label on Maestro digital post notifications.
 - [OS-199] Remove modules that are not used and not covered by central maintenance from OS2forms
+- Avoid double-saving submissions when handling name and address protection.
+- [PR-191](https://github.com/OS2Forms/os2forms/pull/191)
+  Re-throws exception to ensure failed status during Maestro notification job.
+- [PR-202](https://github.com/OS2Forms/os2forms/pull/202)
+  - Removed non-digits from recipient id in Maestro digital post notifications.
+- [PR-189](https://github.com/OS2Forms/os2forms/pull/189)
+  - Added support for MeMo 1.2 and added additional validation of MeMo actions.
 
 ## [4.1.0] 2025-06-03
 
