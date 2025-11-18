@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## [5.0.0] 2025-11-18
+
 - [PR-192](https://github.com/OS2Forms/os2forms/pull/192)
   Fix bug in MitidChildrenSelectAjaxBehaviour.php
 - [PR-228](https://github.com/OS2Forms/os2forms/pull/228)
