@@ -20,6 +20,13 @@ class WebformLeafletMapField extends WebformElementBase {
 
   use LeafletSettingsElementsTrait;
 
+  // Valid Leaflet control positions (cf.
+  // https://github.com/Leaflet/Leaflet/blob/main/src/control/Control.js).
+  private const string LEAFLET_POSITION_TOP_LEFT = 'topleft';
+  private const string LEAFLET_POSITION_TOP_RIGHT = 'topright';
+  private const string LEAFLET_POSITION_BOTTOM_LEFT = 'bottomleft';
+  private const string LEAFLET_POSITION_BOTTOM_RIGHT = 'bottomright';
+
   /**
    * {@inheritdoc}
    */
@@ -33,10 +40,11 @@ class WebformLeafletMapField extends WebformElementBase {
       'minZoom' => 1,
       'maxZoom' => 18,
       'zoomFiner' => 0,
+      'zoomControlPosition' => self::LEAFLET_POSITION_TOP_LEFT,
       'scrollWheelZoom' => 0,
       'doubleClickZoom' => 1,
 
-      'position' => 'topleft',
+      'position' => self::LEAFLET_POSITION_TOP_LEFT,
       'marker' => 'defaultMarker',
       'drawPolyline' => 0,
       'drawRectangle' => 0,
@@ -71,6 +79,13 @@ class WebformLeafletMapField extends WebformElementBase {
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
     $map_keys = array_keys(leaflet_map_get_info());
+
+    $positionOptions = [
+      self::LEAFLET_POSITION_TOP_LEFT => $this->t('topleft'),
+      self::LEAFLET_POSITION_TOP_RIGHT => $this->t('topright'),
+      self::LEAFLET_POSITION_BOTTOM_LEFT => $this->t('bottomleft'),
+      self::LEAFLET_POSITION_BOTTOM_RIGHT => $this->t('bottomright'),
+    ];
 
     $form['mapstyles'] = [
       '#type' => 'fieldset',
@@ -139,6 +154,11 @@ class WebformLeafletMapField extends WebformElementBase {
         '#step' => 1,
         '#description' => $this->t('Value that might/will be added to default Fit Elements Bounds Zoom. (-5 / +5)'),
       ],
+      'zoomControlPosition' => [
+        '#type' => 'select',
+        '#title' => $this->t('Zoom control position'),
+        '#options' => $positionOptions,
+      ],
       'scrollWheelZoom' => [
         '#type' => 'checkbox',
         '#title' => $this->t('Enable Scroll Wheel Zoom on click'),
@@ -159,12 +179,7 @@ class WebformLeafletMapField extends WebformElementBase {
       'position' => [
         '#type' => 'select',
         '#title' => $this->t('Toolbar position.'),
-        '#options' => [
-          'topleft' => $this->t('topleft'),
-          'topright' => $this->t('topright'),
-          'bottomleft' => $this->t('bottomleft'),
-          'bottomright' => $this->t('bottomright'),
-        ],
+        '#options' => $positionOptions,
       ],
       'marker' => [
         '#type' => 'radios',

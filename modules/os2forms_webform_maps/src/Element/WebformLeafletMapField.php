@@ -90,6 +90,7 @@ class WebformLeafletMapField extends FormElement {
       'zoomFiner' => $element['#zoomFiner'],
       'minZoom' => $element['#minZoom'],
       'maxZoom' => $element['#maxZoom'],
+      'zoomControlPosition' => $element['#zoomControlPosition'] ?? 'topleft',
       'center' => [
         'lat' => (float) $element['#lat'],
         'lon' => (float) $element['#lon'],
