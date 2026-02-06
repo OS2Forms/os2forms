@@ -11,6 +11,10 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [PR-301](https://github.com/OS2Forms/os2forms/pull/301)
+  Add address information to Digital Post shipments to ensure "*fjernprint*"
+  can be sent.
+
 ## [5.0.0] 2025-11-18
 
 - [PR-192](https://github.com/OS2Forms/os2forms/pull/192)
