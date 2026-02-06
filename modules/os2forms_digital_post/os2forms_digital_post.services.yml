@@ -52,6 +52,7 @@ services:
       - "@logger.channel.os2forms_digital_post"
       - "@logger.channel.os2forms_digital_post_submission"
       - "@Drupal\\os2forms_digital_post\\Helper\\DigitalPostHelper"
+      - "@Drupal\\os2forms_digital_post\\EventSubscriber\\Os2formsDigitalPostSubscriber"
 
   Drupal\os2forms_digital_post\Helper\SF1461Helper:
 
@@ -69,3 +70,9 @@ services:
       - '@database'
       - '@Drupal\os2forms_digital_post\Helper\MeMoHelper'
       - '@logger.channel.os2forms_digital_post'
+
+  Drupal\os2forms_digital_post\EventSubscriber\Os2formsDigitalPostSubscriber:
+    arguments:
+      - '@request_stack'
+    tags:
+      - { name: 'event_subscriber' }

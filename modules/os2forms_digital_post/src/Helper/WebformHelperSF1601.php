@@ -2,12 +2,15 @@
 
 namespace Drupal\os2forms_digital_post\Helper;
 
+use Drupal\os2web_datalookup\LookupResult\CompanyLookupResult;
+use Drupal\os2web_datalookup\LookupResult\CprLookupResult;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\advancedqueue\Entity\QueueInterface;
 use Drupal\advancedqueue\Job;
 use Drupal\advancedqueue\JobResult;
+use Drupal\os2forms_digital_post\EventSubscriber\Os2formsDigitalPostSubscriber;
 use Drupal\os2forms_digital_post\Exception\InvalidRecipientIdentifierElementException;
 use Drupal\os2forms_digital_post\Exception\RuntimeException;
 use Drupal\os2forms_digital_post\Exception\SubmissionNotFoundException;
@@ -62,6 +65,7 @@ final class WebformHelperSF1601 implements LoggerInterface {
     #[Autowire(service: 'logger.channel.os2forms_digital_post_submission')]
     private readonly LoggerChannelInterface $submissionLogger,
     private readonly DigitalPostHelper $digitalPostHelper,
+    private readonly Os2formsDigitalPostSubscriber $digitalPostSubscriber,
   ) {
     $this->webformSubmissionStorage = $entityTypeManager->getStorage('webform_submission');
     $this->queueStorage = $entityTypeManager->getStorage('advancedqueue_queue');
@@ -151,6 +155,10 @@ final class WebformHelperSF1601 implements LoggerInterface {
       }
       $recipientIdentifierType = 'CPR';
     }
+
+    $digitalPostAddressData = $this->getAddressForDigitalPost($lookupResult);
+
+    $this->digitalPostSubscriber->setDigitalPostContext($submission, $digitalPostAddressData);
 
     $senderSettings = $this->settings->getSender();
     $messageOptions = [
@@ -340,6 +348,33 @@ final class WebformHelperSF1601 implements LoggerInterface {
    */
   public function deleteMessages(array $webformSubmissions): void {
     $this->beskedfordelerHelper->deleteMessages($webformSubmissions);
+  }
+
+  /**
+   * Gets lookup results addresses in the format needed for SF1601.
+   */
+  private function getAddressForDigitalPost(CprLookupResult|CompanyLookupResult $lookupResult): array {
+    $name = $lookupResult->getName();
+
+    $address = $lookupResult->getStreet();
+
+    if ($lookupResult->getHouseNr()) {
+      $address .= ' ' . $lookupResult->getHouseNr();
+    }
+    if ($lookupResult->getFloor()) {
+      $address .= ' ' . $lookupResult->getFloor();
+    }
+    if ($lookupResult->getApartmentNr()) {
+      $address .= ' ' . $lookupResult->getApartmentNr();
+    }
+
+    $zipAndCity = $lookupResult->getPostalCode() . ' ' . $lookupResult->getCity();
+
+    return [
+      'name' => $name,
+      'address' => $address,
+      'zipAndCity' => $zipAndCity,
+    ];
   }
 
 }

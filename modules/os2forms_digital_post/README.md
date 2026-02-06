@@ -80,3 +80,22 @@ of recipients:
 ``` shell
 drush os2forms-digital-post:test:send --help
 ```
+
+## Fjernprint (physical digital post)
+
+To comply with the address placement in the envelope window (kuvert-rude) an
+[event subscriber](src/EventSubscriber/Os2formsDigitalPostSubscriber.php) is
+used to inject an address information element into generated HTML before it is
+converted to a PDF.
+
+We are only guaranteed to have the necessary information when in a digital
+post context. For that reason, the injection of address information is only
+done when in a digital post context. Note also that the information is only
+injected – it is not styled. This allows flexibility across installations but
+also means that it is up to individual installations to style it correctly.
+This should be done in OS2Forms Attachment-templates, see
+[Overwriting templates](https://github.com/OS2Forms/os2forms/tree/develop/modules/os2forms_attachment#overwriting-templates).
+
+To see the exact requirements for address placement, see
+[digst_a4_farve_ej_til_kant_demo_ny_rudeplacering.pdf](docs/digst_a4_farve_ej_til_kant_demo_ny_rudeplacering.pdf).
+
