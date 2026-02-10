@@ -44,6 +44,8 @@ final class Os2formsDigitalPostSubscriber implements EventSubscriberInterface {
     </div>
 </div>
 HTML;
+
+          // Insert address HTML immediately after body opening tag.
           $html = preg_replace('@<body[^>]*>@', '${0}' . $addressHtml, $html);
           $this->deleteDigitalPostContext($submission);
         }
