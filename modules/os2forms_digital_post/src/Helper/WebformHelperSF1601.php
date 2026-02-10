@@ -156,9 +156,7 @@ final class WebformHelperSF1601 implements LoggerInterface {
       $recipientIdentifierType = 'CPR';
     }
 
-    $digitalPostAddressData = $this->getAddressForDigitalPost($lookupResult);
-
-    $this->digitalPostSubscriber->setDigitalPostContext($submission, $digitalPostAddressData);
+    $this->digitalPostSubscriber->setDigitalPostContext($submission, $lookupResult);
 
     $senderSettings = $this->settings->getSender();
     $messageOptions = [
@@ -348,33 +346,6 @@ final class WebformHelperSF1601 implements LoggerInterface {
    */
   public function deleteMessages(array $webformSubmissions): void {
     $this->beskedfordelerHelper->deleteMessages($webformSubmissions);
-  }
-
-  /**
-   * Gets lookup results addresses in the format needed for SF1601.
-   */
-  private function getAddressForDigitalPost(CprLookupResult|CompanyLookupResult $lookupResult): array {
-    $name = $lookupResult->getName();
-
-    $address = $lookupResult->getStreet();
-
-    if ($lookupResult->getHouseNr()) {
-      $address .= ' ' . $lookupResult->getHouseNr();
-    }
-    if ($lookupResult->getFloor()) {
-      $address .= ' ' . $lookupResult->getFloor();
-    }
-    if ($lookupResult->getApartmentNr()) {
-      $address .= ' ' . $lookupResult->getApartmentNr();
-    }
-
-    $zipAndCity = $lookupResult->getPostalCode() . ' ' . $lookupResult->getCity();
-
-    return [
-      'name' => $name,
-      'address' => $address,
-      'zipAndCity' => $zipAndCity,
-    ];
   }
 
 }

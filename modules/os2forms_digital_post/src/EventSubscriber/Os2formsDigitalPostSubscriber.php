@@ -4,16 +4,18 @@ namespace Drupal\os2forms_digital_post\EventSubscriber;
 
 use Drupal\entity_print\Event\PrintEvents;
 use Drupal\entity_print\Event\PrintHtmlAlterEvent;
+use Drupal\os2web_datalookup\LookupResult\CompanyLookupResult;
+use Drupal\os2web_datalookup\LookupResult\CprLookupResult;
 use Drupal\webform\WebformSubmissionInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Used to alter the generated PDF to align with digital post requirements.
  */
 final class Os2formsDigitalPostSubscriber implements EventSubscriberInterface {
 
-  public function __construct(private readonly RequestStack $requestStack) {
+  public function __construct(private readonly SessionInterface $session) {
   }
 
   /**
@@ -29,30 +31,45 @@ final class Os2formsDigitalPostSubscriber implements EventSubscriberInterface {
       $submission = $event->getEntities()[0];
       if ($submission instanceof WebformSubmissionInterface) {
         // Check whether generation is for digital post.
-        if ($digitalPostContext = $this->getDigitalPostContext($submission)) {
-          // Check whether required fields are present.
-          if (!isset($digitalPostContext['name'], $digitalPostContext['address'], $digitalPostContext['zipAndCity'])) {
-            // Do nothing if they are not.
-            return;
+        if ($lookupResult = $this->getDigitalPostContext($submission)) {
+
+          // Combine address parts.
+          $streetAddress = $lookupResult->getStreet();
+
+          if ($lookupResult->getHouseNr()) {
+            $streetAddress .= ' ' . $lookupResult->getHouseNr();
           }
 
-          $name = $digitalPostContext['name'];
-          $address = $digitalPostContext['address'];
-          $zipAndCity = $digitalPostContext['zipAndCity'];
+          $extendedAddress = '';
 
-          $addressHtml = <<<HTML
-<div class="envelope-window" id="envelope-window-digital-post">
-    <div class="envelope-window-recipient-section" id="envelope-window-recipient-section-digital-post">
-        $name</br>
-        $address</br>
-        $zipAndCity
-    </div>
-</div>
-HTML;
+          if ($lookupResult->getFloor()) {
+            $extendedAddress = $lookupResult->getFloor();
+          }
+          if ($lookupResult->getApartmentNr()) {
+            $extendedAddress .= ' ' . $lookupResult->getApartmentNr();
+          }
+
+          // Generate address HTML.
+          $addressHtml = '<div id="envelope-window-digital-post"><div class="h-card">';
+          $addressHtml .= '<div class="p-name">' . htmlspecialchars($lookupResult->getName()) . '</div>';
+          if ($lookupResult->getCoName()) {
+            $addressHtml .= '<div class="p-name">c/o ' . htmlspecialchars($lookupResult->getCoName()) . '</div>';
+          }
+          $addressHtml .= '<div>';
+          $addressHtml .= '<span class="p-street-address">' . htmlspecialchars($streetAddress) . '</span>';
+          if (!empty($extendedAddress)) {
+            $addressHtml .= ' <span class="p-extended-address">' . htmlspecialchars($extendedAddress) . '</span>';
+          }
+          $addressHtml .= '</div>';
+          $addressHtml .= '<div>';
+          $addressHtml .= '<span class="p-postal-code">' . htmlspecialchars($lookupResult->getPostalCode()) . '</span>';
+          $addressHtml .= ' <span class="p-locality">' . htmlspecialchars($lookupResult->getCity()) . '</span>';
+          $addressHtml .= '</div>';
+          $addressHtml .= '</div>';
+          $addressHtml .= '</div>';
 
           // Insert address HTML immediately after body opening tag.
           $html = preg_replace('@<body[^>]*>@', '${0}' . $addressHtml, $html);
-          $this->deleteDigitalPostContext($submission);
         }
       }
     }
@@ -69,27 +86,27 @@ HTML;
   }
 
   /**
-   * Indicate Digital Post context in the current request.
+   * Indicate Digital Post context in the current session.
    */
-  public function setDigitalPostContext(WebformSubmissionInterface $submission, array $digitalPostContext): void {
+  public function setDigitalPostContext(WebformSubmissionInterface $submission, CompanyLookupResult|CprLookupResult $lookupResult): void {
     $key = $this->createSessionKeyFromSubmission($submission);
-    $this->requestStack->getCurrentRequest()->getSession()->set($key, $digitalPostContext);
+    $this->session->set($key, $lookupResult);
   }
 
   /**
-   * Check for Digital Post context in the current request.
+   * Check for Digital Post context in the current session.
    */
-  public function getDigitalPostContext(WebformSubmissionInterface $submission): array {
+  public function getDigitalPostContext(WebformSubmissionInterface $submission): CompanyLookupResult|CprLookupResult|null {
     $key = $this->createSessionKeyFromSubmission($submission);
-    return $this->requestStack->getCurrentRequest()->getSession()->get($key, []);
-  }
 
-  /**
-   * Delete Digital Post context from the current request.
-   */
-  public function deleteDigitalPostContext(WebformSubmissionInterface $submission): bool {
-    $key = $this->createSessionKeyFromSubmission($submission);
-    return (bool) $this->requestStack->getCurrentRequest()->getSession()->remove($key);
+    $digitalPostContext = $this->session->get($key);
+
+    // We only need/use it once, so just remove it after fetching it.
+    if ($digitalPostContext) {
+      $this->session->remove($key);
+    }
+
+    return $digitalPostContext;
   }
 
   /**

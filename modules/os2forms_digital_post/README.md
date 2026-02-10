@@ -99,3 +99,57 @@ This should be done in OS2Forms Attachment-templates, see
 To see the exact requirements for address placement, see
 [digst_a4_farve_ej_til_kant_demo_ny_rudeplacering.pdf](docs/digst_a4_farve_ej_til_kant_demo_ny_rudeplacering.pdf).
 
+The injected HTML is on the form:
+
+Without extended address information:
+
+```html
+<div id="envelope-window-digital-post">
+  <div class="h-card">
+    <div class="p-name">Jeppe</div>
+    <div><span class="p-street-address">Test vej HouseNr</span></div>
+    <div><span class="p-postal-code">2100</span> <span class="p-locality">Copenhagen</span></div>
+  </div>
+</div>
+```
+
+With extended address information:
+
+```html
+<div id="envelope-window-digital-post">
+    <div class="h-card">
+      <div class="p-name">Jeppe</div>
+      <div><span class="p-street-address">Test vej HouseNr</span> <span class="p-extended-address">Floor AppartmentNr</span></div>
+      <div><span class="p-postal-code">2100</span> <span class="p-locality">Copenhagen</span></div>
+    </div>
+</div>
+```
+
+Without c/o:
+
+```html
+
+<div id="envelope-window-digital-post">
+  <div class="h-card">
+    <div class="p-name">Jeppe</div>
+    <div><span class="p-street-address">Test vej HouseNr</span> <span class="p-extended-address">Floor AppartmentNr</span></div>
+    <div><span class="p-postal-code">2100</span> <span class="p-locality">Copenhagen</span></div>
+  </div>
+</div>
+```
+
+With c/o:
+
+```html
+<div id="envelope-window-digital-post">
+  <div class="h-card">
+    <div class="p-name">Jeppe</div>
+    <div class="p-name">c/o Mikkel</div>
+    <div><span class="p-street-address">Test vej HouseNr</span> <span class="p-extended-address">Floor AppartmentNr</span></div>
+    <div><span class="p-postal-code">2100</span> <span class="p-locality">Copenhagen</span></div>
+  </div>
+</div>
+```
+
+
+

@@ -73,6 +73,6 @@ services:
 
   Drupal\os2forms_digital_post\EventSubscriber\Os2formsDigitalPostSubscriber:
     arguments:
-      - '@request_stack'
+      - '@session'
     tags:
       - { name: 'event_subscriber' }
