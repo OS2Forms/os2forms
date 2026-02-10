@@ -99,11 +99,14 @@ This should be done in OS2Forms Attachment-templates, see
 To see the exact requirements for address placement, see
 [digst_a4_farve_ej_til_kant_demo_ny_rudeplacering.pdf](docs/digst_a4_farve_ej_til_kant_demo_ny_rudeplacering.pdf).
 
-The injected HTML is on the form:
+### The injected HTML
 
-Without extended address information:
+Variations of the injected HTML include extended addresses and c/o.
+
+Without extended address information or c/o:
 
 ```html
+
 <div id="envelope-window-digital-post">
   <div class="h-card">
     <div class="p-name">Jeppe</div>
@@ -113,22 +116,9 @@ Without extended address information:
 </div>
 ```
 
-With extended address information:
+With just an extended address:
 
 ```html
-<div id="envelope-window-digital-post">
-    <div class="h-card">
-      <div class="p-name">Jeppe</div>
-      <div><span class="p-street-address">Test vej HouseNr</span> <span class="p-extended-address">Floor AppartmentNr</span></div>
-      <div><span class="p-postal-code">2100</span> <span class="p-locality">Copenhagen</span></div>
-    </div>
-</div>
-```
-
-Without c/o:
-
-```html
-
 <div id="envelope-window-digital-post">
   <div class="h-card">
     <div class="p-name">Jeppe</div>
@@ -138,7 +128,20 @@ Without c/o:
 </div>
 ```
 
-With c/o:
+With just c/o:
+
+```html
+
+<div id="envelope-window-digital-post">
+  <div class="h-card">
+    <div class="p-name">Jeppe</div>
+    <div class="p-name">c/o Mikkel</div><div><span class="p-street-address">Test vej HouseNr</span></div>
+    <div><span class="p-postal-code">2100</span> <span class="p-locality">Copenhagen</span></div>
+  </div>
+</div>
+```
+
+With extended address information and c/o:
 
 ```html
 <div id="envelope-window-digital-post">
@@ -153,3 +156,81 @@ With c/o:
 
 
 
+### Styling of the HTML
+
+The following SCSS can be used to style the injected HTML accordingly:
+
+```scss
+$margin-top: 25mm;
+// There is no exact measurement for margin right in the specifications
+$margin-right: 10mm;
+$margin-bottom: 20mm;
+$margin-left: 17mm;
+$page-width: 210mm;
+$page-height: 297mm;
+$envelope-window-height: 89mm;
+$envelope-window-width: 115mm;
+$recipient-window-height: 21mm;
+$recipient-window-width: 59mm;
+
+@page {
+  size: A4;
+  margin: 0;
+}
+
+html, body {
+  font-family:"DejaVu Sans",Helvetica,Arial,sans-serif;
+}
+
+body {
+  margin-top: $margin-top;
+  margin-right: $margin-right;
+  margin-bottom: $margin-bottom;
+  margin-left: $margin-left;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  height: $margin-top;
+  width: calc($page-width - $margin-left - $margin-right);
+  font-size: 12px;
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  height: $margin-bottom;
+  width: calc($page-width - $margin-left - $margin-right);
+  font-size: 12px;
+}
+
+// Style the envelope window that may be injected by Digital Post.
+// Note that top/left is made from the assumption that @page has margin 0.
+// @see \Drupal\os2forms_digital_post\EventSubscriber\Os2formsDigitalPostSubscriber:onPrintRender
+#envelope-window-digital-post {
+  position: absolute;
+  top: $margin-top;
+  left: $margin-left;
+  height: $envelope-window-height;
+  width: $envelope-window-width;
+  background: white
+}
+
+// If envelope window is present, move webform content down
+// @see os2forms_digital_post
+#envelope-window-digital-post ~ * .webform-entity-print-body {
+  margin-top: $envelope-window-height;
+}
+
+#envelope-window-digital-post > div {
+  position: absolute;
+  top: 16mm;
+  left: 4mm;
+  font-size: 10px;
+  height: $recipient-window-height;
+  width: $recipient-window-width;
+}
+
+// More custom styling...
+```
