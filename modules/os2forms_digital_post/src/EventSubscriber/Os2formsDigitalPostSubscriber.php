@@ -30,6 +30,11 @@ final class Os2formsDigitalPostSubscriber implements EventSubscriberInterface {
       if ($submission instanceof WebformSubmissionInterface) {
         // Check whether generation is for digital post.
         if ($digitalPostContext = $this->getDigitalPostContext($submission)) {
+          // Check whether required fields are present.
+          if (!isset($digitalPostContext['name'], $digitalPostContext['address'], $digitalPostContext['zipAndCity'])) {
+            // Do nothing if they are not.
+            return;
+          }
 
           $name = $digitalPostContext['name'];
           $address = $digitalPostContext['address'];
