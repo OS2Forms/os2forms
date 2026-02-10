@@ -178,10 +178,6 @@ $recipient-window-width: 59mm;
   margin: 0;
 }
 
-html, body {
-  font-family:"DejaVu Sans",Helvetica,Arial,sans-serif;
-}
-
 body {
   margin-top: $margin-top;
   margin-right: $margin-right;
@@ -223,6 +219,7 @@ footer {
   margin-top: $envelope-window-height;
 }
 
+// Style the h-card div
 #envelope-window-digital-post > div {
   position: absolute;
   top: 16mm;
