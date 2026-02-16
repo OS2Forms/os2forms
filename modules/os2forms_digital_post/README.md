@@ -85,7 +85,7 @@ drush os2forms-digital-post:test:send --help
 
 To comply with the address placement in the envelope window (kuvert-rude) an
 [event subscriber](src/EventSubscriber/Os2formsDigitalPostSubscriber.php) is
-used to inject an address information element into generated HTML before it is
+used to inject an address information element into the generated HTML before it is
 converted to a PDF.
 
 We are only guaranteed to have the necessary information when in a digital
