@@ -158,7 +158,7 @@ With extended address information and c/o:
 
 ### Styling of the HTML
 
-The following SCSS can be used to style the injected HTML accordingly:
+The following [SCSS](https://sass-lang.com/) can be used to style the injected HTML accordingly:
 
 ```scss
 $margin-top: 25mm;
