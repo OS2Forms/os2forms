@@ -22,10 +22,10 @@ class WebformLeafletMapField extends WebformElementBase {
 
   // Valid Leaflet control positions (cf.
   // https://github.com/Leaflet/Leaflet/blob/main/src/control/Control.js).
-  private const string LEAFLET_POSITION_TOP_LEFT = 'topleft';
-  private const string LEAFLET_POSITION_TOP_RIGHT = 'topright';
-  private const string LEAFLET_POSITION_BOTTOM_LEFT = 'bottomleft';
-  private const string LEAFLET_POSITION_BOTTOM_RIGHT = 'bottomright';
+  const string LEAFLET_POSITION_TOP_LEFT = 'topleft';
+  const string LEAFLET_POSITION_TOP_RIGHT = 'topright';
+  const string LEAFLET_POSITION_BOTTOM_LEFT = 'bottomleft';
+  const string LEAFLET_POSITION_BOTTOM_RIGHT = 'bottomright';
 
   /**
    * {@inheritdoc}
