@@ -52,7 +52,7 @@ final class Os2formsDigitalPostSubscriber implements EventSubscriberInterface {
           // Generate address HTML.
           $addressHtml = '<div id="envelope-window-digital-post"><div class="h-card">';
           $addressHtml .= '<div class="p-name">' . htmlspecialchars($lookupResult->getName()) . '</div>';
-          if ($lookupResult->getCoName()) {
+          if ($lookupResult instanceof CprLookupResult && $lookupResult->getCoName()) {
             $addressHtml .= '<div class="p-name">c/o ' . htmlspecialchars($lookupResult->getCoName()) . '</div>';
           }
           $addressHtml .= '<div>';
