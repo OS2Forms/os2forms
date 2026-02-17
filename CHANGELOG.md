@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- Fix IP validation in digital signature file download (CIDR support)
+
 ## [5.0.0] 2025-11-18
 
 - [PR-192](https://github.com/OS2Forms/os2forms/pull/192)

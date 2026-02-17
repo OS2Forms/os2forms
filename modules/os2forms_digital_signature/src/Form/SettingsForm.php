@@ -40,12 +40,14 @@ class SettingsForm extends ConfigFormBase {
     $form['os2forms_digital_signature_remote_service_url'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Signature server URL'),
+      '#required' => TRUE,
       '#default_value' => $this->config(self::$configName)->get('os2forms_digital_signature_remote_service_url'),
       '#description' => $this->t('E.g. https://signering.bellcom.dk/sign.php?'),
     ];
     $form['os2forms_digital_signature_sign_hash_salt'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Hash Salt used for signature'),
+      '#required' => TRUE,
       '#default_value' => $this->config(self::$configName)->get('os2forms_digital_signature_sign_hash_salt'),
       '#description' => $this->t('Must match hash salt on the signature server'),
     ];
@@ -53,11 +55,12 @@ class SettingsForm extends ConfigFormBase {
       '#type' => 'textfield',
       '#title' => $this->t('List IPs which can download unsigned PDF submissions'),
       '#default_value' => $this->config(self::$configName)->get('os2forms_digital_signature_submission_allowed_ips'),
-      '#description' => $this->t('Comma separated. e.g. 192.168.1.1,192.168.2.1'),
+      '#description' => $this->t('Comma separated. e.g. 192.168.1.1,192.168.2.1 or 172.16.0.0/16. If left empty no restrictions will be applied.'),
     ];
     $form['os2forms_digital_signature_submission_retention_period'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Unsigned submission timespan (s)'),
+      '#required' => TRUE,
       '#default_value' => ($this->config(self::$configName)->get('os2forms_digital_signature_submission_retention_period')) ?? 300,
       '#description' => $this->t('How many seconds can unsigned submission exist before being automatically deleted'),
     ];

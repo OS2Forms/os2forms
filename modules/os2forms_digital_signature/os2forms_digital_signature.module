@@ -57,21 +57,70 @@ function os2forms_digital_signature_file_download($uri) {
     $config = \Drupal::config(SettingsForm::$configName);
     $allowedIps = $config->get('os2forms_digital_signature_submission_allowed_ips');
 
-    $allowedIpsArr = explode(',', $allowedIps);
-    $remoteIp = Drupal::request()->getClientIp();
+    $allowedIpsArr = array_map('trim', explode(',', $allowedIps));
+    // Remove empty entries (e.g. from trailing comma or empty config).
+    $allowedIpsArr = array_filter($allowedIpsArr);
+    $remoteIp = \Drupal::request()->getClientIp();
 
-    // IP list is empty, or request IP is allowed.
-    if (empty($allowedIpsArr) || in_array($remoteIp, $allowedIpsArr)) {
+    // IP list is empty, allow access.
+    if (empty($allowedIpsArr)) {
       $basename = basename($uri);
       return [
         'Content-disposition' => 'attachment; filename="' . $basename . '"',
       ];
     }
 
-    // Otherwise - Deny access.
+    // Check if remote IP matches any allowed IP or CIDR range.
+    foreach ($allowedIpsArr as $allowedIp) {
+      if ($remoteIp === $allowedIp || os2forms_digital_signature_ip_in_cidr($remoteIp, $allowedIp)) {
+        $basename = basename($uri);
+        return [
+          'Content-disposition' => 'attachment; filename="' . $basename . '"',
+        ];
+      }
+    }
+
+    // Deny access and log warning.
+    \Drupal::logger('os2forms_digital_signature')->warning('File download denied for IP @ip on URI @uri. Allowed IPs: @allowed', [
+      '@ip' => $remoteIp,
+      '@uri' => $uri,
+      '@allowed' => $allowedIps,
+    ]);
+
     return -1;
   }
 
   // Not submission file, allow normal access.
   return NULL;
+}
+
+/**
+ * Check if an IP address is within a CIDR range.
+ *
+ * @param string $ip
+ *   The IP address to check.
+ * @param string $cidr
+ *   The CIDR range (e.g. "172.16.0.0/16").
+ *
+ * @return bool
+ *   TRUE if the IP is within the CIDR range, FALSE otherwise.
+ */
+function os2forms_digital_signature_ip_in_cidr(string $ip, string $cidr): bool {
+  if (!str_contains($cidr, '/')) {
+    return FALSE;
+  }
+
+  [$subnet, $bits] = explode('/', $cidr, 2);
+  $bits = (int) $bits;
+
+  $ip = ip2long($ip);
+  $subnet = ip2long($subnet);
+
+  if ($ip === FALSE || $subnet === FALSE || $bits < 0 || $bits > 32) {
+    return FALSE;
+  }
+
+  $mask = -1 << (32 - $bits);
+
+  return ($ip & $mask) === ($subnet & $mask);
 }
