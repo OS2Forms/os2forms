@@ -8,6 +8,7 @@
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperManager;
 use Drupal\os2forms_digital_signature\Form\SettingsForm;
+use Symfony\Component\HttpFoundation\IpUtils;
 
 /**
  * Implements hook_cron().
@@ -106,21 +107,5 @@ function os2forms_digital_signature_file_download($uri) {
  *   TRUE if the IP is within the CIDR range, FALSE otherwise.
  */
 function os2forms_digital_signature_ip_in_cidr(string $ip, string $cidr): bool {
-  if (!str_contains($cidr, '/')) {
-    return FALSE;
-  }
-
-  [$subnet, $bits] = explode('/', $cidr, 2);
-  $bits = (int) $bits;
-
-  $ip = ip2long($ip);
-  $subnet = ip2long($subnet);
-
-  if ($ip === FALSE || $subnet === FALSE || $bits < 0 || $bits > 32) {
-    return FALSE;
-  }
-
-  $mask = -1 << (32 - $bits);
-
-  return ($ip & $mask) === ($subnet & $mask);
+  return IpUtils::checkIp($ip, $cidr);
 }
