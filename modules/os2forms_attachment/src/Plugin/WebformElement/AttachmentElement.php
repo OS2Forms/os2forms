@@ -29,7 +29,7 @@ class AttachmentElement extends WebformAttachmentBase {
       'template' => '',
       'export_type' => '',
       'digital_signature' => '',
-      'digital_signature_position' => 'after_content',
+      'digital_signature_position' => Os2formsAttachmentPrintBuilder::SIGNATURE_POSITION_AFTER_CONTENT,
       'exclude_empty' => '',
       'exclude_empty_checkbox' => '',
       'excluded_elements' => '',
