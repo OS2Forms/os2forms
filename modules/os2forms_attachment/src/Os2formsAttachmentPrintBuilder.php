@@ -18,6 +18,11 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Os2formsAttachmentPrintBuilder extends PrintBuilder {
 
+  public const SIGNATURE_POSITION_FOOTER = 'footer';
+  public const SIGNATURE_POSITION_HEADER = 'header';
+  public const SIGNATURE_POSITION_AFTER_CONTENT = 'after_content';
+  public const SIGNATURE_POSITION_BEFORE_CONTENT = 'before_content';
+
   /**
    * {@inheritdoc}
    */
@@ -52,8 +57,8 @@ class Os2formsAttachmentPrintBuilder extends PrintBuilder {
    * @return string
    *   FALSE or the URI to the file. E.g. public://my-file.pdf.
    */
-  public function savePrintableDigitalSignature(array $entities, PrintEngineInterface $print_engine, $scheme = 'public', $filename = FALSE, $use_default_css = TRUE) {
-    $renderer = $this->prepareRenderer($entities, $print_engine, $use_default_css, TRUE);
+  public function savePrintableDigitalSignature(array $entities, PrintEngineInterface $print_engine, $scheme = 'public', $filename = FALSE, $use_default_css = TRUE, string $signaturePosition = self::SIGNATURE_POSITION_AFTER_CONTENT) {
+    $renderer = $this->prepareRenderer($entities, $print_engine, $use_default_css, $signaturePosition);
 
     // Allow other modules to alter the generated Print object.
     $this->dispatcher->dispatch(new PreSendPrintEvent($print_engine, $entities), PrintEvents::PRE_SEND);
@@ -82,15 +87,16 @@ class Os2formsAttachmentPrintBuilder extends PrintBuilder {
    *   The print engine.
    * @param bool $use_default_css
    *   TRUE if we want the default CSS included.
-   * @param bool $digitalSignature
-   *   If the digital signature message needs to be added.
+   * @param string $signaturePosition
+   *   The position for the digital signature validation text. Empty string
+   *   means no signature. Use the SIGNATURE_POSITION_* class constants.
    *
    * @return \Drupal\entity_print\Renderer\RendererInterface
    *   A print renderer.
    *
    * @see PrintBuilder::prepareRenderer
    */
-  protected function prepareRenderer(array $entities, PrintEngineInterface $print_engine, $use_default_css, $digitalSignature = FALSE) {
+  protected function prepareRenderer(array $entities, PrintEngineInterface $print_engine, $use_default_css, string $signaturePosition = '') {
     if (empty($entities)) {
       throw new \InvalidArgumentException('You must pass at least 1 entity');
     }
@@ -106,12 +112,30 @@ class Os2formsAttachmentPrintBuilder extends PrintBuilder {
       '#attached' => [],
     ];
 
-    // Adding hardcoded negative margin to avoid margins in <fieldset> <legend>
-    // structure. That margin is automatically added in PDF and PDF only.
     $generatedHtml = (string) $renderer->generateHtml($entities, $render, $use_default_css, TRUE);
-    $generatedHtml .= "<style>fieldset legend {margin-left: -12px;}</style>";
-    if ($digitalSignature) {
-      $generatedHtml .= $this->t('You can validate the signature on this PDF file via validering.nemlog-in.dk.');
+
+    // Place signature according to the passed parameter.
+    if ($signaturePosition) {
+      $signatureHtml = '<div class="validate-signature-element"><p>' . $this->t('You can validate the signature on this PDF file via validering.nemlog-in.dk.') . '</p></div>';
+
+      switch ($signaturePosition) {
+        case self::SIGNATURE_POSITION_HEADER:
+          $generatedHtml = str_replace('</header>', $signatureHtml . '</header>', $generatedHtml);
+          break;
+
+        case self::SIGNATURE_POSITION_BEFORE_CONTENT:
+          $generatedHtml = str_replace('<div class="page">', '<div class="page">' . $signatureHtml, $generatedHtml);
+          break;
+
+        case self::SIGNATURE_POSITION_FOOTER:
+          $generatedHtml = str_replace('</footer>', $signatureHtml . '</footer>', $generatedHtml);
+          break;
+
+        case self::SIGNATURE_POSITION_AFTER_CONTENT:
+        default:
+          $generatedHtml = str_replace('</body>', $signatureHtml . '</body>', $generatedHtml);
+          break;
+      }
     }
 
     $print_engine->addPage($generatedHtml);

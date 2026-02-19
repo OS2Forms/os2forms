@@ -5,6 +5,7 @@ namespace Drupal\os2forms_attachment\Plugin\WebformElement;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Twig\WebformTwigExtension;
 use Drupal\webform\Utility\WebformElementHelper;
+use Drupal\os2forms_attachment\Os2formsAttachmentPrintBuilder;
 use Drupal\webform_attachment\Plugin\WebformElement\WebformAttachmentBase;
 
 /**
@@ -28,6 +29,7 @@ class AttachmentElement extends WebformAttachmentBase {
       'template' => '',
       'export_type' => '',
       'digital_signature' => '',
+      'digital_signature_position' => 'after_content',
       'exclude_empty' => '',
       'exclude_empty_checkbox' => '',
       'excluded_elements' => '',
@@ -92,6 +94,23 @@ class AttachmentElement extends WebformAttachmentBase {
     $form['attachment']['digital_signature'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Digital signature'),
+    ];
+    $form['attachment']['digital_signature_position'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Digital signature position'),
+      '#description' => $this->t('Select where the digital signature validation text should be placed in the PDF document.'),
+      '#options' => [
+        Os2formsAttachmentPrintBuilder::SIGNATURE_POSITION_FOOTER => $this->t('Footer (repeats on every page)'),
+        Os2formsAttachmentPrintBuilder::SIGNATURE_POSITION_HEADER => $this->t('Header (repeats on every page)'),
+        Os2formsAttachmentPrintBuilder::SIGNATURE_POSITION_AFTER_CONTENT => $this->t('After content (end of document)'),
+        Os2formsAttachmentPrintBuilder::SIGNATURE_POSITION_BEFORE_CONTENT => $this->t('Before content (start of document)'),
+      ],
+      '#default_value' => Os2formsAttachmentPrintBuilder::SIGNATURE_POSITION_AFTER_CONTENT,
+      '#states' => [
+        'visible' => [
+          ':input[name="properties[digital_signature]"]' => ['checked' => TRUE],
+        ],
+      ],
     ];
 
     // Set #access so that help is always visible.
