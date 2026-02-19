@@ -49,8 +49,8 @@ class Os2formsAttachmentPrintBuilder extends PrintBuilder {
   /**
    * Modified version of the original savePrintable() function.
    *
-   * The only difference is modified call to prepareRenderer with digitalPost
-   * flag TRUE.
+   * The only difference is modified call to prepareRenderer with a
+   * signature position parameter.
    *
    * @see PrintBuilder::savePrintable()
    *
