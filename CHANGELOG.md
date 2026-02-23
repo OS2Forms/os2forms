@@ -11,6 +11,9 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [PR-307](https://github.com/OS2Forms/os2forms/pull/307)
+  Added proper entity access checks on Maestro notification preview routes
+
 ## [5.0.0] 2025-11-18
 
 - [PR-192](https://github.com/OS2Forms/os2forms/pull/192)

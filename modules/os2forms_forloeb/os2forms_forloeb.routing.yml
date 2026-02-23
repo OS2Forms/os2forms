@@ -17,7 +17,7 @@ os2forms_forloeb.meastro_notification.preview:
       webform:
         type: 'entity:webform'
   requirements:
-    _permission: 'view any webform submission'
+    _entity_access: 'webform.view'
 
 os2forms_forloeb.meastro_notification.preview_render:
   path: '/admin/structure/webform/manage/{webform}/os2forms_forloeb/notification/{handler}/preview/{notification_type}/{content_type}/render/{submission}'
@@ -31,7 +31,7 @@ os2forms_forloeb.meastro_notification.preview_render:
       submission:
         type: 'entity:webform_submission'
   requirements:
-    _permission: 'view any webform submission'
+    _entity_access: 'submission.view'
 
 os2forms_forloeb.meastro_notification.preview_message:
   path: '/os2forms_forloeb/notification/message'
