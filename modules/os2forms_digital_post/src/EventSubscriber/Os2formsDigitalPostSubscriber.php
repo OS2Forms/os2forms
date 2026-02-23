@@ -99,19 +99,6 @@ final class Os2formsDigitalPostSubscriber implements EventSubscriberInterface {
    * Check for Digital Post context in the current session.
    */
   public function getDigitalPostContext(WebformSubmissionInterface $submission): CompanyLookupResult|CprLookupResult|null {
-    $result = new CprLookupResult();
-
-    $result->setCpr('2611740000');
-    $result->setName('Jeppe Kuhlmann Andersen');
-    $result->setPostalCode('8200');
-    $result->setCity('Aarhus N');
-    $result->setStreet('Jens Baggesens vej');
-    $result->setHouseNr('45');
-    $result->setFloor('st.');
-    $result->setApartmentNr('7');
-    $result->setCoName('Mikkel');
-
-    return $result;
     $key = $this->createSessionKeyFromSubmission($submission);
 
     $digitalPostContext = $this->session->get($key);
