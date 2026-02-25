@@ -14,6 +14,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - [PR-301](https://github.com/OS2Forms/os2forms/pull/301)
   Add address information to Digital Post shipments to ensure "*fjernprint*"
   can be sent.
+- [PR-289](https://github.com/OS2Forms/os2forms/pull/289)
+  Added required "Zoom control position" to map element
 
 ## [5.0.0] 2025-11-18
 
