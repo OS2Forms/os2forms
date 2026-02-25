@@ -55,6 +55,12 @@ jobs:
         run: |
           docker compose run --rm --user 0             -e HOST_UID=$(id -u) -e HOST_GID=$(id -g)             php bash -lc 'chown -R ${HOST_UID}:${HOST_GID} /app'
 
+      - name: Debug compose + php
+        run: |
+          ls -la
+          docker compose config
+          docker compose run --rm php php -v
+
       - name: Check that dependencies resolve.
         run: |
           rm -fr vendor/
