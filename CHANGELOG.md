@@ -13,6 +13,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 - [PR-290](https://github.com/OS2Forms/os2forms/pull/new/fix-ci-php83-safe)
   Fix CI failure caused by PHP 8.4 incompatibility
+- [PR-289](https://github.com/OS2Forms/os2forms/pull/289)
+  Added required "Zoom control position" to map element
 
 ## [5.0.0] 2025-11-18
 
