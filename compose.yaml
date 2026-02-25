@@ -8,6 +8,16 @@ services:
     working_dir: /app
     volumes:
       - ./:/app
+    environment:
+      COMPOSER_HOME: /tmp/composer
+      COMPOSER_CACHE_DIR: /tmp/composer-cache
+    entrypoint:
+      - bash
+      - -lc
+      - |
+        git config --global --add safe.directory /app
+        exec "$@"
+      - bash
 
   markdownlint:
     image: itkdev/markdownlint
