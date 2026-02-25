@@ -23,6 +23,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      
+      - name: Mark repo as safe for git (container)
+        run: |
+          docker compose run --rm --user 0 php bash -lc \
+            'git config --system --add safe.directory /app || git config --global --add safe.directory /app'
 
       - name: Fix ownership (container)
         run: |
