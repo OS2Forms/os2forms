@@ -2,7 +2,7 @@
 
 services:
   php:
-    image: ddev/ddev-php-base
+    image: ddev/ddev-php-base:v1.24.10-old
     profiles:
       - dev
     working_dir: /app
