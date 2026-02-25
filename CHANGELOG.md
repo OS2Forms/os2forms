@@ -11,6 +11,9 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [PR-289](https://github.com/OS2Forms/os2forms/pull/289)
+  Added required "Zoom control position" to map element
+
 ## [5.0.0] 2025-11-18
 
 - [PR-192](https://github.com/OS2Forms/os2forms/pull/192)
