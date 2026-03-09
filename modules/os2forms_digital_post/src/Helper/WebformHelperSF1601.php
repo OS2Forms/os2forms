@@ -156,7 +156,7 @@ final class WebformHelperSF1601 implements LoggerInterface {
       $recipientIdentifierType = 'CPR';
     }
 
-    $this->digitalPostSubscriber->setDigitalPostContext($submission, $lookupResult);
+
 
     $senderSettings = $this->settings->getSender();
     $messageOptions = [
@@ -169,7 +169,13 @@ final class WebformHelperSF1601 implements LoggerInterface {
       WebformHandlerSF1601::SENDER_LABEL => $handlerMessageSettings[WebformHandlerSF1601::SENDER_LABEL],
       WebformHandlerSF1601::MESSAGE_HEADER_LABEL => $handlerMessageSettings[WebformHandlerSF1601::MESSAGE_HEADER_LABEL],
     ];
+
+    // Set flag indicating digital post context.
+    $this->digitalPostSubscriber->setDigitalPostContext($submission, $lookupResult);
     $message = $this->meMoHelper->buildWebformSubmissionMessage($submission, $messageOptions, $handlerSettings, $lookupResult);
+    // Remove flag.
+    $this->digitalPostSubscriber->deleteDigitalPostContext($submission);
+
     $forsendelseOptions = [
       self::RECIPIENT_IDENTIFIER_TYPE => $recipientIdentifierType,
       self::RECIPIENT_IDENTIFIER => $recipientIdentifier,
@@ -181,7 +187,12 @@ final class WebformHelperSF1601 implements LoggerInterface {
       WebformHandlerSF1601::SENDER_LABEL => $handlerMessageSettings[WebformHandlerSF1601::SENDER_LABEL],
       WebformHandlerSF1601::MESSAGE_HEADER_LABEL => $handlerMessageSettings[WebformHandlerSF1601::MESSAGE_HEADER_LABEL],
     ];
+
+    // Set flag indicating digital post context.
+    $this->digitalPostSubscriber->setDigitalPostContext($submission, $lookupResult);
     $forsendelse = $this->forsendelseHelper->buildSubmissionForsendelse($submission, $forsendelseOptions, $handlerSettings, $lookupResult);
+    // Remove flag.
+    $this->digitalPostSubscriber->deleteDigitalPostContext($submission);
 
     $type = $handlerMessageSettings[WebformHandlerSF1601::TYPE] ?? SF1601::TYPE_DIGITAL_POST;
 

@@ -101,14 +101,16 @@ final class Os2formsDigitalPostSubscriber implements EventSubscriberInterface {
   public function getDigitalPostContext(WebformSubmissionInterface $submission): CompanyLookupResult|CprLookupResult|null {
     $key = $this->createSessionKeyFromSubmission($submission);
 
-    $digitalPostContext = $this->session->get($key);
+    return $this->session->get($key);
+  }
 
-    // We only need/use it once, so just remove it after fetching it.
-    if ($digitalPostContext) {
-      $this->session->remove($key);
-    }
+  /**
+   * Delete Digital Post context from the current request.
+   */
+  public function deleteDigitalPostContext(WebformSubmissionInterface $submission): bool {
+    $key = $this->createSessionKeyFromSubmission($submission);
 
-    return $digitalPostContext;
+    return (bool) $this->session->remove($key);
   }
 
   /**
