@@ -11,8 +11,9 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [#251](https://github.com/OS2Forms/os2forms/issues/251)
+  Webform encrypt uninstall problem fix
 - git actions check
-
 - [PR-289](https://github.com/OS2Forms/os2forms/pull/289)
   Added required "Zoom control position" to map element
 
