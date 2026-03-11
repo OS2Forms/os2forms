@@ -72,9 +72,8 @@ class WebformLeafletMapField extends WebformElementBase {
       'rectangle_color' => '#3388FF',
 
       // Display settings.
-      'display_image_on' => ['html', 'pdf'],
+      'display_image_on' => ['email', 'html', 'pdf'],
       'display_geojson_on' => ['text', 'html'],
-
     ] + parent::defineDefaultProperties();
   }
 
@@ -358,6 +357,7 @@ class WebformLeafletMapField extends WebformElementBase {
         '#type' => 'checkboxes',
         '#title' => $this->t('Display image on'),
         '#options' => [
+          'email' => $this->t('Email'),
           'html' => $this->t('HTML'),
           'pdf' => $this->t('PDF'),
         ],
@@ -367,6 +367,7 @@ class WebformLeafletMapField extends WebformElementBase {
         '#type' => 'checkboxes',
         '#title' => $this->t('Display GeoJSON on'),
         '#options' => [
+          'email' => $this->t('Email'),
           'html' => $this->t('HTML'),
           'pdf' => $this->t('PDF'),
           'text' => $this->t('Text'),
@@ -387,11 +388,14 @@ class WebformLeafletMapField extends WebformElementBase {
 
     $build = [];
 
-    $viewMode = $options['view_mode'] ?? 'overview';
+    $viewMode = $options['view_mode'] ?? 'results';
     if ('table' === $viewMode) {
       $viewMode = 'html';
     }
-    if ('html' === $viewMode && $options['pdf']) {
+    elseif ($options['email'] ?? FALSE) {
+      $viewMode = 'email';
+    }
+    elseif ($options['pdf'] ?? FALSE) {
       $viewMode = 'pdf';
     }
 
@@ -411,12 +415,16 @@ class WebformLeafletMapField extends WebformElementBase {
           'id' => $imageId,
           'src' => $value['image'],
         ],
+        '#prefix' => '<div class="os2forms-webform-maps-image">',
+        '#suffix' => '</div>',
       ];
     }
 
     if ($includeGeoJson) {
       $build['geojson'] = [
         '#markup' => $value['geojson'],
+        '#prefix' => '<div class="os2forms-webform-maps-geojson">',
+        '#suffix' => '</div>',
       ];
     }
 
