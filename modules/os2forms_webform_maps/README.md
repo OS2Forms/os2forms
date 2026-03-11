@@ -14,3 +14,9 @@ the map. The data can be exported to PDF.
 ## Installation
 
 The module can be installed using the standard Drupal installation procedure.
+
+## Fetching GeoJSON using the API
+
+``` shell
+@todo
+```
