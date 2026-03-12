@@ -19,7 +19,7 @@ The module can be installed using the standard Drupal installation procedure.
 
 Assume that we have a webform with ID `my_webform` and the webform has a Map element with ID `my_map`. We can then fetch
 the data for a submission with UUID `c34d01c5-7bd9-4b15-8b01-5787959453c0` on the webform with a HTTP `GET` request (cf.
-[OS2Forms REST API](https://github.com/itk-dev/os2forms_rest_api/blob/main/README.md)):
+[OS2Forms REST API](https://github.com/OS2Forms/os2forms_rest_api/blob/main/README.md)):
 
 ``` shell name=api-fetch-submission-data
 curl --silent --location --header 'api-key: my-api-key' http://127.0.0.1:8000/webform_rest/my_webform/submission/c34d01c5-7bd9-4b15-8b01-5787959453c0
