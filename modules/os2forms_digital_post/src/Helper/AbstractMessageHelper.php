@@ -4,9 +4,12 @@ namespace Drupal\os2forms_digital_post\Helper;
 
 use DigitalPost\MeMo\Message;
 use Drupal\Core\Render\ElementInfoManager;
+use Drupal\os2forms_digital_post\EventSubscriber\Os2formsDigitalPostSubscriber;
 use Drupal\os2forms_digital_post\Exception\InvalidAttachmentElementException;
 use Drupal\os2forms_digital_post\Model\Document;
 use Drupal\os2forms_digital_post\Plugin\WebformHandler\WebformHandlerSF1601;
+use Drupal\os2web_datalookup\LookupResult\CompanyLookupResult;
+use Drupal\os2web_datalookup\LookupResult\CprLookupResult;
 use Drupal\webform\WebformSubmissionInterface;
 use Drupal\webform\WebformTokenManagerInterface;
 use Drupal\webform_attachment\Element\WebformAttachmentBase;
@@ -28,6 +31,7 @@ abstract class AbstractMessageHelper {
     readonly protected ElementInfoManager $elementInfoManager,
     #[Autowire(service: 'webform.token_manager')]
     readonly protected WebformTokenManagerInterface $webformTokenManager,
+    readonly protected Os2formsDigitalPostSubscriber $digitalPostSubscriber,
   ) {
   }
 
@@ -38,7 +42,7 @@ abstract class AbstractMessageHelper {
    *
    * @phpstan-param array<string, mixed> $handlerSettings
    */
-  protected function getMainDocument(WebformSubmissionInterface $submission, array $handlerSettings): Document {
+  protected function getMainDocument(WebformSubmissionInterface $submission, array $handlerSettings, CprLookupResult|CompanyLookupResult $recipientData): Document {
     // Lifted from Drupal\webform_attachment\Controller\WebformAttachmentController::download.
     $element = $handlerSettings[WebformHandlerSF1601::MEMO_MESSAGE][WebformHandlerSF1601::ATTACHMENT_ELEMENT];
     $element = $submission->getWebform()->getElement($element) ?: [];
@@ -51,7 +55,15 @@ abstract class AbstractMessageHelper {
 
     $fileName = $instance::getFileName($element, $submission);
     $mimeType = $instance::getFileMimeType($element, $submission);
+
+    // The way to alter html generated from entities is through the
+    // PrintEvents::POST_RENDER event. See:
+    // @Drupal\entity_print\Renderer::generateHtml,
+    // To indicate digital post context and get the necessary information,
+    // we add a flag to the session.
+    $this->digitalPostSubscriber->setDigitalPostContext($submission, $recipientData);
     $content = $instance::getFileContent($element, $submission);
+    $this->digitalPostSubscriber->deleteDigitalPostContext($submission);
 
     return new Document(
       $content,

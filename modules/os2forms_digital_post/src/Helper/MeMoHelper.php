@@ -97,10 +97,11 @@ class MeMoHelper extends AbstractMessageHelper {
    * @phpstan-param array<string, mixed> $options
    * @phpstan-param array<string, mixed> $handlerSettings
    */
-  public function buildWebformSubmissionMessage(WebformSubmissionInterface $submission, array $options, array $handlerSettings, CprLookupResult|CompanyLookupResult|null $recipientData = NULL): Message {
+  public function buildWebformSubmissionMessage(WebformSubmissionInterface $submission, array $options, array $handlerSettings, CprLookupResult|CompanyLookupResult $recipientData): Message {
     $senderLabel = $this->replaceTokens($options[WebformHandlerSF1601::SENDER_LABEL], $submission);
     $messageLabel = $this->replaceTokens($options[WebformHandlerSF1601::MESSAGE_HEADER_LABEL], $submission);
-    $document = $this->getMainDocument($submission, $handlerSettings);
+    $document = $this->getMainDocument($submission, $handlerSettings, $recipientData);
+
     $actions = [];
     if (isset($handlerSettings[WebformHandlerSF1601::MEMO_ACTIONS]['actions'])) {
       foreach ($handlerSettings[WebformHandlerSF1601::MEMO_ACTIONS]['actions'] as $spec) {

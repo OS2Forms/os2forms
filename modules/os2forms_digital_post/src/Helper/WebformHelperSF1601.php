@@ -2,15 +2,12 @@
 
 namespace Drupal\os2forms_digital_post\Helper;
 
-use Drupal\os2web_datalookup\LookupResult\CompanyLookupResult;
-use Drupal\os2web_datalookup\LookupResult\CprLookupResult;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\advancedqueue\Entity\QueueInterface;
 use Drupal\advancedqueue\Job;
 use Drupal\advancedqueue\JobResult;
-use Drupal\os2forms_digital_post\EventSubscriber\Os2formsDigitalPostSubscriber;
 use Drupal\os2forms_digital_post\Exception\InvalidRecipientIdentifierElementException;
 use Drupal\os2forms_digital_post\Exception\RuntimeException;
 use Drupal\os2forms_digital_post\Exception\SubmissionNotFoundException;
@@ -65,7 +62,6 @@ final class WebformHelperSF1601 implements LoggerInterface {
     #[Autowire(service: 'logger.channel.os2forms_digital_post_submission')]
     private readonly LoggerChannelInterface $submissionLogger,
     private readonly DigitalPostHelper $digitalPostHelper,
-    private readonly Os2formsDigitalPostSubscriber $digitalPostSubscriber,
   ) {
     $this->webformSubmissionStorage = $entityTypeManager->getStorage('webform_submission');
     $this->queueStorage = $entityTypeManager->getStorage('advancedqueue_queue');
@@ -156,8 +152,6 @@ final class WebformHelperSF1601 implements LoggerInterface {
       $recipientIdentifierType = 'CPR';
     }
 
-
-
     $senderSettings = $this->settings->getSender();
     $messageOptions = [
       self::RECIPIENT_IDENTIFIER_TYPE => $recipientIdentifierType,
@@ -170,11 +164,7 @@ final class WebformHelperSF1601 implements LoggerInterface {
       WebformHandlerSF1601::MESSAGE_HEADER_LABEL => $handlerMessageSettings[WebformHandlerSF1601::MESSAGE_HEADER_LABEL],
     ];
 
-    // Set flag indicating digital post context.
-    $this->digitalPostSubscriber->setDigitalPostContext($submission, $lookupResult);
     $message = $this->meMoHelper->buildWebformSubmissionMessage($submission, $messageOptions, $handlerSettings, $lookupResult);
-    // Remove flag.
-    $this->digitalPostSubscriber->deleteDigitalPostContext($submission);
 
     $forsendelseOptions = [
       self::RECIPIENT_IDENTIFIER_TYPE => $recipientIdentifierType,
@@ -188,11 +178,7 @@ final class WebformHelperSF1601 implements LoggerInterface {
       WebformHandlerSF1601::MESSAGE_HEADER_LABEL => $handlerMessageSettings[WebformHandlerSF1601::MESSAGE_HEADER_LABEL],
     ];
 
-    // Set flag indicating digital post context.
-    $this->digitalPostSubscriber->setDigitalPostContext($submission, $lookupResult);
     $forsendelse = $this->forsendelseHelper->buildSubmissionForsendelse($submission, $forsendelseOptions, $handlerSettings, $lookupResult);
-    // Remove flag.
-    $this->digitalPostSubscriber->deleteDigitalPostContext($submission);
 
     $type = $handlerMessageSettings[WebformHandlerSF1601::TYPE] ?? SF1601::TYPE_DIGITAL_POST;
 
