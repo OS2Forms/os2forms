@@ -2,6 +2,7 @@
 
 namespace Drupal\os2forms_attachment\Element;
 
+use Drupal\os2forms_attachment\Os2formsAttachmentPrintBuilder;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\WebformSubmissionInterface;
 use Drupal\webform_attachment\Element\WebformAttachmentBase;
@@ -21,6 +22,7 @@ class AttachmentElement extends WebformAttachmentBase {
       '#view_mode' => 'html',
       '#export_type' => 'pdf',
       '#digital_signature' => FALSE,
+      '#digital_signature_position' => Os2formsAttachmentPrintBuilder::SIGNATURE_POSITION_AFTER_CONTENT,
       '#template' => '',
     ];
   }
@@ -77,7 +79,8 @@ class AttachmentElement extends WebformAttachmentBase {
 
         // Adding digital signature.
         if (isset($element['#digital_signature']) && $element['#digital_signature']) {
-          $file_path = $print_builder->savePrintableDigitalSignature([$webform_submission], $print_engine, $scheme, $file_name);
+          $signaturePosition = $element['#digital_signature_position'] ?? Os2formsAttachmentPrintBuilder::SIGNATURE_POSITION_AFTER_CONTENT;
+          $file_path = $print_builder->savePrintableDigitalSignature([$webform_submission], $print_engine, $scheme, $file_name, TRUE, $signaturePosition);
         }
         else {
           $file_path = $print_builder->savePrintable([$webform_submission], $print_engine, $scheme, $file_name);
