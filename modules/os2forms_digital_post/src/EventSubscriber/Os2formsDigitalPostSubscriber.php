@@ -31,7 +31,9 @@ final class Os2formsDigitalPostSubscriber implements EventSubscriberInterface {
       $submission = $event->getEntities()[0];
       if ($submission instanceof WebformSubmissionInterface) {
         // Check whether generation is for digital post.
-        if ($lookupResult = $this->getDigitalPostContext($submission)) {
+        if ($context = $this->getDigitalPostContext($submission)) {
+          $lookupResult = $context['lookupResult'];
+          $senderAddress = $context['senderAddress'];
 
           // Combine address parts.
           $streetAddress = $lookupResult->getStreet();
@@ -52,7 +54,11 @@ final class Os2formsDigitalPostSubscriber implements EventSubscriberInterface {
           }
 
           // Generate address HTML.
-          $addressHtml = '<div id="envelope-window-digital-post"><div class="h-card">';
+          $addressHtml = '<div id="envelope-window-digital-post">';
+          if (!empty($senderAddress)) {
+            $addressHtml .= '<div id="sender-address-digital-post">' . htmlspecialchars($senderAddress) . '</div>';
+          }
+          $addressHtml .= '<div class="h-card">';
           $addressHtml .= '<div class="p-name">' . htmlspecialchars($lookupResult->getName()) . '</div>';
           if ($lookupResult instanceof CprLookupResult && $lookupResult->getCoName()) {
             $addressHtml .= '<div class="p-name p-co-name">c/o ' . htmlspecialchars($lookupResult->getCoName()) . '</div>';
@@ -90,15 +96,18 @@ final class Os2formsDigitalPostSubscriber implements EventSubscriberInterface {
   /**
    * Indicate Digital Post context in the current session.
    */
-  public function setDigitalPostContext(WebformSubmissionInterface $submission, CompanyLookupResult|CprLookupResult $lookupResult): void {
+  public function setDigitalPostContext(WebformSubmissionInterface $submission, CompanyLookupResult|CprLookupResult $lookupResult, string $senderAddress = ''): void {
     $key = $this->createSessionKeyFromSubmission($submission);
-    $this->session->set($key, $lookupResult);
+    $this->session->set($key, [
+      'lookupResult' => $lookupResult,
+      'senderAddress' => $senderAddress,
+    ]);
   }
 
   /**
    * Check for Digital Post context in the current session.
    */
-  public function getDigitalPostContext(WebformSubmissionInterface $submission): CompanyLookupResult|CprLookupResult|null {
+  public function getDigitalPostContext(WebformSubmissionInterface $submission): ?array {
     $key = $this->createSessionKeyFromSubmission($submission);
 
     return $this->session->get($key);

@@ -61,7 +61,8 @@ abstract class AbstractMessageHelper {
     // @Drupal\entity_print\Renderer::generateHtml,
     // To indicate digital post context and get the necessary information,
     // we add a flag to the session.
-    $this->digitalPostSubscriber->setDigitalPostContext($submission, $recipientData);
+    $senderAddress = $handlerSettings[WebformHandlerSF1601::MEMO_MESSAGE][WebformHandlerSF1601::SENDER_ADDRESS] ?? '';
+    $this->digitalPostSubscriber->setDigitalPostContext($submission, $recipientData, $senderAddress);
     $content = $instance::getFileContent($element, $submission);
     $this->digitalPostSubscriber->deleteDigitalPostContext($submission);
 
