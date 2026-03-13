@@ -218,13 +218,23 @@ footer {
 }
 
 // Style the h-card div
-#envelope-window-digital-post > div {
+#envelope-window-digital-post > .h-card {
   position: absolute;
   top: 16mm;
   left: 4mm;
   font-size: 10px;
   height: $recipient-window-height;
   width: $recipient-window-width;
+}
+
+// Style the sender address div
+#envelope-window-digital-post > #sender-address-digital-post {
+  position: absolute;
+  top: 12mm;
+  left: 4mm;
+  font-size: 8px;
+  height: 4mm;
+  width: 71mm;
 }
 
 // More custom styling...
