@@ -140,7 +140,7 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
     $form[self::MEMO_MESSAGE][self::SENDER_ADDRESS] = [
       '#type' => 'textfield',
       '#title' => $this->t('Sender address'),
-      '#description' => $this->t('Optional sender address shown on the printed document. Displayed as a single line above the recipient name. Maximum 70 characters.'),
+      '#description' => $this->t('Optional sender address shown on the printed document. Displayed as a single line above the recipient name. Maximum @max characters.', ['@max' => self::SENDER_ADDRESS_MAX_LENGTH]),
       '#required' => FALSE,
       '#default_value' => $this->configuration[self::MEMO_MESSAGE][self::SENDER_ADDRESS] ?? NULL,
       '#maxlength' => self::SENDER_ADDRESS_MAX_LENGTH,
