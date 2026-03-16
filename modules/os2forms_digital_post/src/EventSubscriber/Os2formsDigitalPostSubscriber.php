@@ -32,8 +32,16 @@ final class Os2formsDigitalPostSubscriber implements EventSubscriberInterface {
       if ($submission instanceof WebformSubmissionInterface) {
         // Check whether generation is for digital post.
         if ($context = $this->getDigitalPostContext($submission)) {
-          $lookupResult = $context['lookupResult'];
-          $senderAddress = $context['senderAddress'];
+          $lookupResult = $context['lookupResult'] ?? NULL;
+          $senderAddress = $context['senderAddress'] ?? '';
+
+          if (!$lookupResult instanceof CprLookupResult && !$lookupResult instanceof CompanyLookupResult) {
+            return;
+          }
+
+          if (!is_string($senderAddress)) {
+            $senderAddress = '';
+          }
 
           // Combine address parts.
           $streetAddress = $lookupResult->getStreet();
