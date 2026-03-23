@@ -113,6 +113,8 @@ final class Os2formsDigitalPostSubscriber implements EventSubscriberInterface {
 
   /**
    * Check for Digital Post context in the current session.
+   *
+   * @return array<string, mixed>|null
    */
   public function getDigitalPostContext(WebformSubmissionInterface $submission): ?array {
     $key = $this->createSessionKeyFromSubmission($submission);
