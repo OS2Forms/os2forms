@@ -5,6 +5,7 @@ namespace Drupal\os2forms_webform_maps\Plugin\WebformElement;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\leaflet\LeafletSettingsElementsTrait;
 use Drupal\webform\Plugin\WebformElementBase;
+use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * Provides a 'webform_map_field' element.
@@ -20,6 +21,13 @@ class WebformLeafletMapField extends WebformElementBase {
 
   use LeafletSettingsElementsTrait;
 
+  // Valid Leaflet control positions (cf.
+  // https://github.com/Leaflet/Leaflet/blob/main/src/control/Control.js).
+  const string LEAFLET_POSITION_TOP_LEFT = 'topleft';
+  const string LEAFLET_POSITION_TOP_RIGHT = 'topright';
+  const string LEAFLET_POSITION_BOTTOM_LEFT = 'bottomleft';
+  const string LEAFLET_POSITION_BOTTOM_RIGHT = 'bottomright';
+
   /**
    * {@inheritdoc}
    */
@@ -33,10 +41,11 @@ class WebformLeafletMapField extends WebformElementBase {
       'minZoom' => 1,
       'maxZoom' => 18,
       'zoomFiner' => 0,
+      'zoomControlPosition' => self::LEAFLET_POSITION_TOP_LEFT,
       'scrollWheelZoom' => 0,
       'doubleClickZoom' => 1,
 
-      'position' => 'topleft',
+      'position' => self::LEAFLET_POSITION_TOP_LEFT,
       'marker' => 'defaultMarker',
       'drawPolyline' => 0,
       'drawRectangle' => 0,
@@ -62,6 +71,9 @@ class WebformLeafletMapField extends WebformElementBase {
       'circle_color' => '#3388FF',
       'rectangle_color' => '#3388FF',
 
+      // Display settings.
+      'display_image_on' => ['email', 'html', 'pdf'],
+      'display_geojson_on' => ['text', 'html'],
     ] + parent::defineDefaultProperties();
   }
 
@@ -71,6 +83,13 @@ class WebformLeafletMapField extends WebformElementBase {
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
     $map_keys = array_keys(leaflet_map_get_info());
+
+    $positionOptions = [
+      self::LEAFLET_POSITION_TOP_LEFT => $this->t('topleft'),
+      self::LEAFLET_POSITION_TOP_RIGHT => $this->t('topright'),
+      self::LEAFLET_POSITION_BOTTOM_LEFT => $this->t('bottomleft'),
+      self::LEAFLET_POSITION_BOTTOM_RIGHT => $this->t('bottomright'),
+    ];
 
     $form['mapstyles'] = [
       '#type' => 'fieldset',
@@ -139,6 +158,11 @@ class WebformLeafletMapField extends WebformElementBase {
         '#step' => 1,
         '#description' => $this->t('Value that might/will be added to default Fit Elements Bounds Zoom. (-5 / +5)'),
       ],
+      'zoomControlPosition' => [
+        '#type' => 'select',
+        '#title' => $this->t('Zoom control position'),
+        '#options' => $positionOptions,
+      ],
       'scrollWheelZoom' => [
         '#type' => 'checkbox',
         '#title' => $this->t('Enable Scroll Wheel Zoom on click'),
@@ -159,12 +183,7 @@ class WebformLeafletMapField extends WebformElementBase {
       'position' => [
         '#type' => 'select',
         '#title' => $this->t('Toolbar position.'),
-        '#options' => [
-          'topleft' => $this->t('topleft'),
-          'topright' => $this->t('topright'),
-          'bottomleft' => $this->t('bottomleft'),
-          'bottomright' => $this->t('bottomright'),
-        ],
+        '#options' => $positionOptions,
       ],
       'marker' => [
         '#type' => 'radios',
@@ -329,7 +348,120 @@ class WebformLeafletMapField extends WebformElementBase {
       ],
     ];
 
+    $form['display_settings'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Display settings'),
+    ];
+    $form['display_settings']['display_settings_container'] = [
+      'display_image_on' => [
+        '#type' => 'checkboxes',
+        '#title' => $this->t('Display image on'),
+        '#options' => [
+          'email' => $this->t('Email'),
+          'html' => $this->t('HTML'),
+          'pdf' => $this->t('PDF'),
+        ],
+      ],
+
+      'display_geojson_on' => [
+        '#type' => 'checkboxes',
+        '#title' => $this->t('Display GeoJSON on'),
+        '#options' => [
+          'email' => $this->t('Email'),
+          'html' => $this->t('HTML'),
+          'pdf' => $this->t('PDF'),
+          'text' => $this->t('Text'),
+        ],
+      ],
+    ];
+
     return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function formatHtmlItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []): array {
+    $value = $this->getMapValue($element, $webform_submission, $options);
+
+    $imageId = 'map-image-' . $this->getKey($element);
+
+    $build = [];
+
+    $viewMode = $options['view_mode'] ?? 'results';
+    if ('table' === $viewMode) {
+      $viewMode = 'html';
+    }
+    elseif ($options['email'] ?? FALSE) {
+      $viewMode = 'email';
+    }
+    elseif ($options['pdf'] ?? FALSE) {
+      $viewMode = 'pdf';
+    }
+
+    // @todo Is this (i.e. $element['#display_image_on']) really the way to get element configuration?
+    $showImageOn = array_filter((array) ($element['#display_image_on'] ?? NULL));
+    $includeImage = isset($showImageOn[$viewMode]);
+
+    $showGeoJsonOn = array_filter((array) ($element['#display_geojson_on'] ?? NULL));
+    $includeGeoJson = isset($showGeoJsonOn[$viewMode]);
+
+    if ($includeImage) {
+      $build['image'] = [
+        '#type' => 'html_tag',
+        '#tag' => 'img',
+        '#attributes' => [
+          'class' => ['handler-help-message'],
+          'id' => $imageId,
+          'src' => $value['image'],
+        ],
+        '#prefix' => '<div class="os2forms-webform-maps-image">',
+        '#suffix' => '</div>',
+      ];
+    }
+
+    if ($includeGeoJson) {
+      $build['geojson'] = [
+        '#markup' => $value['geojson'],
+        '#prefix' => '<div class="os2forms-webform-maps-geojson">',
+        '#suffix' => '</div>',
+      ];
+    }
+
+    return $build;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function formatTextItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    $value = $this->getMapValue($element, $webform_submission, $options);
+
+    return $value['geojson'];
+  }
+
+  /**
+   * Get structured map value.
+   *
+   * @return array{
+   *   image: string,
+   *     geojson: string
+   *   }
+   */
+  private function getMapValue(array $element, WebformSubmissionInterface $webform_submission, array $options = []): array {
+    $value = $this->getValue($element, $webform_submission, $options);
+
+    try {
+      $data = json_decode($value, associative: TRUE, flags: JSON_THROW_ON_ERROR);
+    }
+    catch (\JsonException) {
+      $data = [];
+    }
+
+    return $data + [
+      'image' => '',
+      'geojson' => 'null',
+    ];
   }
 
 }
