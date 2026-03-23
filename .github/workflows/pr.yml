@@ -23,17 +23,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      
+      - name: Mark repo as safe for git (container)
+        run: |
+          docker compose run --rm --user 0 php bash -lc \
+            'git config --system --add safe.directory /app || git config --global --add safe.directory /app'
+
+      - name: Fix ownership (container)
+        run: |
+          docker compose run --rm --user 0             -e HOST_UID=$(id -u) -e HOST_GID=$(id -g)             php bash -lc 'chown -R ${HOST_UID}:${HOST_GID} /app'
+
       - name: Validate composer files
         run: |
-          # Note that we don't use the --strict flag on validate due to the
-          # package drupal/config_entity_revisions 2.0.x-dev being considered a
-          # version cf.
-          # https://getcomposer.org/doc/articles/versions.md#branches
-          docker compose run --rm php composer validate composer.json
+          docker compose run --rm --user "$(id -u):$(id -g)" php composer validate composer.json
+
       - name: Check that composer file is normalized
         run: |
-          docker compose run --rm php composer install
-          docker compose run --rm php composer normalize --dry-run
+          docker compose run --rm --user "$(id -u):$(id -g)" php composer install
+          docker compose run --rm --user "$(id -u):$(id -g)" php composer normalize --dry-run
 
   test-composer-files:
     name: Test composer files
@@ -43,29 +50,50 @@ jobs:
         dependency-version: [ prefer-lowest, prefer-stable ]
     steps:
       - uses: actions/checkout@v4
+
+      - name: Fix ownership (container)
+        run: |
+          docker compose run --rm --user 0             -e HOST_UID=$(id -u) -e HOST_GID=$(id -g)             php bash -lc 'chown -R ${HOST_UID}:${HOST_GID} /app'
+
+      - name: Debug compose + php
+        run: |
+          ls -la
+          docker compose config
+          docker compose run --rm php php -v
+
       - name: Check that dependencies resolve.
         run: |
-          # Clean up before update (cf. https://www.drupal.org/project/simplesamlphp_auth/issues/3350773)
           rm -fr vendor/
-          docker compose run --rm php composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction
+          docker compose run --rm --user "$(id -u):$(id -g)" php composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction
 
   php-coding-standards:
     name: PHP coding standards
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Fix ownership (container)
+        run: |
+          docker compose run --rm --user 0             -e HOST_UID=$(id -u) -e HOST_GID=$(id -g)             php bash -lc 'chown -R ${HOST_UID}:${HOST_GID} /app'
+
       - name: Install Dependencies
         run: |
-          docker compose run --rm php composer install
+          docker compose run --rm --user "$(id -u):$(id -g)" php composer install
+
       - name: PHPCS
         run: |
-          docker compose run --rm php composer coding-standards-check/phpcs
+          docker compose run --rm --user "$(id -u):$(id -g)" php composer coding-standards-check/phpcs
 
   php-code-analysis:
     name: PHP code analysis
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Fix ownership (container)
+        run: |
+          docker compose run --rm --user 0             -e HOST_UID=$(id -u) -e HOST_GID=$(id -g)             php bash -lc 'chown -R ${HOST_UID}:${HOST_GID} /app'
+
       - name: Code analysis
         run: |
           ./scripts/code-analysis

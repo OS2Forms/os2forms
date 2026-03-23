@@ -5,6 +5,7 @@ namespace Drupal\os2forms_webform_maps\Element;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\webform\Element\WebformCompositeFormElementTrait;
+use Drupal\os2forms_webform_maps\Plugin\WebformElement\WebformLeafletMapField as WebformLeafletMapElement;
 
 /**
  * Provides a webform_map_field.
@@ -36,7 +37,7 @@ class WebformLeafletMapField extends FormElement {
       '#minZoom' => 1,
       '#maxZoom' => 18,
       '#zoomFiner' => 0,
-      '#position' => 'topleft',
+      '#position' => WebformLeafletMapElement::LEAFLET_POSITION_TOP_LEFT,
       '#marker' => 'defaultMarker',
       '#drawPolyline' => 0,
       '#drawRectangle' => 0,
@@ -90,6 +91,7 @@ class WebformLeafletMapField extends FormElement {
       'zoomFiner' => $element['#zoomFiner'],
       'minZoom' => $element['#minZoom'],
       'maxZoom' => $element['#maxZoom'],
+      'zoomControlPosition' => $element['#zoomControlPosition'] ?? WebformLeafletMapElement::LEAFLET_POSITION_TOP_LEFT,
       'center' => [
         'lat' => (float) $element['#lat'],
         'lon' => (float) $element['#lon'],
