@@ -15,6 +15,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
   Add address information to Digital Post shipments to ensure "*fjernprint*"
   can be sent.
 - Add option to add return address to Digital Post shipments.
+- [PR-317](https://github.com/OS2Forms/os2forms/pull/317)
+  Updated code analysis script.
 - [PR-306](https://github.com/OS2Forms/os2forms/pull/306)
   Made digital signature text placement configurable.
 - [#251](https://github.com/OS2Forms/os2forms/issues/251)
