@@ -96,17 +96,23 @@ also means that it is up to individual installations to style it correctly.
 This should be done in OS2Forms Attachment-templates, see
 [Overwriting templates](https://github.com/OS2Forms/os2forms/tree/develop/modules/os2forms_attachment#overwriting-templates).
 
-To see the exact requirements for address placement, see
+Furthermore, a single-line sender address may be configured on the handler.
+The value of this field will be injected into the HTML as a sender address,
+which should be placed within the envelope window just above the recipient
+address. As with the recipient information, it is up to individual
+installations to style it correctly.
+
+To see the exact requirements for address and sender placement, see
 [digst_a4_farve_ej_til_kant_demo_ny_rudeplacering.pdf](docs/digst_a4_farve_ej_til_kant_demo_ny_rudeplacering.pdf).
 
 ### The injected HTML
 
-Variations of the injected HTML include extended addresses and c/o.
+Variations of the injected HTML include extended addresses, c/o and sender
+address.
 
-Without extended address information or c/o:
+Without extended address information, c/o or sender address:
 
 ```html
-
 <div id="envelope-window-digital-post">
   <div class="h-card">
     <div class="p-name">Jeppe</div>
@@ -131,7 +137,6 @@ With just an extended address:
 With just c/o:
 
 ```html
-
 <div id="envelope-window-digital-post">
   <div class="h-card">
     <div class="p-name">Jeppe</div>
@@ -141,10 +146,25 @@ With just c/o:
 </div>
 ```
 
-With extended address information and c/o:
+With just the sender address:
 
 ```html
 <div id="envelope-window-digital-post">
+  <div id="sender-address-digital-post">Dokk1, Hack Kampmanns Plads 2, 8000 Aarhus C</div>
+  <div class="h-card">
+    <div class="p-name">Jeppe</div>
+    <div><span class="p-street-address">Test vej HouseNr</span></div>
+    <div><span class="p-postal-code">2100</span> <span class="p-locality">Copenhagen</span></div>
+  </div>
+</div>
+```
+
+
+With extended address information, c/o and sender address:
+
+```html
+<div id="envelope-window-digital-post">
+  <div id="sender-address-digital-post">Dokk1, Hack Kampmanns Plads 2, 8000 Aarhus C</div>
   <div class="h-card">
     <div class="p-name">Jeppe</div>
     <div class="p-name">c/o Mikkel</div>
@@ -218,13 +238,23 @@ footer {
 }
 
 // Style the h-card div
-#envelope-window-digital-post > div {
+#envelope-window-digital-post > .h-card {
   position: absolute;
   top: 16mm;
   left: 4mm;
   font-size: 10px;
   height: $recipient-window-height;
   width: $recipient-window-width;
+}
+
+// Style the sender address div
+#envelope-window-digital-post > #sender-address-digital-post {
+  position: absolute;
+  top: 12mm;
+  left: 4mm;
+  font-size: 8px;
+  height: 4mm;
+  width: 71mm;
 }
 
 // More custom styling...
