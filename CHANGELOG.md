@@ -13,6 +13,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 - [PR-315](https://github.com/OS2Forms/os2forms/pull/315)
   Added “Display on“ options to Map element
+- [PR-306](https://github.com/OS2Forms/os2forms/pull/306)
+  Made digital signature text placement configurable.
 - [#251](https://github.com/OS2Forms/os2forms/issues/251)
   Webform encrypt uninstall problem fix
 - git actions check
