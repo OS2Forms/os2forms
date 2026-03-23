@@ -40,7 +40,7 @@ drupal_composer config --no-plugins allow-plugins true
 
 # Making Drupal 10 compatible
 drupal_composer require psr/http-message:^1.0
-drupal_composer require mglaman/composer-drupal-lenient
+drupal_composer require mglaman/composer-drupal-lenient:^1.0
 drupal_composer config --merge --json extra.drupal-lenient.allowed-list '["drupal/coc_forms_auto_export", "drupal/webform_node_element"]'
 
 drupal_composer require wikimedia/composer-merge-plugin
