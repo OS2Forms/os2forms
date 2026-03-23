@@ -159,7 +159,6 @@ With just the sender address:
 </div>
 ```
 
-
 With extended address information, c/o and sender address:
 
 ```html
