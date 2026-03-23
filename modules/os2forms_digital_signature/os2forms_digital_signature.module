@@ -63,22 +63,12 @@ function os2forms_digital_signature_file_download($uri) {
     $allowedIpsArr = array_filter($allowedIpsArr);
     $remoteIp = \Drupal::request()->getClientIp();
 
-    // IP list is empty, allow access.
-    if (empty($allowedIpsArr)) {
+    // Check if remote IP matches any allowed IP or CIDR range.
+    if (empty($allowedIpsArr) || IpUtils::checkIp($remoteIp, $allowedIpsArr)) {
       $basename = basename($uri);
       return [
         'Content-disposition' => 'attachment; filename="' . $basename . '"',
       ];
-    }
-
-    // Check if remote IP matches any allowed IP or CIDR range.
-    foreach ($allowedIpsArr as $allowedIp) {
-      if ($remoteIp === $allowedIp || os2forms_digital_signature_ip_in_cidr($remoteIp, $allowedIp)) {
-        $basename = basename($uri);
-        return [
-          'Content-disposition' => 'attachment; filename="' . $basename . '"',
-        ];
-      }
     }
 
     // Deny access and log warning.
@@ -93,19 +83,4 @@ function os2forms_digital_signature_file_download($uri) {
 
   // Not submission file, allow normal access.
   return NULL;
-}
-
-/**
- * Check if an IP address is within a CIDR range.
- *
- * @param string $ip
- *   The IP address to check.
- * @param string $cidr
- *   The CIDR range (e.g. "172.16.0.0/16").
- *
- * @return bool
- *   TRUE if the IP is within the CIDR range, FALSE otherwise.
- */
-function os2forms_digital_signature_ip_in_cidr(string $ip, string $cidr): bool {
-  return IpUtils::checkIp($ip, $cidr);
 }
