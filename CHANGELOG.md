@@ -11,6 +11,10 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [PR-301](https://github.com/OS2Forms/os2forms/pull/301)
+  Add address information to Digital Post shipments to ensure "*fjernprint*"
+  can be sent.
+- Add option to add return address to Digital Post shipments.
 - [PR-305](https://github.com/OS2Forms/os2forms/pull/305)
   Fix IP validation in digital signature file download (CIDR support)
 - [PR-317](https://github.com/OS2Forms/os2forms/pull/317)
