@@ -1,6 +1,6 @@
 {
     "name": "os2forms/os2forms",
-    "description": "Drupal 8 OS2Form module provides advanced webform functionality for Danish Municipalities",
+    "description": "Drupal 10 OS2Form module provides advanced webform functionality for Danish Municipalities",
     "license": "EUPL-1.2",
     "type": "drupal-module",
     "require": {
