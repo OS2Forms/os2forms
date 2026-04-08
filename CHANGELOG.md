@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [PR-322](https://github.com/OS2Forms/os2forms/pull/322)
+  Update Digital Post handler error messages.
 - [PR-320](https://github.com/OS2Forms/os2forms/pull/320)
   Update README.
 - [PR-301](https://github.com/OS2Forms/os2forms/pull/301)
