@@ -424,7 +424,8 @@ f/OS-115_dawa_address
 - Security in case of vulnerabilities.
 ```
 
-[Unreleased]: https://github.com/OS2Forms/os2forms/compare/4.1.0...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms/compare/5.0.0...HEAD
+[5.0.0]: https://github.com/OS2Forms/os2forms/compare/4.1.0...5.0.0
 [4.1.0]: https://github.com/OS2Forms/os2forms/compare/4.0.0...4.1.0
 [4.0.0]: https://github.com/OS2Forms/os2forms/compare/3.22.2...4.0.0
 [3.22.2]: https://github.com/OS2Forms/os2forms/compare/3.22.1...3.22.2
