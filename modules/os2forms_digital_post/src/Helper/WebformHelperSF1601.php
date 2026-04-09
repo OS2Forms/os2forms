@@ -90,7 +90,7 @@ final class WebformHelperSF1601 implements LoggerInterface {
     $handlerMessageSettings = $handlerSettings[WebformHandlerSF1601::MEMO_MESSAGE];
     $recipientIdentifierKey = $handlerMessageSettings[WebformHandlerSF1601::RECIPIENT_ELEMENT] ?? NULL;
     if (NULL === $recipientIdentifierKey) {
-      $message = 'Recipient identifier element (key: @element_key) not found in submission';
+      $message = 'Recipient identifier element (key: @element_key) not found in handler settings';
       $context = [
         '@element_key' => WebformHandlerSF1601::RECIPIENT_ELEMENT,
       ];
@@ -115,7 +115,7 @@ final class WebformHelperSF1601 implements LoggerInterface {
     if (NULL === $recipientIdentifier) {
       $message = 'Recipient identifier element (key: @element_key) not found in submission';
       $context = [
-        '@element_key' => WebformHandlerSF1601::RECIPIENT_ELEMENT,
+        '@element_key' => $recipientIdentifierKey,
       ];
 
       $this->error($message, $context);
