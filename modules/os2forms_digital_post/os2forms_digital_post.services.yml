@@ -21,12 +21,14 @@ services:
       - "@Drupal\\os2forms_digital_post\\Helper\\Settings"
       - "@plugin.manager.element_info"
       - "@webform.token_manager"
+      - "@Drupal\\os2forms_digital_post\\EventSubscriber\\Os2formsDigitalPostSubscriber"
 
   Drupal\os2forms_digital_post\Helper\ForsendelseHelper:
     arguments:
       - "@Drupal\\os2forms_digital_post\\Helper\\Settings"
       - "@plugin.manager.element_info"
       - "@webform.token_manager"
+      - "@Drupal\\os2forms_digital_post\\EventSubscriber\\Os2formsDigitalPostSubscriber"
 
   Drupal\os2forms_digital_post\Helper\DigitalPostHelper:
     arguments:
@@ -69,3 +71,9 @@ services:
       - '@database'
       - '@Drupal\os2forms_digital_post\Helper\MeMoHelper'
       - '@logger.channel.os2forms_digital_post'
+
+  Drupal\os2forms_digital_post\EventSubscriber\Os2formsDigitalPostSubscriber:
+    arguments:
+      - '@session'
+    tags:
+      - { name: 'event_subscriber' }

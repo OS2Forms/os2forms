@@ -13,6 +13,16 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 - [PR-315](https://github.com/OS2Forms/os2forms/pull/315)
   Added “Display on“ options to Map element
+- [PR-322](https://github.com/OS2Forms/os2forms/pull/322)
+  Update Digital Post handler error messages.
+- [PR-320](https://github.com/OS2Forms/os2forms/pull/320)
+  Update README.
+- [PR-301](https://github.com/OS2Forms/os2forms/pull/301)
+  Add address information to Digital Post shipments to ensure "*fjernprint*"
+  can be sent.
+- Add option to add return address to Digital Post shipments.
+- [PR-305](https://github.com/OS2Forms/os2forms/pull/305)
+  Fix IP validation in digital signature file download (CIDR support)
 - [PR-317](https://github.com/OS2Forms/os2forms/pull/317)
   Updated code analysis script.
 - [PR-306](https://github.com/OS2Forms/os2forms/pull/306)
@@ -418,7 +428,8 @@ f/OS-115_dawa_address
 - Security in case of vulnerabilities.
 ```
 
-[Unreleased]: https://github.com/OS2Forms/os2forms/compare/4.1.0...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms/compare/5.0.0...HEAD
+[5.0.0]: https://github.com/OS2Forms/os2forms/compare/4.1.0...5.0.0
 [4.1.0]: https://github.com/OS2Forms/os2forms/compare/4.0.0...4.1.0
 [4.0.0]: https://github.com/OS2Forms/os2forms/compare/3.22.2...4.0.0
 [3.22.2]: https://github.com/OS2Forms/os2forms/compare/3.22.1...3.22.2

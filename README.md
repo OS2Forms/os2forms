@@ -2,42 +2,31 @@
 
 ## Install
 
-OS2Forms Drupal 8 module is available to download via composer.
+OS2Forms Drupal 10 module is available to download via composer.
 
 ```sh
 composer require os2forms/os2forms
-drush en os2forms
+drush pm:install os2forms
 ```
 
 If you don't have Drupal installed on you server, you will to need install it first.
-Read more about [how to install drupal core](https://www.drupal.org/docs/8/install).
+Read more about [how to install drupal core](https://www.drupal.org/docs/getting-started/installing-drupal).
 
-We are recommending to install drupal via composer by using
-[OS2Forms composer project](https://github.com/OS2Forms/composer-project).
-By this way you will get standalone project with OS2Forms module on board, plus
-all the other contrib modules you will probably need to configure OS2Forms to
-your specific demands.
-
-```sh
-composer create-project os2forms/composer-project:8.x-dev some-dir --no-interaction
-```
-
-To get more benefits on your Drupal project we are offering you to use
+To get more benefits on your Drupal project we recommend you use
 [OS2web](https://packagist.org/packages/os2web/os2web) as installation
-profile for Drupal. This profile is a part of OS2Forms composer project
-mentioned above.
+profile for Drupal.
 
 You can easy download and install OS2web installation profile to your
 composer based Drupal project with commands:
 
 ```sh
 composer require os2web/os2web
-drush si os2web --db-url=mysql://db_user:db_pass@mysql_host/db_name --locale=da --site-name="OS2Forms" --account-pass=admin -y
+drush site:install os2web --db-url=mysql://db_user:db_pass@mysql_host/db_name --locale=da --site-name="OS2Forms" --account-pass=admin -y
 ```
 
 ## Update
 
-Updating process for OS2forms module is similar to usual Drupal 8 module.
+Updating process for OS2forms module is similar to usual Drupal 10 module.
 Use Composer's built-in command for listing packages that have updates available:
 
 ```sh
@@ -46,53 +35,62 @@ composer outdated os2forms/os2forms
 
 ## Automated testing and code quality
 
-See [OS2Forms testing and CI information](https://github.com/OS2Forms/docs#testing-and-ci)
+See [OS2Forms testing and CI information](https://os2forms.github.io/os2forms-docs/for-developers.html#testing-and-ci)
 
 ## Contribution
 
-OS2Forms project is opened for new features and os course bugfixes.
-If you have any suggestion or you found a bug in project, you are very welcome
-to create an issue in github repository issue tracker.
-For issue description there is expected that you will provide clear and
-sufficient information about your feature request or bug report.
+The OS2Forms project is open for new features and bugfixes. If you have any
+suggestion, or you found a bug in the project, you are very welcome to create
+an issue in github repository issue tracker. For issue description was ask
+that you will provide clear and sufficient information about your feature
+request or bug report.
 
 ### Code review policy
 
-See [OS2Forms code review policy](https://github.com/OS2Forms/docs#code-review)
+See [OS2Forms code review policy](https://os2forms.github.io/os2forms-docs/for-developers.html#code-review)
 
 ### Git name convention
 
-See [OS2Forms git name convention](https://github.com/OS2Forms/docs#git-guideline)
+See [OS2Forms git name convention](https://os2forms.github.io/os2forms-docs/for-developers.html#git-guideline)
 
 ## Important notes
 
 ### Webforms
 
-Each webform, including all its settings, is stored as configuration in db and
-will(could) be exported as `yml` file via Drupal configuration management
-system. And afterwards could be tracked by `git`.
+Each webform, along with all its settings, is stored as configuration in the
+database and can be exported as a `yml` file through Drupal's configuration
+management system, making it trackable via `git`.
 
-It means that all webform settings from drupal database will
-be syncronized (exported/imported) with state stored in `yml` files from
-configuration folder stored in git repository. Without proper actions webforms
-could be deleted or reverted to state in `yml` during synchronization.
+This means that webform settings in the Drupal database will be synchronized
+(exported/imported) with the state defined in `yml` files located in the
+configuration folder of your git repository. Without taking the appropriate
+precautions, webforms may be deleted or reverted to the state captured in
+those `yml` files during synchronization.
 
-To avoid/prevent this behavior we recommend use `Config ignore` module, where
-you can add all settings you do not want to export/import via configuration
-management system.
+To prevent this, we recommend using the
+`Config ignore`-[module](https://www.drupal.org/project/config_ignore), which
+allows you to exclude specific settings from the configuration management
+export/import process.
 
 ### Serviceplatformen plugins
 
-Settings for CPR and CVR serviceplantormen plugins are storing as configuration
-in db and will(could) be exported as `yml` file via Drupal configuration
-management system. And afterwards could be tracked by `git`.
+Similar to webforms, settings for the CPR and CVR Serviceplatformen plugins
+are stored as configuration in the database and can be exported as `yml` files
+through Drupal's configuration management system, making them trackable via
+`git`.
 
-If case you have public access to your git repository all setting from plugins
-will be exposed for third persons.
+Note that if your git repository is publicly accessible, these plugin settings
+— which may contain sensitive information — will be exposed. As with webforms,
+we recommend using the `Config ignore`-module to exclude them from the
+export/import process.
 
-To avoid/prevent this behavior we recommend use `Config ignore` module, where
-you can add all settings you do not want to export/import via configuration
-management system.
+### Other configuration
+
+The two cases above are just some examples of configuration that may be
+sensitive or subject to unintended changes during synchronization. In general,
+any configuration that is environment-specific, contains sensitive data, or is
+managed directly in the database rather than through code should be considered
+for exclusion via the `Config ignore`-module.
 
 ## Unstable features
 
@@ -148,11 +146,12 @@ docker compose run --rm markdownlint markdownlint '**/*.md'
 
 We use [PHPStan](https://phpstan.org/) for static code analysis.
 
-Running statis code analysis on a standalone Drupal module is a bit tricky, so we use a helper script to run the
+Running static code analysis on a standalone Drupal module is a bit tricky, so we use a helper script to run the
 analysis:
 
 ```shell
 docker compose run --rm php ./scripts/code-analysis
 ```
 
-**Note**: Currently the code analysis is only run on the `os2forms_digital_post` sub-module (cf. [`phpstan.neon`](./phpstan.neon)).
+**Note**: Currently the code analysis is only run on the `os2forms_digital_post` and `os2forms_fbs_handler` sub-modules
+(cf. [`phpstan.neon`](./phpstan.neon)).

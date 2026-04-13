@@ -31,11 +31,17 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
   public const MESSAGE_HEADER_LABEL = 'message_header_label';
   public const RECIPIENT_ELEMENT = 'recipient_element';
   public const ATTACHMENT_ELEMENT = 'attachment_element';
+  public const SENDER_ADDRESS = 'sender_address';
 
   /**
    * Maximum length of sender label.
    */
   private const SENDER_LABEL_MAX_LENGTH = 64;
+
+  /**
+   * Maximum length of sender address.
+   */
+  private const SENDER_ADDRESS_MAX_LENGTH = 70;
 
   /**
    * Maximum length of header label.
@@ -129,6 +135,15 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
       '#required' => TRUE,
       '#default_value' => $this->configuration[self::MEMO_MESSAGE][self::MESSAGE_HEADER_LABEL] ?? NULL,
       '#maxlength' => self::MESSAGE_HEADER_LABEL_MAX_LENGTH,
+    ];
+
+    $form[self::MEMO_MESSAGE][self::SENDER_ADDRESS] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Sender address'),
+      '#description' => $this->t('Optional sender address shown on the printed document. Displayed as a single line above the recipient name. Maximum @max characters.', ['@max' => self::SENDER_ADDRESS_MAX_LENGTH]),
+      '#required' => FALSE,
+      '#default_value' => $this->configuration[self::MEMO_MESSAGE][self::SENDER_ADDRESS] ?? NULL,
+      '#maxlength' => self::SENDER_ADDRESS_MAX_LENGTH,
     ];
 
     $form[self::MEMO_ACTIONS] = [
