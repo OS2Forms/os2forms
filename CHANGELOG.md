@@ -11,7 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
-- Added NemID first name, middle name and last name webform elements.
+- [PR-325](https://github.com/OS2Forms/os2forms/pull/325)
+  Added NemID first name, middle name and last name webform elements.
 - [PR-322](https://github.com/OS2Forms/os2forms/pull/322)
   Update Digital Post handler error messages.
 - [PR-320](https://github.com/OS2Forms/os2forms/pull/320)
