@@ -258,7 +258,7 @@ function os2forms_update_103003() {
       continue;
     }
 
-    [$new_editor, ] = $smart_defaults
+    [$new_editor] = $smart_defaults
       ->computeSmartDefaultSettings($editor, $format);
     $new_editor->save();
   }
