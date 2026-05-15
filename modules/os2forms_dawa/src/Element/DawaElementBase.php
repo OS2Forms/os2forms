@@ -4,7 +4,6 @@ namespace Drupal\os2forms_dawa\Element;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element\Textfield;
-use Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DatafordelerAddressLookupInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
