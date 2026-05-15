@@ -51,9 +51,9 @@ class DawaElementAddress extends DawaElementBase {
     ];
     $form['autocomplete']['limit_by_municipality'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Limit by municipality (-es)'),
-      '#pattern' => '^(\d{3},?)*$',
-      '#description' => $this->t('CSV list of municipalities codes, what will limit the address lookup.'),
+      '#title' => $this->t('Limit by municipality'),
+      '#pattern' => '^(\d{4})$',
+      '#description' => $this->t('Municipatity code, what will limit the address lookup. Single number, 4 digits, e.g. 0661'),
     ];
 
     return $form;

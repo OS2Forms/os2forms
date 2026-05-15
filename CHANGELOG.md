@@ -32,6 +32,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - git actions check
 - [PR-289](https://github.com/OS2Forms/os2forms/pull/289)
   Added required "Zoom control position" to map element
+- [#246](https://github.com/OS2Forms/os2forms/issues/246)
+  Adding Datafordeler address lookup
 
 ## [5.0.0] 2025-11-18
 

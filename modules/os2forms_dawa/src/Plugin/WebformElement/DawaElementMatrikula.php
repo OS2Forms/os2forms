@@ -10,8 +10,8 @@ use Drupal\webform\WebformSubmissionInterface;
  *
  * @WebformElement(
  *   id = "os2forms_dawa_matrikula",
- *   label = @Translation("DAWA Matrikula (autocomplete)"),
- *   description = @Translation("Provides a DAWA Matrikula Autocomplete element."),
+ *   label = @Translation("DAWA Matrikula (autocomplete) - DEPRECATED"),
+ *   description = @Translation("Provides a DAWA Matrikula Autocomplete element. This element is deprecated due to the API being phased out. There is no provided alternative for this element."),
  *   category = @Translation("DAWA"),
  * )
  */
