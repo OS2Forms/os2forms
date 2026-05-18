@@ -8,6 +8,7 @@
 use Composer\InstalledVersions;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\filter\Entity\FilterFormat;
 use Drupal\taxonomy\Entity\Term;
 use Symfony\Component\Yaml\Yaml;
 
@@ -236,4 +237,31 @@ function os2forms_update_103001() {
  */
 function os2forms_update_103002() {
   \Drupal::service('module_installer')->install(['os2web_key']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Updating ckeditor -> ckeditor5.
+ */
+function os2forms_update_103003() {
+  \Drupal::service('module_installer')->install(['ckeditor5']);
+
+  $editor_storage = \Drupal::entityTypeManager()->getStorage('editor');
+  /** @var \Drupal\ckeditor5\SmartDefaultSettings $smart_defaults */
+  $smart_defaults = \Drupal::service('ckeditor5.smart_default_settings');
+
+  foreach (FilterFormat::loadMultiple() as $format) {
+    /** @var \Drupal\editor\EditorInterface $editor */
+    $editor = $editor_storage->load($format->id());
+    if (!$editor || $editor->getEditor() !== 'ckeditor') {
+      continue;
+    }
+
+    [$new_editor] = $smart_defaults
+      ->computeSmartDefaultSettings($editor, $format);
+    $new_editor->save();
+  }
+
+  \Drupal::service('module_installer')->uninstall(['ckeditor']);
 }
