@@ -1,0 +1,114 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall for the os2forms_digital_signature module.
+ */
+
+use Drupal\os2forms_attachment\Os2formsAttachmentPrintBuilder;
+use Drupal\webform\Entity\Webform;
+
+/**
+ * Migrate per-element digital signature config onto the handler.
+ *
+ * Previously the os2forms_attachment element exposed #digital_signature and
+ * #digital_signature_position properties. Both now live on the
+ * os2forms_digital_signature handler. This update walks every webform that
+ * has the handler enabled, lifts the values off the element into the handler
+ * config, and strips the element properties.
+ */
+function os2forms_digital_signature_update_10001(&$sandbox) {
+  $logger = \Drupal::logger('os2forms_digital_signature');
+  $migrated = 0;
+  $skipped = [];
+
+  /** @var \Drupal\webform\WebformInterface[] $webforms */
+  $webforms = Webform::loadMultiple();
+  foreach ($webforms as $webform) {
+    $handlers = $webform->getHandlers();
+    $signatureHandler = NULL;
+    foreach ($handlers as $handler) {
+      if ($handler->getPluginId() === 'os2forms_digital_signature') {
+        $signatureHandler = $handler;
+        break;
+      }
+    }
+    if (!$signatureHandler) {
+      continue;
+    }
+
+    $elements = $webform->getElementsDecodedAndFlattened();
+    $signedKey = NULL;
+    $signedPosition = NULL;
+    $multiple = [];
+    foreach ($elements as $key => $element) {
+      if (!empty($element['#digital_signature'])) {
+        if ($signedKey === NULL) {
+          $signedKey = $key;
+          $signedPosition = $element['#digital_signature_position']
+            ?? Os2formsAttachmentPrintBuilder::SIGNATURE_POSITION_AFTER_CONTENT;
+        }
+        else {
+          $multiple[] = $key;
+        }
+      }
+    }
+
+    if ($signedKey === NULL) {
+      $skipped[$webform->id()] = 'no element had #digital_signature set';
+      continue;
+    }
+
+    if ($multiple) {
+      $logger->warning('Webform @id has multiple elements flagged for signing (@all); migrating @chosen and ignoring the rest.', [
+        '@id' => $webform->id(),
+        '@all' => implode(', ', array_merge([$signedKey], $multiple)),
+        '@chosen' => $signedKey,
+      ]);
+    }
+
+    // Write the new config onto the handler.
+    $config = $signatureHandler->getConfiguration();
+    $config['settings']['attachment_element'] = $signedKey;
+    $config['settings']['signature_position'] = $signedPosition;
+    $signatureHandler->setConfiguration($config);
+
+    // Strip the legacy properties from every element.
+    $rawElements = $webform->getElementsDecoded();
+    _os2forms_digital_signature_strip_legacy_props($rawElements);
+    $webform->setElements($rawElements);
+
+    $webform->save();
+    $migrated++;
+  }
+
+  if ($skipped) {
+    foreach ($skipped as $id => $reason) {
+      $logger->warning('Skipped webform @id during digital signature config migration: @reason. Configure the handler manually.', [
+        '@id' => $id,
+        '@reason' => $reason,
+      ]);
+    }
+  }
+
+  return t('Migrated digital signature config on @count webform(s).', ['@count' => $migrated]);
+}
+
+/**
+ * Recursively remove legacy digital signature element properties.
+ *
+ * @param array $elements
+ *   The decoded elements tree, modified in place.
+ */
+function _os2forms_digital_signature_strip_legacy_props(array &$elements) {
+  foreach ($elements as $key => &$value) {
+    if (!is_array($value)) {
+      continue;
+    }
+    if (str_starts_with((string) $key, '#')) {
+      continue;
+    }
+    unset($value['#digital_signature'], $value['#digital_signature_position']);
+    _os2forms_digital_signature_strip_legacy_props($value);
+  }
+}
