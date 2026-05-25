@@ -102,7 +102,7 @@ class DawaElementAddressMatrikula extends WebformCompositeBase {
     /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DatafordelerAddressLookupInterface $addressLookup */
     $addressLookup = $datalookupManager->createInstance('datafordeler_address_lookup');
 
-    /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DatafordelerMartikulaLookupInterface $matrikulaLookup */
+    /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DatafordelerMatrikulaLookupInterface $matrikulaLookup */
     $matrikulaLookup = $datalookupManager->createInstance('datafordeler_matrikula_lookup');
 
     // Getting address.
