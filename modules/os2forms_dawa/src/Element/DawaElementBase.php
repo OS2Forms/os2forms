@@ -36,12 +36,10 @@ abstract class DawaElementBase extends Textfield {
     if (!empty($value)) {
       $matches = [];
 
-      /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DatafordelerAddressLookupInterface $datafordelerAddressLookup */
-      $datafordelerAddressLookup = \Drupal::service('plugin.manager.os2web_datalookup')->createInstance('datafordeler_address_lookup');
+      if ($element['#type'] == 'os2forms_dawa_address') {
+        /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DatafordelerAddressLookupInterface $datafordelerAddressLookup */
+        $datafordelerAddressLookup = \Drupal::service('plugin.manager.os2web_datalookup')->createInstance('datafordeler_address_lookup');
 
-      $element_type = $element['#type'];
-
-      if ($element_type == 'os2forms_dawa_address') {
         $parameters = new ParameterBag($element['#autocomplete_route_parameters']);
         $parameters->set('q', $value);
         $matches = $datafordelerAddressLookup->getAddressMatches($parameters);
