@@ -114,10 +114,10 @@ class DawaElementAddressMatrikula extends WebformCompositeBase {
     $address = $addressLookup->getSingleAddress($addressParams);
 
     if ($address) {
-      $addressAccessId = $address->getAccessAddressId();
+      $addressHouseId = $address->getHouseId();
 
       // Find matrikula list from the houseid (husnummer):
-      $matrikulaId = $matrikulaLookup->getMatrikulaId($addressAccessId);
+      $matrikulaId = $matrikulaLookup->getMatrikulaId($addressHouseId);
 
       // Find Matrikula entries from matrikulas ID.
       if ($matrikulaId) {
