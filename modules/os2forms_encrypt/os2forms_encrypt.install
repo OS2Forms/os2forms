@@ -17,3 +17,19 @@
 function os2forms_encrypt_install() {
   module_set_weight('os2forms_encrypt', 9999);
 }
+
+/**
+ * Implements hook_uninstall().
+ */
+function os2forms_encrypt_uninstall(): void {
+  $config_factory = \Drupal::configFactory();
+
+  $configs = [
+    'encrypt.profile.webform',
+    'key.key.webform',
+  ];
+
+  foreach ($configs as $config_name) {
+    $config_factory->getEditable($config_name)->delete();
+  }
+}
