@@ -53,7 +53,7 @@ class DawaElementAddress extends DawaElementBase {
       '#type' => 'textfield',
       '#title' => $this->t('Limit by municipality'),
       '#pattern' => '^(\d{4})$',
-      '#description' => $this->t('Municipatity code, what will limit the address lookup. Single number, 4 digits, e.g. 0661'),
+      '#description' => $this->t('Municipality code, what will limit the address lookup. Single number, 4 digits, e.g. 0661'),
     ];
 
     return $form;
