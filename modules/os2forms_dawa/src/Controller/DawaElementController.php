@@ -3,7 +3,7 @@
 namespace Drupal\os2forms_dawa\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\os2forms_dawa\Service\DawaService;
+use Drupal\os2web_datalookup\Plugin\DataLookupManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,20 +14,20 @@ use Symfony\Component\HttpFoundation\Request;
 class DawaElementController extends ControllerBase {
 
   /**
-   * The DAWA service object.
+   * Datafordeler address lookup.
    *
-   * @var \Drupal\os2forms_dawa\Service\DawaService
+   * @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DatafordelerAddressLookupInterface
    */
-  protected $dawaService;
+  protected $datafordelerAddressLookup;
 
   /**
    * Constructs a DawaElementController object.
    *
-   * @param \Drupal\os2forms_dawa\Service\DawaService $os2forms_dawa_service
-   *   The DAWA service object.
+   * @param \Drupal\os2web_datalookup\Plugin\DataLookupManager $dataLookupManager
+   *   Datalookup manager.
    */
-  public function __construct(DawaService $os2forms_dawa_service) {
-    $this->dawaService = $os2forms_dawa_service;
+  public function __construct(DataLookupManager $dataLookupManager) {
+    $this->datafordelerAddressLookup = $dataLookupManager->createInstance('datafordeler_address_lookup');
   }
 
   /**
@@ -35,7 +35,7 @@ class DawaElementController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('os2forms_dawa.service')
+      $container->get('plugin.manager.os2web_datalookup')
     );
   }
 
@@ -61,18 +61,8 @@ class DawaElementController extends ControllerBase {
     $matches = [];
 
     // Get the matches based on the element type.
-    switch ($element_type) {
-      case 'os2forms_dawa_address':
-        $matches = $this->dawaService->getAddressMatches($query);
-        break;
-
-      case 'os2forms_dawa_block':
-        $matches = $this->dawaService->getBlockMatches($query);
-        break;
-
-      case 'os2forms_dawa_matrikula':
-        $matches = $this->dawaService->getMatrikulaMatches($query);
-        break;
+    if ($element_type == 'os2forms_dawa_address') {
+      $matches = $this->datafordelerAddressLookup->getAddressMatches($query);
     }
 
     return new JsonResponse($matches);
