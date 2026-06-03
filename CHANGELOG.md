@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## [5.1.0] 2026-06-03
+
 - [PR-326](https://github.com/OS2Forms/os2forms/pull/326)
   Updating ckeditor -> ckeditor5.
 - [PR-322](https://github.com/OS2Forms/os2forms/pull/322)
