@@ -61,7 +61,7 @@ class ForsendelseHelper extends AbstractMessageHelper {
    */
   public function buildSubmissionForsendelse(WebformSubmissionInterface $submission, array $options, array $handlerSettings, CprLookupResult|CompanyLookupResult $recipientData): ForsendelseI {
     $label = $this->replaceTokens($options[WebformHandlerSF1601::MESSAGE_HEADER_LABEL], $submission);
-    $document = $this->getMainDocument($submission, $handlerSettings);
+    $document = $this->getMainDocument($submission, $handlerSettings, $recipientData);
 
     return $this->buildForsendelse($recipientData, $label, $document);
   }

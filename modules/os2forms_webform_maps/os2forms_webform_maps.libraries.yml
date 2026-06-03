@@ -1,8 +1,5 @@
 webformmap:
   version: 1.x
-  css:
-    theme:
-      css/webform_map.css: {}
   js:
     js/webform_map.js: {}
   dependencies:

@@ -8,6 +8,7 @@
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperManager;
 use Drupal\os2forms_digital_signature\Form\SettingsForm;
+use Symfony\Component\HttpFoundation\IpUtils;
 
 /**
  * Implements hook_cron().
@@ -57,18 +58,26 @@ function os2forms_digital_signature_file_download($uri) {
     $config = \Drupal::config(SettingsForm::$configName);
     $allowedIps = $config->get('os2forms_digital_signature_submission_allowed_ips');
 
-    $allowedIpsArr = explode(',', $allowedIps);
-    $remoteIp = Drupal::request()->getClientIp();
+    $allowedIpsArr = array_map('trim', explode(',', $allowedIps));
+    // Remove empty entries (e.g. from trailing comma or empty config).
+    $allowedIpsArr = array_filter($allowedIpsArr);
+    $remoteIp = \Drupal::request()->getClientIp();
 
-    // IP list is empty, or request IP is allowed.
-    if (empty($allowedIpsArr) || in_array($remoteIp, $allowedIpsArr)) {
+    // Check if remote IP matches any allowed IP or CIDR range.
+    if (empty($allowedIpsArr) || IpUtils::checkIp($remoteIp, $allowedIpsArr)) {
       $basename = basename($uri);
       return [
         'Content-disposition' => 'attachment; filename="' . $basename . '"',
       ];
     }
 
-    // Otherwise - Deny access.
+    // Deny access and log warning.
+    \Drupal::logger('os2forms_digital_signature')->warning('File download denied for IP @ip on URI @uri. Allowed IPs: @allowed', [
+      '@ip' => $remoteIp,
+      '@uri' => $uri,
+      '@allowed' => $allowedIps,
+    ]);
+
     return -1;
   }
 
