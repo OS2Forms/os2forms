@@ -34,26 +34,15 @@ abstract class DawaElementBase extends Textfield {
     }
 
     if (!empty($value)) {
-      /** @var \Drupal\os2forms_dawa\Service\DawaService $dawaService*/
-      $dawaService = \Drupal::service('os2forms_dawa.service');
+      $matches = [];
 
-      $element_type = $element['#type'];
+      if ($element['#type'] == 'os2forms_dawa_address') {
+        /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DatafordelerAddressLookupInterface $datafordelerAddressLookup */
+        $datafordelerAddressLookup = \Drupal::service('plugin.manager.os2web_datalookup')->createInstance('datafordeler_address_lookup');
 
-      $parameters = new ParameterBag($element['#autocomplete_route_parameters']);
-      $parameters->set('q', $value);
-
-      switch ($element_type) {
-        case 'os2forms_dawa_address':
-          $matches = $dawaService->getAddressMatches($parameters);
-          break;
-
-        case 'os2forms_dawa_block':
-          $matches = $dawaService->getBlockMatches($parameters);
-          break;
-
-        case 'os2forms_dawa_matrikula':
-          $matches = $dawaService->getMatrikulaMatches($parameters);
-          break;
+        $parameters = new ParameterBag($element['#autocomplete_route_parameters']);
+        $parameters->set('q', $value);
+        $matches = $datafordelerAddressLookup->getAddressMatches($parameters);
       }
 
       // Checking if the current value is within the list of the values from an

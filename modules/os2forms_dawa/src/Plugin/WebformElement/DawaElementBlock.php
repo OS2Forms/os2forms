@@ -10,8 +10,8 @@ use Drupal\webform\WebformSubmissionInterface;
  *
  * @WebformElement(
  *   id = "os2forms_dawa_block",
- *   label = @Translation("DAWA Block (autocomplete)"),
- *   description = @Translation("Provides a DAWA Block Autocomplete element."),
+ *   label = @Translation("DAWA Block (autocomplete) - DEPRECATED"),
+ *   description = @Translation("Provides a DAWA Block Autocomplete element. This element is deprecated due to the API being phased out. There is no provided alternative for this element."),
  *   category = @Translation("DAWA"),
  * )
  */

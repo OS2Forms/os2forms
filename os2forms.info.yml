@@ -5,7 +5,6 @@ package: OS2Forms
 core_version_requirement: ^9 || ^10
 
 dependencies:
-  - 'drupal:ckeditor'
   - 'drupal:editor'
   - 'drupal:entity_print'
   - 'drupal:eu_cookie_compliance'
