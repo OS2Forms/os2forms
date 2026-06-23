@@ -42,6 +42,8 @@ final class FbsWebformHandler extends WebformHandlerBase {
    * The queue id.
    */
   private const QUEUE_ID = 'os2forms_fbs_handler';
+  private const string ADDITIONAL = 'additional';
+  private const string STATES = 'states';
 
   /**
    * Constructs an FbsWebformHandler object.
@@ -87,6 +89,19 @@ final class FbsWebformHandler extends WebformHandlerBase {
       $container->get('webform_submission.conditions_validator'),
       $container->get('webform.token_manager')
     );
+  }
+
+  /**
+   * {@inheritdoc}
+   *
+   * @phpstan-return array<string, mixed>
+   */
+  public function defaultConfiguration() {
+    return [
+      self::ADDITIONAL => [
+        self::STATES => [WebformSubmissionInterface::STATE_COMPLETED],
+      ],
+    ];
   }
 
   /**
@@ -146,6 +161,31 @@ final class FbsWebformHandler extends WebformHandlerBase {
       '#default_value' => $this->configuration['password'] ?? '',
     ];
 
+    // Additional.
+    // Lifted from EmailWebformHandler::buildConfigurationForm().
+    $resultsDisabled = (bool) $this->getWebform()->getSetting('results_disabled');
+    $form[self::ADDITIONAL] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Additional settings'),
+    ];
+    // Settings: States.
+    $states = (array) ($this->configuration[self::ADDITIONAL][self::STATES] ?? NULL);
+    $form[self::ADDITIONAL][self::STATES] = [
+      '#type' => 'checkboxes',
+      '#title' => $this->t('Run handler when …'),
+      '#options' => [
+        WebformSubmissionInterface::STATE_DRAFT_CREATED => $this->t('<b>draft is created</b>.'),
+        WebformSubmissionInterface::STATE_DRAFT_UPDATED => $this->t('<b>draft is updated</b>.'),
+        WebformSubmissionInterface::STATE_CONVERTED => $this->t('anonymous <b>submission is converted</b> to authenticated.'),
+        WebformSubmissionInterface::STATE_COMPLETED => $this->t('<b>submission is completed</b>.'),
+        WebformSubmissionInterface::STATE_UPDATED => $this->t('<b>submission is updated</b>.'),
+        WebformSubmissionInterface::STATE_DELETED => $this->t('<b>submission is deleted</b>.'),
+        WebformSubmissionInterface::STATE_LOCKED => $this->t('<b>submission is locked</b>.'),
+      ],
+      '#access' => !$resultsDisabled,
+      '#default_value' => $resultsDisabled ? [WebformSubmissionInterface::STATE_COMPLETED] : $states,
+    ];
+
     return $this->setSettingsParents($form);
   }
 
@@ -164,12 +204,23 @@ final class FbsWebformHandler extends WebformHandlerBase {
       ->getValue(['wrapper', 'username']);
     $this->configuration['password'] = $form_state
       ->getValue(['wrapper', 'password']);
+
+    $additional = $form_state->getValue(self::ADDITIONAL);
+    // Clean up states.
+    $additional[self::STATES] = array_values(array_filter($additional[self::STATES]));
+    $this->configuration[self::ADDITIONAL] = $additional;
   }
 
   /**
    * {@inheritdoc}
    */
   public function postSave(WebformSubmissionInterface $webform_submission, $update = TRUE): void {
+    $submissionState = $webform_submission->getWebform()->getSetting('results_disabled') ? WebformSubmissionInterface::STATE_COMPLETED : $webform_submission->getState();
+    $enabledStates = (array) ($this->configuration[self::ADDITIONAL][self::STATES] ?? NULL);
+    if (!in_array($submissionState, $enabledStates)) {
+      return;
+    }
+
     $logger_context = [
       'handler_id' => 'os2forms_fbs',
       'channel' => 'webform_submission',

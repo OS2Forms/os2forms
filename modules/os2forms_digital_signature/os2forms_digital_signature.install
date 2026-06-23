@@ -2,24 +2,15 @@
 
 /**
  * @file
- * Install hooks for os2forms_fasit.
+ * Install hooks for os2forms_digital_signature.
  */
 
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
- * Install Key module.
+ * Set states config to completed on existing digital signature handlers.
  */
-function os2forms_fasit_update_9001(): void {
-  \Drupal::service('module_installer')->install([
-    'key',
-  ], TRUE);
-}
-
-/**
- * Set states config to completed on existing fasit handlers.
- */
-function os2forms_fasit_update_10001(): void {
+function os2forms_digital_signature_update_10001(): void {
   // To avoid having to load full webforms we load and update webform configs.
   $configFactory = \Drupal::configFactory();
 
@@ -34,7 +25,7 @@ function os2forms_fasit_update_10001(): void {
 
     foreach ($handlers as $handlerKey => $handler) {
       // $handler['id'] is the handler plugin id.
-      if (($handler['id'] ?? NULL) !== 'os2forms_fasit') {
+      if (($handler['id'] ?? NULL) !== 'os2forms_digital_signature') {
         continue;
       }
       $handlers[$handlerKey]['settings']['additional']['states'] = [WebformSubmissionInterface::STATE_COMPLETED];
