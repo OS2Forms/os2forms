@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## [5.1.0] 2026-06-03
+
 - [PR-326](https://github.com/OS2Forms/os2forms/pull/326)
   Updating ckeditor -> ckeditor5.
 - [PR-322](https://github.com/OS2Forms/os2forms/pull/322)
@@ -430,7 +432,8 @@ f/OS-115_dawa_address
 - Security in case of vulnerabilities.
 ```
 
-[Unreleased]: https://github.com/OS2Forms/os2forms/compare/5.0.0...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms/compare/5.1.0...HEAD
+[5.1.0]: https://github.com/OS2Forms/os2forms/compare/5.0.0...5.1.0
 [5.0.0]: https://github.com/OS2Forms/os2forms/compare/4.1.0...5.0.0
 [4.1.0]: https://github.com/OS2Forms/os2forms/compare/4.0.0...4.1.0
 [4.0.0]: https://github.com/OS2Forms/os2forms/compare/3.22.2...4.0.0
