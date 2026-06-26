@@ -5,6 +5,8 @@
  * OS2Forms Address autocomplete functionality module.
  */
 
+use Drupal\Core\Form\FormStateInterface;
+
 /**
  * Implements hook_webform_migrate_d7_webform_element_ELEMENT_TYPE_alter().
  *
@@ -25,4 +27,13 @@ function os2forms_dawa_webform_migrate_d7_webform_element_address_autocomp_alter
  */
 function os2forms_dawa_webform_migrate_d7_webform_element_addrs_autocomp_l_alter(&$markup, $indent, array $element) {
   $markup .= "$indent  '#type': os2forms_dawa_address_matrikula\n";
+}
+
+/**
+ * Implements hook_webform_element_alter().
+ */
+function os2forms_dawa_webform_element_alter(array &$element, FormStateInterface $form_state, array $context) {
+  if ('os2forms_dawa_address' === $element['#type']) {
+    $element['#attached']['library'][] = 'os2forms_dawa/dawa_address_autocomplete';
+  }
 }

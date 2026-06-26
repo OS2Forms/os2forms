@@ -13,6 +13,11 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 - [PR-325](https://github.com/OS2Forms/os2forms/pull/325)
   Added NemID first name, middle name and last name webform elements.
+
+## [5.1.0] 2026-06-03
+
+- [PR-326](https://github.com/OS2Forms/os2forms/pull/326)
+  Updating ckeditor -> ckeditor5.
 - [PR-322](https://github.com/OS2Forms/os2forms/pull/322)
   Update Digital Post handler error messages.
 - [PR-320](https://github.com/OS2Forms/os2forms/pull/320)
@@ -27,11 +32,13 @@ before starting to add changes. Use example [placed in the end of the page](#exa
   Updated code analysis script.
 - [PR-306](https://github.com/OS2Forms/os2forms/pull/306)
   Made digital signature text placement configurable.
-- [#251](https://github.com/OS2Forms/os2forms/issues/251)
-  Webform encrypt uninstall problem fix
 - git actions check
 - [PR-289](https://github.com/OS2Forms/os2forms/pull/289)
   Added required "Zoom control position" to map element
+- [#246](https://github.com/OS2Forms/os2forms/issues/246)
+  Adding Datafordeler address lookup
+- [#251](https://github.com/OS2Forms/os2forms/issues/251)
+  Updated Webform encrypt uninstall problem fix
 
 ## [5.0.0] 2025-11-18
 
@@ -428,7 +435,8 @@ f/OS-115_dawa_address
 - Security in case of vulnerabilities.
 ```
 
-[Unreleased]: https://github.com/OS2Forms/os2forms/compare/5.0.0...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms/compare/5.1.0...HEAD
+[5.1.0]: https://github.com/OS2Forms/os2forms/compare/5.0.0...5.1.0
 [5.0.0]: https://github.com/OS2Forms/os2forms/compare/4.1.0...5.0.0
 [4.1.0]: https://github.com/OS2Forms/os2forms/compare/4.0.0...4.1.0
 [4.0.0]: https://github.com/OS2Forms/os2forms/compare/3.22.2...4.0.0

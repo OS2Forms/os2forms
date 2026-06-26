@@ -1,0 +1,7 @@
+dawa_address_autocomplete:
+  version: 1.x
+  js:
+    js/dawa_address_autocomplete.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
