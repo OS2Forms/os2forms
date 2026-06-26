@@ -144,6 +144,13 @@ class MaestroWebformInheritTask extends MaestroWebformTask {
    * Implements hook_webform_submission_form_alter().
    */
   public static function webformSubmissionFormAlter(array &$form, FormStateInterface $formState, string $formId) {
+    // Only inherit values on the initial form load. This skip condition is the
+    // complement of webform's own prepopulate guard.
+    // @see \Drupal\webform\WebformSubmissionForm::buildForm()
+    if ($formState->isRebuilding() && !$formState->get('is_ajax_restart')) {
+      return;
+    }
+
     // @todo Clean up and align with MaestroHelper::maestroZeroUserNotification().
     if ($queueID = self::getQueueIdFromRequest()) {
       $templateTask = MaestroEngine::getTemplateTaskByQueueID($queueID);
