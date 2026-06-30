@@ -168,11 +168,9 @@ class MaestroWebformInheritTask extends MaestroWebformTask {
                     // A file element needs its default value as an array.
                     // @see \Drupal\webform\Plugin\WebformElement\WebformManagedFileBase::setDefaultValue()
                     if ($elementManager->getElementInstance($element) instanceof WebformManagedFileBase) {
-                      $element['#default_value'] = (array) $value;
+                      $value = (array) $value;
                     }
-                    else {
-                      $element['#default_value'] = $value;
-                    }
+                    $element['#default_value'] = $value;
                   }
                 }
               }
