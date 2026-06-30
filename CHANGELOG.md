@@ -11,6 +11,9 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [PR-339](https://github.com/OS2Forms/os2forms/pull/339)
+  Ensure MaestroInheritTask correctly inherits file-elements.
+
 ## [5.1.0] 2026-06-03
 
 - [PR-326](https://github.com/OS2Forms/os2forms/pull/326)
