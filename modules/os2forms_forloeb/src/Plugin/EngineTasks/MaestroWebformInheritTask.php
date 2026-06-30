@@ -8,6 +8,7 @@ use Drupal\maestro\Engine\MaestroEngine;
 use Drupal\maestro_webform\Plugin\EngineTasks\MaestroWebformTask;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
+use Drupal\webform\Plugin\WebformElement\WebformManagedFileBase;
 use Drupal\webform\Utility\WebformArrayHelper;
 
 /**
@@ -160,10 +161,18 @@ class MaestroWebformInheritTask extends MaestroWebformTask {
             // element information to properly set default element values nested
             // inside the form.
             if ($targetWebform = Webform::load($form['#webform_id'] ?? NULL)) {
+              $elementManager = \Drupal::service('plugin.manager.webform.element');
               foreach ($data as $key => $value) {
                 if ($targetElement = $targetWebform->getElement($key)) {
                   if ($element = &NestedArray::getValue($form['elements'], $targetElement['#webform_parents'])) {
-                    $element['#default_value'] = $value;
+                    // File elements need their default values as an array.
+                    // @see \Drupal\webform\Plugin\WebformElement\WebformManagedFileBase::setDefaultValue()
+                    if ($elementManager->getElementInstance($element) instanceof WebformManagedFileBase) {
+                      $element['#default_value'] = (array) $value;
+                    }
+                    else {
+                      $element['#default_value'] = $value;
+                    }
                   }
                 }
               }
