@@ -11,7 +11,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
-- [337](https://github.com/OS2Forms/os2forms/pull/337)
+- [PR-337](https://github.com/OS2Forms/os2forms/pull/337)
   Avoid inheriting data on page transition in MaestroWebformInheritTask.
 
 ## [5.1.0] 2026-06-03
