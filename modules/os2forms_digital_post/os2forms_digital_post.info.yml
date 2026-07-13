@@ -5,6 +5,7 @@ package: 'OS2Forms'
 core_version_requirement: ^9 || ^10
 dependencies:
   - 'beskedfordeler:beskedfordeler'
+  - 'os2forms:os2forms'
   - 'drupal:advancedqueue'
   - 'os2web_datalookup:os2web_datalookup'
   - 'os2web_key:os2web_key'

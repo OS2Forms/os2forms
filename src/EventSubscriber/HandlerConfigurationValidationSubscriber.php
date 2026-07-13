@@ -1,0 +1,74 @@
+<?php
+
+namespace Drupal\os2forms\EventSubscriber;
+
+use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\os2forms\Helper\HandlerConfigurationValidator;
+use Drupal\webform\WebformInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
+
+/**
+ * Reports misconfigured webform handlers on webform admin pages.
+ *
+ * @see \Drupal\os2forms\Plugin\WebformHandler\OS2FormsHandlerInterface
+ */
+class HandlerConfigurationValidationSubscriber implements EventSubscriberInterface {
+  use StringTranslationTrait;
+
+  /**
+   * Routes on which to report misconfigured handlers.
+   */
+  private const ROUTE_NAMES = [
+    // The webform build page (where elements are renamed or deleted).
+    'entity.webform.edit_form',
+    // The webform handlers page.
+    'entity.webform.handlers',
+  ];
+
+  public function __construct(
+    private readonly HandlerConfigurationValidator $validator,
+    private readonly RouteMatchInterface $routeMatch,
+    private readonly MessengerInterface $messenger,
+  ) {
+  }
+
+  /**
+   * Reports misconfigured webform handlers to the current user.
+   */
+  public function onRequest(RequestEvent $event): void {
+    if (!in_array($this->routeMatch->getRouteName(), self::ROUTE_NAMES, TRUE)) {
+      return;
+    }
+
+    $webform = $this->routeMatch->getParameter('webform');
+    if (!$webform instanceof WebformInterface) {
+      return;
+    }
+
+    foreach ($this->validator->validate($webform) as $handlerId => $result) {
+      foreach ($result['problems'] as $problem) {
+        $this->messenger->addWarning($this->t('The handler @handler (@id) is misconfigured: @problem', [
+          '@handler' => $result['label'],
+          '@id' => $handlerId,
+          '@problem' => $problem,
+        ]));
+      }
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   *
+   * @phpstan-return array<string, mixed>
+   */
+  public static function getSubscribedEvents(): array {
+    return [
+      KernelEvents::REQUEST => ['onRequest'],
+    ];
+  }
+
+}

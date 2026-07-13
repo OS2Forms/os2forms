@@ -3,6 +3,7 @@
 namespace Drupal\os2forms_digital_post\Plugin\WebformHandler;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\os2forms\Plugin\WebformHandler\OS2FormsHandlerInterface;
 use Drupal\os2forms_digital_post\Helper\MeMoHelper;
 use Drupal\os2forms_digital_post\Helper\WebformHelperSF1601;
 use Drupal\webform\Plugin\WebformHandlerBase;
@@ -23,7 +24,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   submission = \Drupal\webform\Plugin\WebformHandlerInterface::SUBMISSION_REQUIRED,
  * )
  */
-final class WebformHandlerSF1601 extends WebformHandlerBase {
+final class WebformHandlerSF1601 extends WebformHandlerBase implements OS2FormsHandlerInterface {
   public const MEMO_MESSAGE = 'memo_message';
   public const MEMO_ACTIONS = 'memo_actions';
   public const TYPE = 'type';
@@ -110,6 +111,7 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
       '#required' => TRUE,
       '#default_value' => $this->configuration[self::MEMO_MESSAGE][static::RECIPIENT_ELEMENT] ?? NULL,
       '#options' => $availableElements,
+      '#empty_option' => $this->t('- Select -'),
     ];
 
     $availableElements = $this->getAttachmentElements();
@@ -119,6 +121,7 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
       '#required' => TRUE,
       '#default_value' => $this->configuration[self::MEMO_MESSAGE][static::ATTACHMENT_ELEMENT] ?? NULL,
       '#options' => $availableElements,
+      '#empty_option' => $this->t('- Select -'),
     ];
 
     $form[self::MEMO_MESSAGE][self::SENDER_LABEL] = [
@@ -262,6 +265,37 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
     return array_map(static function (array $element) {
       return $element['#title'];
     }, $elements);
+  }
+
+  /**
+   * {@inheritdoc}
+   *
+   * @phpstan-return array<int, mixed>
+   */
+  public function validateConfiguration(): array {
+    $problems = [];
+
+    $recipientElement = $this->configuration[self::MEMO_MESSAGE][static::RECIPIENT_ELEMENT] ?? NULL;
+    if (NULL === $recipientElement || '' === $recipientElement) {
+      $problems[] = $this->t('No recipient element is configured.');
+    }
+    elseif (!isset($this->getRecipientElements()[$recipientElement])) {
+      $problems[] = $this->t('The recipient element (%element) does not exist or does not have a supported type.', [
+        '%element' => $recipientElement,
+      ]);
+    }
+
+    $attachmentElement = $this->configuration[self::MEMO_MESSAGE][static::ATTACHMENT_ELEMENT] ?? NULL;
+    if (NULL === $attachmentElement || '' === $attachmentElement) {
+      $problems[] = $this->t('No attachment element is configured.');
+    }
+    elseif (!isset($this->getAttachmentElements()[$attachmentElement])) {
+      $problems[] = $this->t('The attachment element (%element) does not exist or does not have a supported type.', [
+        '%element' => $attachmentElement,
+      ]);
+    }
+
+    return $problems;
   }
 
   /**

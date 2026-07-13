@@ -1,0 +1,10 @@
+services:
+  Drupal\os2forms\Helper\HandlerConfigurationValidator: ~
+
+  Drupal\os2forms\EventSubscriber\HandlerConfigurationValidationSubscriber:
+    arguments:
+      - "@Drupal\\os2forms\\Helper\\HandlerConfigurationValidator"
+      - "@current_route_match"
+      - "@messenger"
+    tags:
+      - { name: event_subscriber }
