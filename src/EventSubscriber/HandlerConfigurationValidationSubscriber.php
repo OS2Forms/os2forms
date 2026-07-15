@@ -29,6 +29,16 @@ class HandlerConfigurationValidationSubscriber implements EventSubscriberInterfa
     'entity.webform.handlers',
   ];
 
+  /**
+   * Constructs the HandlerConfigurationValidationSubscriber.
+   *
+   * @param \Drupal\os2forms\Helper\HandlerConfigurationValidator $validator
+   *   The handler configuration validator.
+   * @param \Drupal\Core\Routing\RouteMatchInterface $routeMatch
+   *   The current route match.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger.
+   */
   public function __construct(
     private readonly HandlerConfigurationValidator $validator,
     private readonly RouteMatchInterface $routeMatch,
@@ -38,6 +48,9 @@ class HandlerConfigurationValidationSubscriber implements EventSubscriberInterfa
 
   /**
    * Reports misconfigured webform handlers to the current user.
+   *
+   * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
+   *   The request event.
    */
   public function onRequest(RequestEvent $event): void {
     if (!in_array($this->routeMatch->getRouteName(), self::ROUTE_NAMES, TRUE)) {

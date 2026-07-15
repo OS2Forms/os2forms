@@ -13,6 +13,9 @@ class HandlerConfigurationValidator {
   /**
    * Validates configuration of all handlers on a webform.
    *
+   * Only handlers implementing OS2FormsHandlerInterface can validate their
+   * own configuration - all other handlers are skipped.
+   *
    * @param \Drupal\webform\WebformInterface $webform
    *   The webform.
    *

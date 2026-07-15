@@ -13,10 +13,10 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 - [PR-340](https://github.com/OS2Forms/os2forms/pull/340)
   - Added `OS2FormsHandlerInterface` for reporting misconfigured webform
-  handlers on the webform build and handlers pages.
+    handlers on the webform build and handlers pages.
   - Implemented configuration validation for the Digital Post handler
   - Added empty options to the Digital Post handler element selects, so
-  dangling element references no longer display as valid configuration.
+    dangling element references no longer display as valid configuration.
 
 ## [5.1.0] 2026-06-03
 
