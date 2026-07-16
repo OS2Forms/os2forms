@@ -14,7 +14,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 /**
  * Reports misconfigured webform handlers on webform admin pages.
  *
- * @see \Drupal\os2forms\Plugin\WebformHandler\OS2FormsHandlerInterface
+ * @see \Drupal\os2forms\Helper\HandlerConfigurationValidator
  */
 class HandlerConfigurationValidationSubscriber implements EventSubscriberInterface {
   use StringTranslationTrait;

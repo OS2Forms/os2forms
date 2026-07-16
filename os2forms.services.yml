@@ -1,5 +1,8 @@
 services:
-  Drupal\os2forms\Helper\HandlerConfigurationValidator: ~
+  Drupal\os2forms\Helper\HandlerConfigurationValidator:
+    arguments:
+      - "@form_builder"
+      - "@messenger"
 
   Drupal\os2forms\EventSubscriber\HandlerConfigurationValidationSubscriber:
     arguments:
