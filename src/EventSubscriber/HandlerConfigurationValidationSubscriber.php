@@ -57,6 +57,12 @@ class HandlerConfigurationValidationSubscriber implements EventSubscriberInterfa
       return;
     }
 
+    // Only report on regular page views.
+    $request = $event->getRequest();
+    if (!$request->isMethod('GET') || $request->isXmlHttpRequest()) {
+      return;
+    }
+
     $webform = $this->routeMatch->getParameter('webform');
     if (!$webform instanceof WebformInterface) {
       return;
