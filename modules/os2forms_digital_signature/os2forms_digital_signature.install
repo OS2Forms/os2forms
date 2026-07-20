@@ -18,14 +18,21 @@ use Drupal\webform\Entity\Webform;
  * now lives on the os2forms_digital_signature handler, so this update
  * replicates that selection into the handler config of every webform using
  * the handler, and strips the legacy element properties from all webforms.
+ *
+ * Processes the webforms in batches of 25 via the update sandbox.
  */
 function os2forms_digital_signature_update_10001(&$sandbox) {
   $logger = \Drupal::logger('os2forms_digital_signature');
-  $migrated = 0;
-  $skipped = [];
 
+  if (!isset($sandbox['ids'])) {
+    $sandbox['ids'] = array_values(\Drupal::entityQuery('webform')->accessCheck(FALSE)->execute());
+    $sandbox['migrated'] = 0;
+  }
+
+  // array_splice() removes the chunk from the sandbox, so the next pass
+  // continues with the remaining ids.
   /** @var \Drupal\webform\WebformInterface[] $webforms */
-  $webforms = Webform::loadMultiple();
+  $webforms = Webform::loadMultiple(array_splice($sandbox['ids'], 0, 25));
   foreach ($webforms as $webform) {
     $handlers = $webform->getHandlers();
     $signatureHandler = NULL;
@@ -63,7 +70,9 @@ function os2forms_digital_signature_update_10001(&$sandbox) {
       }
 
       if ($signedKey === NULL) {
-        $skipped[$webform->id()] = 'the handler is enabled but the webform has no os2forms_digital_signature_document or os2forms_attachment element';
+        $logger->warning('Skipped webform @id during digital signature config migration: the handler is enabled but the webform has no os2forms_digital_signature_document or os2forms_attachment element. Configure the handler manually.', [
+          '@id' => $webform->id(),
+        ]);
       }
       else {
         if (count($candidates) > 1) {
@@ -89,7 +98,7 @@ function os2forms_digital_signature_update_10001(&$sandbox) {
         $config['settings']['signature_position'] = $signedPosition;
         $signatureHandler->setConfiguration($config);
         $needsSave = TRUE;
-        $migrated++;
+        $sandbox['migrated']++;
       }
     }
 
@@ -110,16 +119,12 @@ function os2forms_digital_signature_update_10001(&$sandbox) {
     }
   }
 
-  if ($skipped) {
-    foreach ($skipped as $id => $reason) {
-      $logger->warning('Skipped webform @id during digital signature config migration: @reason. Configure the handler manually.', [
-        '@id' => $id,
-        '@reason' => $reason,
-      ]);
-    }
-  }
+  // Anything below 1 makes the runner call us again. Done when no ids remain.
+  $sandbox['#finished'] = empty($sandbox['ids']) ? 1 : 0;
 
-  return t('Migrated digital signature config on @count webform(s).', ['@count' => $migrated]);
+  if ($sandbox['#finished'] >= 1) {
+    return t('Migrated digital signature config on @count webform(s).', ['@count' => $sandbox['migrated']]);
+  }
 }
 
 /**
