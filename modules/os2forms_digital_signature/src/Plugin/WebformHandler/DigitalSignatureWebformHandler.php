@@ -162,8 +162,9 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
   /**
    * Build the dropdown options for the attachment element selector.
    *
-   * Lists every element implementing WebformElementAttachmentInterface
-   * (covers os2forms_attachment and os2forms_digital_signature_document).
+   * The signing flow requires a PDF, so only the two element types that
+   * provide one are listed: os2forms_digital_signature_document (uploaded
+   * PDF) and os2forms_attachment (generated PDF).
    *
    * @return array
    *   Map of element key => human label.
@@ -181,8 +182,11 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
       if (!$element) {
         continue;
       }
-      $title = $element['#title'] ?? $key;
       $type = $element['#type'] ?? '';
+      if (!in_array($type, ['os2forms_digital_signature_document', 'os2forms_attachment'], TRUE)) {
+        continue;
+      }
+      $title = $element['#title'] ?? $key;
       $options[$key] = sprintf('%s (%s) [%s]', $title, $key, $type);
     }
     return $options;
