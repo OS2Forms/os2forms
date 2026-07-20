@@ -307,9 +307,6 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
     }
 
     $element = $elements[$elementKey];
-    $element['#digital_signature'] = TRUE;
-    $element['#digital_signature_position'] = $this->configuration['signature_position']
-      ?? Os2formsAttachmentPrintBuilder::SIGNATURE_POSITION_AFTER_CONTENT;
 
     /** @var \Drupal\webform\Plugin\WebformElementAttachmentInterface $element_plugin */
     $element_plugin = $this->elementManager->getElementInstance($element);
