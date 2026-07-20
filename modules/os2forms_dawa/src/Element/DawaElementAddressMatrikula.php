@@ -96,11 +96,14 @@ class DawaElementAddressMatrikula extends WebformCompositeBase {
   private static function getMatrikulaOptions($addressValue, array $element) {
     $options = [];
 
-    /** @var \Drupal\os2forms_dawa\Service\DawaService $dawaService */
-    $dawaService = \Drupal::service('os2forms_dawa.service');
+    /** @var \Drupal\os2web_datalookup\Plugin\DataLookupManager $datalookupManager */
+    $datalookupManager = \Drupal::service('plugin.manager.os2web_datalookup');
 
-    /** @var \Drupal\os2forms_dawa\Plugin\os2web\DataLookup\DatafordelerDataLookupInterface $datafordelerLookup */
-    $datafordelerLookup = \Drupal::service('plugin.manager.os2web_datalookup')->createInstance('datafordeler_data_lookup');
+    /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DatafordelerAddressLookupInterface $addressLookup */
+    $addressLookup = $datalookupManager->createInstance('datafordeler_address_lookup');
+
+    /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DatafordelerMatrikulaLookupInterface $matrikulaLookup */
+    $matrikulaLookup = $datalookupManager->createInstance('datafordeler_matrikula_lookup');
 
     // Getting address.
     $addressParams = new ParameterBag();
@@ -108,17 +111,17 @@ class DawaElementAddressMatrikula extends WebformCompositeBase {
     if (isset($element['#limit_by_municipality'])) {
       $addressParams->set('limit_by_municipality', $element['#limit_by_municipality']);
     }
-    $address = $dawaService->getSingleAddress($addressParams);
+    $address = $addressLookup->getSingleAddress($addressParams);
 
     if ($address) {
-      $addressAccessId = $address->getAccessAddressId();
+      $addressHouseId = $address->getHouseId();
 
       // Find matrikula list from the houseid (husnummer):
-      $matrikulaId = $datafordelerLookup->getMatrikulaId($addressAccessId);
+      $matrikulaId = $matrikulaLookup->getMatrikulaId($addressHouseId);
 
       // Find Matrikula entries from matrikulas ID.
       if ($matrikulaId) {
-        $matrikulaEnties = $datafordelerLookup->getMatrikulaEntries($matrikulaId);
+        $matrikulaEnties = $matrikulaLookup->getMatrikulaEntries($matrikulaId);
         foreach ($matrikulaEnties as $matrikula) {
           $matrikulaOption = $matrikula->getMatrikulaNumber() . ' ' . $matrikula->getOwnershipName();
 
