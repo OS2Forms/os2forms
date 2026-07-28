@@ -28,9 +28,9 @@ class SettingsForm extends ConfigFormBase {
    */
   public function __construct(
     ConfigFactoryInterface $configFactory,
-    private readonly RoleStorageInterface $roleStorage,
-    private readonly EntityStorageInterface $queueStorage,
-    private readonly ModuleExtensionList $moduleHandler,
+    protected readonly RoleStorageInterface $roleStorage,
+    protected readonly EntityStorageInterface $queueStorage,
+    protected readonly ModuleExtensionList $moduleHandler,
   ) {
     parent::__construct($configFactory);
   }

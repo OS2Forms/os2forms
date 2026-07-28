@@ -26,7 +26,7 @@ final class SettingsForm extends ConfigFormBase {
    *
    * @var \Drupal\Core\Entity\EntityStorageInterface
    */
-  private readonly EntityStorageInterface $queueStorage;
+  protected readonly EntityStorageInterface $queueStorage;
 
   /**
    * Constructor.
@@ -34,7 +34,7 @@ final class SettingsForm extends ConfigFormBase {
   public function __construct(
     ConfigFactoryInterface $config_factory,
     EntityTypeManagerInterface $entityTypeManager,
-    private readonly Settings $settings,
+    protected readonly Settings $settings,
   ) {
     parent::__construct($config_factory);
     $this->queueStorage = $entityTypeManager->getStorage('advancedqueue_queue');

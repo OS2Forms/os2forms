@@ -28,7 +28,7 @@ class SettingsForm extends ConfigFormBase {
    *
    * @var \Drupal\encrypt\EncryptionProfileManager
    */
-  private EncryptionProfileManager $encryptionProfileManager;
+  protected EncryptionProfileManager $encryptionProfileManager;
 
   public function __construct(ConfigFactoryInterface $config_factory, EncryptionProfileManager $encryptionProfileManager) {
     parent::__construct($config_factory);

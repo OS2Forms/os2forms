@@ -699,7 +699,7 @@ class SaveToFileWebformHandler extends WebformHandlerBase {
       '#markup' => $message,
     ];
 
-    $this->messenger()->addMessage(\Drupal::service('renderer')->renderPlain($build), $file_type);
+    $this->messenger()->addMessage(\Drupal::service('renderer')->renderPlain($build));
   }
 
   /**

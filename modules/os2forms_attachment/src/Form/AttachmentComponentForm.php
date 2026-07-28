@@ -113,9 +113,11 @@ class AttachmentComponentForm extends EntityForm {
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
-    parent::save($form, $form_state);
+    $result = parent::save($form, $form_state);
 
     $form_state->setRedirect('entity.os2forms_attachment_component.list');
+
+    return $result;
   }
 
   /**
