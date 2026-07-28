@@ -46,7 +46,7 @@
         "drupal/webform_node_element": "^1.2",
         "drupal/webform_remote_handlers": "^3.0",
         "drupal/webform_remote_select": "^1.0.6",
-        "drupal/webform_rest": "^4.0.0-beta2",
+        "drupal/webform_rest": "^4.2",
         "drupal/webform_validation": "^2.0",
         "drupal/webform_views": "^5.0@alpha",
         "drupal/workflow_participants": "^3.0@RC",
