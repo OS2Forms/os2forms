@@ -132,7 +132,7 @@
                 "PHP Warning if unserialize fails (https://www.drupal.org/project/webform_encrypt/issues/3292305)": "https://www.drupal.org/files/issues/2022-06-23/unserialize-php-notice.patch"
             },
             "drupal/webform_node_element": {
-                "3290637 - Automated Drupal 10 compatibility fixes": "https://www.drupal.org/files/issues/2023-05-12/webform_node_element_d10-3290637-11.patch"
+                "3495835 - Drupal 11 compatibility fixes for Webform Node Element": "https://git.drupalcode.org/project/webform_node_element/-/merge_requests/5.diff"
             }
         }
     },
