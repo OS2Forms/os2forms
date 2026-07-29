@@ -8,7 +8,7 @@
         "ext-dom": "*",
         "ext-soap": "*",
         "cweagans/composer-patches": "^1.6.5",
-        "dompdf/dompdf": "^2.0",
+        "dompdf/dompdf": "^2.0 || ^3.0",
         "drupal/admin_toolbar": "^3.0",
         "drupal/advancedqueue": "^1.0",
         "drupal/cache_control_override": "^1.1 || ^2.0",
