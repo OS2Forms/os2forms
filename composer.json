@@ -13,7 +13,6 @@
         "drupal/advancedqueue": "^1.0",
         "drupal/cache_control_override": "^1.1 || ^2.0",
         "drupal/coc_forms_auto_export": "^3.0@alpha",
-        "drupal/config_entity_revisions": "2.0.x-dev",
         "drupal/diff": "^1.0",
         "drupal/entity_print": "^2.1",
         "drupal/eu_cookie_compliance": "^1.8",
