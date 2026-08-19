@@ -3,6 +3,7 @@
 namespace Drupal\os2forms_fasit\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -33,9 +34,10 @@ final class SettingsForm extends ConfigFormBase {
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
-    protected readonly FasitHelper $helper,
+    TypedConfigManagerInterface $typedConfigManager,
+    protected readonly FasitHelper $helper
   ) {
-    parent::__construct($config_factory);
+    parent::__construct($config_factory, $typedConfigManager);
   }
 
   /**
@@ -46,6 +48,7 @@ final class SettingsForm extends ConfigFormBase {
   public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('config.factory'),
+      $container->get('config.typed'),
       $container->get(FasitHelper::class)
     );
   }

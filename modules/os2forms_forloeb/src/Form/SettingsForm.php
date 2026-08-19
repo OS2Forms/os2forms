@@ -3,6 +3,7 @@
 namespace Drupal\os2forms_forloeb\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Extension\ModuleExtensionList;
@@ -28,11 +29,12 @@ class SettingsForm extends ConfigFormBase {
    */
   public function __construct(
     ConfigFactoryInterface $configFactory,
+    TypedConfigManagerInterface $typedConfigManager,
     protected readonly RoleStorageInterface $roleStorage,
     protected readonly EntityStorageInterface $queueStorage,
     protected readonly ModuleExtensionList $moduleHandler,
   ) {
-    parent::__construct($configFactory);
+    parent::__construct($configFactory, $typedConfigManager);
   }
 
   /**
@@ -41,6 +43,7 @@ class SettingsForm extends ConfigFormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
+      $container->get('config.typed'),
       $container->get('entity_type.manager')->getStorage('user_role'),
       $container->get('entity_type.manager')->getStorage('advancedqueue_queue'),
       $container->get('extension.list.module'),
