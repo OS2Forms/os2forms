@@ -3,6 +3,12 @@ services:
     parent: logger.channel_base
     arguments: [ 'os2forms_digital_signature' ]
 
+  os2forms_digital_signature.signing_document_resolver:
+    class: Drupal\os2forms_digital_signature\Service\SigningDocumentResolver
+    arguments:
+      - '@module_handler'
+      - '@plugin.manager.webform.element'
+
   os2forms_digital_signature.signing_service:
     class: Drupal\os2forms_digital_signature\Service\SigningService
     arguments:

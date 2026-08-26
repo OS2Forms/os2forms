@@ -9,6 +9,7 @@ use Drupal\Core\File\FileExists;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
+use Drupal\os2forms_digital_signature\Service\SigningDocumentResolver;
 use Drupal\os2forms_digital_signature\Service\SigningService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -35,6 +36,7 @@ class DigitalSignatureController extends ControllerBase {
     private readonly LoggerInterface $logger,
     private readonly Settings $settings,
     private readonly SigningService $signingService,
+    private readonly SigningDocumentResolver $signingDocumentResolver,
     private readonly FileSystemInterface $fileSystem,
     private readonly RequestStack $requestStack,
   ) {
@@ -49,6 +51,7 @@ class DigitalSignatureController extends ControllerBase {
       $container->get('logger.channel.os2forms_digital_signature'),
       $container->get('settings'),
       $container->get('os2forms_digital_signature.signing_service'),
+      $container->get('os2forms_digital_signature.signing_document_resolver'),
       $container->get('file_system'),
       $container->get('request_stack'),
     );
@@ -63,8 +66,6 @@ class DigitalSignatureController extends ControllerBase {
    *   Webform submission UUID.
    * @param string $hash
    *   Hash to check if the request is authentic.
-   * @param int|null $fid
-   *   File to replace (optional).
    *
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
    *   Redirect response to form submission confirmation.
@@ -72,7 +73,7 @@ class DigitalSignatureController extends ControllerBase {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function signCallback($uuid, $hash, $fid = NULL) {
+  public function signCallback($uuid, $hash) {
     // Load the webform submission entity by UUID.
     $submissions = $this->entityTypeManager()
       ->getStorage('webform_submission')
@@ -86,7 +87,8 @@ class DigitalSignatureController extends ControllerBase {
       throw new NotFoundHttpException();
     }
 
-    $webformId = $webformSubmission->getWebform()->id();
+    $webform = $webformSubmission->getWebform();
+    $webformId = $webform->id();
 
     // Checking the action.
     $request = $this->requestStack->getCurrentRequest();
@@ -115,13 +117,22 @@ class DigitalSignatureController extends ControllerBase {
       throw new NotFoundHttpException();
     }
 
-    // If $fid is present - we are replacing uploaded/managed file, otherwise
+    // If $existingAttachment FID is present - we are replacing uploaded/managed file, otherwise
     // creating a new one.
-    if ($fid) {
-      $file = $this->fileStorage->load($fid);
-      $expectedFileUri = $file->getFileUri();
+    $existingAttachment = $this->signingDocumentResolver->resolve($webformSubmission);
+    if (!$existingAttachment) {
+      throw new NotFoundHttpException();
     }
-    else {
+
+    $expectedFileUri = NULL;
+    $fidToReplace = $existingAttachment['fid'] ?? NULL;
+
+    if ($fidToReplace) {
+      $file = $this->fileStorage->load($fidToReplace);
+      $expectedFileUri = $file?->getFileUri();
+    }
+
+    if (!$expectedFileUri) {
       // Prepare the directory to ensure it exists and is writable.
       $expectedFileUri = "private://webform/$webformId/digital_signature/$uuid.pdf";
       $directory = dirname($expectedFileUri);
@@ -140,8 +151,8 @@ class DigitalSignatureController extends ControllerBase {
       $webformSubmission->save();
 
       // If file existing, resave the file to update the size and etc.
-      if ($fid) {
-        $this->fileStorage->load($fid)?->save();
+      if ($fidToReplace) {
+        $this->fileStorage->load($fidToReplace)?->save();
       }
     }
     catch (\Exception $e) {
@@ -159,8 +170,7 @@ class DigitalSignatureController extends ControllerBase {
     ])->toString();
 
     // Redirect to the webform confirmation page.
-    $response = new RedirectResponse($confirmation_url);
-    return $response;
+    return new RedirectResponse($confirmation_url);
   }
 
 }
