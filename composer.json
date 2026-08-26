@@ -123,6 +123,12 @@
             "drupal/entity_print": {
                 "2733781 - Add Export to Word Support": "https://www.drupal.org/files/issues/2019-11-22/2733781-47.patch"
             },
+            "drupal/events_logging": {
+                "3430351 - Automated Drupal 11 compatibility fixes for events_logging": "https://www.drupal.org/files/issues/2024-03-17/events_logging.2.0.0-beta2.rector.patch"
+            },
+            "drupal/switch_page_theme": {
+                "3489081 - Drupal 11 compatibility for Switch Page Theme": "https://www.drupal.org/files/issues/2025-10-30/switch_page_theme-3489081-20.patch"
+            },
             "drupal/webform": {
                 "Unlock possibility of using Entity print module export to Word": "https://www.drupal.org/files/issues/2020-02-29/3096552-6.patch",
                 "Webform computed element post save alter": "https://www.drupal.org/files/issues/2024-06-25/webform_computed_post_save_field_alter.patch",
@@ -134,12 +140,6 @@
             },
             "drupal/webform_node_element": {
                 "3495835 - Drupal 11 compatibility fixes for Webform Node Element": "https://git.drupalcode.org/project/webform_node_element/-/merge_requests/5.diff"
-            },
-            "drupal/events_logging" : {
-                "3430351 - Automated Drupal 11 compatibility fixes for events_logging": "https://www.drupal.org/files/issues/2024-03-17/events_logging.2.0.0-beta2.rector.patch"
-            },
-            "drupal/switch_page_theme" : {
-                "3489081 - Drupal 11 compatibility for Switch Page Theme" : "https://www.drupal.org/files/issues/2025-10-30/switch_page_theme-3489081-20.patch"
             }
         }
     },
