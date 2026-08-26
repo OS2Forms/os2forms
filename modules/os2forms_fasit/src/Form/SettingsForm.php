@@ -35,7 +35,7 @@ final class SettingsForm extends ConfigFormBase {
   public function __construct(
     ConfigFactoryInterface $config_factory,
     TypedConfigManagerInterface $typedConfigManager,
-    protected readonly FasitHelper $helper
+    protected readonly FasitHelper $helper,
   ) {
     parent::__construct($config_factory, $typedConfigManager);
   }
