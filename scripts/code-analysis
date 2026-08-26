@@ -38,8 +38,8 @@ drupal_composer config minimum-stability dev
 # https://getcomposer.org/doc/06-config.md#allow-plugins
 drupal_composer config --no-plugins allow-plugins true
 
-# Making Drupal 10 compatible
-drupal_composer require psr/http-message:^1.0
+# Making Drupal 10/11 compatible
+drupal_composer require "psr/http-message:^1.1 || ^2.0"
 drupal_composer require mglaman/composer-drupal-lenient:^1.0
 drupal_composer config --merge --json extra.drupal-lenient.allowed-list '["drupal/coc_forms_auto_export", "drupal/webform_node_element"]'
 
