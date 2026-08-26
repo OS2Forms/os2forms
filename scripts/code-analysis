@@ -46,7 +46,7 @@ drupal_composer config --merge --json extra.drupal-lenient.allowed-list '["drupa
 drupal_composer require wikimedia/composer-merge-plugin
 drupal_composer config extra.merge-plugin.include "$module_path/composer.json"
 # https://www.drupal.org/project/drupal/issues/3220043#comment-14845434
-drupal_composer require --dev symfony/phpunit-bridge
+drupal_composer require --dev symfony/phpunit-bridge -W
 
 # Run PHPStan
 (cd "$drupal_dir/$module_path" && ../../../../vendor/bin/phpstan)
