@@ -72,7 +72,7 @@
         "mglaman/phpstan-drupal": "^1.1",
         "phpstan/extension-installer": "^1.3",
         "phpstan/phpstan-deprecation-rules": "^1.1",
-        "phpunit/phpunit": "^9.5",
+        "phpunit/phpunit": "^9.6 || ^10.5 || ^11.5",
         "wsdltophp/packagegenerator": "^4.0"
     },
     "repositories": {
