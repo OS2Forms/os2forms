@@ -107,7 +107,8 @@
             "allowed-list": [
                 "drupal/coc_forms_auto_export",
                 "drupal/webform_node_element",
-                "drupal/events_logging"
+                "drupal/events_logging",
+                "drupal/switch_page_theme"
             ]
         },
         "enable-patching": true,
@@ -136,6 +137,9 @@
             },
             "drupal/events_logging" : {
                 "3430351 - Automated Drupal 11 compatibility fixes for events_logging": "https://www.drupal.org/files/issues/2024-03-17/events_logging.2.0.0-beta2.rector.patch"
+            },
+            "drupal/switch_page_theme" : {
+                "3489081 - Drupal 11 compatibility for Switch Page Theme" : "https://www.drupal.org/files/issues/2025-10-30/switch_page_theme-3489081-20.patch"
             }
         }
     },
