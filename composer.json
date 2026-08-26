@@ -106,7 +106,8 @@
         "drupal-lenient": {
             "allowed-list": [
                 "drupal/coc_forms_auto_export",
-                "drupal/webform_node_element"
+                "drupal/webform_node_element",
+                "drupal/events_logging"
             ]
         },
         "enable-patching": true,
@@ -132,6 +133,9 @@
             },
             "drupal/webform_node_element": {
                 "3495835 - Drupal 11 compatibility fixes for Webform Node Element": "https://git.drupalcode.org/project/webform_node_element/-/merge_requests/5.diff"
+            },
+            "drupal/events_logging" : {
+                "3430351 - Automated Drupal 11 compatibility fixes for events_logging": "https://www.drupal.org/files/issues/2024-03-17/events_logging.2.0.0-beta2.rector.patch"
             }
         }
     },
