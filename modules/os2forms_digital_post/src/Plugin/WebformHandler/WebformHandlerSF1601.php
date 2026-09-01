@@ -32,6 +32,8 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
   public const RECIPIENT_ELEMENT = 'recipient_element';
   public const ATTACHMENT_ELEMENT = 'attachment_element';
   public const SENDER_ADDRESS = 'sender_address';
+  private const string ADDITIONAL = 'additional';
+  private const string STATES = 'states';
 
   /**
    * Maximum length of sender label.
@@ -76,6 +78,9 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
   public function defaultConfiguration() {
     return [
       'debug' => FALSE,
+      self::ADDITIONAL => [
+        self::STATES => [WebformSubmissionInterface::STATE_COMPLETED],
+      ],
     ];
   }
 
@@ -201,6 +206,31 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
       '#description' => $this->t('If checked, every handler method invoked will be displayed onscreen to all users.'),
       '#return_value' => TRUE,
       '#default_value' => $this->configuration['debug'] ?? NULL,
+    ];
+
+    // Additional.
+    // Lifted from EmailWebformHandler::buildConfigurationForm().
+    $resultsDisabled = (bool) $this->getWebform()->getSetting('results_disabled');
+    $form[self::ADDITIONAL] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Additional settings'),
+    ];
+    // Settings: States.
+    $states = (array) ($this->configuration[self::ADDITIONAL][self::STATES] ?? NULL);
+    $form[self::ADDITIONAL][self::STATES] = [
+      '#type' => 'checkboxes',
+      '#title' => $this->t('Run handler when …'),
+      '#options' => [
+        WebformSubmissionInterface::STATE_DRAFT_CREATED => $this->t('<b>draft is created</b>.'),
+        WebformSubmissionInterface::STATE_DRAFT_UPDATED => $this->t('<b>draft is updated</b>.'),
+        WebformSubmissionInterface::STATE_CONVERTED => $this->t('anonymous <b>submission is converted</b> to authenticated.'),
+        WebformSubmissionInterface::STATE_COMPLETED => $this->t('<b>submission is completed</b>.'),
+        WebformSubmissionInterface::STATE_UPDATED => $this->t('<b>submission is updated</b>.'),
+        WebformSubmissionInterface::STATE_DELETED => $this->t('<b>submission is deleted</b>.'),
+        WebformSubmissionInterface::STATE_LOCKED => $this->t('<b>submission is locked</b>.'),
+      ],
+      '#access' => !$resultsDisabled,
+      '#default_value' => $resultsDisabled ? [WebformSubmissionInterface::STATE_COMPLETED] : $states,
     ];
 
     return $this->setSettingsParents($form);
@@ -333,6 +363,11 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
     $this->configuration[self::MEMO_ACTIONS] = $actions;
 
     $this->configuration['debug'] = (bool) $formState->getValue('debug');
+
+    $additional = $formState->getValue(self::ADDITIONAL);
+    // Clean up states.
+    $additional[self::STATES] = array_values(array_filter($additional[self::STATES]));
+    $this->configuration[self::ADDITIONAL] = $additional;
   }
 
   /**
@@ -341,6 +376,12 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
    * @phpstan-return void
    */
   public function postSave(WebformSubmissionInterface $webformSubmission, $update = TRUE) {
+    $submissionState = $webformSubmission->getWebform()->getSetting('results_disabled') ? WebformSubmissionInterface::STATE_COMPLETED : $webformSubmission->getState();
+    $enabledStates = (array) ($this->configuration[self::ADDITIONAL][self::STATES] ?? NULL);
+    if (!in_array($submissionState, $enabledStates)) {
+      return;
+    }
+
     $this->helper->createJob($webformSubmission, $this->configuration);
   }
 

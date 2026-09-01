@@ -109,11 +109,14 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
    * {@inheritdoc}
    */
   public function preSave(WebformSubmissionInterface $webform_submission) {
-    $webform = $webform_submission->getWebform();
-
-    if ($webform_submission->isLocked()) {
+    // Signing redirects the user to the signing flow, so it only makes sense
+    // on an actual submission. Drafts are skipped, and a locked submission is
+    // already signed (signing locks it).
+    if ($webform_submission->isDraft() || $webform_submission->isLocked()) {
       return;
     }
+
+    $webform = $webform_submission->getWebform();
 
     $attachment = $this->getSubmissionAttachment($webform_submission);
     if (!$attachment) {
