@@ -11,6 +11,11 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- Moved digital signature configuration (which attachment to sign and the
+  signature validation text position) from the *OS2Forms Attachment* element
+  onto the *Digital Signature* webform handler. Includes an automatic
+  migration update hook for existing webforms.
+
 ## [5.1.0] 2026-06-03
 
 - [PR-326](https://github.com/OS2Forms/os2forms/pull/326)
