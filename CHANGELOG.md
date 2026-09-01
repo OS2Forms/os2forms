@@ -18,7 +18,6 @@ before starting to add changes. Use example [placed in the end of the page](#exa
   - Digital post
   - Fasit
   - FBS
-  - Digital signature
 
 ## [5.1.0] 2026-06-03
 
