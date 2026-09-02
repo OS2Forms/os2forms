@@ -6,6 +6,7 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Core\File\Exception\FileWriteException;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\file\Entity\File;
@@ -645,7 +646,7 @@ class SaveToFileWebformHandler extends WebformHandlerBase {
    * @param string $type
    *   The type of message to be displayed to the end use.
    */
-  protected function debug($message, $state, $file_path, $type = 'warning') {
+  protected function debug($message, $state, $file_path, $type = MessengerInterface::TYPE_WARNING) {
     if (empty($this->configuration['debug'])) {
       return;
     }
@@ -699,7 +700,7 @@ class SaveToFileWebformHandler extends WebformHandlerBase {
       '#markup' => $message,
     ];
 
-    $this->messenger()->addMessage(\Drupal::service('renderer')->renderPlain($build));
+    $this->messenger()->addMessage(\Drupal::service('renderer')->renderPlain($build), $type);
   }
 
   /**
