@@ -37,56 +37,56 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
    *
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
-  private readonly ModuleHandlerInterface $moduleHandler;
+  protected readonly ModuleHandlerInterface $moduleHandler;
 
   /**
    * The webform element plugin manager.
    *
    * @var \Drupal\webform\Plugin\WebformElementManagerInterface
    */
-  private readonly WebformElementManagerInterface $elementManager;
+  protected readonly WebformElementManagerInterface $elementManager;
 
   /**
    * Logger for channel - os2forms_digital_signature.
    *
    * @var \Psr\Log\LoggerInterface
    */
-  private readonly LoggerInterface $logger;
+  protected readonly LoggerInterface $logger;
 
   /**
    * File system interface.
    *
    * @var \Drupal\Core\File\FileSystemInterface
    */
-  private readonly FileSystemInterface $fileSystem;
+  protected readonly FileSystemInterface $fileSystem;
 
   /**
    * File repository.
    *
    * @var \Drupal\file\FileRepositoryInterface
    */
-  private readonly FileRepositoryInterface $fileRepository;
+  protected readonly FileRepositoryInterface $fileRepository;
 
   /**
    * File URL generator.
    *
    * @var \Drupal\Core\File\FileUrlGeneratorInterface
    */
-  private readonly FileUrlGeneratorInterface $fileUrlGenerator;
+  protected readonly FileUrlGeneratorInterface $fileUrlGenerator;
 
   /**
    * OS2Forms signing service.
    *
    * @var \Drupal\os2forms_digital_signature\Service\SigningService
    */
-  private readonly SigningService $signingService;
+  protected readonly SigningService $signingService;
 
   /**
    * Settings service.
    *
    * @var \Drupal\Core\Site\Settings
    */
-  private readonly Settings $settings;
+  protected readonly Settings $settings;
 
   /**
    * {@inheritdoc}

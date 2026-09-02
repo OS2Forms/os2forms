@@ -26,7 +26,7 @@ class Fasit extends JobTypeBase implements ContainerFactoryPluginInterface {
    *
    * @var \Drupal\os2forms_fasit\Helper\FasitHelper
    */
-  private FasitHelper $helper;
+  protected FasitHelper $helper;
 
   /**
    * The submission logger.
