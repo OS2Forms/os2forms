@@ -11,6 +11,11 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [PR-353](https://github.com/OS2Forms/os2forms/pull/353)
+  - Moved `WebformInheritTask` data inheriting from
+  `hook_webform_submission_form_alter` to `hook_entity_prepare_form`.
+  - Set data on the submission.
+
 ## [5.1.0] 2026-06-03
 
 - [PR-326](https://github.com/OS2Forms/os2forms/pull/326)

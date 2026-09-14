@@ -5,6 +5,7 @@
  * Install, update and uninstall functions for the os2forms_forloeb.
  */
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\maestro\Engine\MaestroEngine;
 use Drupal\os2forms_forloeb\MaestroHelper;
@@ -12,6 +13,7 @@ use Drupal\os2forms_forloeb\Plugin\EngineTasks\MaestroWebformInheritTask;
 use Drupal\user\Entity\User;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\WebformInterface;
+use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * Implements hook_maestro_interactive_handlers().
@@ -293,10 +295,18 @@ function os2forms_forloeb_preprocess_page(&$variables) {
 }
 
 /**
- * Implements hook_webform_submission_form_alter().
+ * Implements hook_entity_prepare_form().
+ *
+ * Uses the generic hook rather than hook_webform_submission_prepare_form()
+ * because core invokes the generic hook first, and the inherited data should
+ * be set early.
+ *
+ * @see \Drupal\Core\Entity\EntityForm::init()
  */
-function os2forms_forloeb_webform_submission_form_alter(array &$form, FormStateInterface $formState, string $formId) {
-  MaestroWebformInheritTask::webformSubmissionFormAlter($form, $formState, $formId);
+function os2forms_forloeb_entity_prepare_form(EntityInterface $entity, string $operation, FormStateInterface $formState) {
+  if ($entity instanceof WebformSubmissionInterface) {
+    MaestroWebformInheritTask::webformSubmissionPrepareForm($entity, $operation, $formState);
+  }
 }
 
 /**
