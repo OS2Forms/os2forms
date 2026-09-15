@@ -13,6 +13,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 - [PR-346](https://github.com/OS2Forms/os2forms/pull/346)
   Drupal 11 compatibility.
+- [#355](https://github.com/OS2Forms/os2forms/issues/355)
+  Children select elements warning fix.
 
 ## [5.1.0] 2026-06-03
 
