@@ -40,7 +40,7 @@ final class SendMeastroNotification extends JobTypeBase implements ContainerFact
     array $configuration,
     $plugin_id,
     $plugin_definition,
-    private readonly MaestroHelper $helper,
+    protected readonly MaestroHelper $helper,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }

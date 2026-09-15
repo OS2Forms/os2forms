@@ -2,7 +2,7 @@ name: 'OS2Forms Fasit'
 type: module
 description: 'Fasit integration'
 package: OS2Forms
-core_version_requirement: ^9 || ^10
+core_version_requirement: ^10 || ^11
 dependencies:
   - drupal:webform
   - drupal:advancedqueue

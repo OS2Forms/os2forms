@@ -11,6 +11,9 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [PR-346](https://github.com/OS2Forms/os2forms/pull/346)
+  Drupal 11 compatibility.
+
 ## [5.1.0] 2026-06-03
 
 - [PR-326](https://github.com/OS2Forms/os2forms/pull/326)
