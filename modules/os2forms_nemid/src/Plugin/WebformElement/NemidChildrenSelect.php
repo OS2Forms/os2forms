@@ -155,7 +155,7 @@ class NemidChildrenSelect extends Select implements NemidElementPersonalInterfac
 
     $element['#options'] = $options;
 
-    if ($showAddressNameProtectionMessage) {
+    if ($showAddressNameProtectionMessage && isset($element['#address_protection_help_text'])) {
       $element['#suffix'] = '<div>' . $element['#address_protection_help_text'] . '</div>';
     }
   }
