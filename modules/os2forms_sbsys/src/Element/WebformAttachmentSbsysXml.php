@@ -271,6 +271,10 @@ class WebformAttachmentSbsysXml extends WebformAttachmentXml {
    *   Element configuration value
    */
   public static function getConfigurationValue($name, array $config, WebformSubmissionInterface $webform_submission) {
+    if (!isset($config[$name])) {
+      return '';
+    }
+
     if ($config[$name] == 'default_nemid_value') {
       return 'default_nemid_value';
     }
