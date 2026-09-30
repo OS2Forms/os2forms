@@ -25,7 +25,7 @@ final class SendDigitalPostSF1601 extends JobTypeBase implements ContainerFactor
    *
    * @var \Drupal\os2forms_digital_post\Helper\WebformHelperSF1601
    */
-  private WebformHelperSF1601 $helper;
+  protected WebformHelperSF1601 $helper;
 
   /**
    * {@inheritdoc}

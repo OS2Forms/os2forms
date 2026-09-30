@@ -61,7 +61,6 @@ class BeskedfordelerHelper {
    * @see Message::__set()
    */
   public function loadMessage(string $messageUUID): ?Message {
-    // @phpstan-ignore-next-line (fetchObject invoked with 2 parameters)
     return $this->database
       ->select(self::TABLE_NAME, 'm')
       ->fields('m')

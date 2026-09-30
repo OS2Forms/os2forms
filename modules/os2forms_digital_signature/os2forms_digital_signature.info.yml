@@ -2,7 +2,7 @@ name: 'OS2Forms Digital Signature'
 type: module
 description: 'Provides digital signature functionality'
 package: 'OS2Forms'
-core_version_requirement: ^9 || ^10
+core_version_requirement: ^10 || ^11
 dependencies:
   - 'webform:webform'
 
