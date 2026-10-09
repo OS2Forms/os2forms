@@ -27,7 +27,13 @@ function os2forms_webform_maps_theme() {
 function os2forms_webform_maps_locale_translation_projects_alter(&$projects) {
   $module_handler = \Drupal::service('module_handler');
   $path = $module_handler->getModule('os2forms_webform_maps')->getPath();
-  $projects['os2forms_webform_maps']['info']['interface translation server pattern'] = $path . '/translations/%language.po';
+  $projects['os2forms_webform_maps'] = [
+    'project_type' => 'module',
+    'info' => [
+      'name' => 'OS2Forms Webform Maps',
+      'interface translation server pattern' => $path . '/translations/%language.po'
+    ],
+  ];
 }
 
 /**

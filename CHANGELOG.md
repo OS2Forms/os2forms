@@ -11,11 +11,15 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- Adding children information to Attachment SBSYS
+- os2forms_webform_maps translation page fix
+
+## [6.0.0] 2026-09-30
+
 - [PR-346](https://github.com/OS2Forms/os2forms/pull/346)
   Drupal 11 compatibility.
 - [#355](https://github.com/OS2Forms/os2forms/issues/355)
   Children select elements warning fix.
-- Adding children information to Attachment SBSYS
 
 ## [5.1.0] 2026-06-03
 
