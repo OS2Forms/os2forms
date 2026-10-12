@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Install hooks for os2forms_fasit.
+ * Install, update, and uninstall functions for OS2Forms Fasit.
  */
 
 /**
@@ -12,4 +12,41 @@ function os2forms_fasit_update_9001(): void {
   \Drupal::service('module_installer')->install([
     'key',
   ], TRUE);
+}
+
+/**
+ * Migrate existing Fasit handlers to primary party settings.
+ */
+function os2forms_fasit_update_10001(): void {
+  $config_factory = \Drupal::configFactory();
+
+  foreach ($config_factory->listAll('webform.webform.') as $config_name) {
+    $config = $config_factory->getEditable($config_name);
+    $handlers = $config->get('handlers') ?? [];
+    $changed = FALSE;
+
+    foreach ($handlers as &$handler) {
+      if (($handler['id'] ?? NULL) !== 'os2forms_fasit') {
+        continue;
+      }
+
+      $general = &$handler['settings']['general'];
+
+      if (isset($general['cpr_element']) && !isset($general['primary_party_element'])) {
+        $general['primary_party_element'] = $general['cpr_element'];
+      }
+      unset($general['cpr_element']);
+
+      if (!isset($general['primary_party_type'])) {
+        $general['primary_party_type'] = 'urn:schultz:dokument:1.0:primaerpart:cpr:';
+      }
+
+      $changed = TRUE;
+    }
+    unset($handler);
+
+    if ($changed) {
+      $config->set('handlers', $handlers)->save(TRUE);
+    }
+  }
 }
