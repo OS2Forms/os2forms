@@ -27,7 +27,6 @@ use Symfony\Component\HttpFoundation\Response;
 class FasitHelper {
   private const FASIT_API_METHOD_UPLOAD = 'upload2';
   private const FASIT_API_METHOD_CREATE = 'oio/3.0.0/opret';
-  private const FASIT_API_PRIMAERPART_TEMPLATE_VALUE = 'urn:schultz:dokument:1.0:primaerpart:cpr:';
 
   /**
    * File element types that may contain PDF files.
@@ -128,34 +127,35 @@ class FasitHelper {
     );
 
     // Check handler configuration.
-    $this->checkHandlerConfiguration($handlerConfiguration, FasitWebformHandler::FASIT_HANDLER_CPR_ELEMENT);
+    $this->checkHandlerConfiguration($handlerConfiguration, FasitWebformHandler::FASIT_HANDLER_PRIMARY_PARTY_ELEMENT);
     $this->checkHandlerConfiguration($handlerConfiguration, FasitWebformHandler::FASIT_HANDLER_DOCUMENT_TITLE);
     $this->checkHandlerConfiguration($handlerConfiguration, FasitWebformHandler::FASIT_HANDLER_DOCUMENT_DESCRIPTION);
 
     $fasitDocumentTitle = $handlerConfiguration[FasitWebformHandler::FASIT_HANDLER_GENERAL][FasitWebformHandler::FASIT_HANDLER_DOCUMENT_TITLE];
     $fasitDocumentDescription = $handlerConfiguration[FasitWebformHandler::FASIT_HANDLER_GENERAL][FasitWebformHandler::FASIT_HANDLER_DOCUMENT_DESCRIPTION];
+    $fasitPrimaryPartyType = $handlerConfiguration[FasitWebformHandler::FASIT_HANDLER_GENERAL][FasitWebformHandler::FASIT_HANDLER_PRIMARY_PARTY_TYPE] ?? FasitWebformHandler::FASIT_PRIMARY_PARTY_CPR;
 
-    // Fasit CPR element.
-    $webformCprElementId = $handlerConfiguration[FasitWebformHandler::FASIT_HANDLER_GENERAL][FasitWebformHandler::FASIT_HANDLER_CPR_ELEMENT];
+    // Fasit primary party element.
+    $webformPrimaryPartyElementId = $handlerConfiguration[FasitWebformHandler::FASIT_HANDLER_GENERAL][FasitWebformHandler::FASIT_HANDLER_PRIMARY_PARTY_ELEMENT];
 
     /** @var \Drupal\webform\Entity\WebformSubmission $submission */
     $submission = $this->getSubmission($submissionId);
     $submissionData = $submission->getData();
 
-    $fasitCpr = $submissionData[$webformCprElementId] ?? NULL;
+    $fasitPrimaryPartyIdentifier = $submissionData[$webformPrimaryPartyElementId] ?? NULL;
 
-    // Fix if os2forms_person_lookup (cpr & name validation) element is used.
-    if (is_array($fasitCpr)) {
+    // Extract the identifier if an os2forms_person_lookup element is used.
+    if (is_array($fasitPrimaryPartyIdentifier)) {
       // Example:
       // [
       // 'cpr_number' => 1234567890,
       // 'name' => Eksempel Eksempelsen,
       // ].
-      $fasitCpr = $fasitCpr['cpr_number'] ?? NULL;
+      $fasitPrimaryPartyIdentifier = $fasitPrimaryPartyIdentifier['cpr_number'] ?? NULL;
     }
 
-    if (NULL === $fasitCpr) {
-      throw new InvalidSubmissionException(sprintf('Could not determine value of configured CPR element in submission.'));
+    if (NULL === $fasitPrimaryPartyIdentifier) {
+      throw new InvalidSubmissionException('Could not determine the configured primary party identifier in submission.');
     }
 
     // Construct XML.
@@ -204,7 +204,7 @@ class FasitHelper {
         $referenceIdChildElements = $element->childNodes;
         foreach ($referenceIdChildElements as $referenceIdChildElement) {
           if ($referenceIdChildElement->nodeName === 'UUIDIdentifikator') {
-            $referenceIdChildElement->nodeValue = self::FASIT_API_PRIMAERPART_TEMPLATE_VALUE . $fasitCpr;
+            $referenceIdChildElement->nodeValue = $fasitPrimaryPartyType . $fasitPrimaryPartyIdentifier;
           }
         }
       }
@@ -235,7 +235,7 @@ class FasitHelper {
       throw new FasitResponseException(sprintf('Expected status code 200, received %d', $response->getStatusCode()));
     }
 
-    $msg = sprintf('Successfully uploaded document %s to cpr %s in Fasit. Webform id %s.', $fasitDocumentTitle, $fasitCpr, $submission->getWebform()->id());
+    $msg = sprintf('Successfully uploaded document %s to primary party %s in Fasit. Webform id %s.', $fasitDocumentTitle, $fasitPrimaryPartyIdentifier, $submission->getWebform()->id());
     $this->auditLogger->info('Fasit', $msg);
   }
 

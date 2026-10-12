@@ -33,8 +33,11 @@ class FasitWebformHandler extends WebformHandlerBase {
   public const FASIT_HANDLER_GENERAL = 'general';
   public const FASIT_HANDLER_DOCUMENT_TITLE = 'document_title';
   public const FASIT_HANDLER_DOCUMENT_DESCRIPTION = 'document_description';
-  public const FASIT_HANDLER_CPR_ELEMENT = 'cpr_element';
+  public const FASIT_HANDLER_PRIMARY_PARTY_TYPE = 'primary_party_type';
+  public const FASIT_HANDLER_PRIMARY_PARTY_ELEMENT = 'primary_party_element';
   public const FASIT_HANDLER_ATTACHMENT_ELEMENT = 'attachment_element';
+  public const FASIT_PRIMARY_PARTY_CPR = 'urn:schultz:dokument:1.0:primaerpart:cpr:';
+  public const FASIT_PRIMARY_PARTY_PNUMBER = 'urn:schultz:dokument:1.0:primaerpart:pnummer:';
 
   /**
    * The submission logger.
@@ -109,12 +112,24 @@ class FasitWebformHandler extends WebformHandlerBase {
       '#required' => TRUE,
     ];
 
-    $form[self::FASIT_HANDLER_GENERAL][self::FASIT_HANDLER_CPR_ELEMENT] = [
+    $form[self::FASIT_HANDLER_GENERAL][self::FASIT_HANDLER_PRIMARY_PARTY_TYPE] = [
       '#type' => 'select',
-      '#title' => $this->t('CPR element'),
+      '#title' => $this->t('Primary party type'),
+      '#options' => [
+        self::FASIT_PRIMARY_PARTY_CPR => $this->t('CPR'),
+        self::FASIT_PRIMARY_PARTY_PNUMBER => $this->t('PNUMMER'),
+      ],
+      '#default_value' => $this->configuration[self::FASIT_HANDLER_GENERAL][self::FASIT_HANDLER_PRIMARY_PARTY_TYPE] ?? self::FASIT_PRIMARY_PARTY_CPR,
+      '#description' => $this->t('Choose the type used when journaling the primary party in Fasit.'),
+      '#required' => TRUE,
+    ];
+
+    $form[self::FASIT_HANDLER_GENERAL][self::FASIT_HANDLER_PRIMARY_PARTY_ELEMENT] = [
+      '#type' => 'select',
+      '#title' => $this->t('Primary party element'),
       '#options' => $this->getAvailableElementsByType(['textfield', 'os2forms_nemid_cpr', 'os2forms_person_lookup'], $elements),
-      '#default_value' => $this->configuration[self::FASIT_HANDLER_GENERAL][self::FASIT_HANDLER_CPR_ELEMENT] ?? '',
-      '#description' => $this->t('Choose element containing CPR.'),
+      '#default_value' => $this->configuration[self::FASIT_HANDLER_GENERAL][self::FASIT_HANDLER_PRIMARY_PARTY_ELEMENT] ?? '',
+      '#description' => $this->t('Choose the element containing the primary party identifier.'),
       '#required' => TRUE,
       '#size' => 5,
     ];
@@ -141,7 +156,8 @@ class FasitWebformHandler extends WebformHandlerBase {
     parent::submitConfigurationForm($form, $form_state);
     $this->configuration[self::FASIT_HANDLER_GENERAL][self::FASIT_HANDLER_DOCUMENT_TITLE] = $form_state->getValue(self::FASIT_HANDLER_GENERAL)[self::FASIT_HANDLER_DOCUMENT_TITLE];
     $this->configuration[self::FASIT_HANDLER_GENERAL][self::FASIT_HANDLER_DOCUMENT_DESCRIPTION] = $form_state->getValue(self::FASIT_HANDLER_GENERAL)[self::FASIT_HANDLER_DOCUMENT_DESCRIPTION];
-    $this->configuration[self::FASIT_HANDLER_GENERAL][self::FASIT_HANDLER_CPR_ELEMENT] = $form_state->getValue(self::FASIT_HANDLER_GENERAL)[self::FASIT_HANDLER_CPR_ELEMENT];
+    $this->configuration[self::FASIT_HANDLER_GENERAL][self::FASIT_HANDLER_PRIMARY_PARTY_TYPE] = $form_state->getValue(self::FASIT_HANDLER_GENERAL)[self::FASIT_HANDLER_PRIMARY_PARTY_TYPE];
+    $this->configuration[self::FASIT_HANDLER_GENERAL][self::FASIT_HANDLER_PRIMARY_PARTY_ELEMENT] = $form_state->getValue(self::FASIT_HANDLER_GENERAL)[self::FASIT_HANDLER_PRIMARY_PARTY_ELEMENT];
     $this->configuration[self::FASIT_HANDLER_GENERAL][self::FASIT_HANDLER_ATTACHMENT_ELEMENT] = $form_state->getValue(self::FASIT_HANDLER_GENERAL)[self::FASIT_HANDLER_ATTACHMENT_ELEMENT];
   }
 
