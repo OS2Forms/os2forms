@@ -203,7 +203,7 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
   protected function isSignableElement(array $element): bool {
     return match ($element['#type'] ?? '') {
       'os2forms_digital_signature_document' => TRUE,
-      // Ensure only os2forms_attachment elements with PDF export type are listed.
+      // List only os2forms_attachment elements with PDF export type.
       'os2forms_attachment' => ($element['#export_type'] ?? '') === 'pdf',
       default => FALSE,
     };
