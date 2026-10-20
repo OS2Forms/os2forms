@@ -13,6 +13,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 - Adding children information to Attachment SBSYS
 - os2forms_webform_maps translation page fix
+- Upgrading Gin theme versions
 
 ## [6.0.0] 2026-09-30
 
