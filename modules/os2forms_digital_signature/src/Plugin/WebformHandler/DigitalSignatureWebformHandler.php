@@ -109,7 +109,7 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
     $form['attachment_element'] = [
       '#type' => 'select',
       '#title' => $this->t('Attachment element to sign'),
-      '#description' => $this->t('Select the webform element whose generated or uploaded PDF should be signed.'),
+      '#description' => $this->t('Select the webform element whose generated or uploaded PDF should be signed. Only <em>OS2Forms Attachment</em> elements with export type PDF and <em>Digital Signature Document</em> elements are listed.'),
       '#options' => $this->getAttachmentElementOptions(),
       '#empty_option' => $this->t('- Select -'),
       '#default_value' => $this->configuration['attachment_element'],
@@ -168,6 +168,8 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
    *
    * @return array
    *   Map of element key => human label.
+   *
+   * @see self::isSignableElement()
    */
   protected function getAttachmentElementOptions(): array {
     $webform = $this->getWebform();
@@ -179,17 +181,32 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
     $options = [];
     foreach ($webform->getElementsAttachments() as $key) {
       $element = $elements[$key] ?? NULL;
-      if (!$element) {
+      if (!$element || !$this->isSignableElement($element)) {
         continue;
       }
       $type = $element['#type'] ?? '';
-      if (!in_array($type, ['os2forms_digital_signature_document', 'os2forms_attachment'], TRUE)) {
-        continue;
-      }
       $title = $element['#title'] ?? $key;
       $options[$key] = sprintf('%s (%s) [%s]', $title, $key, $type);
     }
     return $options;
+  }
+
+  /**
+   * Check whether an element provides a PDF that can be signed.
+   *
+   * @param array $element
+   *   The flattened webform element.
+   *
+   * @return bool
+   *   TRUE if the element can be signed.
+   */
+  protected function isSignableElement(array $element): bool {
+    return match ($element['#type'] ?? '') {
+      'os2forms_digital_signature_document' => TRUE,
+      // Ensure only os2forms_attachment elements with PDF export type are listed.
+      'os2forms_attachment' => ($element['#export_type'] ?? '') === 'pdf',
+      default => FALSE,
+    };
   }
 
   /**
@@ -311,6 +328,15 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
     }
 
     $element = $elements[$elementKey];
+
+    // Ensure that the element provides a PDF that can be signed during runtime.
+    if (!$this->isSignableElement($element)) {
+      $this->logger->error('Configured attachment element %element on webform %webform does not provide a PDF and cannot be signed.', [
+        '%element' => $elementKey,
+        '%webform' => $this->getWebform()->id(),
+      ]);
+      return NULL;
+    }
 
     /** @var \Drupal\webform\Plugin\WebformElementAttachmentInterface $element_plugin */
     $element_plugin = $this->elementManager->getElementInstance($element);
