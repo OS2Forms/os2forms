@@ -62,11 +62,16 @@ class AttachmentElement extends WebformAttachmentBase {
       // Resolving them here ensures all consumers of the element (email
       // handlers, attachment downloads) serve an already signed document
       // and render the validation text consistently.
+      // Webform skips handlers whose per-submission conditions do not match,
+      // so the same check is applied here to avoid rendering signature
+      // validation text on a document that was never signed.
       $elementKey = $element['#webform_key'] ?? NULL;
       if ($elementKey !== NULL) {
         foreach ($webform_submission->getWebform()->getHandlers('os2forms_digital_signature') as $handler) {
           $settings = $handler->getConfiguration()['settings'] ?? [];
-          if ($handler->isEnabled() && ($settings['attachment_element'] ?? '') === $elementKey) {
+          if ($handler->isEnabled()
+            && $handler->checkConditions($webform_submission)
+            && ($settings['attachment_element'] ?? '') === $elementKey) {
             $element['#digital_signature'] = TRUE;
             $element['#digital_signature_position'] = $settings['signature_position']
               ?? Os2formsAttachmentPrintBuilder::SIGNATURE_POSITION_AFTER_CONTENT;
