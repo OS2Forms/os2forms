@@ -15,6 +15,15 @@ before starting to add changes. Use example [placed in the end of the page](#exa
   - Moved `WebformInheritTask` data inheriting from
   `hook_webform_submission_form_alter` to `hook_entity_prepare_form`.
   - Set data on the submission.
+- Adding children information to Attachment SBSYS
+- os2forms_webform_maps translation page fix
+
+## [6.0.0] 2026-09-30
+
+- [PR-346](https://github.com/OS2Forms/os2forms/pull/346)
+  Drupal 11 compatibility.
+- [#355](https://github.com/OS2Forms/os2forms/issues/355)
+  Children select elements warning fix.
 
 ## [5.1.0] 2026-06-03
 

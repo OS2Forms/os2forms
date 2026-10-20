@@ -5,6 +5,7 @@ namespace Drupal\os2forms_sbsys\Plugin\WebformElement;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\os2forms\Plugin\WebformElement\WebformAttachmentXml;
+use Drupal\os2forms_nemid\Plugin\WebformElement\NemidChildElementInterface;
 use Drupal\os2forms_nemid\Plugin\WebformElement\NemidElementBase;
 use Drupal\webform\Plugin\WebformElement\DateBase;
 use Drupal\webform\Plugin\WebformElement\TextBase;
@@ -123,7 +124,11 @@ class WebformAttachmentSbsysXml extends WebformAttachmentXml {
       }
 
       // Skipping if is of type we do not support.
-      if (!$elementInstance instanceof TextBase && !$elementInstance instanceof NemidElementBase && !$elementInstance instanceof DateBase && !$elementInstance instanceof WebformComputedBase) {
+      if (!$elementInstance instanceof TextBase
+        && !$elementInstance instanceof NemidElementBase
+        && !$elementInstance instanceof DateBase
+        && !$elementInstance instanceof WebformComputedBase
+        && !$elementInstance instanceof NemidChildElementInterface) {
         continue;
       }
 
