@@ -2,7 +2,7 @@ name: 'OS2forms webform texts'
 type: module
 description: 'Provides reusable webform tekst.'
 package: OS2Forms
-core_version_requirement: ^9 || ^10
+core_version_requirement: ^10 || ^11
 
 dependencies:
   - 'drupal:webform_node_element'

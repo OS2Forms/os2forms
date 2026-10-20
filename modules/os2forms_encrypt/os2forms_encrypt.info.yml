@@ -3,7 +3,7 @@ description: Encryption functionality for OS2Forms web-forms
 package: OS2Forms
 type: module
 version: 1.0.0
-core_version_requirement: ^8 || ^9 || ^10
+core_version_requirement: ^10 || ^11
 dependencies:
   - 'drupal:webform_encrypt'
   - 'drupal:sodium'
