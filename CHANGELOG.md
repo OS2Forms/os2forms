@@ -11,6 +11,10 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- Moved digital signature configuration (which attachment to sign and the
+  signature validation text position) from the *OS2Forms Attachment* element
+  onto the *Digital Signature* webform handler. Includes an automatic
+  migration update hook for existing webforms.
 - Adding children information to Attachment SBSYS
 - os2forms_webform_maps translation page fix
 - Upgrading Gin theme versions
