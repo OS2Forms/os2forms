@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [PR-325](https://github.com/OS2Forms/os2forms/pull/325)
+  Added NemID first name, middle name and last name webform elements.
 - Adding children information to Attachment SBSYS
 - os2forms_webform_maps translation page fix
 - Upgrading Gin theme versions
