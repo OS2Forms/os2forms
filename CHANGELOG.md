@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## [6.1.0] 2026-10-22
+
 - Adding children information to Attachment SBSYS
 - os2forms_webform_maps translation page fix
 - Upgrading Gin theme versions
