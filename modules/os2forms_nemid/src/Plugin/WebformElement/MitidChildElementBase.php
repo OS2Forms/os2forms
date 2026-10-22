@@ -12,7 +12,7 @@ use Drupal\webform\Plugin\WebformElementBase;
  * @see \Drupal\webform\Plugin\WebformElementInterface
  * @see \Drupal\webform\Annotation\WebformElement
  */
-abstract class MitidChildElementBase extends WebformElementBase {
+abstract class MitidChildElementBase extends WebformElementBase implements NemidChildElementInterface {
 
   /**
    * {@inheritdoc}

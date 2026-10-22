@@ -20,7 +20,7 @@ use Drupal\webform\WebformSubmissionInterface;
  * @see \Drupal\os2forms_nemid\Plugin\NemidElementBase
  * @see \Drupal\os2forms_nemid\Element\NemidChildrenRadios
  */
-class NemidChildrenRadios extends Radios implements NemidElementPersonalInterface, NemidPrepopulateFieldInterface {
+class NemidChildrenRadios extends Radios implements NemidElementPersonalInterface, NemidPrepopulateFieldInterface, NemidChildElementInterface {
 
   /**
    * {@inheritdoc}
