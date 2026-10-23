@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- Computed twig encryption fix
+
 ## [6.1.0] 2026-10-22
 
 - Adding children information to Attachment SBSYS
