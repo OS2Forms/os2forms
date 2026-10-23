@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [#321](https://github.com/OS2Forms/os2forms/issues/321) Removing SaveToFileWebformHandler (id: save_to_file)
+
 ## [6.1.0] 2026-10-22
 
 - Adding children information to Attachment SBSYS
