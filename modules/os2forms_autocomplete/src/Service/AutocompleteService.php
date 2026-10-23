@@ -2,7 +2,7 @@
 
 namespace Drupal\os2forms_autocomplete\Service;
 
-use Drupal\Core\Logger\LoggerChannelFactory;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
@@ -21,10 +21,10 @@ class AutocompleteService {
   /**
    * AutocompleteService constructor.
    *
-   * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   The logger factory.
    */
-  public function __construct(LoggerChannelFactory $logger_factory) {
+  public function __construct(LoggerChannelFactoryInterface $logger_factory) {
     $this->logger = $logger_factory->get('OS2Forms Autocomplete');
   }
 
