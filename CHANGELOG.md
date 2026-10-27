@@ -30,6 +30,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
   - Set data on the submission.
 - [PR-325](https://github.com/OS2Forms/os2forms/pull/325)
   Added NemID first name, middle name and last name webform elements.
+- [PR-381](https://github.com/OS2Forms/os2forms/pull/381)
+  Fixing OS2Forms autocomplete field logger
 
 ## [6.1.0] 2026-10-22
 
