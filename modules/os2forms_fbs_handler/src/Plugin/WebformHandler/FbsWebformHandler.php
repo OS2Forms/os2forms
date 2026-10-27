@@ -179,7 +179,6 @@ final class FbsWebformHandler extends WebformHandlerBase {
         WebformSubmissionInterface::STATE_CONVERTED => $this->t('anonymous <b>submission is converted</b> to authenticated.'),
         WebformSubmissionInterface::STATE_COMPLETED => $this->t('<b>submission is completed</b>.'),
         WebformSubmissionInterface::STATE_UPDATED => $this->t('<b>submission is updated</b>.'),
-        WebformSubmissionInterface::STATE_DELETED => $this->t('<b>submission is deleted</b>.'),
         WebformSubmissionInterface::STATE_LOCKED => $this->t('<b>submission is locked</b>.'),
       ],
       '#access' => !$resultsDisabled,
