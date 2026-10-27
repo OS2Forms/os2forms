@@ -15,8 +15,14 @@ before starting to add changes. Use example [placed in the end of the page](#exa
   - Moved `WebformInheritTask` data inheriting from
   `hook_webform_submission_form_alter` to `hook_entity_prepare_form`.
   - Set data on the submission.
+- [PR-325](https://github.com/OS2Forms/os2forms/pull/325)
+  Added NemID first name, middle name and last name webform elements.
+
+## [6.1.0] 2026-10-22
+
 - Adding children information to Attachment SBSYS
 - os2forms_webform_maps translation page fix
+- Upgrading Gin theme versions
 
 ## [6.0.0] 2026-09-30
 
