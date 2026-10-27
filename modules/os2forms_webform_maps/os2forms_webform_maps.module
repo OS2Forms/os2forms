@@ -15,7 +15,7 @@ function os2forms_webform_maps_locale_translation_projects_alter(&$projects) {
     'project_type' => 'module',
     'info' => [
       'name' => 'OS2Forms Webform Maps',
-      'interface translation server pattern' => $path . '/translations/%language.po'
+      'interface translation server pattern' => $path . '/translations/%language.po',
     ],
   ];
 }
