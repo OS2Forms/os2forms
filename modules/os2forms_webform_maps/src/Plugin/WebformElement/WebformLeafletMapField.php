@@ -389,22 +389,20 @@ class WebformLeafletMapField extends WebformElementBase {
     $build = [];
 
     $viewMode = $options['view_mode'] ?? 'results';
-    if ('table' === $viewMode) {
-      $viewMode = 'html';
-    }
-    elseif ($options['email'] ?? FALSE) {
+    // Check the email and PDF flags before the view mode, since a PDF (or an
+    // email) can be rendered with the table layout.
+    if ($options['email'] ?? FALSE) {
       $viewMode = 'email';
     }
     elseif ($options['pdf'] ?? FALSE) {
       $viewMode = 'pdf';
     }
+    elseif ('table' === $viewMode) {
+      $viewMode = 'html';
+    }
 
-    // @todo Is this (i.e. $element['#display_image_on']) really the way to get element configuration?
-    $showImageOn = array_filter((array) ($element['#display_image_on'] ?? NULL));
-    $includeImage = isset($showImageOn[$viewMode]);
-
-    $showGeoJsonOn = array_filter((array) ($element['#display_geojson_on'] ?? NULL));
-    $includeGeoJson = isset($showGeoJsonOn[$viewMode]);
+    $includeImage = in_array($viewMode, $this->getElementProperty($element, 'display_image_on'));
+    $includeGeoJson = in_array($viewMode, $this->getElementProperty($element, 'display_geojson_on'));
 
     if ($includeImage) {
       $build['image'] = [
@@ -436,6 +434,20 @@ class WebformLeafletMapField extends WebformElementBase {
    */
   protected function formatTextItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
     $value = $this->getMapValue($element, $webform_submission, $options);
+
+    // Tokens (e.g. in plain text emails) do not pass a view mode, so fall back
+    // to text. The email and PDF flags take precedence over the view mode.
+    $viewMode = $options['view_mode'] ?? 'text';
+    if ($options['email'] ?? FALSE) {
+      $viewMode = 'email';
+    }
+    elseif ($options['pdf'] ?? FALSE) {
+      $viewMode = 'pdf';
+    }
+
+    if (!in_array($viewMode, $this->getElementProperty($element, 'display_geojson_on'))) {
+      return '';
+    }
 
     return $value['geojson'];
   }
