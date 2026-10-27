@@ -13,11 +13,19 @@ The signature server consists of two parts. A frontend module
 
 ### Activating Digital Signature
 
-1. Add the OS2forms attachment element to the form.
-2. Indicate that the OS2Forms attachment requires a digital signature.
-3. Add the Digital Signature Handler to the webform.
+1. Add an attachment-style element to the form (either *OS2Forms Attachment* — generated PDF — or
+   *OS2forms digital signature document* — uploaded PDF).
+2. Add the **Digital Signature** handler to the webform.
+3. In the handler configuration, pick the attachment element to sign from the **Attachment element to sign**
+   dropdown, and choose where the signature validation text should be placed in the generated PDF
+   (the position only applies to *OS2Forms Attachment* elements; it is ignored for uploaded PDFs).
 4. If the form requires an email handler, ensure the trigger is set to **...when submission is locked** in the handler’s
 *Additional settings*.
+
+> [!NOTE]
+> Prior to this release, the attachment element exposed `Digital signature` and `Digital signature position` properties
+> directly. These settings have moved to the handler. Existing forms are migrated automatically by
+> `os2forms_digital_signature_update_10001()`.
 
 ### Flow Explained
 
