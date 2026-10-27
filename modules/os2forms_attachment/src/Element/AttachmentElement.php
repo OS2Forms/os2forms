@@ -58,6 +58,28 @@ class AttachmentElement extends WebformAttachmentBase {
     if ($element['#export_type'] === 'pdf') {
       $file_path = NULL;
 
+      // Digital signature settings live on the digital signature handler.
+      // Resolving them here ensures all consumers of the element (email
+      // handlers, attachment downloads) serve an already signed document
+      // and render the validation text consistently.
+      // Webform skips handlers whose per-submission conditions do not match,
+      // so the same check is applied here to avoid rendering signature
+      // validation text on a document that was never signed.
+      $elementKey = $element['#webform_key'] ?? NULL;
+      if ($elementKey !== NULL) {
+        foreach ($webform_submission->getWebform()->getHandlers('os2forms_digital_signature') as $handler) {
+          $settings = $handler->getConfiguration()['settings'] ?? [];
+          if ($handler->isEnabled()
+            && $handler->checkConditions($webform_submission)
+            && ($settings['attachment_element'] ?? '') === $elementKey) {
+            $element['#digital_signature'] = TRUE;
+            $element['#digital_signature_position'] = $settings['signature_position']
+              ?? Os2formsAttachmentPrintBuilder::SIGNATURE_POSITION_AFTER_CONTENT;
+            break;
+          }
+        }
+      }
+
       // If attachment with digital signatur, check if we already have one.
       if (isset($element['#digital_signature']) && $element['#digital_signature']) {
         // Get scheme.
