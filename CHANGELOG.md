@@ -32,6 +32,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
   Added NemID first name, middle name and last name webform elements.
 - [PR-381](https://github.com/OS2Forms/os2forms/pull/381)
   Fixing OS2Forms autocomplete field logger
+- [#321](https://github.com/OS2Forms/os2forms/issues/321) [PR-381](https://github.com/OS2Forms/os2forms/pull/381)
+  Removing SaveToFileWebformHandler (id: save_to_file)
 
 ## [6.1.0] 2026-10-22
 
