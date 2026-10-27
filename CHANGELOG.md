@@ -11,7 +11,27 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
-- Fixing OS2Forms autocomplete field logger
+- [PR-315](https://github.com/OS2Forms/os2forms/pull/315)
+  Added “Display on“ options to Map element
+- [PR-333](https://github.com/OS2Forms/os2forms/pull/333)
+  Added the ability to configure on which submission states handlers should run.
+  The default option is to run on the completed state. Changes was made to the
+  following handlers:
+  - Digital post
+  - Fasit
+  - FBS
+- Moved digital signature configuration (which attachment to sign and the
+  signature validation text position) from the *OS2Forms Attachment* element
+  onto the *Digital Signature* webform handler. Includes an automatic
+  migration update hook for existing webforms.
+- [PR-353](https://github.com/OS2Forms/os2forms/pull/353)
+  - Moved `WebformInheritTask` data inheriting from
+  `hook_webform_submission_form_alter` to `hook_entity_prepare_form`.
+  - Set data on the submission.
+- [PR-325](https://github.com/OS2Forms/os2forms/pull/325)
+  Added NemID first name, middle name and last name webform elements.
+- [PR-381](https://github.com/OS2Forms/os2forms/pull/381)
+  Fixing OS2Forms autocomplete field logger
 
 ## [6.1.0] 2026-10-22
 
