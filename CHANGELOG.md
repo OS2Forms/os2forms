@@ -34,6 +34,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
   Fixing OS2Forms autocomplete field logger
 - [#321](https://github.com/OS2Forms/os2forms/issues/321) [PR-381](https://github.com/OS2Forms/os2forms/pull/381)
   Removing SaveToFileWebformHandler (id: save_to_file)
+- [#380](https://github.com/OS2Forms/os2forms/pull/380)
+  Computed twig encryption fix
 
 ## [6.1.0] 2026-10-22
 
