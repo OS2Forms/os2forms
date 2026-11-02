@@ -115,6 +115,7 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
       '#required' => TRUE,
       '#default_value' => $this->configuration[self::MEMO_MESSAGE][static::RECIPIENT_ELEMENT] ?? NULL,
       '#options' => $availableElements,
+      '#empty_option' => $this->t('- Select -'),
     ];
 
     $availableElements = $this->getAttachmentElements();
@@ -124,6 +125,7 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
       '#required' => TRUE,
       '#default_value' => $this->configuration[self::MEMO_MESSAGE][static::ATTACHMENT_ELEMENT] ?? NULL,
       '#options' => $availableElements,
+      '#empty_option' => $this->t('- Select -'),
     ];
 
     $form[self::MEMO_MESSAGE][self::SENDER_LABEL] = [
