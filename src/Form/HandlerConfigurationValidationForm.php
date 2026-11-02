@@ -49,7 +49,11 @@ class HandlerConfigurationValidationForm implements FormInterface {
   public function buildForm(array $form, FormStateInterface $form_state) {
     // Build the handler configuration form the same way as
     // \Drupal\webform\Form\WebformHandlerFormBase::form().
-    $form['settings'] = [];
+    $form['#parents'] = [];
+    $form['settings'] = [
+      '#tree' => TRUE,
+      '#parents' => ['settings'],
+    ];
     $subform_state = SubformState::createForSubform($form['settings'], $form, $form_state);
     $form['settings'] = $this->handler->buildConfigurationForm($form['settings'], $subform_state);
     $form['settings']['#tree'] = TRUE;
@@ -64,6 +68,9 @@ class HandlerConfigurationValidationForm implements FormInterface {
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     $subform_state = SubformState::createForSubform($form['settings'], $form, $form_state);
+    // Pass the complete form as
+    // \Drupal\webform\Form\WebformHandlerFormBase::validateForm() does.
+    // Handlers are written against that contract and may index the full form.
     $this->handler->validateConfigurationForm($form, $subform_state);
   }
 
