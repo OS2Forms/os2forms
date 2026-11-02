@@ -20,7 +20,7 @@ use Drupal\webform\WebformSubmissionInterface;
  * @see \Drupal\os2forms_nemid\Plugin\NemidElementBase
  * @see \Drupal\os2forms_nemid\Element\NemidChildrenRadios
  */
-class NemidChildrenRadios extends Radios implements NemidElementPersonalInterface, NemidPrepopulateFieldInterface {
+class NemidChildrenRadios extends Radios implements NemidElementPersonalInterface, NemidPrepopulateFieldInterface, NemidChildElementInterface {
 
   /**
    * {@inheritdoc}
@@ -155,7 +155,7 @@ class NemidChildrenRadios extends Radios implements NemidElementPersonalInterfac
 
     $element['#options'] = $options;
 
-    if ($showAddressNameProtectionMessage) {
+    if ($showAddressNameProtectionMessage && isset($element['#address_protection_help_text'])) {
       $element['#suffix'] = '<div>' . $element['#address_protection_help_text'] . '</div>';
     }
   }

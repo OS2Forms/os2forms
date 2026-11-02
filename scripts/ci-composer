@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Install the leniency plugin before resolving this lockless Drupal module.
+composer global config --no-plugins allow-plugins.mglaman/composer-drupal-lenient true
+composer global require --no-interaction --no-progress --prefer-dist mglaman/composer-drupal-lenient:^1.0
+
+exec composer "$@"

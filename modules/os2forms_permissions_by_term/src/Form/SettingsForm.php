@@ -24,7 +24,7 @@ class SettingsForm extends ConfigFormBase {
    *
    * @var \Drupal\Core\Entity\EntityFieldManagerInterface
    */
-  private $entityFieldTypeManager;
+  protected $entityFieldTypeManager;
 
   /**
    * Constructs an SettingsForm object.

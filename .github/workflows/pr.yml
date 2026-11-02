@@ -39,7 +39,7 @@ jobs:
 
       - name: Check that composer file is normalized
         run: |
-          docker compose run --rm --user "$(id -u):$(id -g)" php composer install
+          docker compose run --rm --user "$(id -u):$(id -g)" php ./scripts/ci-composer install
           docker compose run --rm --user "$(id -u):$(id -g)" php composer normalize --dry-run
 
   test-composer-files:
@@ -64,7 +64,7 @@ jobs:
       - name: Check that dependencies resolve.
         run: |
           rm -fr vendor/
-          docker compose run --rm --user "$(id -u):$(id -g)" php composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction
+          docker compose run --rm --user "$(id -u):$(id -g)" php ./scripts/ci-composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction
 
   php-coding-standards:
     name: PHP coding standards
@@ -78,7 +78,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          docker compose run --rm --user "$(id -u):$(id -g)" php composer install
+          docker compose run --rm --user "$(id -u):$(id -g)" php ./scripts/ci-composer install
 
       - name: PHPCS
         run: |
