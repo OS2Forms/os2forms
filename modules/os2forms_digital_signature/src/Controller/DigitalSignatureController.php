@@ -117,8 +117,8 @@ class DigitalSignatureController extends ControllerBase {
       throw new NotFoundHttpException();
     }
 
-    // If $existingAttachment FID is present - we are replacing uploaded/managed file, otherwise
-    // creating a new one.
+    // If $existingAttachment FID is present - we are replacing uploaded/managed file.
+    // Otherwise, creating a new one.
     $existingAttachment = $this->signingDocumentResolver->resolve($webformSubmission);
     if (!$existingAttachment) {
       throw new NotFoundHttpException();
