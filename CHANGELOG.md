@@ -42,6 +42,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
   Removing SaveToFileWebformHandler (id: save_to_file)
 - [#380](https://github.com/OS2Forms/os2forms/pull/380)
   Computed twig encryption fix
+- DAWA autocomplete warning fix
 
 ## [6.1.0] 2026-10-22
 
