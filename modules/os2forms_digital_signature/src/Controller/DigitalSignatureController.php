@@ -110,17 +110,17 @@ class DigitalSignatureController extends ControllerBase {
       throw new NotFoundHttpException();
     }
 
-    $signedFilename = $request->get('file');
-    $signedFileContent = $this->signingService->download($signedFilename);
-    if (!$signedFileContent) {
-      $this->logger->warning('Missing file on remote server %file.', ['%file' => $signedFilename]);
-      throw new NotFoundHttpException();
-    }
-
     // If $existingAttachment FID is present - we are replacing uploaded/managed
     // file, otherwise, creating a new one.
     $existingAttachment = $this->signingDocumentResolver->resolve($webformSubmission);
     if (!$existingAttachment) {
+      throw new NotFoundHttpException();
+    }
+
+    $signedFilename = $request->get('file');
+    $signedFileContent = $this->signingService->download($signedFilename);
+    if (!$signedFileContent) {
+      $this->logger->warning('Missing file on remote server %file.', ['%file' => $signedFilename]);
       throw new NotFoundHttpException();
     }
 
