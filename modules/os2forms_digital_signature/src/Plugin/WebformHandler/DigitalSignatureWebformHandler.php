@@ -3,7 +3,6 @@
 namespace Drupal\os2forms_digital_signature\Plugin\WebformHandler;
 
 use Drupal\Component\Utility\Crypt;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\File\FileExists;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\File\FileUrlGeneratorInterface;
@@ -12,8 +11,8 @@ use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Drupal\file\FileRepositoryInterface;
 use Drupal\os2forms_attachment\Os2formsAttachmentPrintBuilder;
+use Drupal\os2forms_digital_signature\Service\SigningDocumentResolver;
 use Drupal\os2forms_digital_signature\Service\SigningService;
-use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Drupal\webform\Plugin\WebformHandlerBase;
 use Drupal\webform\WebformSubmissionInterface;
 use Psr\Log\LoggerInterface;
@@ -33,20 +32,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class DigitalSignatureWebformHandler extends WebformHandlerBase {
-
-  /**
-   * The module handler.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected readonly ModuleHandlerInterface $moduleHandler;
-
-  /**
-   * The webform element plugin manager.
-   *
-   * @var \Drupal\webform\Plugin\WebformElementManagerInterface
-   */
-  protected readonly WebformElementManagerInterface $elementManager;
 
   /**
    * Logger for channel - os2forms_digital_signature.
@@ -75,6 +60,13 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
    * @var \Drupal\Core\File\FileUrlGeneratorInterface
    */
   protected readonly FileUrlGeneratorInterface $fileUrlGenerator;
+
+  /**
+   * Signing document resolver.
+   *
+   * @var \Drupal\os2forms_digital_signature\Service\SigningDocumentResolver
+   */
+  protected readonly SigningDocumentResolver $signingDocumentResolver;
 
   /**
    * OS2Forms signing service.
@@ -201,12 +193,7 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
    *   TRUE if the element can be signed.
    */
   protected function isSignableElement(array $element): bool {
-    return match ($element['#type'] ?? '') {
-      'os2forms_digital_signature_document' => TRUE,
-      // List only os2forms_attachment elements with PDF export type.
-      'os2forms_attachment' => ($element['#export_type'] ?? '') === 'pdf',
-      default => FALSE,
-    };
+    return $this->signingDocumentResolver->isSignableElement($element);
   }
 
   /**
@@ -214,12 +201,11 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
-    $instance->moduleHandler = $container->get('module_handler');
-    $instance->elementManager = $container->get('plugin.manager.webform.element');
     $instance->logger = $container->get('logger.channel.os2forms_digital_signature');
     $instance->fileSystem = $container->get('file_system');
     $instance->fileRepository = $container->get('file.repository');
     $instance->fileUrlGenerator = $container->get('file_url_generator');
+    $instance->signingDocumentResolver = $container->get('os2forms_digital_signature.signing_document_resolver');
     $instance->signingService = $container->get('os2forms_digital_signature.signing_service');
     $instance->settings = $container->get('settings');
 
@@ -239,7 +225,7 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
 
     $webform = $webform_submission->getWebform();
 
-    $attachment = $this->getSubmissionAttachment($webform_submission);
+    $attachment = $this->signingDocumentResolver->resolve($webform_submission);
     if (!$attachment) {
       $this->logger->error('Attachment cannot be created webform: %webform, webform_submission: %webform_submission',
         [
@@ -284,91 +270,16 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
     $salt = $this->settings->get('hash_salt');
     $hash = Crypt::hashBase64($webform_submission->uuid() . $webform->id() . $salt);
 
-    $attachmentFid = $attachment['fid'] ?? NULL;
-    $signatureCallbackUrl = Url::fromRoute('os2forms_digital_signature.sign_callback',
-      [
-        'uuid' => $webform_submission->uuid(),
-        'hash' => $hash,
-        'fid' => $attachmentFid,
-      ]
-    );
+    $callbackParams = [
+      'uuid' => $webform_submission->uuid(),
+      'hash' => $hash,
+    ];
+
+    $signatureCallbackUrl = Url::fromRoute('os2forms_digital_signature.sign_callback', $callbackParams);
 
     // Starting signing, if everything is correct - this funcition will start
     // redirect.
     $this->signingService->sign($fileToSignPublicUrl, $cid, $signatureCallbackUrl->setAbsolute()->toString());
-  }
-
-  /**
-   * Get OS2forms file attachment.
-   *
-   * Resolves the attachment element configured on the handler, asks its
-   * plugin for the email attachment payload, and returns the first item.
-   *
-   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
-   *   A webform submission.
-   *
-   * @return array|null
-   *   Array of attachment data, or NULL when no attachment is available.
-   *
-   * @throws \Exception
-   */
-  protected function getSubmissionAttachment(WebformSubmissionInterface $webform_submission) {
-    $elementKey = $this->configuration['attachment_element'] ?? '';
-    if ($elementKey === '') {
-      $this->logger->error('Digital signature handler has no attachment_element configured for webform %webform.', [
-        '%webform' => $this->getWebform()->id(),
-      ]);
-      return NULL;
-    }
-
-    $elements = $this->getWebform()->getElementsInitializedAndFlattened();
-    if (!isset($elements[$elementKey])) {
-      $this->logger->error('Configured attachment element %element does not exist on webform %webform.', [
-        '%element' => $elementKey,
-        '%webform' => $this->getWebform()->id(),
-      ]);
-      return NULL;
-    }
-
-    $element = $elements[$elementKey];
-
-    // Ensure that the element provides a PDF that can be signed during runtime.
-    if (!$this->isSignableElement($element)) {
-      $this->logger->error('Configured attachment element %element on webform %webform does not provide a PDF and cannot be signed.', [
-        '%element' => $elementKey,
-        '%webform' => $this->getWebform()->id(),
-      ]);
-      return NULL;
-    }
-
-    /** @var \Drupal\webform\Plugin\WebformElementAttachmentInterface $element_plugin */
-    $element_plugin = $this->elementManager->getElementInstance($element);
-    $attachments = $element_plugin->getEmailAttachments($element, $webform_submission);
-
-    if (empty($attachments)) {
-      return NULL;
-    }
-
-    // If the source is an uploaded managed file, attach the FID so the
-    // signed file can replace the upload rather than creating a new file.
-    if ($fid = $webform_submission->getElementData($elementKey)) {
-      $attachments[0]['fid'] = $fid;
-    }
-
-    $attachment = reset($attachments);
-
-    // For SwiftMailer && Mime Mail use filecontent and not the filepath.
-    // @see \Drupal\swiftmailer\Plugin\Mail\SwiftMailer::attachAsMimeMail
-    // @see \Drupal\mimemail\Utility\MimeMailFormatHelper::mimeMailFile
-    // @see https://www.drupal.org/project/webform/issues/3232756
-    if ($this->moduleHandler->moduleExists('swiftmailer')
-      || $this->moduleHandler->moduleExists('mimemail')) {
-      if (isset($attachment['filecontent']) && isset($attachment['filepath'])) {
-        unset($attachment['filepath']);
-      }
-    }
-
-    return $attachment;
   }
 
 }
