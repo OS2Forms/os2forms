@@ -6,10 +6,14 @@ use DigitalPost\MeMo\Message;
 use Drupal\Core\Render\ElementInfoManager;
 use Drupal\os2forms_digital_post\EventSubscriber\Os2formsDigitalPostSubscriber;
 use Drupal\os2forms_digital_post\Exception\InvalidAttachmentElementException;
+use Drupal\os2forms_digital_post\Exception\InvalidAttachmentFileTypeException;
+use Drupal\os2forms_digital_post\Exception\RuntimeException;
 use Drupal\os2forms_digital_post\Model\Document;
 use Drupal\os2forms_digital_post\Plugin\WebformHandler\WebformHandlerSF1601;
 use Drupal\os2web_datalookup\LookupResult\CompanyLookupResult;
 use Drupal\os2web_datalookup\LookupResult\CprLookupResult;
+use Drupal\webform\Plugin\WebformElement\WebformManagedFileBase;
+use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Drupal\webform\WebformSubmissionInterface;
 use Drupal\webform\WebformTokenManagerInterface;
 use Drupal\webform_attachment\Element\WebformAttachmentBase;
@@ -32,6 +36,8 @@ abstract class AbstractMessageHelper {
     #[Autowire(service: 'webform.token_manager')]
     readonly protected WebformTokenManagerInterface $webformTokenManager,
     readonly protected Os2formsDigitalPostSubscriber $digitalPostSubscriber,
+    #[Autowire(service: 'plugin.manager.webform.element')]
+    readonly protected WebformElementManagerInterface $elementManager,
   ) {
   }
 
@@ -71,6 +77,43 @@ abstract class AbstractMessageHelper {
       $mimeType,
       $fileName
     );
+  }
+
+  /**
+   * Get attachment documents from the file elements selected on the handler.
+   *
+   * @phpstan-param array<string, mixed> $handlerSettings
+   * @phpstan-return array<int, Document>
+   */
+  protected function getAttachmentDocuments(WebformSubmissionInterface $submission, array $handlerSettings): array {
+    $documents = [];
+    $webform = $submission->getWebform();
+    $keys = (array) ($handlerSettings[WebformHandlerSF1601::MEMO_MESSAGE][WebformHandlerSF1601::ATTACHMENT_ELEMENTS] ?? []);
+    foreach ($keys as $key) {
+      $element = $webform->getElement($key);
+      if (NULL === $element) {
+        continue;
+      }
+      $plugin = $this->elementManager->getElementInstance($element);
+      if (!in_array($element['#type'], WebformHandlerSF1601::FILE_ELEMENT_TYPES, TRUE) || !$plugin instanceof WebformManagedFileBase) {
+        throw new InvalidAttachmentElementException(sprintf('Element %s (%s) is not a file element.', $key, $element['#type']));
+      }
+
+      foreach ($plugin->getTargetEntities($element, $submission) ?: [] as $file) {
+        $filename = $file->getFilename();
+        $mimeType = Document::getAttachmentMimeType($filename);
+        if (NULL === $mimeType) {
+          throw new InvalidAttachmentFileTypeException(sprintf('File %s (%s) from element %s is not an allowed Digital Post attachment type.', $filename, $file->getMimeType(), $key));
+        }
+        $content = file_get_contents($file->getFileUri());
+        if (FALSE === $content) {
+          throw new RuntimeException(sprintf('Cannot read file %s from element %s.', $filename, $key));
+        }
+        $documents[] = new Document($content, $mimeType, $filename);
+      }
+    }
+
+    return $documents;
   }
 
   /**
