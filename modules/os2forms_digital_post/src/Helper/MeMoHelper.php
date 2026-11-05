@@ -4,6 +4,7 @@ namespace Drupal\os2forms_digital_post\Helper;
 
 use DataGovDk\Model\Core\Address;
 use DigitalPost\MeMo\Action;
+use DigitalPost\MeMo\AdditionalDocument;
 use DigitalPost\MeMo\AttentionData;
 use DigitalPost\MeMo\AttentionPerson;
 use DigitalPost\MeMo\EntryPoint;
@@ -33,8 +34,9 @@ class MeMoHelper extends AbstractMessageHelper {
    * Build message.
    *
    * @phpstan-param array<int, mixed> $actions
+   * @phpstan-param array<int, Document> $attachments
    */
-  public function buildMessage(CprLookupResult|CompanyLookupResult $recipientData, string $senderLabel, string $messageLabel, Document $document, array $actions): Message {
+  public function buildMessage(CprLookupResult|CompanyLookupResult $recipientData, string $senderLabel, string $messageLabel, Document $document, array $actions, array $attachments = []): Message {
     $messageUUID = Serializer::createUuid();
     $messageID = Serializer::createUuid();
 
@@ -86,6 +88,18 @@ class MeMoHelper extends AbstractMessageHelper {
 
     $body->setMainDocument($mainDocument);
 
+    foreach ($attachments as $attachment) {
+      $body->addToAdditionalDocument((new AdditionalDocument())
+        ->setLabel($attachment->filename)
+        ->setFile([
+          (new File())
+            ->setEncodingFormat($attachment->mimeType)
+            ->setLanguage($attachment->language)
+            ->setFilename($attachment->filename)
+            ->setContent($attachment->content),
+        ]));
+    }
+
     $message->setMessageBody($body);
 
     return $message;
@@ -101,6 +115,7 @@ class MeMoHelper extends AbstractMessageHelper {
     $senderLabel = $this->replaceTokens($options[WebformHandlerSF1601::SENDER_LABEL], $submission);
     $messageLabel = $this->replaceTokens($options[WebformHandlerSF1601::MESSAGE_HEADER_LABEL], $submission);
     $document = $this->getMainDocument($submission, $handlerSettings, $recipientData);
+    $attachments = $this->getAttachmentDocuments($submission, $handlerSettings);
 
     $actions = [];
     if (isset($handlerSettings[WebformHandlerSF1601::MEMO_ACTIONS]['actions'])) {
@@ -109,7 +124,7 @@ class MeMoHelper extends AbstractMessageHelper {
       }
     }
 
-    return $this->buildMessage($recipientData, $senderLabel, $messageLabel, $document, $actions);
+    return $this->buildMessage($recipientData, $senderLabel, $messageLabel, $document, $actions, $attachments);
   }
 
   /**

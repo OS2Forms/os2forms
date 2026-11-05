@@ -32,6 +32,14 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
   public const RECIPIENT_ELEMENT = 'recipient_element';
   public const ATTACHMENT_ELEMENT = 'attachment_element';
   public const SENDER_ADDRESS = 'sender_address';
+  public const ATTACHMENT_ELEMENTS = 'attachment_elements';
+  public const FILE_ELEMENT_TYPES = [
+    'managed_file',
+    'webform_document_file',
+    'webform_image_file',
+    'webform_audio_file',
+    'webform_video_file',
+  ];
   private const string ADDITIONAL = 'additional';
   private const string STATES = 'states';
 
@@ -127,6 +135,27 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
       '#options' => $availableElements,
       '#empty_option' => $this->t('- Select -'),
     ];
+
+    $fileElements = $this->getFileElements();
+    $fileElementsTitle = $this->t('Elements whose files are attached to the digital post');
+    if (empty($fileElements)) {
+      $form[self::MEMO_MESSAGE][self::ATTACHMENT_ELEMENTS] = [
+        '#type' => 'item',
+        '#title' => $fileElementsTitle,
+        '#markup' => $this->t('No file elements found in this webform. Add a file element to be able to attach uploaded files to the digital post.'),
+      ];
+    }
+    else {
+      $form[self::MEMO_MESSAGE][self::ATTACHMENT_ELEMENTS] = [
+        '#type' => 'checkboxes',
+        '#title' => $fileElementsTitle,
+        '#description' => $this->t('Files from the selected elements are attached to the digital post message only – never to physical mail. Only <a href=":url">file types accepted by Digital Post</a> are allowed. Any other file type makes the sending fail. The total message size is not checked, so limit file sizes and types on the webform.', [
+          ':url' => 'https://www.digitaliser.dk/digital-post/vejledninger/tilladte-filtyper-og-navne',
+        ]),
+        '#options' => $fileElements,
+        '#default_value' => $this->configuration[self::MEMO_MESSAGE][self::ATTACHMENT_ELEMENTS] ?? [],
+      ];
+    }
 
     $form[self::MEMO_MESSAGE][self::SENDER_LABEL] = [
       '#type' => 'textfield',
@@ -296,6 +325,24 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
   }
 
   /**
+   * Get file elements.
+   *
+   * @phpstan-return array<string, mixed>
+   */
+  private function getFileElements(): array {
+    $elements = array_filter(
+      $this->getWebform()->getElementsDecodedAndFlattened(),
+      static function (array $element) {
+        return in_array($element['#type'], self::FILE_ELEMENT_TYPES, TRUE);
+      }
+    );
+
+    return array_map(static function (array $element) {
+      return $element['#title'];
+    }, $elements);
+  }
+
+  /**
    * {@inheritdoc}
    *
    * @phpstan-param array<string, mixed> $form
@@ -352,7 +399,13 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
   public function submitConfigurationForm(array &$form, FormStateInterface $formState) {
     parent::submitConfigurationForm($form, $formState);
 
-    $this->configuration[self::MEMO_MESSAGE] = $formState->getValue(self::MEMO_MESSAGE);
+    $memoMessage = $formState->getValue(self::MEMO_MESSAGE);
+    // Checkboxes submit unticked options as 0. Keep only the ticked element
+    // keys as a plain list.
+    $attachmentElements = (array) ($memoMessage[self::ATTACHMENT_ELEMENTS] ?? []);
+    $memoMessage[self::ATTACHMENT_ELEMENTS] = array_values(array_filter($attachmentElements));
+    $this->configuration[self::MEMO_MESSAGE] = $memoMessage;
+
     // Filter out actions with no action set.
     $actions = $formState->getValue(self::MEMO_ACTIONS);
     $actions['actions'] = array_values(array_filter(

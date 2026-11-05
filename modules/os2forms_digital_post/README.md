@@ -61,6 +61,33 @@ drush advancedqueue:queue:list
 or go to `/admin/config/system/queues/jobs/os2forms_digital_post` for a
 graphical overview of jobs in the queue.
 
+## Attachments
+
+The handler can attach files uploaded in the form as *bilag* on the digital
+post message. Tick the file elements (managed file, document, image, audio
+and video elements) under "Elements whose files are attached to the digital
+post" on the handler. If nothing is ticked, no files are attached.
+
+Attachments are only added to the digital (MeMo) message – never to the
+physical (fjernprint) letter. Each attachment's file type is checked against
+the [file types accepted by Digital
+Post](https://www.digitaliser.dk/digital-post/vejledninger/tilladte-filtyper-og-navne)
+when the message is built, and a disallowed type makes the queue job fail.
+The total message size is not checked. Limit file sizes and types on the file
+webforms themselves.
+
+## Recipient registration status
+
+Before sending, the handler asks SF1601 (PostForespørg) whether the recipient
+is registered for Digital Post or exempt, and writes the answer to the
+submission log together with the number of attachments. This is informational
+only. The digital post is sent regardless, and a failed lookup is logged as a
+warning. Test the lookup with
+
+```sh
+drush os2forms-digital-post:test:post-forespoerg <cpr or cvr>
+```
+
 ## Beskedfordeler
 
 The digital post module depends on [Beskedfordeler for

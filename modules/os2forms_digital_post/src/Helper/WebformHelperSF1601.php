@@ -2,6 +2,7 @@
 
 namespace Drupal\os2forms_digital_post\Helper;
 
+use DigitalPost\MeMo\AdditionalDocument;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
@@ -165,6 +166,44 @@ final class WebformHelperSF1601 implements LoggerInterface {
     ];
 
     $message = $this->meMoHelper->buildWebformSubmissionMessage($submission, $messageOptions, $handlerSettings, $lookupResult);
+
+    $attachmentNames = array_map(
+      static fn (AdditionalDocument $document) => $document->getLabel(),
+      $message->getMessageBody()->getAdditionalDocument()
+    );
+    if (!empty($attachmentNames)) {
+      $this->notice('Attached @count file(s) to digital post: @files', [
+        'webform_submission' => $submission,
+        'handler_id' => 'os2forms_digital_post',
+        'operation' => 'digital post attachments',
+        '@count' => count($attachmentNames),
+        '@files' => implode(', ', $attachmentNames),
+      ]);
+    }
+
+    $statusContext = [
+      'webform_submission' => $submission,
+      'handler_id' => 'os2forms_digital_post',
+      'operation' => 'digital post recipient status',
+      '@count' => count($attachmentNames),
+    ];
+    try {
+      if ($this->digitalPostHelper->isRegisteredForDigitalPost($recipientIdentifier)) {
+        $this->notice(empty($attachmentNames)
+          ? 'Recipient is registered for Digital Post.'
+          : 'Recipient is registered for Digital Post. @count attachment(s) will be delivered.', $statusContext);
+      }
+      else {
+        $this->warning(empty($attachmentNames)
+          ? 'Recipient is exempt from Digital Post and will receive physical mail.'
+          : 'Recipient is exempt from Digital Post and will receive physical mail. @count attachment(s) will NOT be delivered.', $statusContext);
+      }
+    }
+    catch (\Throwable $throwable) {
+      $this->warning('Could not determine Digital Post registration status: @message', $statusContext + [
+        '@message' => $throwable->getMessage(),
+      ]);
+    }
 
     $forsendelseOptions = [
       self::RECIPIENT_IDENTIFIER_TYPE => $recipientIdentifierType,

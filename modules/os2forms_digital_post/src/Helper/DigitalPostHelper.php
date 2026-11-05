@@ -65,25 +65,7 @@ final class DigitalPostHelper implements LoggerInterface {
    * @phpstan-return array<int, mixed>
    */
   public function sendDigitalPost(string $type, Message $message, ?ForsendelseI $forsendelse, ?WebformSubmissionInterface $submission = NULL): array {
-    $senderSettings = $this->settings->getSender();
-
-    if (Settings::PROVIDER_TYPE_FORM === $this->settings->getCertificateProvider()) {
-      $certificateLocator = $this->certificateLocatorHelper->getCertificateLocator();
-    }
-    else {
-      $certificateLocator = new KeyCertificateLocator(
-        $this->settings->getCertificateKey(),
-        $this->keyHelper
-      );
-    }
-
-    $options = [
-      'test_mode' => (bool) $this->settings->getTestMode(),
-      'authority_cvr' => $senderSettings[Settings::SENDER_IDENTIFIER],
-      'certificate_locator' => $certificateLocator,
-    ];
-
-    $service = new SF1601($options);
+    $service = $this->createService();
     $transactionId = Serializer::createUuid();
 
     $response = $service->kombiPostAfsend($transactionId, $type, $message, $forsendelse);
@@ -101,6 +83,54 @@ final class DigitalPostHelper implements LoggerInterface {
     $this->auditLogger->info('DigitalPost', $msg);
 
     return [$response, $service->getLastKombiMeMoMessage()];
+  }
+
+  /**
+   * Look up Digital Post registration status (SF1601 PostForespørg).
+   *
+   * @phpstan-return array<string, mixed>
+   */
+  public function postForespoerg(string $recipientIdentifier): array {
+    $response = $this->createService()->postForespoerg(Serializer::createUuid(), SF1601::FORESPOERG_TYPE_DIGITAL_POST, $recipientIdentifier);
+    $this->auditLogger->info('DigitalPost', sprintf('Looked up Digital Post registration status for %s.', $recipientIdentifier));
+
+    return $response;
+  }
+
+  /**
+   * Check if recipient is registered for Digital Post.
+   */
+  public function isRegisteredForDigitalPost(string $recipientIdentifier): bool {
+    $response = $this->postForespoerg($recipientIdentifier);
+    $result = $response['result'] ?? NULL;
+    if (!is_bool($result)) {
+      throw new RuntimeException(sprintf('Unexpected PostForespørg response: %s', json_encode($response)));
+    }
+
+    return $result;
+  }
+
+  /**
+   * Create SF1601 service.
+   */
+  private function createService(): SF1601 {
+    $senderSettings = $this->settings->getSender();
+
+    if (Settings::PROVIDER_TYPE_FORM === $this->settings->getCertificateProvider()) {
+      $certificateLocator = $this->certificateLocatorHelper->getCertificateLocator();
+    }
+    else {
+      $certificateLocator = new KeyCertificateLocator(
+        $this->settings->getCertificateKey(),
+        $this->keyHelper
+      );
+    }
+
+    return new SF1601([
+      'test_mode' => (bool) $this->settings->getTestMode(),
+      'authority_cvr' => $senderSettings[Settings::SENDER_IDENTIFIER],
+      'certificate_locator' => $certificateLocator,
+    ]);
   }
 
   /**
