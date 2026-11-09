@@ -332,9 +332,7 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
   private function getFileElements(): array {
     $elements = array_filter(
       $this->getWebform()->getElementsDecodedAndFlattened(),
-      static function (array $element) {
-        return in_array($element['#type'], self::FILE_ELEMENT_TYPES, TRUE);
-      }
+      static fn (array $element) => in_array($element['#type'] ?? NULL, self::FILE_ELEMENT_TYPES, TRUE)
     );
 
     return array_map(static function (array $element) {
