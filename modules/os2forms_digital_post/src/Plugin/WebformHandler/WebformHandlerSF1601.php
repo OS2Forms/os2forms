@@ -335,9 +335,7 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
       static fn (array $element) => in_array($element['#type'] ?? NULL, self::FILE_ELEMENT_TYPES, TRUE)
     );
 
-    return array_map(static function (array $element) {
-      return $element['#title'];
-    }, $elements);
+    return array_column($elements, '#title');
   }
 
   /**
