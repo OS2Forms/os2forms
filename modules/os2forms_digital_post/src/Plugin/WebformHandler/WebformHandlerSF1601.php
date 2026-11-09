@@ -136,26 +136,15 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
       '#empty_option' => $this->t('- Select -'),
     ];
 
-    $fileElements = $this->getFileElements();
-    $fileElementsTitle = $this->t('Elements whose files are attached to the digital post');
-    if (empty($fileElements)) {
-      $form[self::MEMO_MESSAGE][self::ATTACHMENT_ELEMENTS] = [
-        '#type' => 'item',
-        '#title' => $fileElementsTitle,
-        '#markup' => $this->t('No file elements found in this webform. Add a file element to be able to attach uploaded files to the digital post.'),
-      ];
-    }
-    else {
-      $form[self::MEMO_MESSAGE][self::ATTACHMENT_ELEMENTS] = [
-        '#type' => 'checkboxes',
-        '#title' => $fileElementsTitle,
-        '#description' => $this->t('Files from the selected elements are attached to the digital post message only – never to physical mail. Only <a href=":url">file types accepted by Digital Post</a> are allowed. Any other file type makes the sending fail. The total message size is not checked, so limit file sizes and types on the webform.', [
-          ':url' => 'https://www.digitaliser.dk/digital-post/vejledninger/tilladte-filtyper-og-navne',
-        ]),
-        '#options' => $fileElements,
-        '#default_value' => $this->configuration[self::MEMO_MESSAGE][self::ATTACHMENT_ELEMENTS] ?? [],
-      ];
-    }
+    $form[self::MEMO_MESSAGE][self::ATTACHMENT_ELEMENTS] = [
+      '#type' => 'checkboxes',
+      '#title' => $this->t('Elements whose files are attached to the digital post'),
+      '#description' => $this->t('Files from the selected elements are attached to the digital post message only – never to physical mail. Only <a href=":url">file types accepted by Digital Post</a> are allowed. Any other file type makes the sending fail. The total message size is not checked, so limit file sizes and types on the webform.', [
+        ':url' => 'https://www.digitaliser.dk/digital-post/vejledninger/tilladte-filtyper-og-navne',
+      ]),
+      '#options' => $this->getFileElements(),
+      '#default_value' => $this->configuration[self::MEMO_MESSAGE][self::ATTACHMENT_ELEMENTS] ?? [],
+    ];
 
     $form[self::MEMO_MESSAGE][self::SENDER_LABEL] = [
       '#type' => 'textfield',
