@@ -110,11 +110,18 @@ class DigitalSignatureController extends ControllerBase {
       throw new NotFoundHttpException();
     }
 
-    // If $existingAttachment FID is present - we are replacing uploaded/managed
-    // file, otherwise, creating a new one.
-    $existingAttachment = $this->signingDocumentResolver->resolve($webformSubmission);
-    if (!$existingAttachment) {
+    // Resolve the target server-side without loading or generating its content.
+    $resolvedElement = $this->signingDocumentResolver->resolveElement($webformSubmission);
+    if ($resolvedElement === NULL) {
       throw new NotFoundHttpException();
+    }
+
+    $fidToReplace = NULL;
+    if ($resolvedElement['element']['#type'] === 'os2forms_digital_signature_document') {
+      $fidToReplace = $webformSubmission->getElementData($resolvedElement['key']);
+      if (!$fidToReplace) {
+        throw new NotFoundHttpException();
+      }
     }
 
     $signedFilename = $request->get('file');
@@ -125,7 +132,6 @@ class DigitalSignatureController extends ControllerBase {
     }
 
     $expectedFileUri = NULL;
-    $fidToReplace = $existingAttachment['fid'] ?? NULL;
 
     if ($fidToReplace) {
       $file = $this->fileStorage->load($fidToReplace);

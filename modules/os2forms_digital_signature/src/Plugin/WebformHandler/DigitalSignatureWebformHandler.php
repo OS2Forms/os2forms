@@ -225,7 +225,7 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
 
     $webform = $webform_submission->getWebform();
 
-    $attachment = $this->signingDocumentResolver->resolve($webform_submission);
+    $attachment = $this->signingDocumentResolver->loadAttachment($webform_submission);
     if (!$attachment) {
       $this->logger->error('Attachment cannot be created webform: %webform, webform_submission: %webform_submission',
         [

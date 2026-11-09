@@ -22,17 +22,52 @@ final class SigningDocumentResolver {
   ) {}
 
   /**
-   * Resolves the attachment for a webform submission.
+   * Loads or generates the attachment for a webform submission.
    *
    * @param \Drupal\webform\WebformSubmissionInterface $webformSubmission
    *   The webform submission.
    *
    * @return array|null
-   *   The resolved attachment or NULL when no attachment can be resolved.
+   *   The attachment or NULL when no attachment can be loaded or generated.
    *
    * @throws \Exception
    */
-  public function resolve(WebformSubmissionInterface $webformSubmission): ?array {
+  public function loadAttachment(WebformSubmissionInterface $webformSubmission): ?array {
+    $resolvedElement = $this->resolveElement($webformSubmission);
+    if ($resolvedElement === NULL) {
+      return NULL;
+    }
+
+    $elementKey = $resolvedElement['key'];
+    $element = $resolvedElement['element'];
+
+    /** @var \Drupal\webform\Plugin\WebformElementAttachmentInterface $elementPlugin */
+    $elementPlugin = $this->elementManager->getElementInstance($element);
+    $attachments = $elementPlugin->getEmailAttachments($element, $webformSubmission);
+
+    if (empty($attachments)) {
+      return NULL;
+    }
+
+    // Only an uploaded document has a managed file to replace.
+    if (($element['#type'] ?? '') === 'os2forms_digital_signature_document'
+      && ($fid = $webformSubmission->getElementData($elementKey))) {
+      $attachments[0]['fid'] = $fid;
+    }
+
+    return reset($attachments);
+  }
+
+  /**
+   * Resolves the configured signing element without loading attachment content.
+   *
+   * @param \Drupal\webform\WebformSubmissionInterface $webformSubmission
+   *   The webform submission.
+   *
+   * @return array|null
+   *   The element key and definition, or NULL when configuration is invalid.
+   */
+  public function resolveElement(WebformSubmissionInterface $webformSubmission): ?array {
     $webform = $webformSubmission->getWebform();
     $elementKey = '';
     // The handler has single cardinality. Use its configured element for both
@@ -67,30 +102,10 @@ final class SigningDocumentResolver {
       return NULL;
     }
 
-    /** @var \Drupal\webform\Plugin\WebformElementAttachmentInterface $elementPlugin */
-    $elementPlugin = $this->elementManager->getElementInstance($element);
-    $attachments = $elementPlugin->getEmailAttachments($element, $webformSubmission);
-
-    if (empty($attachments)) {
-      return NULL;
-    }
-
-    // Only an uploaded document has a managed file to replace.
-    if (($element['#type'] ?? '') === 'os2forms_digital_signature_document'
-      && ($fid = $webformSubmission->getElementData($elementKey))) {
-      $attachments[0]['fid'] = $fid;
-    }
-
-    $attachment = reset($attachments);
-
-    // SwiftMailer and Mime Mail consume filecontent rather than filepath.
-    if (($this->moduleHandler->moduleExists('swiftmailer')
-      || $this->moduleHandler->moduleExists('mimemail'))
-      && isset($attachment['filecontent'], $attachment['filepath'])) {
-      unset($attachment['filepath']);
-    }
-
-    return $attachment;
+    return [
+      'key' => $elementKey,
+      'element' => $element,
+    ];
   }
 
   /**
