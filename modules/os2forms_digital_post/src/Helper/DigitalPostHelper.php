@@ -27,6 +27,11 @@ final class DigitalPostHelper implements LoggerInterface {
   use LoggerTrait;
 
   /**
+   * The SF1601 service.
+   */
+  private ?SF1601 $sf1601 = NULL;
+
+  /**
    * Constructor.
    */
   public function __construct(
@@ -65,7 +70,7 @@ final class DigitalPostHelper implements LoggerInterface {
    * @phpstan-return array<int, mixed>
    */
   public function sendDigitalPost(string $type, Message $message, ?ForsendelseI $forsendelse, ?WebformSubmissionInterface $submission = NULL): array {
-    $service = $this->createService();
+    $service = $this->getSf1601();
     $transactionId = Serializer::createUuid();
 
     $response = $service->kombiPostAfsend($transactionId, $type, $message, $forsendelse);
@@ -92,7 +97,7 @@ final class DigitalPostHelper implements LoggerInterface {
    */
   public function postForespoerg(string $recipientIdentifier): array {
     $this->auditLogger->info('DigitalPost', sprintf('Looking up Digital Post registration status for %s.', $recipientIdentifier));
-    $response = $this->createService()->postForespoerg(Serializer::createUuid(), SF1601::FORESPOERG_TYPE_DIGITAL_POST, $recipientIdentifier);
+    $response = $this->getSf1601()->postForespoerg(Serializer::createUuid(), SF1601::FORESPOERG_TYPE_DIGITAL_POST, $recipientIdentifier);
     $this->auditLogger->info('DigitalPost', sprintf('Looked up Digital Post registration status for %s.', $recipientIdentifier));
 
     return $response;
@@ -112,26 +117,30 @@ final class DigitalPostHelper implements LoggerInterface {
   }
 
   /**
-   * Create SF1601 service.
+   * Get SF1601 service.
    */
-  private function createService(): SF1601 {
-    $senderSettings = $this->settings->getSender();
+  private function getSf1601(): SF1601 {
+    if (NULL === $this->sf1601) {
+      $senderSettings = $this->settings->getSender();
 
-    if (Settings::PROVIDER_TYPE_FORM === $this->settings->getCertificateProvider()) {
-      $certificateLocator = $this->certificateLocatorHelper->getCertificateLocator();
-    }
-    else {
-      $certificateLocator = new KeyCertificateLocator(
-        $this->settings->getCertificateKey(),
-        $this->keyHelper
-      );
+      if (Settings::PROVIDER_TYPE_FORM === $this->settings->getCertificateProvider()) {
+        $certificateLocator = $this->certificateLocatorHelper->getCertificateLocator();
+      }
+      else {
+        $certificateLocator = new KeyCertificateLocator(
+          $this->settings->getCertificateKey(),
+          $this->keyHelper
+        );
+      }
+
+      $this->sf1601 = new SF1601([
+        'test_mode' => (bool) $this->settings->getTestMode(),
+        'authority_cvr' => $senderSettings[Settings::SENDER_IDENTIFIER],
+        'certificate_locator' => $certificateLocator,
+      ]);
     }
 
-    return new SF1601([
-      'test_mode' => (bool) $this->settings->getTestMode(),
-      'authority_cvr' => $senderSettings[Settings::SENDER_IDENTIFIER],
-      'certificate_locator' => $certificateLocator,
-    ]);
+    return $this->sf1601;
   }
 
   /**
