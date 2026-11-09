@@ -91,6 +91,7 @@ final class DigitalPostHelper implements LoggerInterface {
    * @phpstan-return array<string, mixed>
    */
   public function postForespoerg(string $recipientIdentifier): array {
+    $this->auditLogger->info('DigitalPost', sprintf('Looking up Digital Post registration status for %s.', $recipientIdentifier));
     $response = $this->createService()->postForespoerg(Serializer::createUuid(), SF1601::FORESPOERG_TYPE_DIGITAL_POST, $recipientIdentifier);
     $this->auditLogger->info('DigitalPost', sprintf('Looked up Digital Post registration status for %s.', $recipientIdentifier));
 
