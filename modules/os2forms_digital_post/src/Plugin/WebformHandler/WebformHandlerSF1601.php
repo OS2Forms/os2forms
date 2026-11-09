@@ -3,6 +3,7 @@
 namespace Drupal\os2forms_digital_post\Plugin\WebformHandler;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element\Checkboxes;
 use Drupal\os2forms_digital_post\Helper\MeMoHelper;
 use Drupal\os2forms_digital_post\Helper\WebformHelperSF1601;
 use Drupal\webform\Plugin\WebformHandlerBase;
@@ -386,10 +387,7 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
     parent::submitConfigurationForm($form, $formState);
 
     $memoMessage = $formState->getValue(self::MEMO_MESSAGE);
-    // Checkboxes submit unticked options as 0. Keep only the ticked element
-    // keys as a plain list.
-    $attachmentElements = (array) ($memoMessage[self::ATTACHMENT_ELEMENTS] ?? []);
-    $memoMessage[self::ATTACHMENT_ELEMENTS] = array_values(array_filter($attachmentElements));
+    $memoMessage[self::ATTACHMENT_ELEMENTS] = Checkboxes::getCheckedCheckboxes((array) ($memoMessage[self::ATTACHMENT_ELEMENTS] ?? []));
     $this->configuration[self::MEMO_MESSAGE] = $memoMessage;
 
     // Filter out actions with no action set.
