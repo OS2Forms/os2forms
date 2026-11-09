@@ -34,7 +34,7 @@ class MeMoHelper extends AbstractMessageHelper {
    * Build message.
    *
    * @phpstan-param array<int, mixed> $actions
-   * @phpstan-param array<int, Document> $attachments
+   * @param list<Document> $attachments
    */
   public function buildMessage(CprLookupResult|CompanyLookupResult $recipientData, string $senderLabel, string $messageLabel, Document $document, array $actions, array $attachments = []): Message {
     $messageUUID = Serializer::createUuid();
