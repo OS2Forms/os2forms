@@ -181,29 +181,7 @@ final class WebformHelperSF1601 implements LoggerInterface {
       ]);
     }
 
-    $statusContext = [
-      'webform_submission' => $submission,
-      'handler_id' => 'os2forms_digital_post',
-      'operation' => 'digital post recipient status',
-      '@count' => count($attachmentNames),
-    ];
-    try {
-      if ($this->digitalPostHelper->isRegisteredForDigitalPost($recipientIdentifier)) {
-        $this->notice(empty($attachmentNames)
-          ? 'Recipient is registered for Digital Post.'
-          : 'Recipient is registered for Digital Post. @count attachment(s) will be delivered.', $statusContext);
-      }
-      else {
-        $this->warning(empty($attachmentNames)
-          ? 'Recipient is exempt from Digital Post and will receive physical mail.'
-          : 'Recipient is exempt from Digital Post and will receive physical mail. @count attachment(s) will NOT be delivered.', $statusContext);
-      }
-    }
-    catch (\Throwable $throwable) {
-      $this->warning('Could not determine Digital Post registration status: @message', $statusContext + [
-        '@message' => $throwable->getMessage(),
-      ]);
-    }
+    $this->logRecipientStatus($submission, $recipientIdentifier, count($attachmentNames));
 
     $forsendelseOptions = [
       self::RECIPIENT_IDENTIFIER_TYPE => $recipientIdentifierType,
@@ -222,6 +200,45 @@ final class WebformHelperSF1601 implements LoggerInterface {
     $type = $handlerMessageSettings[WebformHandlerSF1601::TYPE] ?? SF1601::TYPE_DIGITAL_POST;
 
     return $this->digitalPostHelper->sendDigitalPost($type, $message, $forsendelse, $submission);
+  }
+
+  /**
+   * Log whether the recipient is registered for Digital Post.
+   */
+  private function logRecipientStatus(WebformSubmissionInterface $submission, string $recipientIdentifier, int $attachmentCount): void {
+    $context = [
+      'webform_submission' => $submission,
+      'handler_id' => 'os2forms_digital_post',
+      'operation' => 'digital post recipient status',
+      '@count' => $attachmentCount,
+    ];
+
+    try {
+      $isRegistered = $this->digitalPostHelper->isRegisteredForDigitalPost($recipientIdentifier);
+    }
+    catch (\Throwable $throwable) {
+      $this->warning('Could not determine Digital Post registration status: @message', $context + [
+        '@message' => $throwable->getMessage(),
+      ]);
+      return;
+    }
+
+    if ($attachmentCount > 0) {
+      if ($isRegistered) {
+        $this->notice('Recipient is registered for Digital Post. @count attachment(s) will be delivered.', $context);
+      }
+      else {
+        $this->warning('Recipient is exempt from Digital Post and will receive physical mail. @count attachment(s) will NOT be delivered.', $context);
+      }
+    }
+    else {
+      if ($isRegistered) {
+        $this->notice('Recipient is registered for Digital Post.', $context);
+      }
+      else {
+        $this->warning('Recipient is exempt from Digital Post and will receive physical mail.', $context);
+      }
+    }
   }
 
   /**
