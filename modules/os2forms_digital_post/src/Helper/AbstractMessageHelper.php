@@ -91,7 +91,7 @@ abstract class AbstractMessageHelper {
     foreach ($keys as $key) {
       $element = $webform->getElement($key);
       if (NULL === $element) {
-        continue;
+        throw new InvalidAttachmentElementException(sprintf('Attachment element %s not found.', $key));
       }
       if (!in_array($element['#type'], WebformHandlerSF1601::FILE_ELEMENT_TYPES, TRUE)) {
         throw new InvalidAttachmentElementException(sprintf('Element %s (%s) is not a file element.', $key, $element['#type']));
