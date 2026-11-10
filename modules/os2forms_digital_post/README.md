@@ -73,9 +73,9 @@ physical (fjernprint) letter. Each attachment's file type is checked against
 the [file types accepted by Digital
 Post](https://www.digitaliser.dk/digital-post/vejledninger/tilladte-filtyper-og-navne)
 when the message is built. A disallowed type, or a ticked element that no
-longer exists on the webform, makes the queue job fail. The total message
-size is not checked. Limit file sizes and types on the file webforms
-themselves.
+longer exists on the webform, makes the queue job fail, as does more than 10
+attachments in total, which is the Digital Post limit. The total message size
+is not checked. Limit file sizes and types on the file webforms themselves.
 
 ## Recipient registration status
 

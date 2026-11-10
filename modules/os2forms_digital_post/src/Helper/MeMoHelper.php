@@ -17,6 +17,7 @@ use DigitalPost\MeMo\Recipient;
 use DigitalPost\MeMo\Sender;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\os2forms_digital_post\Exception\InvalidMessageException;
 use Drupal\os2forms_digital_post\Model\Document;
 use Drupal\os2forms_digital_post\Plugin\WebformHandler\WebformHandlerSF1601;
 use Drupal\os2web_datalookup\LookupResult\CompanyLookupResult;
@@ -29,6 +30,13 @@ use ItkDev\Serviceplatformen\Service\SF1601\Serializer;
  * MeMo helper.
  */
 class MeMoHelper extends AbstractMessageHelper {
+
+  /**
+   * Max number of attachments (AdditionalDocument) in a MeMo message.
+   *
+   * @see https://www.digitaliser.dk/Media/638930946151204384/MeMo%20Modelbeskrivelse%20v1.2.pdf
+   */
+  public const MAX_ATTACHMENTS = 10;
 
   /**
    * Build message.
@@ -87,6 +95,10 @@ class MeMoHelper extends AbstractMessageHelper {
     }
 
     $body->setMainDocument($mainDocument);
+
+    if (count($attachments) > self::MAX_ATTACHMENTS) {
+      throw new InvalidMessageException(sprintf('Digital Post allows at most %d attachments: %d given.', self::MAX_ATTACHMENTS, count($attachments)));
+    }
 
     foreach ($attachments as $attachment) {
       $body->addToAdditionalDocument((new AdditionalDocument())
