@@ -12,7 +12,6 @@ use Drupal\os2forms_digital_post\Model\Document;
 use Drupal\os2forms_digital_post\Plugin\WebformHandler\WebformHandlerSF1601;
 use Drupal\os2web_datalookup\LookupResult\CompanyLookupResult;
 use Drupal\os2web_datalookup\LookupResult\CprLookupResult;
-use Drupal\webform\Plugin\WebformElement\WebformManagedFileBase;
 use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Drupal\webform\WebformSubmissionInterface;
 use Drupal\webform\WebformTokenManagerInterface;
@@ -94,10 +93,11 @@ abstract class AbstractMessageHelper {
       if (NULL === $element) {
         continue;
       }
-      $plugin = $this->elementManager->getElementInstance($element);
-      if (!in_array($element['#type'], WebformHandlerSF1601::FILE_ELEMENT_TYPES, TRUE) || !$plugin instanceof WebformManagedFileBase) {
+      if (!in_array($element['#type'], WebformHandlerSF1601::FILE_ELEMENT_TYPES, TRUE)) {
         throw new InvalidAttachmentElementException(sprintf('Element %s (%s) is not a file element.', $key, $element['#type']));
       }
+      /** @var \Drupal\webform\Plugin\WebformElement\WebformManagedFileBase $plugin */
+      $plugin = $this->elementManager->getElementInstance($element);
 
       foreach ($plugin->getTargetEntities($element, $submission) ?: [] as $file) {
         $filename = $file->getFilename();
