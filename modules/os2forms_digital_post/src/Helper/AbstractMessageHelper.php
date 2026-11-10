@@ -87,7 +87,7 @@ abstract class AbstractMessageHelper {
   protected function getAttachmentDocuments(WebformSubmissionInterface $submission, array $handlerSettings): array {
     $documents = [];
     $webform = $submission->getWebform();
-    $keys = (array) ($handlerSettings[WebformHandlerSF1601::MEMO_MESSAGE][WebformHandlerSF1601::ATTACHMENT_ELEMENTS] ?? []);
+    $keys = $handlerSettings[WebformHandlerSF1601::MEMO_MESSAGE][WebformHandlerSF1601::ATTACHMENT_ELEMENTS] ?? [];
     foreach ($keys as $key) {
       $element = $webform->getElement($key);
       if (NULL === $element) {
