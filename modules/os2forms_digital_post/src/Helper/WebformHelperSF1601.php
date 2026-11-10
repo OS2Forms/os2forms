@@ -181,7 +181,8 @@ final class WebformHelperSF1601 implements LoggerInterface {
       ]);
     }
 
-    $this->logRecipientStatus($submission, $recipientIdentifier, count($attachmentNames));
+    $type = $handlerMessageSettings[WebformHandlerSF1601::TYPE] ?? SF1601::TYPE_DIGITAL_POST;
+    $this->logDeliveryRoute($submission, $recipientIdentifier, $type, count($attachmentNames));
 
     $forsendelseOptions = [
       self::RECIPIENT_IDENTIFIER_TYPE => $recipientIdentifierType,
@@ -197,21 +198,30 @@ final class WebformHelperSF1601 implements LoggerInterface {
 
     $forsendelse = $this->forsendelseHelper->buildSubmissionForsendelse($submission, $forsendelseOptions, $handlerSettings, $lookupResult);
 
-    $type = $handlerMessageSettings[WebformHandlerSF1601::TYPE] ?? SF1601::TYPE_DIGITAL_POST;
-
     return $this->digitalPostHelper->sendDigitalPost($type, $message, $forsendelse, $submission);
   }
 
   /**
-   * Log whether the recipient is registered for Digital Post.
+   * Log how the message is routed: physical mail, or by recipient registration.
    */
-  private function logRecipientStatus(WebformSubmissionInterface $submission, string $recipientIdentifier, int $attachmentCount): void {
+  private function logDeliveryRoute(WebformSubmissionInterface $submission, string $recipientIdentifier, string $type, int $attachmentCount): void {
     $context = [
       'webform_submission' => $submission,
       'handler_id' => 'os2forms_digital_post',
-      'operation' => 'digital post recipient status',
+      'operation' => 'digital post routing',
       '@count' => $attachmentCount,
     ];
+
+    // Physical mail is sent regardless of registration, so skip the lookup.
+    if (SF1601::TYPE_FYSISK_POST === $type) {
+      if ($attachmentCount > 0) {
+        $this->warning('Handler sends physical mail: @count attachment(s) are not included in the letter.', $context);
+      }
+      else {
+        $this->notice('Handler sends physical mail.', $context);
+      }
+      return;
+    }
 
     try {
       $isRegistered = $this->digitalPostHelper->isRegisteredForDigitalPost($recipientIdentifier);
@@ -223,21 +233,11 @@ final class WebformHelperSF1601 implements LoggerInterface {
       return;
     }
 
-    if ($attachmentCount > 0) {
-      if ($isRegistered) {
-        $this->notice('Recipient is registered for Digital Post. @count attachment(s) will be delivered.', $context);
-      }
-      else {
-        $this->warning('Recipient is exempt from Digital Post and will receive physical mail. @count attachment(s) will NOT be delivered.', $context);
-      }
+    if ($isRegistered) {
+      $this->notice('Recipient is registered for Digital Post.', $context);
     }
     else {
-      if ($isRegistered) {
-        $this->notice('Recipient is registered for Digital Post.', $context);
-      }
-      else {
-        $this->warning('Recipient is exempt from Digital Post and will receive physical mail.', $context);
-      }
+      $this->warning('Recipient is exempt from Digital Post.', $context);
     }
   }
 
