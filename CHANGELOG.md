@@ -11,6 +11,13 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [#269](https://github.com/OS2Forms/os2forms/issues/269)
+  - Added optional file attachments (bilag) from file elements to the Digital
+    Post handler. Attachments are added to the digital (MeMo) message only.
+  - Added SF1601 PostForespørg lookup of the recipient's Digital Post
+    registration status, logged on the submission log.
+  - Requires `itk-dev/serviceplatformen` 1.9.1 or later, which fixes sending
+    MeMo messages with additional documents.
 - [PR-340](https://github.com/OS2Forms/os2forms/pull/340)
   - Added reporting of misconfigured webform handlers on the webform build
     and handlers pages, based on programmatically validating handler
