@@ -47,7 +47,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 - [#386](https://github.com/OS2Forms/os2forms/pull/386)
   DAWA autocomplete warning fix
 - [#389](https://github.com/OS2Forms/os2forms/pull/389)
-  PersonLookup element preview bug.
+  Skip CPR lookup validation outside webform submission forms.
 
 ## [6.1.0] 2026-10-22
 
