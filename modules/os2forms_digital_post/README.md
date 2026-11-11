@@ -75,8 +75,9 @@ file type is checked against the [file types accepted by Digital
 Post](https://www.digitaliser.dk/digital-post/vejledninger/tilladte-filtyper-og-navne)
 when the message is built. A disallowed type, or a ticked element that no
 longer exists on the webform, makes the queue job fail, as does more than 10
-attachments in total, which is the Digital Post limit. The total message size
-is not checked. Limit file sizes and types on the file webforms themselves.
+attachments in total, which is the Digital Post limit. The main document and
+attachments may total at most 70 MB, which keeps the Base64-encoded message
+under the 99.5 MB Digital Post limit, exceeding this fails the job.
 
 ## Recipient registration status
 

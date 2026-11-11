@@ -15,6 +15,7 @@ use DigitalPost\MeMo\MessageBody;
 use DigitalPost\MeMo\MessageHeader;
 use DigitalPost\MeMo\Recipient;
 use DigitalPost\MeMo\Sender;
+use Drupal\Component\Utility\Bytes;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\os2forms_digital_post\Exception\InvalidMessageException;
@@ -37,6 +38,13 @@ class MeMoHelper extends AbstractMessageHelper {
    * @see https://www.digitaliser.dk/Media/638930946151204384/MeMo%20Modelbeskrivelse%20v1.2.pdf
    */
   public const MAX_ATTACHMENTS = 10;
+
+  /**
+   * Max total size of main document and attachments.
+   *
+   * Base64 adds a third, keeping the message under the 99.5 MB limit.
+   */
+  public const MAX_DOCUMENTS_SIZE = '70 MB';
 
   /**
    * Build message.
@@ -98,6 +106,14 @@ class MeMoHelper extends AbstractMessageHelper {
 
     if (count($attachments) > self::MAX_ATTACHMENTS) {
       throw new InvalidMessageException(sprintf('Digital Post allows at most %d attachments: %d given.', self::MAX_ATTACHMENTS, count($attachments)));
+    }
+
+    $size = strlen($document->content);
+    foreach ($attachments as $attachment) {
+      $size += strlen($attachment->content);
+    }
+    if ($size > Bytes::toNumber(self::MAX_DOCUMENTS_SIZE)) {
+      throw new InvalidMessageException(sprintf('Digital Post allows documents totalling at most %s: %.1f MB given.', self::MAX_DOCUMENTS_SIZE, $size / 1024 / 1024));
     }
 
     foreach ($attachments as $attachment) {
