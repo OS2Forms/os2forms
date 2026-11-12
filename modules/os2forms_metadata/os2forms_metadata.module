@@ -1,0 +1,85 @@
+<?php
+
+/**
+ * @file
+ * Tracks Webform lifecycle events and completed submissions.
+ */
+
+use Drupal\os2forms_metadata\MetadataStorage;
+use Drupal\webform\WebformInterface;
+use Drupal\webform\WebformSubmissionInterface;
+
+/**
+ * Implements hook_webform_insert().
+ */
+function os2forms_metadata_webform_insert(WebformInterface $webform): void {
+  $account = \Drupal::currentUser();
+  $uid = $account->isAuthenticated() ? (int) $account->id() : NULL;
+  $username = $account->isAuthenticated() ? $account->getAccountName() : 'System';
+
+  /** @var MetadataStorage $metadataStorage */
+  $metadataStorage = \Drupal::service('os2forms_metadata.storage');
+  $metadataStorage->create(
+    $webform->uuid(),
+    $uid,
+    $username,
+  );
+}
+
+/**
+ * Implements hook_webform_update().
+ */
+function os2forms_metadata_webform_update(WebformInterface $webform): void {
+  $account = \Drupal::currentUser();
+  $uid = $account->isAuthenticated() ? (int) $account->id() : NULL;
+  $username = $account->isAuthenticated() ? $account->getAccountName() : 'System';
+
+  /** @var MetadataStorage $metadataStorage */
+  $metadataStorage = \Drupal::service('os2forms_metadata.storage');
+  $metadataStorage->update(
+    $webform->uuid(),
+    $uid,
+    $username,
+  );
+}
+
+/**
+ * Implements hook_webform_delete().
+ */
+function os2forms_metadata_webform_delete(WebformInterface $webform): void {
+  /** @var MetadataStorage $metadataStorage */
+  $metadataStorage = \Drupal::service('os2forms_metadata.storage');
+  $metadataStorage->delete($webform->uuid());
+}
+
+/**
+ * Implements hook_webform_submission_insert().
+ */
+function os2forms_metadata_webform_submission_insert(WebformSubmissionInterface $submission): void {
+  os2forms_metadata_record_submission($submission);
+}
+
+/**
+ * Implements hook_webform_submission_update().
+ */
+function os2forms_metadata_webform_submission_update(WebformSubmissionInterface $submission): void {
+  $original = $submission->getOriginal();
+  if ($original && $original->isDraft()) {
+    os2forms_metadata_record_submission($submission);
+  }
+}
+
+/**
+ * Records completed submissions, excluding drafts and Webform test submissions.
+ */
+function os2forms_metadata_record_submission(WebformSubmissionInterface $submission): void {
+  if ($submission->isDraft() || !$submission->getCompletedTime()) {
+    return;
+  }
+
+  $webform = $submission->getWebform();
+
+  /** @var MetadataStorage $metadataStorage */
+  $metadataStorage = \Drupal::service('os2forms_metadata.storage');
+  $metadataStorage->recordSubmission($webform->uuid(), $submission->getCompletedTime());
+}

@@ -1,0 +1,95 @@
+<?php
+
+/**
+ * @file
+ * Installation and database schema for OS2Forms Metadata.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function os2forms_metadata_schema(): array {
+  $timestamp = [
+    'type' => 'int',
+    'size' => 'big',
+    'not null' => FALSE,
+  ];
+  $uid = [
+    'type' => 'int',
+    'unsigned' => TRUE,
+    'not null' => FALSE,
+  ];
+  $username = [
+    'type' => 'varchar',
+    'length' => 255,
+    'not null' => FALSE,
+  ];
+
+  return [
+    'os2forms_metadata' => [
+      'description' => 'Persistent Webform metadata, independent of submission records and configuration exports.',
+      'fields' => [
+        'webform_uuid' => [
+          'description' => 'The UUID of the Webform owning this metadata.',
+          'type' => 'varchar_ascii',
+          'length' => 128,
+          'not null' => TRUE,
+        ],
+        'created' => ['description' => 'Form creation time as a Unix timestamp, or NULL if unknown.'] + $timestamp,
+        'created_uid' => ['description' => 'Creator user ID, or NULL if unknown or system initiated.'] + $uid,
+        'created_username' => ['description' => 'Fixed creator username snapshot, or NULL if unknown.'] + $username,
+        'changed' => ['description' => 'Last form save time as a Unix timestamp, or NULL if unknown.'] + $timestamp,
+        'changed_uid' => ['description' => 'Last editor user ID, or NULL if unknown or system initiated.'] + $uid,
+        'changed_username' => ['description' => 'Fixed last editor username snapshot, or NULL if unknown.'] + $username,
+        'latest_submission' => ['description' => 'Latest known submission completion time as a Unix timestamp.'] + $timestamp,
+      ],
+      'primary key' => ['webform_uuid'],
+      'foreign keys' => [
+        'creator' => [
+          'table' => 'users',
+          'columns' => ['created_uid' => 'uid'],
+        ],
+        'editor' => [
+          'table' => 'users',
+          'columns' => ['changed_uid' => 'uid'],
+        ],
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_install().
+ */
+function os2forms_metadata_install(): void {
+  $database = \Drupal::database();
+  $storage = \Drupal::entityTypeManager()->getStorage('webform');
+  $webform_ids = $storage->getQuery()->accessCheck(FALSE)->execute();
+
+  foreach ($webform_ids as $webform_id) {
+    $webform = $storage->load($webform_id);
+    // Using owner as the webform auther, as we don't have other data.
+    $owner = $webform->getOwner();
+
+    $query = $database->select('webform_submission', 'submission');
+    $query->addExpression('MAX(submission.completed)', 'latest_completed');
+    $latest = $query->condition('webform_id', $webform_id)
+      ->condition('in_draft', 0)
+      ->condition('completed', 0, '>')
+      ->execute()
+      ->fetchField();
+
+    // The owner is our best guess for the last editor; no editor history exists.
+    // Leave creation/modification dates NULL and preserve existing metadata.
+    $database->merge('os2forms_metadata')
+      ->insertFields([
+        'created_uid' => $webform->getOwnerId() ?: NULL,
+        'created_username' => $owner ? $owner->getAccountName() : NULL,
+        'changed_uid' => $webform->getOwnerId() ?: NULL,
+        'changed_username' => $owner ? $owner->getAccountName() : NULL,
+        'latest_submission' => $latest ?: NULL,
+      ])
+      ->key('webform_uuid', $webform->uuid())
+      ->execute();
+  }
+}
