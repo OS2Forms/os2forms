@@ -5,9 +5,73 @@
  * Tracks Webform lifecycle events and completed submissions.
  */
 
-use Drupal\os2forms_metadata\MetadataStorage;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\os2forms_metadata\WebformMetadataListBuilder;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionInterface;
+
+/**
+ * Implements hook_entity_type_alter().
+ *
+ * @phpstan-param array<string, \Drupal\Core\Entity\EntityTypeInterface> $entity_types
+ */
+function os2forms_metadata_entity_type_alter(array &$entity_types): void {
+  $entity_types['webform']->setListBuilderClass(WebformMetadataListBuilder::class);
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * @phpstan-param array<string, mixed> $form
+ */
+function os2forms_metadata_form_webform_os2forms_settings_form_alter(array &$form, FormStateInterface $form_state): void {
+  /** @var \Drupal\Core\Entity\EntityFormInterface $form_object */
+  $form_object = $form_state->getFormObject();
+  $webform = $form_object->getEntity();
+  /** @var \Drupal\os2forms_metadata\MetadataStorage $metadataStorage */
+  $metadataStorage = \Drupal::service('os2forms_metadata.storage');
+  $metadata = $metadataStorage->load($webform->uuid()) ?? [];
+  $timezone = \Drupal::config('system.date')->get('timezone.default') ?: 'UTC';
+  $fields = [
+    'created' => t('Creation date'),
+    'created_username' => t('Created by'),
+    'changed' => t('Last modification date'),
+    'changed_username' => t('Last edited by'),
+    'latest_submission' => t('Latest submission date'),
+  ];
+  $rows = [];
+  foreach ($fields as $field => $label) {
+    $value = $metadata[$field] ?? NULL;
+    if ($value === NULL) {
+      $value = t('Unknown');
+    }
+    elseif (in_array($field, ['created', 'changed', 'latest_submission'], TRUE)) {
+      $value = \Drupal::service('date.formatter')->format($value, 'short', '', $timezone);
+    }
+    $rows[] = [$label, ['data' => ['#plain_text' => (string) $value]]];
+  }
+
+  $form['os2forms_metadata'] = [
+    '#type' => 'details',
+    '#title' => t('OS2Forms Metadata'),
+    '#open' => FALSE,
+    '#weight' => 100,
+    '#cache' => [
+      'tags' => [
+        'os2forms_metadata:' . $webform->uuid(),
+        'config:system.date',
+        'config:core.date_format.short',
+      ],
+      'contexts' => ['languages:language_interface'],
+    ],
+    'values' => [
+      '#type' => 'table',
+      '#input' => FALSE,
+      '#header' => [t('Field'), t('Value')],
+      '#rows' => $rows,
+    ],
+  ];
+}
 
 /**
  * Implements hook_webform_insert().
@@ -17,7 +81,7 @@ function os2forms_metadata_webform_insert(WebformInterface $webform): void {
   $uid = $account->isAuthenticated() ? (int) $account->id() : NULL;
   $username = $account->isAuthenticated() ? $account->getAccountName() : 'System';
 
-  /** @var MetadataStorage $metadataStorage */
+  /** @var \Drupal\os2forms_metadata\MetadataStorage $metadataStorage */
   $metadataStorage = \Drupal::service('os2forms_metadata.storage');
   $metadataStorage->create(
     $webform->uuid(),
@@ -34,7 +98,7 @@ function os2forms_metadata_webform_update(WebformInterface $webform): void {
   $uid = $account->isAuthenticated() ? (int) $account->id() : NULL;
   $username = $account->isAuthenticated() ? $account->getAccountName() : 'System';
 
-  /** @var MetadataStorage $metadataStorage */
+  /** @var \Drupal\os2forms_metadata\MetadataStorage $metadataStorage */
   $metadataStorage = \Drupal::service('os2forms_metadata.storage');
   $metadataStorage->update(
     $webform->uuid(),
@@ -47,7 +111,7 @@ function os2forms_metadata_webform_update(WebformInterface $webform): void {
  * Implements hook_webform_delete().
  */
 function os2forms_metadata_webform_delete(WebformInterface $webform): void {
-  /** @var MetadataStorage $metadataStorage */
+  /** @var \Drupal\os2forms_metadata\MetadataStorage $metadataStorage */
   $metadataStorage = \Drupal::service('os2forms_metadata.storage');
   $metadataStorage->delete($webform->uuid());
 }
@@ -63,14 +127,16 @@ function os2forms_metadata_webform_submission_insert(WebformSubmissionInterface 
  * Implements hook_webform_submission_update().
  */
 function os2forms_metadata_webform_submission_update(WebformSubmissionInterface $submission): void {
-  $original = $submission->getOriginal();
+  // Drupal 10 exposes the original entity as a property.
+  /** @var \Drupal\webform\WebformSubmissionInterface|null $original */
+  $original = method_exists($submission, 'getOriginal') ? $submission->getOriginal() : (get_object_vars($submission)['original'] ?? NULL);
   if ($original && $original->isDraft()) {
     os2forms_metadata_record_submission($submission);
   }
 }
 
 /**
- * Records completed submissions, excluding drafts and Webform test submissions.
+ * Records completed submissions, including tests but excluding drafts.
  */
 function os2forms_metadata_record_submission(WebformSubmissionInterface $submission): void {
   if ($submission->isDraft() || !$submission->getCompletedTime()) {
@@ -79,7 +145,7 @@ function os2forms_metadata_record_submission(WebformSubmissionInterface $submiss
 
   $webform = $submission->getWebform();
 
-  /** @var MetadataStorage $metadataStorage */
+  /** @var \Drupal\os2forms_metadata\MetadataStorage $metadataStorage */
   $metadataStorage = \Drupal::service('os2forms_metadata.storage');
   $metadataStorage->recordSubmission($webform->uuid(), $submission->getCompletedTime());
 }

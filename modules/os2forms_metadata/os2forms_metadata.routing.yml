@@ -1,0 +1,8 @@
+os2forms_metadata.export:
+  path: '/admin/structure/webform/metadata/export'
+  defaults:
+    _controller: '\Drupal\os2forms_metadata\Controller\MetadataExportController::download'
+  requirements:
+    _custom_access: '\Drupal\webform\Access\WebformAccountAccess::checkOverviewAccess'
+  options:
+    no_cache: TRUE

@@ -7,6 +7,8 @@
 
 /**
  * Implements hook_schema().
+ *
+ * @phpstan-return array<string, mixed>
  */
 function os2forms_metadata_schema(): array {
   $timestamp = [
@@ -68,7 +70,8 @@ function os2forms_metadata_install(): void {
 
   foreach ($webform_ids as $webform_id) {
     $webform = $storage->load($webform_id);
-    // Using owner as the webform auther, as we don't have other data.
+    // Use the owner as the initial creator because no creator history exists.
+    /** @var \Drupal\user\UserInterface|null $owner */
     $owner = $webform->getOwner();
 
     $query = $database->select('webform_submission', 'submission');
@@ -79,7 +82,7 @@ function os2forms_metadata_install(): void {
       ->execute()
       ->fetchField();
 
-    // The owner is our best guess for the last editor; no editor history exists.
+    // The owner is our best guess for the last editor; no history exists.
     // Leave creation/modification dates NULL and preserve existing metadata.
     $database->merge('os2forms_metadata')
       ->insertFields([

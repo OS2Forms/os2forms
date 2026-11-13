@@ -10,7 +10,7 @@ use Drupal\Core\Database\Query\Merge;
 /**
  * Stores Webform metadata independently of configuration and submissions.
  */
-final class MetadataStorage {
+class MetadataStorage {
 
   /**
    * Constructs the metadata storage service.
@@ -23,6 +23,9 @@ final class MetadataStorage {
 
   /**
    * Loads a metadata row, or NULL if none exists.
+   *
+   * @return array<string, mixed>|null
+   *   The stored metadata, if available.
    */
   public function load(string $uuid): ?array {
     return $this->loadMultiple([$uuid])[$uuid] ?? NULL;
@@ -38,13 +41,17 @@ final class MetadataStorage {
    *   The metadata rows.
    */
   public function loadMultiple(array $uuids): array {
-    $rows = [];
-    foreach (array_chunk(array_unique($uuids), 100) as $chunk) {
-      $rows += $this->database->select('os2forms_metadata', 'metadata')
-        ->fields('metadata')
-        ->condition('webform_uuid', $chunk, 'IN')
-        ->execute()
-        ->fetchAllAssoc('webform_uuid', \PDO::FETCH_ASSOC);
+    if (!$uuids) {
+      return [];
+    }
+
+    $rows = $this->database->select('os2forms_metadata', 'metadata')
+      ->fields('metadata')
+      ->condition('webform_uuid', $uuids, 'IN')
+      ->execute()
+      ->fetchAllAssoc('webform_uuid');
+    foreach ($rows as $uuid => $row) {
+      $rows[$uuid] = (array) $row;
     }
     return $rows;
   }
@@ -111,8 +118,10 @@ final class MetadataStorage {
   /**
    * Invalidates metadata displays for this form and the overview.
    *
-   * @todo Review cache tags and invalidation when implementing the metadata
-   *   displays, including whether Webform's existing cache tags are sufficient.
+   * The overview uses the list tag because submission activity does not save
+   * the Webform and therefore does not invalidate its configuration cache tags.
+   *
+   * The settings details section uses the per-form tag for the same reason.
    */
   private function invalidate(string $uuid): void {
     $this->cacheTagsInvalidator->invalidateTags([
