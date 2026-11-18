@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [PR-307](https://github.com/OS2Forms/os2forms/pull/307)
+  Added proper entity access checks on Maestro notification preview routes
 - [#269](https://github.com/OS2Forms/os2forms/issues/269)
   - Added optional file attachments (bilag) from file elements to the Digital
     Post handler. Attachments are added to the digital (MeMo) message only.
