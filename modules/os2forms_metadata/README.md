@@ -8,6 +8,11 @@ under **Settings > OS2Forms**.
 filters or pagination. Dates use Drupal's site timezone and existing permissions
 apply throughout.
 
+All five metadata columns support ascending and descending sorting. Dates start
+with the newest first; usernames sort alphabetically without case sensitivity.
+Unknown values stay last, and sorting applies across all pages. CSV export keeps
+its existing ordering.
+
 ## Installation
 
 ```sh

@@ -7,6 +7,7 @@ use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Url;
+use Drupal\Core\Utility\TableSort;
 use Drupal\webform\WebformEntityListBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -33,6 +34,16 @@ class WebformMetadataListBuilder extends WebformEntityListBuilder {
   protected array $metadata = [];
 
   /**
+   * The metadata field selected for sorting, or an empty string.
+   */
+  protected string $metadataSortField = '';
+
+  /**
+   * The selected metadata sort direction.
+   */
+  protected string $metadataSortDirection = 'asc';
+
+  /**
    * {@inheritdoc}
    */
   public static function createInstance(ContainerInterface $container, EntityTypeInterface $entity_type) {
@@ -47,8 +58,87 @@ class WebformMetadataListBuilder extends WebformEntityListBuilder {
    */
   public function load() {
     $webforms = parent::load();
-    $this->loadMetadata($webforms);
+    if (!$this->metadataSortField) {
+      $this->loadMetadata($webforms);
+    }
     return $webforms;
+  }
+
+  /**
+   * {@inheritdoc}
+   *
+   * @return array<string>
+   *   The form IDs for the current page.
+   */
+  protected function getEntityIds() {
+    $header = $this->buildHeader();
+    $order = TableSort::getOrder($header, $this->request);
+    $field = (string) $order['sql'];
+    $this->metadataSortField = '';
+    if (!isset($header[$field]) || !str_starts_with($field, 'metadata_')) {
+      return parent::getEntityIds();
+    }
+
+    $this->metadataSortField = substr($field, strlen('metadata_'));
+    $this->metadataSortDirection = TableSort::getSort($header, $this->request);
+
+    return $this->getMetadataEntityIds();
+  }
+
+  /**
+   * Sorts matching forms by metadata and selects the requested page.
+   *
+   * @return array<string>
+   *   The form IDs for the current page.
+   */
+  protected function getMetadataEntityIds(): array {
+    $ids = $this->getQuery($this->keys, $this->category, $this->state)->execute();
+    $webforms = $this->getStorage()->loadMultiple($ids);
+    $this->loadMetadata($webforms);
+    uasort($webforms, [$this, 'compareMetadata']);
+    $ids = array_keys($webforms);
+
+    // Sort all matching forms before selecting the requested page.
+    $limit = $this->getLimit();
+    if ($limit) {
+      $pager = \Drupal::service('pager.manager')->createPager(count($ids), $limit);
+      $ids = array_slice($ids, $pager->getCurrentPage() * $limit, $limit);
+    }
+
+    /** @var \Drupal\webform\WebformEntityStorageInterface $storage */
+    $storage = $this->getStorage();
+    $this->totalNumberOfResults = $ids
+      ? $storage->getTotalNumberOfResults() + array_fill_keys($ids, 0)
+      : [];
+    return $ids;
+  }
+
+  /**
+   * Compares metadata values, placing unknown values last in either direction.
+   */
+  protected function compareMetadata(EntityInterface $first, EntityInterface $second): int {
+    $firstValue = $this->metadata[$first->uuid()][$this->metadataSortField] ?? NULL;
+    $secondValue = $this->metadata[$second->uuid()][$this->metadataSortField] ?? NULL;
+    $comparison = 0;
+    if ($firstValue !== NULL && $secondValue !== NULL) {
+      if (in_array($this->metadataSortField, ['created_username', 'changed_username'], TRUE)) {
+        $comparison = strnatcasecmp($firstValue, $secondValue);
+      }
+      else {
+        $comparison = (int) $firstValue <=> (int) $secondValue;
+      }
+      if ($this->metadataSortDirection === 'desc') {
+        $comparison = -$comparison;
+      }
+    }
+    elseif ($firstValue !== $secondValue) {
+      return $firstValue === NULL ? 1 : -1;
+    }
+
+    // Keep ties stable when paging or changing the primary sort direction.
+    return $comparison
+      ?: strnatcasecmp((string) $first->label(), (string) $second->label())
+      ?: strcmp((string) $first->id(), (string) $second->id());
   }
 
   /**
@@ -104,15 +194,33 @@ class WebformMetadataListBuilder extends WebformEntityListBuilder {
    */
   public function buildHeader() {
     $header = parent::buildHeader();
-    $operations = $header['operations'];
-    unset($header['operations']);
 
-    $header['metadata_created'] = $this->t('Creation date');
-    $header['metadata_created_username'] = $this->t('Created by');
-    $header['metadata_changed'] = $this->t('Last modification date');
-    $header['metadata_changed_username'] = $this->t('Last edited by');
-    $header['metadata_latest_submission'] = $this->t('Latest submission date');
-    $header['operations'] = $operations;
+    $header['metadata_created'] = [
+      'data' => $this->t('Creation date'),
+      'field' => 'metadata_created',
+      'initial_click_sort' => 'desc',
+    ];
+    $header['metadata_created_username'] = [
+      'data' => $this->t('Created by'),
+      'field' => 'metadata_created_username',
+      'initial_click_sort' => 'asc',
+    ];
+    $header['metadata_changed'] = [
+      'data' => $this->t('Last modification date'),
+      'field' => 'metadata_changed',
+      'initial_click_sort' => 'desc',
+    ];
+    $header['metadata_changed_username'] = [
+      'data' => $this->t('Last edited by'),
+      'field' => 'metadata_changed_username',
+      'initial_click_sort' => 'asc',
+    ];
+    $header['metadata_latest_submission'] = [
+      'data' => $this->t('Latest submission date'),
+      'field' => 'metadata_latest_submission',
+      'initial_click_sort' => 'desc',
+    ];
+
     return $header;
   }
 
@@ -130,8 +238,6 @@ class WebformMetadataListBuilder extends WebformEntityListBuilder {
 
     $metadata = $this->metadata[$entity->uuid()] ?? [];
     $timezone = $this->configFactory->get('system.date')->get('timezone.default') ?: 'UTC';
-    $operations = $row['operations'];
-    unset($row['operations']);
 
     foreach (['created', 'created_username', 'changed', 'changed_username', 'latest_submission'] as $field) {
       $value = $metadata[$field] ?? NULL;
@@ -144,7 +250,6 @@ class WebformMetadataListBuilder extends WebformEntityListBuilder {
       $row['metadata_' . $field]['data'] = ['#plain_text' => (string) $value];
     }
 
-    $row['operations'] = $operations;
     return $row;
   }
 
@@ -159,14 +264,19 @@ class WebformMetadataListBuilder extends WebformEntityListBuilder {
     // Webform can return an autocomplete redirect instead of a render array.
     if (is_array($build)) {
       $url = Url::fromRoute('os2forms_metadata.export');
-      $build['metadata_export'] = [
+      $exportLink = [
         '#type' => 'link',
         '#title' => $this->t('Download CSV'),
         '#url' => $url,
         '#access' => $url->access($this->currentUser, TRUE),
         '#attributes' => ['class' => ['button']],
-        '#weight' => -5,
+        '#weight' => 10,
       ];
+
+      if (isset($build['table']['operations']['apply_above'])) {
+        $build['table']['operations']['metadata_export'] = $exportLink;
+      }
+
       CacheableMetadata::createFromRenderArray($build)
         ->addCacheTags([
           'os2forms_metadata_list',
@@ -176,6 +286,7 @@ class WebformMetadataListBuilder extends WebformEntityListBuilder {
         ->addCacheContexts(['user', 'url.query_args', 'languages:language_interface'])
         ->applyTo($build);
     }
+
     return $build;
   }
 
