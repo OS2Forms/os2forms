@@ -1,0 +1,11 @@
+services:
+  _defaults:
+    autowire: true
+
+  logger.channel.os2forms:
+    parent: logger.channel_base
+    arguments: [ 'os2forms' ]
+
+  Drupal\os2forms\EventSubscriber\AdvancedQueueSubscriber:
+    tags:
+      - { name: event_subscriber }
