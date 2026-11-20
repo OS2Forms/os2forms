@@ -37,7 +37,7 @@ final class AdvancedQueueSubscriber implements EventSubscriberInterface {
   public function onPreProcess(JobEvent $event): void {
     try {
       $property = new \ReflectionProperty(WebformSubmission::class, 'webform');
-      $property->setValue(NULL);
+      $property->setValue(NULL, NULL);
     }
     catch (\ReflectionException $exception) {
       $this->logger->error('Cannot reset webform submission webform state: @message', [
