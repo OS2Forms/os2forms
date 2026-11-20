@@ -55,6 +55,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
   DAWA autocomplete warning fix
 - [#389](https://github.com/OS2Forms/os2forms/pull/389)
   Skip CPR lookup validation outside webform submission forms.
+- [#395](https://github.com/OS2Forms/os2forms/pull/395  
+  Introducing os2forms_metadata module for keep metadata of the webform and webform submissions.
 
 ## [6.1.0] 2026-10-22
 
