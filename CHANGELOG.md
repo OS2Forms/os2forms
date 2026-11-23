@@ -11,6 +11,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- [PR-394](https://github.com/OS2Forms/os2forms/pull/394)
+  Add event subscriber to reset webform submissions state between processing jobs in queue
 - [PR-307](https://github.com/OS2Forms/os2forms/pull/307)
   Added proper entity access checks on Maestro notification preview routes
 - [#269](https://github.com/OS2Forms/os2forms/issues/269)
