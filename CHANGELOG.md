@@ -11,8 +11,6 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
-- [PR-394](https://github.com/OS2Forms/os2forms/pull/394)
-  Add event subscriber to reset webform submissions state between processing jobs in queue
 - [PR-307](https://github.com/OS2Forms/os2forms/pull/307)
   Added proper entity access checks on Maestro notification preview routes
 - [#269](https://github.com/OS2Forms/os2forms/issues/269)
@@ -59,6 +57,11 @@ before starting to add changes. Use example [placed in the end of the page](#exa
   DAWA autocomplete warning fix
 - [#389](https://github.com/OS2Forms/os2forms/pull/389)
   Skip CPR lookup validation outside webform submission forms.
+
+## [6.1.1] 2026-11-23
+
+- [PR-394](https://github.com/OS2Forms/os2forms/pull/394)
+  Add event subscriber to reset webform submissions state between processing jobs in queue
 
 ## [6.1.0] 2026-10-22
 
@@ -494,7 +497,10 @@ f/OS-115_dawa_address
 - Security in case of vulnerabilities.
 ```
 
-[Unreleased]: https://github.com/OS2Forms/os2forms/compare/5.1.0...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms/compare/6.1.1...HEAD
+[6.1.1]: https://github.com/OS2Forms/os2forms/compare/6.1.0....6.1.1
+[6.1.0]: https://github.com/OS2Forms/os2forms/compare/6.0.0...6.1.0
+[6.0.0]: https://github.com/OS2Forms/os2forms/compare/5.1.0...6.0.0
 [5.1.0]: https://github.com/OS2Forms/os2forms/compare/5.0.0...5.1.0
 [5.0.0]: https://github.com/OS2Forms/os2forms/compare/4.1.0...5.0.0
 [4.1.0]: https://github.com/OS2Forms/os2forms/compare/4.0.0...4.1.0
