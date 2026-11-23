@@ -1,4 +1,11 @@
 services:
+  _defaults:
+    autowire: true
+
+  logger.channel.os2forms:
+    parent: logger.channel_base
+    arguments: [ 'os2forms' ]
+
   Drupal\os2forms\Helper\HandlerConfigurationValidator:
     arguments:
       - "@form_builder"
@@ -9,5 +16,7 @@ services:
       - "@Drupal\\os2forms\\Helper\\HandlerConfigurationValidator"
       - "@current_route_match"
       - "@messenger"
+
+  Drupal\os2forms\EventSubscriber\AdvancedQueueSubscriber:
     tags:
       - { name: event_subscriber }
