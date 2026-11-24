@@ -5,6 +5,8 @@
  * Install hooks for os2forms_fasit.
  */
 
+use Drupal\webform\WebformSubmissionInterface;
+
 /**
  * Install Key module.
  */
@@ -12,4 +14,35 @@ function os2forms_fasit_update_9001(): void {
   \Drupal::service('module_installer')->install([
     'key',
   ], TRUE);
+}
+
+/**
+ * Set states config to completed on existing fasit handlers.
+ */
+function os2forms_fasit_update_10001(): void {
+  // To avoid having to load full webforms we load and update webform configs.
+  $configFactory = \Drupal::configFactory();
+
+  foreach ($configFactory->listAll('webform.webform.') as $name) {
+    $config = $configFactory->getEditable($name);
+    $handlers = $config->get('handlers');
+    if (!is_array($handlers)) {
+      continue;
+    }
+
+    $changed = FALSE;
+
+    foreach ($handlers as $handlerKey => $handler) {
+      // $handler['id'] is the handler plugin id.
+      if (($handler['id'] ?? NULL) !== 'os2forms_fasit') {
+        continue;
+      }
+      $handlers[$handlerKey]['settings']['additional']['states'] = [WebformSubmissionInterface::STATE_COMPLETED];
+      $changed = TRUE;
+    }
+
+    if ($changed) {
+      $config->set('handlers', $handlers)->save();
+    }
+  }
 }

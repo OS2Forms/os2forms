@@ -6,6 +6,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\os2forms\Utility\NameHelper;
 use Drupal\webform\Plugin\WebformElement\WebformCompositeBase;
 use Drupal\webform\WebformInterface;
+use Drupal\webform\WebformSubmissionForm;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -90,7 +91,17 @@ class Os2formsPersonLookup extends WebformCompositeBase {
    * Form API callback. Make sure CPR is valid and belong provided name.
    */
   public static function validatePerson(array &$element, FormStateInterface $form_state, array &$completed_form) {
+    // Element picker previews also run validation when toggling the preview.
+    if (!($form_state->getFormObject() instanceof WebformSubmissionForm)) {
+      return;
+    }
+
     $values = $element['#value'];
+    // Empty composites have a NULL value. Required validation handles these.
+    if (empty($values['cpr_number'])) {
+      return;
+    }
+
     $cpr_number = str_replace('-', '', $values['cpr_number']);
 
     /** @var \Drupal\os2web_datalookup\Plugin\DataLookupManager $os2web_datalookup_plugins */

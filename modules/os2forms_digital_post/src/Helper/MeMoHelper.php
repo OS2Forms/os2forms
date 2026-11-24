@@ -4,6 +4,7 @@ namespace Drupal\os2forms_digital_post\Helper;
 
 use DataGovDk\Model\Core\Address;
 use DigitalPost\MeMo\Action;
+use DigitalPost\MeMo\AdditionalDocument;
 use DigitalPost\MeMo\AttentionData;
 use DigitalPost\MeMo\AttentionPerson;
 use DigitalPost\MeMo\EntryPoint;
@@ -14,8 +15,10 @@ use DigitalPost\MeMo\MessageBody;
 use DigitalPost\MeMo\MessageHeader;
 use DigitalPost\MeMo\Recipient;
 use DigitalPost\MeMo\Sender;
+use Drupal\Component\Utility\Bytes;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\os2forms_digital_post\Exception\InvalidMessageException;
 use Drupal\os2forms_digital_post\Model\Document;
 use Drupal\os2forms_digital_post\Plugin\WebformHandler\WebformHandlerSF1601;
 use Drupal\os2web_datalookup\LookupResult\CompanyLookupResult;
@@ -30,11 +33,26 @@ use ItkDev\Serviceplatformen\Service\SF1601\Serializer;
 class MeMoHelper extends AbstractMessageHelper {
 
   /**
+   * Max number of attachments (AdditionalDocument) in a MeMo message.
+   *
+   * @see https://www.digitaliser.dk/Media/638930946151204384/MeMo%20Modelbeskrivelse%20v1.2.pdf
+   */
+  public const MAX_ATTACHMENTS = 10;
+
+  /**
+   * Max total size of main document and attachments.
+   *
+   * Base64 adds a third, keeping the message under the 99.5 MB limit.
+   */
+  public const MAX_DOCUMENTS_SIZE = '70 MB';
+
+  /**
    * Build message.
    *
    * @phpstan-param array<int, mixed> $actions
+   * @phpstan-param list<Document> $attachments
    */
-  public function buildMessage(CprLookupResult|CompanyLookupResult $recipientData, string $senderLabel, string $messageLabel, Document $document, array $actions): Message {
+  public function buildMessage(CprLookupResult|CompanyLookupResult $recipientData, string $senderLabel, string $messageLabel, Document $document, array $actions, array $attachments = []): Message {
     $messageUUID = Serializer::createUuid();
     $messageID = Serializer::createUuid();
 
@@ -86,6 +104,30 @@ class MeMoHelper extends AbstractMessageHelper {
 
     $body->setMainDocument($mainDocument);
 
+    if (count($attachments) > self::MAX_ATTACHMENTS) {
+      throw new InvalidMessageException(sprintf('Digital Post allows at most %d attachments: %d given.', self::MAX_ATTACHMENTS, count($attachments)));
+    }
+
+    $size = strlen($document->content);
+    foreach ($attachments as $attachment) {
+      $size += strlen($attachment->content);
+    }
+    if ($size > Bytes::toNumber(self::MAX_DOCUMENTS_SIZE)) {
+      throw new InvalidMessageException(sprintf('Digital Post allows documents totalling at most %s: %.1f MB given.', self::MAX_DOCUMENTS_SIZE, $size / 1024 / 1024));
+    }
+
+    foreach ($attachments as $attachment) {
+      $body->addToAdditionalDocument((new AdditionalDocument())
+        ->setLabel($attachment->filename)
+        ->setFile([
+          (new File())
+            ->setEncodingFormat($attachment->mimeType)
+            ->setLanguage($attachment->language)
+            ->setFilename($attachment->filename)
+            ->setContent($attachment->content),
+        ]));
+    }
+
     $message->setMessageBody($body);
 
     return $message;
@@ -101,6 +143,7 @@ class MeMoHelper extends AbstractMessageHelper {
     $senderLabel = $this->replaceTokens($options[WebformHandlerSF1601::SENDER_LABEL], $submission);
     $messageLabel = $this->replaceTokens($options[WebformHandlerSF1601::MESSAGE_HEADER_LABEL], $submission);
     $document = $this->getMainDocument($submission, $handlerSettings, $recipientData);
+    $attachments = $this->getAttachmentDocuments($submission, $handlerSettings);
 
     $actions = [];
     if (isset($handlerSettings[WebformHandlerSF1601::MEMO_ACTIONS]['actions'])) {
@@ -109,7 +152,7 @@ class MeMoHelper extends AbstractMessageHelper {
       }
     }
 
-    return $this->buildMessage($recipientData, $senderLabel, $messageLabel, $document, $actions);
+    return $this->buildMessage($recipientData, $senderLabel, $messageLabel, $document, $actions, $attachments);
   }
 
   /**

@@ -33,7 +33,7 @@ function os2forms_dawa_webform_migrate_d7_webform_element_addrs_autocomp_l_alter
  * Implements hook_webform_element_alter().
  */
 function os2forms_dawa_webform_element_alter(array &$element, FormStateInterface $form_state, array $context) {
-  if ('os2forms_dawa_address' === $element['#type']) {
+  if ('os2forms_dawa_address' === ($element['#type'] ?? NULL)) {
     $element['#attached']['library'][] = 'os2forms_dawa/dawa_address_autocomplete';
   }
 }

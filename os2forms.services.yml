@@ -6,6 +6,17 @@ services:
     parent: logger.channel_base
     arguments: [ 'os2forms' ]
 
+  Drupal\os2forms\Helper\HandlerConfigurationValidator:
+    arguments:
+      - "@form_builder"
+      - "@messenger"
+
+  Drupal\os2forms\EventSubscriber\HandlerConfigurationValidationSubscriber:
+    arguments:
+      - "@Drupal\\os2forms\\Helper\\HandlerConfigurationValidator"
+      - "@current_route_match"
+      - "@messenger"
+
   Drupal\os2forms\EventSubscriber\AdvancedQueueSubscriber:
     tags:
       - { name: event_subscriber }

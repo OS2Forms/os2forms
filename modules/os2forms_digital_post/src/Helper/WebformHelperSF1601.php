@@ -2,6 +2,7 @@
 
 namespace Drupal\os2forms_digital_post\Helper;
 
+use DigitalPost\MeMo\AdditionalDocument;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
@@ -166,6 +167,23 @@ final class WebformHelperSF1601 implements LoggerInterface {
 
     $message = $this->meMoHelper->buildWebformSubmissionMessage($submission, $messageOptions, $handlerSettings, $lookupResult);
 
+    $attachmentNames = array_map(
+      static fn (AdditionalDocument $document) => $document->getLabel(),
+      $message->getMessageBody()->getAdditionalDocument()
+    );
+    if (!empty($attachmentNames)) {
+      $this->notice('Attached @count file(s) to digital post: @files', [
+        'webform_submission' => $submission,
+        'handler_id' => 'os2forms_digital_post',
+        'operation' => 'digital post attachments',
+        '@count' => count($attachmentNames),
+        '@files' => implode(', ', $attachmentNames),
+      ]);
+    }
+
+    $type = $handlerMessageSettings[WebformHandlerSF1601::TYPE] ?? SF1601::TYPE_DIGITAL_POST;
+    $this->logDeliveryRoute($submission, $recipientIdentifier, $type, count($attachmentNames));
+
     $forsendelseOptions = [
       self::RECIPIENT_IDENTIFIER_TYPE => $recipientIdentifierType,
       self::RECIPIENT_IDENTIFIER => $recipientIdentifier,
@@ -180,9 +198,47 @@ final class WebformHelperSF1601 implements LoggerInterface {
 
     $forsendelse = $this->forsendelseHelper->buildSubmissionForsendelse($submission, $forsendelseOptions, $handlerSettings, $lookupResult);
 
-    $type = $handlerMessageSettings[WebformHandlerSF1601::TYPE] ?? SF1601::TYPE_DIGITAL_POST;
-
     return $this->digitalPostHelper->sendDigitalPost($type, $message, $forsendelse, $submission);
+  }
+
+  /**
+   * Log how the message is routed: physical mail, or by recipient registration.
+   */
+  private function logDeliveryRoute(WebformSubmissionInterface $submission, string $recipientIdentifier, string $type, int $attachmentCount): void {
+    $context = [
+      'webform_submission' => $submission,
+      'handler_id' => 'os2forms_digital_post',
+      'operation' => 'digital post routing',
+      '@count' => $attachmentCount,
+    ];
+
+    // Physical mail is sent regardless of registration, so skip the lookup.
+    if (SF1601::TYPE_FYSISK_POST === $type) {
+      if ($attachmentCount > 0) {
+        $this->warning('Handler sends physical mail: @count attachment(s) are not included in the letter.', $context);
+      }
+      else {
+        $this->notice('Handler sends physical mail.', $context);
+      }
+      return;
+    }
+
+    try {
+      $isRegistered = $this->digitalPostHelper->isRegisteredForDigitalPost($recipientIdentifier);
+    }
+    catch (\Throwable $throwable) {
+      $this->warning('Could not determine Digital Post registration status: @message', $context + [
+        '@message' => $throwable->getMessage(),
+      ]);
+      return;
+    }
+
+    if ($isRegistered) {
+      $this->notice('Recipient is registered for Digital Post.', $context);
+    }
+    else {
+      $this->warning('Recipient is exempt from Digital Post.', $context);
+    }
   }
 
   /**

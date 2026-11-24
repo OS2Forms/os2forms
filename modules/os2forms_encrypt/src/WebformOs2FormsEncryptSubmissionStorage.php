@@ -187,6 +187,15 @@ class WebformOs2FormsEncryptSubmissionStorage extends WebformEncryptSubmissionSt
   /**
    * {@inheritdoc}
    *
+   * Normalizes stringable values before passing them to encryption methods.
+   */
+  protected function encrypt($string, EncryptionProfileInterface $encryption_profile) {
+    return parent::encrypt((string) $string, $encryption_profile);
+  }
+
+  /**
+   * {@inheritdoc}
+   *
    * Overwritten to only encrypt data send to database.
    *
    * @see Drupal\webform\WebformSubmissionStorage::saveData

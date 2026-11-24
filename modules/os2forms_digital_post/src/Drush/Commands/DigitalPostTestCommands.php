@@ -188,6 +188,35 @@ final class DigitalPostTestCommands extends DrushCommands {
   }
 
   /**
+   * Look up Digital Post registration status (SF1601 PostForespørg).
+   *
+   * @param array $recipients
+   *   The recipients (CPR or CVR).
+   *
+   * @phpstan-param array<string> $recipients
+   *
+   * @command os2forms-digital-post:test:post-forespoerg
+   * @usage os2forms-digital-post:test:post-forespoerg 1234567890 12345678
+   */
+  public function postForespoerg(array $recipients): void {
+    $io = new SymfonyStyle($this->input(), $this->output());
+
+    foreach ($recipients as $recipient) {
+      try {
+        $response = $this->digitalPostHelper->postForespoerg($recipient);
+        $io->definitionList(
+          ['Recipient' => $recipient],
+          ['Response' => json_encode($response, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)],
+          ['Registered for Digital Post' => json_encode($response['result'] ?? NULL)],
+        );
+      }
+      catch (\Throwable $throwable) {
+        $io->error(sprintf('Error looking up %s: %s', $recipient, $throwable->getMessage()));
+      }
+    }
+  }
+
+  /**
    * Dump digital post settings.
    */
   private function dumpDigitalPostSettings(SymfonyStyle $io): void {

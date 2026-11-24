@@ -22,6 +22,7 @@ services:
       - "@plugin.manager.element_info"
       - "@webform.token_manager"
       - "@Drupal\\os2forms_digital_post\\EventSubscriber\\Os2formsDigitalPostSubscriber"
+      - "@plugin.manager.webform.element"
 
   Drupal\os2forms_digital_post\Helper\ForsendelseHelper:
     arguments:
@@ -29,6 +30,7 @@ services:
       - "@plugin.manager.element_info"
       - "@webform.token_manager"
       - "@Drupal\\os2forms_digital_post\\EventSubscriber\\Os2formsDigitalPostSubscriber"
+      - "@plugin.manager.webform.element"
 
   Drupal\os2forms_digital_post\Helper\DigitalPostHelper:
     arguments:
