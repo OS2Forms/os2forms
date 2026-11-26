@@ -1,0 +1,8 @@
+name: 'OS2Forms Metadata'
+type: module
+description: 'Stores persistent creation, modification, and submission metadata for Webforms.'
+package: OS2Forms
+core_version_requirement: ^10 || ^11
+dependencies:
+  - os2forms:os2forms
+  - webform:webform

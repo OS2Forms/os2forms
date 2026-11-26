@@ -1,0 +1,4 @@
+services:
+  os2forms_metadata.storage:
+    class: Drupal\os2forms_metadata\MetadataStorage
+    arguments: ['@database', '@cache_tags.invalidator', '@datetime.time']
